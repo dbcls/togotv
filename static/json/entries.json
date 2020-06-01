@@ -1,0 +1,463 @@
+{
+  "data": [
+    {
+      "TogoTV_Video_ID": 1809,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200401_PubMed.mov",
+      "description": "<a href=\"https://pubmed.gov\" target=\"_blank\" rel=\"noopener\">PubMed</a> (パブメド)は<a href=\"http://www.nlm.nih.gov/\" target=\"_blank\" rel=\"noopener\">米国立医学図書館(National Library of Medicine)</a>が維持・管理している文献情報データベースで、5000誌を超える世界の雑誌に掲載された生命科学分野の文献を検索することができます。2020年3月末時点でおよそ 3,000万件を超えるの文献情報を提供(<a href=\"https://pubmed.ncbi.nlm.nih.gov/?term=All%5Bfilter%5D\" target=\"_blank\" rel=\"noopener\">PubMedの検索窓で「All[filter]」と入力すると検索時点での全件数が分かります。</a>)しており、その検索数は月間でおよそ7,000 万件という、生命科学分野で最も利用されているウェブサービスの1つです。<br>\nこの動画では、2019年末に大幅にリニューアルされたPubMedの新インターフェースの基本的な使い方から、自分の探している論文が見つからない場合の対処法や検索結果の保存方法、新着論文の自動取得方法などの便利な機能を紹介します。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "d5-B07bQokI",
+      "headline": [
+        {
+          "name": "1. GoogleでPubMedを検索する",
+          "time": 26
+        },
+        {
+          "name": "2. PubMedに検索語を入力する",
+          "time": 57
+        },
+        {
+          "name": "2-1. 検索結果を並べ替える",
+          "time": 85
+        },
+        {
+          "name": "2-2. 検索結果を絞り込む",
+          "time": 118
+        },
+        {
+          "name": "3. 検索した文献を表示する",
+          "time": 201
+        },
+        {
+          "name": "3-1. フルテキストを表示する（ジャーナルへのリンク)",
+          "time": 221
+        },
+        {
+          "name": "3-2. フルテキストを表示する（PubMed Central)",
+          "time": 238
+        },
+        {
+          "name": "4. 類似した文献を表示する（Similar articles）",
+          "time": 276
+        },
+        {
+          "name": "5. 検索式を確認する（PubMed Advanced Search Builder）",
+          "time": 300
+        },
+        {
+          "name": "5-1. 詳細な検索式を表示する",
+          "time": 322
+        },
+        {
+          "name": "5-2. Advanced検索を使って詳細に検索条件を指定する",
+          "time": 348
+        },
+        {
+          "name": "6. 検索結果を保存する",
+          "time": 397
+        },
+        {
+          "name": "7. Single Citation Matcherを使って特定の一つの文献を取得する",
+          "time": 431
+        },
+        {
+          "name": "8. 個人別カスタマイズ機能（My NCBI）",
+          "time": 456
+        },
+        {
+          "name": "8-1. サインインする",
+          "time": 461
+        },
+        {
+          "name": "8-2. My NCBIでできる事",
+          "time": 476
+        },
+        {
+          "name": "8-3. 新着論文を自動的に取得する",
+          "time": 491
+        },
+        {
+          "name": "8-4. 気に入った論文を保存する",
+          "time": 545
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.053",
+      "keywords": [
+        "文献検索",
+        "データベース",
+        "NCBI",
+        "情報収集"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "PubMedを使って論文を検索する",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200401_0.jpg",
+      "update": "",
+      "uploadDate": "2020-04-01",
+      "url": "https://togotv.dbcls.jp/20200401.html"
+    },
+    {
+      "TogoTV_Video_ID": 1808,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200331_BrainExplorer.mov",
+      "description": "<a href=\"https://portal.brain-map.org/\" target=\"_blank\" rel=\"noopener\">The Allen Brain Atlas</a>は米国シアトルにある<a href=\"https://alleninstitute.org/\"  target=\"_blank\" rel=\"noopener\">アレン脳科学研究所(The Allen Institute for Brain Science)</a>内のプロジェクトで、マウスやヒトの脳の遺伝子発現マップを作成し、ゲノミクスと神経解剖学を組み合わせることで脳の統合的な理解を深めることを目的としています。その統合プラットフォームであるAllen Bain Map では、各種データやツールが提供されているほか、プロジェクトの一覧が見ることができます。Allen Brain Atlasは発生過程や成熟した脳の空間情報と遺伝子発現をまとめたデータベースで、マウス、ヒト、霊長類などについてまとめられています。これらのデータは<a href=\"https://mouse.brain-map.org/static/brainexplorer\">Brain Explorer</a>というビューアを使って、3次元で表示することができます。<br>\n今回はデスクトップ版Brain Explorerを用いて、マウスとヒトの脳遺伝子発現について3次元マップを構築する方法と複数のデータを同時に確認する方法、Web版Brain Explorerの起動の仕方を紹介します。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "NPLmVbT4DqA",
+      "headline": [
+        {
+          "name": "1. Allen Brain AtlasのホームページからBrain Explorer をダウンロードする",
+          "time": 89
+        },
+        {
+          "name": "2. Mouse Brain Atlasから描画する遺伝子を選定する",
+          "time": 136
+        },
+        {
+          "name": "3. Brain Explorerを起動し、マウス脳の3次元遺伝子発現プロファイルを表示する",
+          "time": 235
+        },
+        {
+          "name": "4. Human Brain Atlasから描画する遺伝子を選定する",
+          "time": 342
+        },
+        {
+          "name": "5. Brain Explorerを起動し、ヒト脳の3次元遺伝子発現プロファイルを表示する",
+          "time": 374
+        },
+        {
+          "name": "7. Web版 Brain Explorerを用いて描画する神経結合性データをMouse Connectivity Atlasから選択する",
+          "time": 426
+        },
+        {
+          "name": "8. Web版 Brain Explorerを起動し、マウス脳の特定の部位に結合している神経細胞を表示する",
+          "time": 460
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.052",
+      "keywords": [
+        "遺伝子",
+        "可視化",
+        "発現解析",
+        "画像",
+        "データベース"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Allen Brain AtlasのBrain Explorer を使って脳の遺伝子発現状況を3次元で調べる",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200331_0.jpg",
+      "update": "",
+      "uploadDate": "2020-03-31",
+      "url": "https://togotv.dbcls.jp/20200331.html"
+    },
+    {
+      "TogoTV_Video_ID": 1807,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200325_PyMOL_command.mov",
+      "description": "<a href=\"https://pymol.org/2/\" target=\"_blank\" rel=\"noopener\">PyMOL</a>（パイモル: 動画作成時点のバージョンは2.3.4）は、人間の肉眼では見えない生体分子を高品質な3Dイメージとして可視化することができるオープンソースの分子ビューアです。名称の一部Pyは記述言語である<a href=\"https://www.python.jp/\" target=\"_blank\" rel=\"noopener\">Python</a>に因んでいます。コンパイル済みの製品を使用する場合は有料化されていますが、教職員もしくは学生は教育目的として登録すれば無料で使うことができます。\n<br>一方、最新のソースコードは無償公開されており、自分でソースコードからコンパイルして利用することもできます。(参考記事1: <a href=\"https://qiita.com/tonets/items/1927058e4297fc1c060d\" target=\"_blank\" rel=\"noopener\">Windows10にPyMOLをインストールする（2018年8月30日版）</a>、参考記事2: <a href=\"https://qiita.com/Ag_smith/items/58e917710c4eddab46ee\" target=\"_blank\" rel=\"noopener\">macOS/CentOS 7/Ubuntu 18.04へのオープンソース版PyMOLのインストール方法</a>)<br>\n今回は、PyMOLのコマンド機能を利用して、条件に合う原子を選択する方法、原子間の距離や角度・二面角を測る方法、アミノ酸を置換する方法を説明します。<br><a href=\"http://ja.wikipedia.org/wiki/%E3%82%B5%E3%83%AA%E3%83%B3\" target=\"_blank\" rel=\"noopener\">サリン</a>は殺傷能力が非常に高い神経ガスの一種です。その作用機構は、<a href=\"http://en.wikipedia.org/wiki/Cholinesterase\" target=\"_blank\" rel=\"noopener\">アセチルコリンエステラーゼ(AChE)</a>の活性部位にサリンが不可逆的に結合し、結果として神経伝達物質であるアセチルコリンの分解を阻害して、神経を麻痺させるというものです。今回例として用いている<a href=\"https://pdbj.org/mine/summary/2whp\" target=\"_blank\" rel=\"noopener\">2WHP (Crystal structure of acetylcholinesterase, phosphonylated by sarin and in complex with HI-6)</a>は、アセチルコリンエステラーゼの活性部位（Ser203）にサリン分子が結合したものです。このタンパク質内部のサリンに着目しながら、様々な方法で見ていきます。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "W_skfwG8eDE",
+      "headline": [
+        {
+          "name": "1. PyMOLで基本的なコマンドの使い方",
+          "time": 25
+        },
+        {
+          "name": "2. 条件に合う原子を選択する方法",
+          "time": 56
+        },
+        {
+          "name": "3. PyMOLでラベルの表示方法",
+          "time": 221
+        },
+        {
+          "name": "4. 原子間の距離や角度・二面角を測る方法",
+          "time": 286
+        },
+        {
+          "name": "5. アミノ酸を置換する方法",
+          "time": 388
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.051",
+      "keywords": [
+        "タンパク質",
+        "可視化",
+        "構造解析",
+        "ソフトウェア"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "PyMOLのコマンドを使ってタンパク質の構造を詳細に調べる",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200325_0.jpg",
+      "update": "",
+      "uploadDate": "2020-03-25",
+      "url": "https://togotv.dbcls.jp/20200325.html"
+    },
+    {
+      "TogoTV_Video_ID": 1806,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200313_Xena.mov",
+      "description": "<a href=\"https://xena.ucsc.edu/\" target=\"_blank\" rel=\"noopener\">UCSC Xena</a>は、<a href=\"https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga\" target=\"_blank\" rel=\"noopener\">The Cancer Genome Atlas (TCGA)</a>や<a href=\"https://gdc.cancer.gov/\" target=\"_blank\" rel=\"noopener\">The NCI&apos;s Genomic Data Commons (GDC)</a>などに代表される大規模な公開がんゲノムデータセットをウェブブラウザ上で視覚化し解析することができるツールです(原著論文(プレプリント): <a href=\"https://www.biorxiv.org/content/10.1101/326470v6\" target=\"_blank\" rel=\"noopener\">The UCSC Xena platform for public and private cancer genomics data visualization and interpretation</a>)。<br>\n各プロジェクトで集約された、さまざまな組織におけるSNV、INDEL、大規模構造バリアント、CNV、遺伝子発現、DNAメチル化、ATAC-seq(網羅的オープンクロマチン領域解析)、表現型などのデータを自由に組み合わせて解析することができます。これらのデータの可視化のために、分類別にカラーリングされた独自のスプレッドシート型のビューアが用意されており、そこで各種統計解析や発現解析、Kaplan Meierプロットによる生存時間解析(Survival anaysis)、多型解析などが実行できるようになっています。 ",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "UCW_-aeZB6U",
+      "headline": [
+        {
+          "name": "1. UCSC Xenaにアクセスする",
+          "time": 30
+        },
+        {
+          "name": "2. 乳がんにおけるHER2の遺伝子発現・変異データを閲覧する",
+          "time": 55
+        },
+        {
+          "name": "3. 乳がんサンプルの生存率と統計情報を閲覧する",
+          "time": 154
+        },
+        {
+          "name": "4. 二種類のグリオーマの遺伝子変異パターンを比較する",
+          "time": 280
+        },
+        {
+          "name": "5. がん細胞と正常細胞の遺伝子発現を比較する",
+          "time": 430
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.050",
+      "keywords": [
+        "UCSC",
+        " ゲノム",
+        "遺伝子",
+        "発現解析",
+        "構造解析",
+        "変異解析",
+        "多型",
+        "可視化",
+        "疾患情報",
+        "ウェブツール"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "UCSC Xenaを使って公開がんゲノムデータを解析する",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200313_0.jpg",
+      "update": "",
+      "uploadDate": "2020-03-13",
+      "url": "https://togotv.dbcls.jp/20200313.html"
+    },
+    {
+      "TogoTV_Video_ID": 1805,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200312_PyMOL.mov",
+      "description": "<a href=\"https://pymol.org/2/\" target=\"_blank\" rel=\"noopener\">PyMOL</a>（パイモル: 動画作成時点のバージョンは2.3.4）は、人間の肉眼では見えない生体分子を高品質な3Dイメージとして可視化することができるオープンソースの分子ビューアです。名称の一部Pyは記述言語である<a href=\"https://www.python.jp/\" target=\"_blank\" rel=\"noopener\">Python</a>に因んでいます。コンパイル済みの製品を使用する場合は有料化されていますが、教職員もしくは学生は教育目的として登録すれば無料で使うことができます。\n<br>一方、最新のソースコードは無償公開されており、自分でソースコードからコンパイルして利用することもできます。(参考記事1: <a href=\"https://qiita.com/tonets/items/1927058e4297fc1c060d\" target=\"_blank\" rel=\"noopener\">Windows10にPyMOLをインストールする（2018年8月30日版）</a>、参考記事2: <a href=\"https://qiita.com/Ag_smith/items/58e917710c4eddab46ee\" target=\"_blank\" rel=\"noopener\">macOS/CentOS 7/Ubuntu 18.04へのオープンソース版PyMOLのインストール方法</a>)<br>\n今回は、製品版のPyMOLを使って、Macへのインストールとその登録方法、基本操作を解説します。例として用いた<a href=\"https://pdbj.org/mine/summary/3b7e\" target=\"_blank\" rel=\"noopener\">3B7E (Neuraminidase of A/Brevig Mission/1/1918 H1N1 strain in complex with zanamivir)</a>は、1918年に流行したスペイン風邪の原因となったH1N1型インフルエンザウイルスの増殖を助ける、ノイラミニダーゼ（NA: Neuraminidase) というタンパク質です。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "DYWDL9fMQaM",
+      "headline": [
+        {
+          "name": "1. PyMOLを検索し、インストールする。",
+          "time": 44
+        },
+        {
+          "name": "2. PyMOL Liscenseの取得",
+          "time": 81
+        },
+        {
+          "name": "3. PyMOLの構成と基本操作",
+          "time": 198
+        },
+        {
+          "name": "4. リボン図に表示する方法",
+          "time": 332
+        },
+        {
+          "name": "5. 分子を綺麗に表示するテクニック",
+          "time": 461
+        },
+        {
+          "name": "6. 画像とセッションの保存",
+          "time": 507
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.049",
+      "keywords": [
+        "タンパク質",
+        "可視化",
+        "構造解析",
+        "ソフトウェア"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "PyMOLを使ってタンパク質の構造を見る",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200312_0.jpg",
+      "update": "",
+      "uploadDate": "2020-03-12",
+      "url": "https://togotv.dbcls.jp/20200312.html"
+    },
+    {
+      "TogoTV_Video_ID": 1804,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200217_SCPortalen.mov",
+      "description": "SCPortalenは、<a href=\"https://www.ims.riken.jp/labo/64/index_j.html\" target=\"_blank\" rel=\"noopener\">理化学研究所 生命医科学研究センター 生命医科学大容量データ技術研究チーム</a>が開発、維持している、公開された一細胞遺伝子発現プロファイルのメタデータを補正し、統一したデータ解析法を適用した結果をまとめたデータベースです(原著論文: <a href=\"https://pubmed.ncbi.nlm.nih.gov/29045713-scportalen-human-and-mouse-single-cell-centric-database/\" target=\"_blank\" rel=\"noopener\">SCPortalen: Human and Mouse Single-Cell Centric Database</a>)。SCPortalenでは、主たる論文誌で掲載されている一細胞トランスクリプトームデータを収集し、各細胞/RNA-Seqデータに関するメタデータをキュレーションして整理しています。また、マッピングや発現量定量化を統一した処理方法で再データ処理を行い、各種Quality Checkを経て、サンプルやRNA-Seqデータの品質情報を作成し、PCAやt-SNEなどの標準的なデータ解析を実行しており、それらの結果を統合して閲覧、検索可能なインターフェースを備えています。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "G1lCbpSVHCY",
+      "headline": [
+        {
+          "name": "1. RNA-Seqデータセットのメタデータを閲覧する",
+          "time": 32
+        },
+        {
+          "name": "2. 細胞種名などを用いてデータを検索する",
+          "time": 114
+        },
+        {
+          "name": "3. PCAとt-SNEでデータを可視化する",
+          "time": 200
+        },
+        {
+          "name": "4. RNA-Seqの生データを取得して品質評価する",
+          "time": 262
+        },
+        {
+          "name": "5. RNA-Seqのリードカウントデータを取得する",
+          "time": 340
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.048",
+      "keywords": [
+        "データベース",
+        "発現解析",
+        "遺伝子",
+        "可視化"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "シングルセル解析データベースSCPortalenを使ってメタデータと遺伝子発現データを入手する",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200217_0.jpg",
+      "update": "",
+      "uploadDate": "2020-02-17",
+      "url": "https://togotv.dbcls.jp/20200217.html"
+    },
+    {
+      "TogoTV_Video_ID": 1803,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200216_UCSC_DataIntegrator.mov",
+      "description": "<a href=\"http://genome.ucsc.edu/\" target=\"_blank\" rel=\"noopener\">UCSC Genome Browser</a>は、 米国カリフォルニア大学サンタクルーズ校(UCSC)が開発、維持しているゲノムブラウザ、ゲノムアノテーション閲覧システムです。ゲノムブラウザとはアノテーション(注釈)が付加された遺伝子のゲノム上の位置やその周辺を表示するツールのことです。<br>\n<a href=\"https://genome.ucsc.edu/cgi-bin/hgIntegrator\" target=\"_blank\" rel=\"noopener\">Data integrator</a> は、UCSCが提供しているツールで、ゲノム上の異なる種類のトラックデータを、まとめて表形式で取得するためのツールです。発現データと変異情報など、異なる種類のデータの重複領域について調べたいときに便利です。今回は、「転写因子”MYC”の結合部位において、疾患との関連が報告されている変異」を一覧で取得することを例にその使い方を紹介します。<br>\nちなみに、UCSC Genome Browser のウェブサイトはヨーロッパとアジアにミラーサイトがあり(<a href=\"http://genome-asia.ucsc.edu/mirror.html\" target=\"_blank\" rel=\"noopener\">UCSC Genome Browser Mirror Sites</a>)、日本からアクセスする場合には、<a href=\"http://genome-asia.ucsc.edu\" target=\"_blank\" rel=\"noopener\">アジアのミラーサイト(RIKEN横浜キャンパス)</a>を使うとさらに高速です。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "lkqdnRVMt0w",
+      "headline": [
+        {
+          "name": "1. NCBIトップページからData Integratorを使う",
+          "time": 28
+        },
+        {
+          "name": "2. トラックデータを追加する",
+          "time": 86
+        },
+        {
+          "name": "3. 出力する項目を選択する",
+          "time": 181
+        },
+        {
+          "name": "4. 出力ファイルの見方",
+          "time": 291
+        },
+        {
+          "name": "5. Genome BrowserからData Integratorを使う",
+          "time": 357
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.047",
+      "keywords": [
+        "UCSC",
+        " ゲノム",
+        "ウェブツール",
+        "データベース"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Data Integratorを使ってUCSC Genome Browserの複数のゲノムアノテーションデータを表形式で出力する",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200216_0.jpg",
+      "update": "",
+      "uploadDate": "2020-02-16",
+      "url": "https://togotv.dbcls.jp/20200216.html"
+    },
+    {
+      "TogoTV_Video_ID": 1802,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200215_BLAH6_15_Felipe.mov",
+      "description": " <a href=\"http://blah6.linkedannotation.org/\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Biomedical Linked Annotation Hackathon (BLAH) 6</a> was held in <a href=\"http://www.l-i-c.com/english_access.html\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Lutheran Ichigaya Center</a> in Tokyo, Japan. On the first day of the Hackathon (Feb. 4th), <a href=\"http://blah6.linkedannotation.org/program\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">a public symposium</a> of the BLAH 6 was held.<br>\n In this talk, Felipe Soares makes a presentation entitled \"Biomedical machine translation validation and multi-language annotation transfer <a href=\"https://drive.google.com/file/d/1Bo7XU6Y-VzB05kpoPGyWmRdEKRAig6Fp/view?usp=sharing\" target=\"_blank\">[slides]</a>\". (8:15) <br>\n <a href=\"https://www.youtube.com/playlist?list=PL0uaKHgcG00YfswpX0k3qZO4_tuWc9Ndf\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">All talks in BLAH6 are listed in the YouTube list.</a> ",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "FLMdpC_ywhw",
+      "headline": [],
+      "id": "https://doi.org/10.7875/togotv.2020.046",
+      "keywords": [
+        "講演",
+        "English",
+        "BioHackathon"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Biomedical machine translation validation and multi-language annotation transfer @ BLAH6",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200215_0.jpg",
+      "update": "",
+      "uploadDate": "2020-02-15",
+      "url": "https://togotv.dbcls.jp/20200215.html"
+    },
+    {
+      "TogoTV_Video_ID": 1801,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200214_BLAH6_14_Hee-jo.mov",
+      "description": " <a href=\"http://blah6.linkedannotation.org/\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Biomedical Linked Annotation Hackathon (BLAH) 6</a> was held in <a href=\"http://www.l-i-c.com/english_access.html\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Lutheran Ichigaya Center</a> in Tokyo, Japan. On the first day of the Hackathon (Feb. 4th), <a href=\"http://blah6.linkedannotation.org/program\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">a public symposium</a> of the BLAH 6 was held.<br>\n In this talk, Hee-jo Nam makes a presentation entitled \"Genomics & Informatics corpus annotation tool<a href=\"https://drive.google.com/file/d/1NvDahKNIKcYPC08TDg-g1uURMXiLEmAa/view?usp=sharing\" target=\"_blank\">[slides]</a>\". (5:38) <br>\n <a href=\"https://www.youtube.com/playlist?list=PL0uaKHgcG00YfswpX0k3qZO4_tuWc9Ndf\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">All talks in BLAH6 are listed in the YouTube list.</a> ",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "gBnDzQ71aeE",
+      "headline": [],
+      "id": "https://doi.org/10.7875/togotv.2020.045",
+      "keywords": [
+        "講演",
+        "English",
+        "BioHackathon"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Genomics & Informatics corpus annotation tool @ BLAH6",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200214_0.jpg",
+      "update": "",
+      "uploadDate": "2020-02-14",
+      "url": "https://togotv.dbcls.jp/20200214.html"
+    },
+    {
+      "TogoTV_Video_ID": 1800,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200213_BLAH6_13_katerina.mov",
+      "description": " <a href=\"http://blah6.linkedannotation.org/\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Biomedical Linked Annotation Hackathon (BLAH) 6</a> was held in <a href=\"http://www.l-i-c.com/english_access.html\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">Lutheran Ichigaya Center</a> in Tokyo, Japan. On the first day of the Hackathon (Feb. 4th), <a href=\"http://blah6.linkedannotation.org/program\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">a public symposium</a> of the BLAH 6 was held.<br>\n In this talk, Katerina Nastou makes a presentation entitled \"Improving dictionary-based NER using deep learning <a href=\"https://drive.google.com/file/d/1YoR9br24MTO2MZXErb8eqtL3ftIpyAKX/view?usp=sharing\" target=\"_blank\">[slides]</a>\". (5:00) <br>\n <a href=\"https://www.youtube.com/playlist?list=PL0uaKHgcG00YfswpX0k3qZO4_tuWc9Ndf\" target=\"_blank\" rel=\"noopener\" rel=\"noopener\">All talks in BLAH6 are listed in the YouTube list.</a> ",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "vKGYzIIQ7v0",
+      "headline": [],
+      "id": "https://doi.org/10.7875/togotv.2020.044",
+      "keywords": [
+        "講演",
+        "English",
+        "BioHackathon"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "Improving dictionary-based NER using deep learning @ BLAH6",
+      "publisher": "DBCLS",
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200213_0.jpg",
+      "update": "",
+      "uploadDate": "2020-02-13",
+      "url": "https://togotv.dbcls.jp/20200213.html"
+    }
+  ],
+  "last_page": 181,
+  "numfound": 1806,
+  "start": 0,
+  "total": 10
+}

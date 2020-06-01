@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="652" height="90" viewBox="0 0 652 90">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2e2727;
+        opacity: 0.5;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3, .cls-7 {
+        fill: #333;
+        font-size: 113.536px;
+        font-family: Futura-Dem, Futura;
+      }
+
+      .cls-3 {
+        letter-spacing: 0.2em;
+      }
+
+      .cls-4 {
+        fill: #048998;
+      }
+
+      .cls-5 {
+        fill: #fdd365;
+      }
+
+      .cls-6 {
+        fill: #fff;
+        opacity: 0.1;
+      }
+
+      .cls-7 {
+        letter-spacing: 0.16em;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect id="長方形_790" data-name="長方形 790" class="cls-1" width="652" height="90" transform="translate(76 183)"/>
+    </clipPath>
+  </defs>
+  <g id="マスクグループ_22" data-name="マスクグループ 22" class="cls-2" transform="translate(-76 -183)">
+    <g id="グループ_1286" data-name="グループ 1286" transform="translate(-64 -52)">
+      <text id="TV" class="cls-3" transform="translate(640.476 319.016)"><tspan x="0" y="0">TV</tspan></text>
+      <g id="グループ_1285" data-name="グループ 1285">
+        <text id="TV-2" data-name="TV" class="cls-3" transform="translate(640.476 319.016)"><tspan x="0" y="0">TV</tspan></text>
+        <g id="グループ_1284" data-name="グループ 1284" transform="translate(4)">
+          <g id="グループ_1283" data-name="グループ 1283">
+            <circle id="楕円形_82" data-name="楕円形 82" class="cls-4" cx="44.444" cy="44.444" r="44.444" transform="translate(524.921 235.556)"/>
+            <circle id="楕円形_83" data-name="楕円形 83" class="cls-4" cx="44.444" cy="44.444" r="44.444" transform="translate(524.921 235.556)"/>
+            <g id="グループ_1282" data-name="グループ 1282">
+              <g id="グループ_1280" data-name="グループ 1280">
+                <path id="パス_8231" data-name="パス 8231" class="cls-5" d="M560.858,263.977,584.816,280l-23.958,16.023Z"/>
+              </g>
+              <g id="グループ_1281" data-name="グループ 1281">
+                <path id="パス_8232" data-name="パス 8232" class="cls-5" d="M560.858,263.977,584.816,280l-23.958,16.023Z"/>
+              </g>
+            </g>
+          </g>
+          <path id="パス_8233" data-name="パス 8233" class="cls-6" d="M569.365,235.556A44.435,44.435,0,0,0,538.3,311.774l62.837-62.837A44.3,44.3,0,0,0,569.365,235.556Z"/>
+        </g>
+        <text id="TOGO" class="cls-7" transform="translate(140 317.297)"><tspan x="0" y="0">TOGO</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

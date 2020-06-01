@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "TogoTV_Video_ID": 1809,
+      "author": "TogoTV",
+      "contentUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/200401_PubMed.mov",
+      "description": "<a href=\"https://pubmed.gov\" target=\"_blank\" rel=\"noopener\">PubMed</a> (パブメド)は<a href=\"http://www.nlm.nih.gov/\" target=\"_blank\" rel=\"noopener\">米国立医学図書館(National Library of Medicine)</a>が維持・管理している文献情報データベースで、5000誌を超える世界の雑誌に掲載された生命科学分野の文献を検索することができます。2020年3月末時点でおよそ 3,000万件を超えるの文献情報を提供(<a href=\"https://pubmed.ncbi.nlm.nih.gov/?term=All%5Bfilter%5D\" target=\"_blank\" rel=\"noopener\">PubMedの検索窓で「All[filter]」と入力すると検索時点での全件数が分かります。</a>)しており、その検索数は月間でおよそ7,000 万件という、生命科学分野で最も利用されているウェブサービスの1つです。<br>\nこの動画では、2019年末に大幅にリニューアルされたPubMedの新インターフェースの基本的な使い方から、自分の探している論文が見つからない場合の対処法や検索結果の保存方法、新着論文の自動取得方法などの便利な機能を紹介します。",
+      "duration(ISO 8601)": "",
+      "editor": "Hiromasa Ono",
+      "embedUrl": "d5-B07bQokI",
+      "headline": [
+        {
+          "name": "1. GoogleでPubMedを検索する",
+          "time": 26
+        },
+        {
+          "name": "2. PubMedに検索語を入力する",
+          "time": 57
+        },
+        {
+          "name": "2-1. 検索結果を並べ替える",
+          "time": 85
+        },
+        {
+          "name": "2-2. 検索結果を絞り込む",
+          "time": 118
+        },
+        {
+          "name": "3. 検索した文献を表示する",
+          "time": 201
+        },
+        {
+          "name": "3-1. フルテキストを表示する(ジャーナルへのリンク)",
+          "time": 221
+        },
+        {
+          "name": "3-2. フルテキストを表示する(PubMed Central)",
+          "time": 238
+        },
+        {
+          "name": "4. 類似した文献を表示する(Similar articles)",
+          "time": 276
+        },
+        {
+          "name": "5. 検索式を確認する(PubMed Advanced Search Builder)",
+          "time": 300
+        },
+        {
+          "name": "5-1. 詳細な検索式を表示する",
+          "time": 322
+        },
+        {
+          "name": "5-2. Advanced検索を使って詳細に検索条件を指定する",
+          "time": 348
+        },
+        {
+          "name": "6. 検索結果を保存する",
+          "time": 397
+        },
+        {
+          "name": "7. Single Citation Matcherを使って特定の一つの文献を取得する",
+          "time": 431
+        },
+        {
+          "name": "8. 個人別カスタマイズ機能(My NCBI)",
+          "time": 456
+        },
+        {
+          "name": "8-1. サインインする",
+          "time": 461
+        },
+        {
+          "name": "8-2. My NCBIでできる事",
+          "time": 476
+        },
+        {
+          "name": "8-3. 新着論文を自動的に取得する",
+          "time": 491
+        },
+        {
+          "name": "8-4. 気に入った論文を保存する",
+          "time": 545
+        }
+      ],
+      "id": "https://doi.org/10.7875/togotv.2020.053",
+      "keywords": [
+        "文献検索",
+        "データベース",
+        "NCBI",
+        "情報収集"
+      ],
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "name": "PubMedを使って論文を検索する",
+      "publisher": "DBCLS",
+      "skillset_1": {
+        "id": "PL0uaKHgcG00Z89qgyoEbSof6VSGVxpplc",
+        "title": "ラボの新人がまずマスターしたいデータベース・ウェブツール (2020年4月)"
+      },
+      "thumbnailUrl": "https://dbarchive.biosciencedbc.jp/data/togotv/movie/thumbnail/20200401_0.jpg",
+      "update": "",
+      "uploadDate": "2020-04-01",
+      "url": "https://togotv.dbcls.jp/20200401.html"
+    }
+  ],
+  "last_page": 1,
+  "numfound": 1,
+  "start": 0,
+  "total": 1
+}

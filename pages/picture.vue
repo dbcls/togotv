@@ -1,0 +1,161 @@
+<template>
+  <div class="picture_wrapper">
+    <div class="pic_section">
+      <div class="img_wrapper">
+        <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" :alt="picture.name">
+      </div>
+      <div class="pic_detail">
+        <p class="name tsukushi bold">{{ picture.name }}</p>
+        <p class="name_en mont">{{ picture.name_en }}</p>
+        <p class="author mont" v-html="`Designed by  ${picture.author}`"></p>
+        <a href="" target="_blank" class="taxonomy mont">{{ picture.tax_id }}</a>
+        <a :href="picture.license" target="_blank" class="wiki mont">Wikipedia Commons</a>
+        <div class="download_btns">
+          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" class="mont bold" download>png</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" class="mont bold" download>svg</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="related_images_wrapper">
+      <p class="related_title tsukushi bold">関連画像</p>
+      <ul class="related_images">
+        <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
+          <nuxt-link :to="{name: 'picture', query: {id: data.TogoTV_Image_ID}}">
+            <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.original_png}`" :alt="data.name">
+          </nuxt-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import Vue from 'vue'
+import axios from 'axios'
+
+export default Vue.extend({
+  watchQuery: ['id'],
+  key: route => route.fullPath,
+  async asyncData ( { query, error } ) {
+    let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&TogoTV_Image_ID=${query.id}`)
+    let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
+
+    return {
+      picture: data.data.data[0],
+      tag_data: tag_data.data.data
+    }
+  },
+  head() {
+    return {
+      title: this.picture.name
+    }
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+  }
+})
+</script>
+
+<style lang="sass" scoped>
+.picture_wrapper
+  // min-width: 1130px
+  padding: 106px 0
+  > .pic_section
+    width: 100%
+    display: flex
+    > .img_wrapper
+      width: 70%
+      height: 290px
+      background-color: #EDFCFC
+      display: flex
+      align-items: center
+      justify-content: center
+      > img
+        min-width: 490px
+        max-width: 650px
+        width: 60%
+    > .pic_detail
+      width: 30%
+      min-width: 380px
+      padding: 39px 0 0 30px
+      box-sizing: border-box
+      height: 290px
+      color: #fff
+      background-color: $MAIN_COLOR
+      position: relative
+      &:before
+        content: ""
+        position: absolute
+        top: 0
+        left: -100px
+        border-left: 50px solid transparent
+        border-top: 145px solid transparent
+        border-right: 50px solid $MAIN_COLOR
+        border-bottom: 145px solid $MAIN_COLOR
+      > p
+        margin: 0
+      > p.name
+        font-size: 30px
+      > p.name_en
+        font-size: 18px
+        margin-top: 1px
+      > p.author
+        margin: 26px 0 7px
+        font-size: 12px
+        display: flex
+        align-items: center
+        &:before
+          width: 18px
+          height: 18px
+          margin-right: 3px
+          @include icon('brush')
+      > a.taxonomy,
+      > a.wiki
+        color: #fff
+        font-size: 12px
+        display: block
+        line-height: 26px
+        display: flex
+        align-items: center
+        &:before
+          width: 18px
+          height: 18px
+          margin-right: 3px
+          @include icon('externallink')
+      > div.download_btns
+        margin-top: 24px
+        margin-left: -3px
+        > a
+          @include download_btn
+          margin-left: 5px
+          &:first-of-type
+            margin-left: 0
+  > .related_images_wrapper
+    padding: 0 $VIEW_PADDING
+    margin-top: 102px
+    > .related_title
+      font-size: 18px
+      display: flex
+      align-items: center
+      &:before
+        width: 25px
+        height: 25px
+        @include icon('img')
+    > .related_images
+      display: flex
+      flex-wrap: wrap
+      > li
+        > a
+          display: inline-block
+          margin-right: 20px
+          margin-bottom: 20px
+          > img
+            width: 146px
+            &:hover
+              cursor: pointer
+</style>
