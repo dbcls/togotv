@@ -41,11 +41,11 @@
             @click="facets.taxon.is_open = !facets.taxon.is_open"
           ></span>
         </p>
-        <div :class="['checkbox_wrapper', facets.taxon.is_open ? '' : 'close']">
+        <div :class="['checkbox_wrapper', 'taxon', facets.taxon.is_open ? '' : 'close']">
           <ul class="taxon_1">
             <li v-for="(taxon, index) in facets.taxon.data" :key="index">
               <!-- taxon1 -->
-              <input type="checkbox" :id="taxon.key" :value="taxon.key" v-model="filters.taxon1"/>
+              <input type="checkbox" :id="taxon.key" :value="taxon.key" v-model="filters.taxon1" @click="checkTaxon('taxon1', null, null, null, taxon.taxonomy_2.buckets)"/>
               <label :for="taxon.key">
                 <span class="label" v-html="taxon.key"></span>
                 <span class="count mont">{{ taxon.doc_count }}</span>
@@ -54,7 +54,7 @@
               <ul class="taxon_2" v-if="hasChildren(taxon.taxonomy_2.buckets)">
                 <li v-for="(taxon_2, index_2) in taxon.taxonomy_2.buckets" :key="index_2">
                   <!-- taxon2 -->
-                  <input type="checkbox" :id="taxon_2.key" :value="taxon_2.key" v-model="filters.taxon2"/>
+                  <input type="checkbox" :id="taxon_2.key" :value="taxon_2.key" v-model="filters.taxon2" @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"/>
                   <label :for="taxon_2.key">
                     <span class="label" v-html="taxon_2.key"></span>
                     <span class="count mont">{{ taxon_2.doc_count }}</span>
@@ -63,7 +63,7 @@
                   <ul class="taxon_3" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
                     <li v-for="(taxon_3, index_3) in taxon_2.taxonomy_3.buckets" :key="index_3">
                       <!-- taxon2 -->
-                      <input type="checkbox" :id="taxon_3.key" :value="taxon_3.key" v-model="filters.taxon3"/>
+                      <input type="checkbox" :id="taxon_3.key" :value="taxon_3.key" v-model="filters.taxon3" @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"/>
                       <label :for="taxon_3.key">
                         <span class="label" v-html="taxon_3.key"></span>
                         <span class="count mont">{{ taxon_3.doc_count }}</span>
@@ -97,7 +97,23 @@
         </div>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title format tsukushi bold">形式</p>
+        <p class="facet_small_title format tsukushi bold">形式
+          <span
+            :class="['toggle_btn', facets.pics.is_open ? '' : 'close']"
+            @click="facets.pics.is_open = !facets.pics.is_open"
+          ></span>
+        </p>
+        <div :class="['checkbox_wrapper', facets.pics.is_open ? '' : 'close']">
+          <ul>
+            <li v-for="(pic, index) in facets.pics.data" :key="index">
+              <input type="checkbox" :id="pic.key" :value="pic.key" v-model="filters.pics"/>
+              <label :for="pic.key">
+                <span class="label" v-html="pic.key"></span>
+                <span class="count mont">{{ pic.doc_count }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="gallery_wrapper">
@@ -258,7 +274,7 @@ export default Vue.extend({
           checked: [],
           is_open: true
         },
-        extension: {
+        pics: {
           checked: [],
           is_open: true
         }
@@ -269,7 +285,7 @@ export default Vue.extend({
         taxon2: [],
         taxon3: [],
         other_tags: [],
-        extension: [],
+        pics: [],
       }
     }
   },
@@ -282,13 +298,143 @@ export default Vue.extend({
     }
   },
   methods: {
+    checkTaxon(type, granpa, parent, siblings, children, parents) {
+      let is_all_checked = true
+      if(type === "taxon1") {
+        // taxon1クリック時→子供の要素全てチェックor外す
+        // 全てチェックが入ってるかチェック
+        is_all_checked = this.checkAllChildrenChecked(children, null, 2)
+        this.filters.taxon2 = this.removeArrayFromTaxonFilter('taxon2', children, 1)
+        this.filters.taxon3 = this.removeArrayFromTaxonFilter('taxon3', children, 2)
+        if(!is_all_checked) {
+          let taxon2_array = []
+          let taxon3_array = []
+          children.forEach(child => {
+            taxon2_array.push(child.key)
+            child.taxonomy_3.buckets.forEach(taxon3 => {
+              taxon3_array.push(taxon3.key)
+            })
+          })
+          this.filters.taxon2 = this.filters.taxon2.concat(taxon2_array)
+          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array)
+        }
+      } else if (type === "taxon2") {
+        // taxon2クリック時→子供の要素全てチェックor外す、兄弟要素確認し、親の状態決める
+        is_all_checked = this.checkAllChildrenChecked(children, 'taxon3', 1)
+
+        this.filters.taxon3 = this.removeArrayFromTaxonFilter('taxon3', children, 1)
+
+        if(!is_all_checked) {
+          let taxon3_array = []
+          children.forEach(child => {
+            taxon3_array.push(child.key)
+          })
+          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array)
+        }
+        
+        // check siblings state
+        setTimeout(() => {
+          let is_siblings_all_checked = true
+          siblings.forEach(sibling => {
+            if(siblings.key === "") {
+              return
+            }
+            if(this.filters.taxon2.indexOf(sibling.key) === -1) {
+              is_siblings_all_checked = false
+            }
+          })
+          if(is_siblings_all_checked) {
+            this.filters.taxon1.push(parent)
+          } else {
+            this.filters.taxon1 = this.filters.taxon1.filter(taxon => taxon !== parent)
+          }
+        }, 0)
+      } else if (type === "taxon3") {
+      // taxon3クリック時→兄弟要素確認し、親の状態決める。親の状態確認し、祖父の状態決める
+        setTimeout(() => {
+          // 親
+          let is_siblings_all_checked = true
+          siblings.forEach(sibling => {
+            if(sibling.key === "") {
+              return
+            }
+            if(this.filters.taxon3.indexOf(sibling.key) === -1) {
+              is_siblings_all_checked = false
+            }
+          })
+          if(is_siblings_all_checked) {
+            this.filters.taxon2.push(parent)
+          } else {
+            this.filters.taxon2 = this.filters.taxon2.filter(taxon => taxon !== parent)
+          }
+
+          // 祖父
+          let is_parents_all_checked = true
+          parents.forEach(parent => {
+            if(parent.key === "") {
+              return
+            }
+            if(this.filters.taxon3.indexOf(parent.key) === -1) {
+              is_parents_all_checked = false
+            }
+          })
+          if(is_parents_all_checked) {
+            this.filters.taxon1.push(granpa)
+          } else {
+            this.filters.taxon1 = this.filters.taxon1.filter(taxon => taxon !== granpa)
+          }
+        }, 0)
+      }
+    },
+    checkAllChildrenChecked(array, target_filter, nest) {
+      let is_all_checked = true
+      if(nest === 1) {
+        array.forEach(child => {
+          if(this.filters[target_filter].indexOf(child.key) === -1) {
+            is_all_checked = false
+          }
+        })
+      } else if (nest === 2) {
+        array.forEach(child => {
+          if(this.filters.taxon2.indexOf(child.key) === -1) {
+            is_all_checked = false
+          }
+          child.taxonomy_3.buckets.forEach(taxon3 => {
+            if(this.filters.taxon3.indexOf(taxon3.key) === -1) {
+              is_all_checked = false
+            }
+          })
+        })
+      }
+      return is_all_checked
+    },
+    removeArrayFromTaxonFilter(target_filter, remove_array, nest) {
+      if(nest === 1) {
+        return this.filters[target_filter].filter(taxon => {
+          let flag = true
+          remove_array.forEach(remove_taxon => {
+            if (remove_taxon.key !== "" && remove_taxon.key === taxon) {
+              flag = false
+            }
+          })
+          return flag
+        })
+      } else if (nest === 2) {
+        return this.filters.taxon3.filter(taxon3 => {
+          let flag = true
+          remove_array.forEach(taxon2 => {
+            taxon2.taxonomy_3.buckets.forEach(remove_taxon3 => {
+              if (remove_taxon3.key !== "" && taxon3 === remove_taxon3.key) {
+                flag = false
+              }
+            })
+          })
+          return flag
+        })
+      }
+    },
     removeTag(text) {
       return text.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '')
-    },
-    fetchFacetResult(key) {
-      this.$nextTick(() => {
-        console.log(this.facets[key].checked)
-      })
     },
     infiniteHandler($state) {
       axios
@@ -458,6 +604,9 @@ export default Vue.extend({
           @include toggle_arrow
       > .checkbox_wrapper
         transition: .5s
+        max-height: 100vh
+        &.taxon
+         max-height: 400vh
         &.close
           max-height: 0
           overflow: hidden
