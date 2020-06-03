@@ -1,0 +1,28 @@
+{
+  "faq_list": [
+    {
+      "question": "DBCLSとはなんですか？",
+      "answer": "DBCLSについてはこちらをご覧ください。[DBCLSについてのよくある質問](https://dbcls.rois.ac.jp/faq)もあります。"
+    },
+    {
+      "question": "統合TVってなんでそもそも動画なんだっけ…?",
+      "answer": "スクリーンキャプチャ+解説文という書籍のようなスタイルだと、その「行間」が分からないことが多いということで、 それなら動画で事の始終を全部見せようということで動画にしようということになりました。"
+    },
+    {
+      "question": "動画を作ってる人のMotivationは何なのですか?",
+      "answer": "生命科学系「全然わかんなかったツール」を紹介のために勉強して「日本で一番自分が詳しいんじゃ」というくらいになる、 しかも大学の授業などで紹介される、がモチベーションになる、というのが動画作成している人間の言葉です。"
+    },
+    {
+      "question": "統合TVの番組の選定はどのように行われていますか？",
+      "answer": "統合TV制作スタッフが、使いこなせると非常に有用と考えるDB・ウェブツールを選定しています。 原則的には無償で誰でも使えるものを紹介することにしていますが、有償のソフトウェア等についてもその有用性が著しいものについては紹介することもあります。"
+    },
+    {
+      "question": "紹介して欲しいDBやウェブツールのリクエストをしたいのですが？",
+      "answer": "ユーザーの方が有用と考え日々お使いになっている未収録のDB・ウェブツールがありましたら[統合TV 番組リクエストフォーム](https://togotv.dbcls.jp/contact.html)からリクエストをお願いします。そのDB・ウェブツールの有用な点や便利な機能・使い方などを具体的に教えていただけると助かります。"
+    },
+    {
+      "question": "統合TVの動画はどのように撮影・編集していますか？",
+      "answer": "統合TVの作り方についての番組がありますので、下記を参照してください。<br>[→ 統合TVの作り方 in Camtasia Studio 6 〜撮影編](https://togotv.dbcls.jp/20100129.html#p01)<br>[→ 統合TVの作り方 in Camtasia Studio 6 〜編集編](https://togotv.dbcls.jp/20100203.html#p01)<br>[→ 統合TVの作り方（MacOSX版）](https://togotv.dbcls.jp/20080709.html#p01)<br>Windows、Macともに[Camtasia Studio](https://www.techsmith.co.jp/camtasia-features.html)を利用しています。<br>英語字幕の付与は[Subberbian](http://pencilsoftware.com/Subberbian.html) (Mac)を利用しています。"
+    }
+  ]
+}

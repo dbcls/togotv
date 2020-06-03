@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import faq_json from '~/static/json/test/FAQ.json'
+import faq_json from '~/static/json/FAQ.json'
 
 export default Vue.extend({
   head() {
