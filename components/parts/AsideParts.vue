@@ -3,7 +3,7 @@
     <section class="course_wrapper">
       <p class="section_title tsukushi bold">スキル別コースから探す</p>
       <ul>
-        <li v-for="course in course" :key="course.id">
+        <li v-for="course in course_list" :key="course.id">
           <span>
             <nuxt-link class="tsukushi" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
           </span>
@@ -13,25 +13,43 @@
     <section class="tag_wrapper">
       <p class="section_title tsukushi bold">タグから探す</p>
       <ul>
-        <li v-for="tag in tag_list" :key="tag.id">
-          <nuxt-link :to="{name: 'tag', query: {name: tag.name}}">{{ tag.name }}</nuxt-link>
+        <li v-for="(tag, index) in tag_list" :key="index">
+          <nuxt-link :to="{name: 'tag', query: {name: tag.key}}">{{ tag.key }}</nuxt-link>
         </li>
       </ul>
     </section>
   </aside>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
-import course from '~/static/json/test/course.json'
-import tag_list from '~/static/json/test/tag.json'
+import axios from 'axios'
 
 export default Vue.extend({
-  data () {
+  data() {
     return {
-      course: course.courses,
-      tag_list: tag_list.tag_list
+      course_list: [],
+      tag_list: []
     }
+  },
+  mounted() {
+    axios
+      .get(`http://togotv-api.bhx.jp/api/skillset`)
+      .then(data => {
+        this.course_list = data.data.cources
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`http://togotv-api.bhx.jp/api/facets/keywords`)
+      .then(data => {
+        this.tag_list = data.data.facets
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   methods: {
   }
