@@ -552,8 +552,6 @@ export default Vue.extend({
   align-items: flex-start
   > .facet_wrapper
     @include facet
-    position: relative
-    top: 0
     > p.facet_title
       font-size: 18px
       display: flex

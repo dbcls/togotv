@@ -42,11 +42,16 @@ export default Vue.extend({
   a
     text-decoration: none
     color: $BLACK
+    display: block
     &.thumbnail_wrapper
       position: relative
     > .thumbnail
       width: 247px
+      max-width: 247px
+      min-width: 247px
       height: 139px
+      min-height: 139px
+      max-height: 139px
       object-fit: cover
       border-radius: 4px
       &.small
