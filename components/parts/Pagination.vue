@@ -2,61 +2,46 @@
   <div class="pagination_wrapper">
     <span
       v-if="currentpage !== 1"
-      @click="fetchPost(1)"
-      class="arrow"
+      @click="fetchData(1)"
+      class="arrow left"
     ></span>
-    <ul v-if="totalpage <= 5">
+    <ul v-if="lastpage <= 5">
       <li
-        v-for="index in totalpage"
+        v-for="index in lastpage"
         :key="index"
-        :class="['pagination', isCurrentPage(index)]"
-        @click="fetchPost(index)"
+        :class="['pagination', 'mont', isCurrentPage(index)]"
+        @click="fetchData(index)"
       >{{ index }}</li>
     </ul>
     <ul v-else>
       <li
         v-for="index in 5"
         :key="index"
-        :class="['pagination', isCurrentPage(currentpageRange[0] - 1 + index)]"
-        @click="fetchPost(currentpageRange[0] - 1 + index)"
+        :class="['pagination', 'mont', isCurrentPage(currentpageRange[0] - 1 + index)]"
+        @click="fetchData(currentpageRange[0] - 1 + index)"
       >{{ currentpageRange[0] - 1 + index }}</li>
     </ul>
     <span
-      v-if="currentpage !== Number(totalpage)"
-      @click="fetchPost(totalpage)"
-      class="arrow"
+      v-if="currentpage !== Number(lastpage)"
+      @click="fetchData(lastpage)"
+      class="arrow right"
     ></span>
   </div>
 </template>
 ​
 <script>
+import Vue from 'vue'
 const POSTS_PER_PAGE = 10;
 
 export default Vue.extend({
   props: {
-    data: {}
+    lastpage: ""
   },
   data() {
     return {
-      currentpageRange: []
+      currentpageRange: [],
+      currentpage: 1
     };
-  },
-  computed: {
-    totalpage() {
-      return Math.ceil(this.data.total_entry / POSTS_PER_PAGE);
-    },
-    currentpage: {
-      get() {
-        if (this.$route.query.page !== undefined) {
-          this.fetchPost(Number(this.$route.query.page));
-          return Number(this.$route.query.page);
-        }
-        return ''
-      },
-      set(value) {
-        this.value = value;
-      }
-    }
   },
   methods: {
     isCurrentPage(index) {
@@ -65,15 +50,15 @@ export default Vue.extend({
       }
     },
     changeCurrentPageRange() {
-      if (this.totalpage <= 5) {
-        this.currentpageRange = [1, this.totalpage];
+      if (this.lastpage <= 5) {
+        this.currentpageRange = [1, this.lastpage];
       } else if (this.currentpage === 1 || this.currentpage === 2) {
         this.currentpageRange = [1, 5];
       } else if (
-        this.currentpage === this.totalpage ||
-        this.currentpage === this.totalpage - 1
+        this.currentpage === this.lastpage ||
+        this.currentpage === this.lastpage - 1
       ) {
-        this.currentpageRange = [this.totalpage - 4, this.totalpage];
+        this.currentpageRange = [this.lastpage - 4, this.lastpage];
       } else {
         this.currentpageRange = [this.currentpage - 2, this.currentpage + 2];
       }
@@ -82,8 +67,8 @@ export default Vue.extend({
       this.currentpage = page;
       this.changeCurrentPageRange();
     },
-    fetchPost(page) {
-      this.$emit("fetchPost", page);
+    fetchData(page) {
+      this.$emit("fetchData", page, false);
     }
   }
 });
@@ -91,41 +76,46 @@ export default Vue.extend({
 ​
 <style lang="sass" scoped>
 .pagination_wrapper
-  position: absolute
-  bottom: 25px
-  left: 50%
-  transform: translateX(-50%)
   display: flex
   justify-content: center
   align-items: center
+  margin-top: 30px
+  > span.arrow, span.arrow:after
+    display: inline-block
+    width: 8px
+    height: 8px
+    border-top: 1px solid rgba(51, 51, 51, .5)
+    border-right: 1px solid rgba(51, 51, 51, .5)
   > span.arrow
-    font-size: 12px
-    color: $MAIN_COLOR
+    &:after
+      content: ''
+      margin: 0px 0px 3px -4px
     &:hover
       cursor: pointer
+  > span.arrow.right
+    transform: rotate(45deg)
+  > span.arrow.left
+    transform: rotate(-135deg)
   > ul
     display: flex
     justify-content: center
     margin: 0 20px
     > .pagination
-      width: 25px
-      height: 25px
-      border-radius: 3px
-      font-size: 14px
-      font-weight: bold
-      padding-top: 1px
-      color: #999999
+      width: 35px
+      height: 35px
+      border-radius: 100px
+      font-size: 18px
+      font-weight: 600
+      color: rgba(51, 51, 51, .5)
       display: flex
       align-items: center
       justify-content: center
       margin-right: 14px
-      &.active
-        color: $COLOR_5
-        border: 1px solid $COLOR_5
+      &.active,
       &:hover
+        color: $MAIN_COLOR
+        background-color: $POINT_COLOR
         cursor: pointer
-        color: #fff
-        background-color: $COLOR_5
       &:last-of-type
         margin-right: 0
 </style>

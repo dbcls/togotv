@@ -17,37 +17,52 @@
       </div>
       <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="new_video_list"/>
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="new_video_list"/>
+      <Pagination ref="pagination" :lastpage="lastpage" @fetchData="fetchData" />
       </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
 import AsideParts from '~/components/parts/AsideParts.vue'
+import Pagination from '~/components/parts/Pagination.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData ( params ) {
-    // console.log('params', params.query.id) //ID部分これに差し替える
-    const { data } = await axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
-    console.log(data)
-    return { new_video_list: data.data }
+  data() {
+    return {
+      lastpage: 0,
+      new_video_list: []
+    }
   },
   head() {
     return {
       title: '新着動画'
     }
   },
+  mounted() {
+    this.fetchData(1, true)
+  },
   components: {
     VideoListCard,
     AsideParts,
-    VideoList
+    VideoList,
+    Pagination
   },
   methods: {
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
+    },
+    fetchData(page, is_initial) {
+      axios.get(`http://togotv-api.bhx.jp/api/entries?from=${page}&rows=21`).then(data => {
+        this.new_video_list = data.data.data
+        if(is_initial) {
+          this.lastpage = data.data.last_page
+        }
+        this.$refs.pagination.changeCurrentPage(page);
+      })
     }
   }
 })

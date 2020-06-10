@@ -61,7 +61,7 @@ export default Vue.extend({
       } else {
         link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}.${extension}`
       }
-      document.body.appendChild(link)
+      document.body.appendChild(link)      
       link.click()
       document.body.removeChild(link)
       this.$emit('closeModal')

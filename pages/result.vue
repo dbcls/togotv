@@ -4,51 +4,91 @@
       <p class="facet_title filter tsukushi bold">絞り込み検索</p>
       <div class="facet_small_section">
         <p class="facet_small_title video tsukushi bold">番組のタイプ</p>
-        <label>
-          <input type="checkbox" id="demonstration" value="demonstration" checkedv-model="selected_video_type">
-          <span>動画講習</span>
-        </label>
-        <label>
-          <input type="checkbox" id="lecture" value="lecture" checkedv-model="selected_video_type">
-          <span>講演</span>
-        </label>
-        <label>
-          <input type="checkbox" id="handson" value="handson" checkedv-model="selected_video_type">
-          <span>ハンズオン講習</span>
-        </label>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li>
+              <input type="checkbox" id="demonstration" value="demonstration" checkedv-model="selected_video_type">
+              <label for="demonstration">
+                <span>動画講習</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="lecture" value="lecture" checkedv-model="selected_video_type">
+              <label for="lecture">
+                <span>講演</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="handson" value="handson" checkedv-model="selected_video_type">
+              <label for="handson">
+                <span>ハンズオン講習</span>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title calender tsukushi bold">公開時期</p>
-        <label>
-          <input type="checkbox" id="within1" value="within1" checkedv-model="selected_release_season">
-          <span>1年以内</span>
-        </label>
-        <label>
-          <input type="checkbox" id="1yearago" value="1yearago" checkedv-model="selected_release_season">
-          <span>1年前 〜 2年前</span>
-        </label>
-        <label>
-          <input type="checkbox" id="2yearago" value="2yearago" checkedv-model="selected_release_season">
-          <span>2年前 〜 3年前</span>
-        </label>
-        <label>
-          <input type="checkbox" id="3yearago" value="3yearago" checkedv-model="selected_release_season">
-          <span>3年前</span>
-        </label>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li>
+              <input type="checkbox" id="within1" value="within1" checkedv-model="selected_release_season">
+              <label for="within1">
+                <span>1年以内</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="1yearago" value="1yearago" checkedv-model="selected_release_season">
+              <label for="1yearago">
+                <span>1年前 〜 2年前</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="2yearago" value="2yearago" checkedv-model="selected_release_season">
+              <label for="2yearago">
+                <span>2年前 〜 3年前</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="3yearago" value="3yearago" checkedv-model="selected_release_season">
+              <label for="3yearago">
+                <span>3年前</span>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">タグ</p>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li v-for="(tag, index) in tag_list" :key="index">
+              <input type="checkbox" :id="tag.key" :value="tag.key" checkedv-model="selected_tags">
+              <label :for="tag.key">
+                <span>{{ tag.key }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title language tsukushi bold">言語</p>
-        <label>
-          <input type="checkbox" id="ja" value="ja" checkedv-model="selected_language">
-          <span>日本語</span>
-        </label>
-        <label>
-          <input type="checkbox" id="en" value="en" checkedv-model="selected_language">
-          <span>英語</span>
-        </label>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li>
+              <input type="checkbox" id="ja" value="ja" checkedv-model="selected_language">
+              <label for="ja">
+                <span>日本語</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="en" value="en" checkedv-model="selected_language">
+              <label for="en">
+                <span>英語</span>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title time tsukushi bold">時間</p>
@@ -76,23 +116,21 @@
       </div>
       <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="result_list"/>
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="result_list"/>
+      <Pagination ref="pagination" :lastpage="lastpage" @fetchData="fetchData" />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
+import Pagination from '~/components/parts/Pagination.vue'
 import axios from 'axios'
 
 export default Vue.extend({
   watchQuery: ['query'],
   key: route => route.fullPath,
-  async asyncData ( params ) {
-    const { data } = await axios.get(`http://togotv-api.bhx.jp/api/search?text=${params.query.query}`)
-    return { result_list: data.data }
-  },
   head() {
     return {
       title: `「${this.$route.query.query}」の検索結果`
@@ -100,20 +138,45 @@ export default Vue.extend({
   },
   components: {
     VideoListCard,
-    VideoList
+    VideoList,
+    Pagination
   },
   data () {
     return {
       selected_video_type: [],
       selected_release_season: [],
+      selected_tags: [],
       selected_language: [],
-      selected_duration: 0
+      selected_duration: 0,
+      lastpage: 0,
+      result_list: [],
+      tag_list: []
     }
+  },
+  mounted() {
+    this.fetchData(1, true)
+    axios
+      .get(`http://togotv-api.bhx.jp/api/facets/keywords`)
+      .then(data => {
+        this.tag_list = data.data.facets
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   methods: {
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
-    }
+    },
+    fetchData(page, is_initial) {
+      axios.get(`http://togotv-api.bhx.jp/api/search?from=${page}&text=${this.$route.query.query}`).then(data => {
+        this.result_list = data.data.data
+        if(is_initial) {
+          this.lastpage = data.data.last_page
+        }
+        this.$refs.pagination.changeCurrentPage(page);
+      })
+    }    
   }
 })
 </script>
@@ -177,9 +240,16 @@ export default Vue.extend({
         &.time
           &:before
             @include icon('time')
-      > label
-        @include checkbox
-        margin-left: 3px
+      > .checkbox_wrapper
+        ul
+          li
+            position: relative
+            > label
+              > span
+                margin-left: 27px
+            > input[type=checkbox]
+              @include checkbox
+              margin-left: 3px
       > .select_time_bar
         position: relative
         display: flex
