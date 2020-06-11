@@ -45,15 +45,7 @@ export default Vue.extend({
       position: relative
       padding: 13px  13px 19px
       &::after
-        content: ''
-        width: 100%
-        height: 1px
-        background-image: linear-gradient(to right, $MAIN_COLOR, $MAIN_COLOR 3px, transparent 3px, transparent 7px)
-        background-size: 7px 1px
-        background-repeat: repeat-x
-        position: absolute
-        left: 0
-        bottom: 0
+        @include dot_border_bottom
       > .question,
       > .answer
         margin: 0

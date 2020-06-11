@@ -160,18 +160,8 @@
           </ul>
         </div>
       </div>
-      <ul class="picture_list">
+      <ul v-if="$store.state.display === 'card'" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
-          <!-- <a
-            @click="selectPic(picture.TogoTV_Image_ID, picture.original_png)"
-            @dblclick="moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
-            :class="checkIfSelected(picture.TogoTV_Image_ID)"
-          >
-            <img
-              :src="`http://togotv.dbcls.jp/images/s/${picture.original_png}`"
-              :alt="picture.name"
-            />
-          </a>-->
           <a
             @click="is_edit_on ? selectPic(picture.TogoTV_Image_ID, picture.original_png, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
@@ -200,10 +190,23 @@
           </div>
         </li>
       </ul>
-      <infinite-loading ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
+      <infinite-loading v-if="$store.state.display === 'card'" ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
         <div slot="no-more"></div>
         <div slot="no-results"></div>
       </infinite-loading>
+      <ul v-if="$store.state.display === 'list'" class="picture_list">
+        <li v-for="(other_tag, index) in tags" :key="index" @click="fetchImageByTag(other_tag.key, index)" :class="other_tag.key == '' ? 'notag' : ''">
+          <div v-if="other_tag.key !== ''" class="category">
+            {{ other_tag.key }}
+            <span
+              :id="`toggle_btn_${index}`"
+              :class="['toggle_btn', 'close']"
+            ></span>
+          </div>
+          <ul :id="`picture_list_children_${index}`" class="picture_list_children">
+          </ul>
+        </li>
+      </ul>
     </div>
     <DownloadModal
       v-if="is_modal_on"
@@ -231,12 +234,15 @@ export default Vue.extend({
       title: 'Togo picture gallery'
     }
   },
-  mounted() {
+  created() {
     Object.keys(this.facets).forEach((key) => {
       axios
         .get(`http://togotv-api.bhx.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           this.facets[key].data = data.data.facets
+          if(key === 'other_tags') {
+            this.tags = data.data.facets
+          }
         })
         .catch(error => {
           console.log('error', error)
@@ -261,6 +267,7 @@ export default Vue.extend({
       current_page: 1,
       last_page: 0,
       pictures: [],
+      tags: [],
       facets: {
         author: {
           checked: [],
@@ -298,6 +305,36 @@ export default Vue.extend({
     }
   },
   methods: {
+    fetchImageByTag(tag, index) {
+      let target_element = document.getElementById(`toggle_btn_${index}`)
+      let classes = target_element.getAttribute('class')
+      let target_element_children = document.getElementById(`picture_list_children_${index}`)
+      if(classes.indexOf('close') === -1) {
+        target_element.classList.add('close')
+        target_element_children.classList.add('close')
+      } else {
+        target_element.classList.remove('close')
+        target_element_children.classList.remove('close')
+        if(!target_element_children.hasChildNodes()) {
+          axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${tag}`).then(data => {
+            let children_list = ''
+            data.data.data.forEach(tag => {
+              children_list += 
+                `<li>
+                  <a href="./picture?id=${tag.TogoTV_Image_ID}" onClick="event.stopPropagation()">
+                    <div class="title">
+                      <img src="http://togotv.dbcls.jp/images/s/${tag.original_png}"/>
+                      <p>${tag.name}</p>
+                    </div>
+                    <p class="author">${this.removeTag(tag.author)}</p>
+                  </a>
+                </li>`
+            })
+            target_element_children.innerHTML = children_list
+          })
+        }
+      }
+    },
     checkTaxon(type, granpa, parent, siblings, children, parents) {
       let is_all_checked = true
       if(type === "taxon1") {
@@ -545,7 +582,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .pictures_wrapper
   padding: 0 $VIEW_PADDING
   display: flex
@@ -655,6 +692,7 @@ export default Vue.extend({
                 top: 7px
                 left: -20px
   > .gallery_wrapper
+    width: 100%
     > .gallery_section_header
       display: flex
       justify-content: space-between
@@ -693,6 +731,56 @@ export default Vue.extend({
               &:hover
                 cursor: pointer
     > ul.picture_list
+      > li
+        border-top: 2px solid $MAIN_COLOR
+        &.notag
+          border: none
+        > .category
+          height: 35px
+          padding-left: 13px
+          font-size: 14px
+          font-weight: bold
+          display: flex
+          align-items: center
+          > span.toggle_btn
+            @include toggle_arrow
+        &:hover
+          cursor: pointer
+        &:last-of-type
+          border-bottom: 2px solid $MAIN_COLOR
+        > ul.picture_list_children
+          max-height: auto
+          > li
+            position: relative
+            height: 35px
+            padding: 0 13px
+            font-size: 12px
+            font-weight: bold
+            > a
+              color: $BLACK
+              text-decoration: none
+              display: flex
+              align-items: center
+              justify-content: space-between
+              > div.title
+                display: flex
+                align-items: center
+                > img
+                  width: 30px
+                  height: 30px
+                  object-fit: cover
+                  margin-right: 8px
+            &:after
+              @include dot_border_bottom
+            &:first-of-type
+              border-top: 1px solid $MAIN_COLOR
+            &:last-of-type
+              &:after
+                height: 0
+          &.close
+            visibility: hidden
+            max-height: 0
+    > ul.picture_list_card
       display: flex
       flex-wrap: wrap
       margin-right: -20px

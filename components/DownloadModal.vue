@@ -24,6 +24,7 @@
       </p>
     </div>
     <div class="btn_wrapper">
+      <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
       <a class="button mont bold" target="_blank" @click="controlDownload('png')">png</a>
       <a class="button mont bold" target="_blank" @click="controlDownload('svg')">svg</a>
       <a class="button mont bold" target="_blank" @click="controlDownload('ai')">AI<span>(Adobe Illustrator)</span></a>
@@ -42,13 +43,37 @@ export default Vue.extend({
   },
   methods: {
     controlDownload(extension) {
-      if(this.props.is_single_download){
+      if(extension === 'all') {
+        let all_extensions = [
+          'png', 'svg', 'ai'
+        ]
+        if(this.props.is_single_download){
+          all_extensions.forEach((extension, i) => {
+            setTimeout(() => {
+              this.download(this.props.selected_pic.png, extension)
+            }, 500 * i)
+          })
+        } else {
+          all_extensions.forEach((extension, i) => {
+            // setTimeout(() => {
+            //   this.download(this.props.selected_pic.png, extension)
+            // }, 500 * i)
+            this.props.selected_pics.forEach((pic, t) => {
+              setTimeout(() => {
+                this.download(pic.png, extension)
+              }, 500 * (i + t))
+            })
+          })
+        }
+      } else if(this.props.is_single_download){
         // シングルダウンロード
         this.download(this.props.selected_pic.png, extension)
       } else {
         // 複数ダウンロード
-        this.props.selected_pics.forEach(pic => {
-          this.download(pic.png, extension)
+        this.props.selected_pics.forEach((pic, i) => {
+          setTimeout(() => {
+            this.download(pic.png, extension)
+          }, 500 * i)
         })
       }
     },
