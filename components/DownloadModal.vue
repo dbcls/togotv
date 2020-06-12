@@ -25,9 +25,12 @@
     </div>
     <div class="btn_wrapper">
       <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('png')">png</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('svg')">svg</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('ai')">AI<span>(Adobe Illustrator)</span></a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('original_png')">png</a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('original_svg')">svg</a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('original_ai')">AI<span>(Adobe Illustrator)</span></a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('obj_mtl_zip')">obj_mtl_zip</a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('apng')">apng</a>
+      <a class="button mont bold" target="_blank" @click="controlDownload('rotaion')">rotaion</a>
     </div>
   </div>
 </template>
@@ -45,12 +48,12 @@ export default Vue.extend({
     controlDownload(extension) {
       if(extension === 'all') {
         let all_extensions = [
-          'png', 'svg', 'ai'
+          'original_png', 'original_svg', 'original_ai', 'obj_mtl_zip', 'apng', 'rotaion'
         ]
         if(this.props.is_single_download){
           all_extensions.forEach((extension, i) => {
             setTimeout(() => {
-              this.download(this.props.selected_pic.png, extension)
+              this.download(this.props.selected_pic[extension])
             }, 500 * i)
           })
         } else {
@@ -60,33 +63,36 @@ export default Vue.extend({
             // }, 500 * i)
             this.props.selected_pics.forEach((pic, t) => {
               setTimeout(() => {
-                this.download(pic.png, extension)
+                this.download(pic[extension])
               }, 500 * (i + t))
             })
           })
         }
       } else if(this.props.is_single_download){
         // シングルダウンロード
-        this.download(this.props.selected_pic.png, extension)
+        this.download(this.props.selected_pic[extension])
       } else {
         // 複数ダウンロード
         this.props.selected_pics.forEach((pic, i) => {
           setTimeout(() => {
-            this.download(pic.png, extension)
+            this.download(pic[extension])
           }, 500 * i)
         })
       }
     },
-    download(name, extension) {
+    download(name) {
+      if(!name) {
+        return;
+      }
       let link = document.createElement('a')
       link.target = "_blank"
       link.download = name
-      if(extension === 'png') {
-        link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}.png`
+      if(name.slice(-3) === 'png') {
+        link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}`
       } else {
-        link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}.${extension}`
+        link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}`
       }
-      document.body.appendChild(link)      
+      document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
       this.$emit('closeModal')
@@ -100,6 +106,7 @@ export default Vue.extend({
   @include modal
   padding: 41px 70px 33px
   width: 70vw
+  max-width: 980px
   background-color: $MAIN_COLOR
   border-radius: 20px
   > .modal_title
@@ -129,10 +136,12 @@ export default Vue.extend({
     display: flex
     justify-content: center
     align-items: center
-    margin-top: 24px
+    flex-wrap: wrap
+    margin-top: 15px
     > a.button
       @include download_btn
       margin-right: 10px
+      margin-top: 9px
       &:last-of-type
         margin-right: 0px
       > span

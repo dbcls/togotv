@@ -12,7 +12,10 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
+      <p class="facet_title filter tsukushi bold">
+        絞り込み検索
+      </p>
+      <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
       <div class="facet_small_section">
         <p class="facet_small_title brush tsukushi bold">
           作者
@@ -24,9 +27,9 @@
         <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
           <ul>
             <li v-for="(author, index) in facets.author.data" :key="index">
-              <input type="checkbox" :id="author.key === '' ? '作者なし' : removeTag(author.key)" :value="author.key === '' ? '作者なし' : removeTag(author.key)" v-model="filters.author"/>
-              <label :for="author.key === '' ? '作者なし' : removeTag(author.key)">
-                <span class="label">{{ author.key === '' ? '作者なし' : removeTag(author.key) }}</span>
+              <input type="checkbox" :id="removeTag(author.key)" :value="removeTag(author.key)" v-model="filters.author"/>
+              <label :for="removeTag(author.key)">
+                <span class="label">{{ removeTag(author.key) }}</span>
                 <span class="count mont">{{ author.doc_count }}</span>
               </label>
             </li>
@@ -49,18 +52,18 @@
               <label :for="taxon.key">
                 <span class="label" v-html="taxon.key"></span>
                 <span class="count mont">{{ taxon.doc_count }}</span>
-                <span class="toggle_btn" v-if="hasChildren(taxon.taxonomy_2.buckets)"></span>
+                <span class="toggle_btn close" @click="toggleTaxon($event)" v-if="hasChildren(taxon.taxonomy_2.buckets)"></span>
               </label>
-              <ul class="taxon_2" v-if="hasChildren(taxon.taxonomy_2.buckets)">
+              <ul class="taxon_2 close" v-if="hasChildren(taxon.taxonomy_2.buckets)">
                 <li v-for="(taxon_2, index_2) in taxon.taxonomy_2.buckets" :key="index_2">
                   <!-- taxon2 -->
                   <input type="checkbox" :id="taxon_2.key" :value="taxon_2.key" v-model="filters.taxon2" @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"/>
                   <label :for="taxon_2.key">
                     <span class="label" v-html="taxon_2.key"></span>
                     <span class="count mont">{{ taxon_2.doc_count }}</span>
-                    <span class="toggle_btn" v-if="hasChildren(taxon_2.taxonomy_3.buckets)"></span>
+                    <span class="toggle_btn close" @click="toggleTaxon($event)" v-if="hasChildren(taxon_2.taxonomy_3.buckets)"></span>
                   </label>
-                  <ul class="taxon_3" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
+                  <ul class="taxon_3 close" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
                     <li v-for="(taxon_3, index_3) in taxon_2.taxonomy_3.buckets" :key="index_3">
                       <!-- taxon2 -->
                       <input type="checkbox" :id="taxon_3.key" :value="taxon_3.key" v-model="filters.taxon3" @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"/>
@@ -89,7 +92,7 @@
             <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
               <input type="checkbox" :id="other_tag.key" :value="other_tag.key" v-model="filters.other_tags"/>
               <label :for="other_tag.key">
-                <span class="label" v-html="other_tag.key === '' ? '分類なし' : other_tag.key"></span>
+                <span class="label" v-html="other_tag.key"></span>
                 <span class="count mont">{{ other_tag.doc_count }}</span>
               </label>
             </li>
@@ -163,11 +166,11 @@
       <ul v-if="$store.state.display === 'card'" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
-            @click="is_edit_on ? selectPic(picture.TogoTV_Image_ID, picture.original_png, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
+            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
             <span
-              @click="selectPic(picture.TogoTV_Image_ID, picture.original_png, $event)"
+              @click="selectPic(picture, $event)"
               v-if="is_edit_on"
               class="check_btn"
             ></span>
@@ -181,16 +184,16 @@
             <p class="name_en mont">{{ picture.name_en }}</p>
             <a
               class="button png mont bold"
-              @click="setDonwnloadLink(picture.TogoTV_Image_ID, picture.original_png)"
-            >png</a>
+              @click="setDonwnloadLink(picture)"
+            >ダウンロード</a>
             <nuxt-link
               class="button mont bold"
               :to="{name: 'picture', query: {id: picture.TogoTV_Image_ID}}"
-            >詳細をみる</nuxt-link>
+            >詳細</nuxt-link>
           </div>
         </li>
       </ul>
-      <infinite-loading v-if="$store.state.display === 'card'" ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
+      <infinite-loading v-if="$store.state.display === 'card' && !is_filter_on" ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
         <div slot="no-more"></div>
         <div slot="no-results"></div>
       </infinite-loading>
@@ -239,7 +242,11 @@ export default Vue.extend({
       axios
         .get(`http://togotv-api.bhx.jp/api/facets/${key}?target=pictures`)
         .then(data => {
+          data.data.facets = data.data.facets.filter(facet => {
+            return facet.key !== ""}
+          )
           this.facets[key].data = data.data.facets
+          // リスト表示の為
           if(key === 'other_tags') {
             this.tags = data.data.facets
           }
@@ -267,6 +274,7 @@ export default Vue.extend({
       current_page: 1,
       last_page: 0,
       pictures: [],
+      loaded_pictures: [],
       tags: [],
       facets: {
         author: {
@@ -299,12 +307,54 @@ export default Vue.extend({
   watch: {
     filters: {
       handler: function (val) {
-
+        let param = Object.assign({}, val)
+        // 空のプロパティは削除
+        Object.keys(param).forEach(key => {
+          if(param[key].length === 0) {
+            delete param[key];
+          }
+        })
+        if (!this.is_filter_on) {
+          // フィルターなし
+          this.pictures = this.loaded_pictures
+        } else {
+          // 配列を文字列に変換
+          Object.keys(param).forEach((key => {
+            if(typeof param[key] === 'object') {
+              param[key] = param[key].join(',')
+            }
+          }))
+          param['target'] = 'pictures'
+          param['rows'] = 1000
+          axios.get('http://togotv-api.bhx.jp/api/bool_search', {
+            params: param
+          }).then(data => {
+            this.pictures = data.data.data
+          }).catch(error => {
+            console.log('error', error)
+          });
+        }
       },
       deep: true
     }
   },
+  computed: {
+    is_filter_on() {
+      let frag = false
+      Object.keys(this.filters).forEach(key => {
+        if(this.filters[key].length !== 0) {
+            frag = true
+        }
+      })
+      return frag
+    }
+  },
   methods: {
+    clearFilter() {
+      Object.keys(this.filters).forEach(key => {
+        this.filters[key] = []
+      })
+    },
     fetchImageByTag(tag, index) {
       let target_element = document.getElementById(`toggle_btn_${index}`)
       let classes = target_element.getAttribute('class')
@@ -354,6 +404,9 @@ export default Vue.extend({
           })
           this.filters.taxon2 = this.filters.taxon2.concat(taxon2_array)
           this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array)
+        } else {
+          this.filters.taxon2 = []
+          this.filters.taxon3 = []
         }
       } else if (type === "taxon2") {
         // taxon2クリック時→子供の要素全てチェックor外す、兄弟要素確認し、親の状態決める
@@ -474,25 +527,28 @@ export default Vue.extend({
       return text.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '')
     },
     infiniteHandler($state) {
-      axios
-        .get(
-          `http://togotv-api.bhx.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
-        )
-        .then((data) => {
-          this.pictures = this.pictures.concat(data.data.data)
-          if (this.current_page === 1) {
-            this.last_page = data.data.last_page
-          }
-          if (this.current_page === this.last_page) {
-            $state.complete()
-          } else {
-            this.current_page += 1
-            $state.loaded()
-          }
-        })
-        .catch((error) => {
-          console.log('error', error)
-        })
+      if (!this.is_filter_on) {
+        axios
+          .get(
+            `http://togotv-api.bhx.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
+          )
+          .then((data) => {
+            this.pictures = this.pictures.concat(data.data.data)
+            this.loaded_pictures = this.pictures.concat()
+            if (this.current_page === 1) {
+              this.last_page = data.data.last_page
+            }
+            if (this.current_page === this.last_page) {
+              $state.complete()
+            } else {
+              this.current_page += 1
+              $state.loaded()
+            }
+          })
+          .catch((error) => {
+            console.log('error', error)
+          })
+       }
     },
     setCanMessageSubmit() {
       this.canMessageSubmit = true
@@ -513,38 +569,34 @@ export default Vue.extend({
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
     },
-    setDonwnloadLink(id, png) {
-      this.selected_pic['id'] = id
-      this.selected_pic['png'] = png.split('.').shift()
+    setDonwnloadLink(pic) {
+      this.selected_pic = pic
       this.is_single_download = true
       this.is_modal_on = true
     },
     moveDetailPage(next_page) {
       this.$router.push(next_page)
     },
-    selectPic(id, png, e) {
+    selectPic(pic, e) {
       e.stopPropagation()
       let is_already_exist = false
-      this.selected_pics.forEach((pic) => {
-        if (pic.id === id) {
+      this.selected_pics.forEach(selected_pic => {
+        if (selected_pic.TogoTV_Image_ID === pic.TogoTV_Image_ID) {
           is_already_exist = true
         }
       })
       if (!is_already_exist) {
-        this.selected_pics.push({
-          id: id,
-          png: png.split('.').shift()
-        })
+        this.selected_pics.push(pic)
       } else {
-        this.selected_pics = this.selected_pics.filter((pic) => {
-          return pic.id !== id
+        this.selected_pics = this.selected_pics.filter(selected_pic => {
+          return selected_pic.TogoTV_Image_ID !== pic.TogoTV_Image_ID
         })
       }
     },
     checkIfSelected(id) {
       let is_already_exist = false
       this.selected_pics.forEach((pic) => {
-        if (pic.id === id) {
+        if (pic.TogoTV_Image_ID === id) {
           is_already_exist = true
         }
       })
@@ -577,6 +629,17 @@ export default Vue.extend({
         }
       })
       return flag
+    },
+    toggleTaxon(e) {
+      e.preventDefault()
+      let class_list = e.target.classList
+      if(class_list.value.indexOf('close') === -1) {
+        class_list.add('close')
+        e.target.parentNode.nextElementSibling.classList.add('close')
+      } else {
+        class_list.remove('close')
+        e.target.parentNode.nextElementSibling.classList.remove('close')
+      }
     }
   }
 })
@@ -603,6 +666,19 @@ export default Vue.extend({
       &.filter
         &:before
           @include icon('filter')
+    > p.clear_btn
+      text-decoration: underline
+      font-size: 12px
+      display: flex
+      align-items: center
+      &:before
+        width: 18px
+        height: 18px
+        margin-right: 2px
+        margin-left: 3px
+        @include icon('clear')
+      &:hover
+        cursor: pointer
     > .input_wrapper
       @include text_input
       > input
@@ -673,6 +749,8 @@ export default Vue.extend({
           &.taxon_3
             margin-left: 28px
             position: relative
+            max-height: auto
+            transition: max-height .3s
             &:before
               content: ""
               width: 1px
@@ -691,6 +769,9 @@ export default Vue.extend({
                 position: absolute
                 top: 7px
                 left: -20px
+            &.close
+              max-height: 0
+              overflow: hidden
   > .gallery_wrapper
     width: 100%
     > .gallery_section_header
@@ -796,6 +877,7 @@ export default Vue.extend({
             height: 22px
             border-radius: 2px
             border: 2px solid $SUB_COLOR
+            background-color: #fff
             position: absolute
             left: 0
             top: 0
