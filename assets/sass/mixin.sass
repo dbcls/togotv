@@ -194,9 +194,9 @@ $VIEW_PADDING_SP: 40px
   z-index: $LAYER_MODAL_BACK
 
 @mixin toggle_arrow
-  width: 10px
-  height: 10px
-  margin-left: 6px
+  width: 15px
+  height: 11px
+  padding-left: 6px
   display: flex
   &:before
     content: ''
@@ -208,7 +208,7 @@ $VIEW_PADDING_SP: 40px
     transform: rotate(-135deg)
     transition: .3s
   &.close
-    margin-top: 5px
+    padding-top: 5px
     &:before
       transform: rotate(45deg)
   &:hover
