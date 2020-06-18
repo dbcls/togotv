@@ -25,12 +25,12 @@
     </div>
     <div class="btn_wrapper">
       <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('original_png')">png</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('original_svg')">svg</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('original_ai')">AI<span>(Adobe Illustrator)</span></a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('obj_mtl_zip')">obj_mtl_zip</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('apng')">apng</a>
-      <a class="button mont bold" target="_blank" @click="controlDownload('rotaion')">rotaion</a>
+      <a class="button mont bold" v-if="extension_exist.original_png" target="_blank" @click="controlDownload('original_png')">png</a>
+      <a class="button mont bold" v-if="extension_exist.original_svg" target="_blank" @click="controlDownload('original_svg')">svg</a>
+      <a class="button mont bold" v-if="extension_exist.original_ai" target="_blank" @click="controlDownload('original_ai')">AI<span>(Adobe Illustrator)</span></a>
+      <a class="button mont bold" v-if="extension_exist.obj_mtl_zip" target="_blank" @click="controlDownload('obj_mtl_zip')">obj_mtl_zip</a>
+      <a class="button mont bold" v-if="extension_exist.apng" target="_blank" @click="controlDownload('apng')">apng</a>
+      <a class="button mont bold" v-if="extension_exist.rotation" target="_blank" @click="controlDownload('rotation')">rotation</a>
     </div>
   </div>
 </template>
@@ -44,17 +44,47 @@ export default Vue.extend({
       required: true
     }
   },
+  mounted() {
+    console.log(this.props)
+    if(this.props.is_single_download) {
+      Object.keys(this.extension_exist).forEach(extension => {
+        if(this.props.selected_pic[extension] !== '') {
+          this.extension_exist[extension] = true
+        }
+      })
+    } else {
+      this.props.selected_pics.forEach(selected_pic => {
+        Object.keys(this.extension_exist).forEach(extension => {
+          if(selected_pic[extension] !== '') {
+            this.extension_exist[extension] = true
+          }
+        })
+      })
+    }
+  },
+  data() {
+    return {
+      extension_exist: {
+        'original_png': false,
+        'original_svg': false,
+        'original_ai': false,
+        'obj_mtl_zip': false,
+        'apng': false,
+        'rotation': false,
+      }
+    }
+  },
   methods: {
     controlDownload(extension) {
       if(extension === 'all') {
-        let all_extensions = [
-          'original_png', 'original_svg', 'original_ai', 'obj_mtl_zip', 'apng', 'rotaion'
-        ]
+        let all_extensions = Object.keys(this.extension_exist)
         if(this.props.is_single_download){
           all_extensions.forEach((extension, i) => {
-            setTimeout(() => {
-              this.download(this.props.selected_pic[extension])
-            }, 500 * i)
+            if(this.extension_exist[extension]) {
+              setTimeout(() => {
+                this.download(this.props.selected_pic[extension])
+              }, 500 * i)
+            }
           })
         } else {
           all_extensions.forEach((extension, i) => {
