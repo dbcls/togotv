@@ -169,7 +169,7 @@ export default Vue.extend({
       this.$store.commit('toggleDisplay')
     },
     fetchData(page, is_initial) {
-      axios.get(`http://togotv-api.bhx.jp/api/search?from=${page}&text=${this.$route.query.query}`).then(data => {
+      axios.get(`http://togotv-api.bhx.jp/api/search?from=${page}&text=${this.$route.query.query}&rows=21`).then(data => {
         this.result_list = data.data.data
         if(is_initial) {
           this.lastpage = data.data.last_page

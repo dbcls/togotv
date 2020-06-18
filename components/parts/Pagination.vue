@@ -64,6 +64,7 @@ export default Vue.extend({
       }
     },
     changeCurrentPage(page) {
+      scrollTo(0, 0);
       this.currentpage = page;
       this.changeCurrentPageRange();
     },

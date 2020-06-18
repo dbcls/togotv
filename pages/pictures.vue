@@ -307,33 +307,40 @@ export default Vue.extend({
   watch: {
     filters: {
       handler: function (val) {
-        let param = Object.assign({}, val)
-        // 空のプロパティは削除
-        Object.keys(param).forEach(key => {
-          if(param[key].length === 0) {
-            delete param[key];
-          }
-        })
-        if (!this.is_filter_on) {
-          // フィルターなし
-          this.pictures = this.loaded_pictures
-        } else {
-          // 配列を文字列に変換
-          Object.keys(param).forEach((key => {
-            if(typeof param[key] === 'object') {
-              param[key] = param[key].join(',')
+        setTimeout(() => {
+          let param = Object.assign({}, val)
+          // 空のプロパティは削除
+          Object.keys(param).forEach(key => {
+            param[key] = param[key].filter(data => data !== "")
+            if(param[key].length === 0) {
+              delete param[key];
             }
-          }))
-          param['target'] = 'pictures'
-          param['rows'] = 1000
-          axios.get('http://togotv-api.bhx.jp/api/bool_search', {
-            params: param
-          }).then(data => {
-            this.pictures = data.data.data
-          }).catch(error => {
-            console.log('error', error)
-          });
-        }
+          })
+          if (!this.is_filter_on) {
+            // フィルターなし]
+            this.pictures = this.loaded_pictures
+          } else {
+            // 配列を文字列に変換
+            Object.keys(param).forEach((key => {
+              if(key === 'pics') {
+                param['exist'] = param['pics']
+                delete param['pics']
+                param['exist'] = param['exist'].join(',')
+              } else if(typeof param[key] === 'object') {
+                param[key] = param[key].join(',')
+              }
+            }))
+            param['target'] = 'pictures'
+            param['rows'] = 1000
+            axios.get('http://togotv-api.bhx.jp/api/bool_search', {
+              params: param
+            }).then(data => {
+              this.pictures = data.data.data
+            }).catch(error => {
+              console.log('error', error)
+            });
+          }
+        }, 0)
       },
       deep: true
     }
@@ -371,7 +378,7 @@ export default Vue.extend({
             data.data.data.forEach(tag => {
               children_list += 
                 `<li>
-                  <a href="./picture?id=${tag.TogoTV_Image_ID}" onClick="event.stopPropagation()">
+                  <a href="../picture?id=${tag.TogoTV_Image_ID}" onClick="event.stopPropagation()">
                     <div class="title">
                       <img src="http://togotv.dbcls.jp/images/s/${tag.original_png}"/>
                       <p>${tag.name}</p>
@@ -534,7 +541,7 @@ export default Vue.extend({
           )
           .then((data) => {
             this.pictures = this.pictures.concat(data.data.data)
-            this.loaded_pictures = this.pictures.concat()
+            this.loaded_pictures = this.loaded_pictures.concat(data.data.data)
             if (this.current_page === 1) {
               this.last_page = data.data.last_page
             }

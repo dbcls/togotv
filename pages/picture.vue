@@ -11,9 +11,12 @@
         <a href="" target="_blank" class="taxonomy mont">{{ picture.tax_id }}</a>
         <a :href="picture.license" target="_blank" class="wiki mont">Wikipedia Commons</a>
         <div class="download_btns">
-          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" class="mont bold" download>png</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" class="mont bold" download>svg</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" v-if="picture.original_png !== ''" class="mont bold" download>png</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" v-if="picture.original_svg !== ''" class="mont bold" download>svg</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" v-if="picture.original_ai !== ''" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.obj_mtl_zip}`" v-if="picture.obj_mtl_zip !== ''" class="mont bold" download>obj_mtl_zip</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.apng}`" v-if="picture.apng !== ''" class="mont bold" download>apng</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.rotation}`" v-if="picture.rotation !== ''" class="mont bold" download>rotation</a>
         </div>
       </div>
     </div>
@@ -40,7 +43,7 @@ export default Vue.extend({
   async asyncData ( { query, error } ) {
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&TogoTV_Image_ID=${query.id}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
-
+      console.log(data.data.data[0])
     return {
       picture: data.data.data[0],
       tag_data: tag_data.data.data
@@ -70,7 +73,7 @@ export default Vue.extend({
     display: flex
     > .img_wrapper
       width: 70%
-      height: 290px
+      height: 310px
       background-color: #EDFCFC
       display: flex
       align-items: center
@@ -84,7 +87,7 @@ export default Vue.extend({
       min-width: 380px
       padding: 39px 0 0 30px
       box-sizing: border-box
-      height: 290px
+      height: 310px
       color: #fff
       background-color: $MAIN_COLOR
       position: relative
@@ -94,9 +97,9 @@ export default Vue.extend({
         top: 0
         left: -100px
         border-left: 50px solid transparent
-        border-top: 145px solid transparent
+        border-top: 155px solid transparent
         border-right: 50px solid $MAIN_COLOR
-        border-bottom: 145px solid $MAIN_COLOR
+        border-bottom: 155px solid $MAIN_COLOR
       > p
         margin: 0
       > p.name
@@ -128,11 +131,12 @@ export default Vue.extend({
           margin-right: 3px
           @include icon('externallink')
       > div.download_btns
-        margin-top: 24px
+        margin-top: 15px
         margin-left: -3px
         > a
           @include download_btn
           margin-left: 5px
+          line-height: 38px
           &:first-of-type
             margin-left: 0
   > .related_images_wrapper
