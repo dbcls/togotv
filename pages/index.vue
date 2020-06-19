@@ -45,7 +45,7 @@
 import Vue from 'vue'
 import CourseList from '~/components/CourseList.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
-import TextSearch from '~/components/parts/TextSearch.vue'
+import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
 
 export default Vue.extend({

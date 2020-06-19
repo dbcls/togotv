@@ -91,7 +91,7 @@
 import Vue from 'vue'
 import VueYoutube from 'vue-youtube'
 import CourseList from '~/components/CourseList.vue'
-import SingleVideoCard from '~/components/parts/SingleVideoCard.vue'
+import SingleVideoCard from '~/components/SingleVideoCard.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
 import axios from 'axios'
 

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import SingleVideoCard from '~/components/parts/SingleVideoCard.vue'
+import SingleVideoCard from '~/components/SingleVideoCard.vue'
 
 export default Vue.extend({
   props: {

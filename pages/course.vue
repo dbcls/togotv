@@ -20,7 +20,7 @@
 <script>
 import Vue from 'vue'
 // import course from '~/static/json/test/specificCourse.json'
-import SingleVideoCard from '~/components/parts/SingleVideoCard.vue'
+import SingleVideoCard from '~/components/SingleVideoCard.vue'
 import axios from 'axios'
 
 export default Vue.extend({
