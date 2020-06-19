@@ -26,8 +26,8 @@
 import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
-import AsideParts from '~/components/parts/AsideParts.vue'
-import Pagination from '~/components/parts/Pagination.vue'
+import AsideParts from '~/components/AsideParts.vue'
+import Pagination from '~/components/Pagination.vue'
 import axios from 'axios'
 
 export default Vue.extend({

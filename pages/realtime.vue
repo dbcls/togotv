@@ -25,7 +25,7 @@
 import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
-import AsideParts from '~/components/parts/AsideParts.vue'
+import AsideParts from '~/components/AsideParts.vue'
 import axios from 'axios'
 
 export default Vue.extend({

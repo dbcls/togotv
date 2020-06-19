@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ScrollBtn from '~/components/parts/ScrollBtn.vue'
-import SingleVideoCard from '~/components/parts/SingleVideoCard.vue'
+import ScrollBtn from '~/components/ScrollBtn.vue'
+import SingleVideoCard from '~/components/SingleVideoCard.vue'
 
 export default Vue.extend({
   props: {

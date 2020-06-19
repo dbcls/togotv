@@ -23,7 +23,7 @@
 
 <script>
 import Vue from 'vue'
-import ScrollBtn from '~/components/parts/ScrollBtn.vue'
+import ScrollBtn from '~/components/ScrollBtn.vue'
 
 export default Vue.extend({
   props: {

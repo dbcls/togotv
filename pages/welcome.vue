@@ -736,6 +736,7 @@ h2
         border: 12px solid $SUB_COLOR
         border-radius: 3px
         z-index: $LAYER_1
+        width: 463px
       > .welcome_main
         width: 890px
         position: absolute

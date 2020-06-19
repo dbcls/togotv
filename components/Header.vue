@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import TextSearch from '~/components/parts/TextSearch.vue'
+import TextSearch from '~/components/TextSearch.vue'
 import Vue from 'vue'
 export default Vue.extend({
   data () {
