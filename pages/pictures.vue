@@ -343,6 +343,11 @@ export default Vue.extend({
         }, 0)
       },
       deep: true
+    },
+    keyword: function(val) {
+      if(val === '') {
+        this.clearFilter()
+      }
     }
   },
   computed: {
@@ -568,9 +573,17 @@ export default Vue.extend({
         if (!this.canMessageSubmit) {
           return
         }
-        // this.$router.push({ name: 'result', query: { query: this.keyword } })
-      } else if (type === 'click') {
-        // this.$router.push({ name: 'result', query: { query: this.keyword } })
+        this.clearFilter()
+        axios
+          .get(
+            `http://togotv-api.bhx.jp/api/search?target=pictures&text=${this.keyword}`
+          )
+          .then((data) => {
+            this.pictures = data.data.data
+          })
+          .catch((error) => {
+            console.log('error', error)
+          })
       }
     },
     toggleDisplay() {
