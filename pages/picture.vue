@@ -7,16 +7,16 @@
       <div class="pic_detail">
         <p class="name tsukushi bold">{{ picture.name }}</p>
         <p class="name_en mont">{{ picture.name_en }}</p>
-        <p class="author mont" v-html="`Designed by  ${picture.author}`"></p>
+        <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
         <a href="" target="_blank" class="taxonomy mont">{{ picture.tax_id }}</a>
         <a :href="picture.license" target="_blank" class="wiki mont">Wikipedia Commons</a>
         <div class="download_btns">
-          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" v-if="picture.original_png !== ''" class="mont bold" download>png</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" v-if="picture.original_svg !== ''" class="mont bold" download>svg</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" v-if="picture.original_ai !== ''" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.obj_mtl_zip}`" v-if="picture.obj_mtl_zip !== ''" class="mont bold" download>obj_mtl_zip</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.apng}`" v-if="picture.apng !== ''" class="mont bold" download>apng</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.rotation}`" v-if="picture.rotation !== ''" class="mont bold" download>rotation</a>
+          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" v-if="picture.original_png !== undefined" class="mont bold" download>png</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" v-if="picture.original_svg !== undefined" class="mont bold" download>svg</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" v-if="picture.original_ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.obj_mtl_zip}`" v-if="picture.obj_mtl_zip !== undefined" class="mont bold" download>obj_mtl_zip</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.apng}`" v-if="picture.apng !== undefined" class="mont bold" download>apng</a>
+          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.rotation}`" v-if="picture.rotation !== undefined" class="mont bold" download>rotation</a>
         </div>
       </div>
     </div>
@@ -43,7 +43,6 @@ export default Vue.extend({
   async asyncData ( { query, error } ) {
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&TogoTV_Image_ID=${query.id}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
-      console.log(data.data.data[0])
     return {
       picture: data.data.data[0],
       tag_data: tag_data.data.data
@@ -82,6 +81,8 @@ export default Vue.extend({
         min-width: 490px
         max-width: 650px
         width: 60%
+        max-height: 530px
+        object-fit: contain
     > .pic_detail
       width: 30%
       min-width: 380px

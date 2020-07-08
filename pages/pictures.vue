@@ -1,6 +1,6 @@
 <template>
   <div class="pictures_wrapper">
-    <div class="facet_wrapper">
+    <div class="facet_wrapper" v-if="$store.state.display === 'card'">
       <p class="facet_title search tsukushi bold">テキスト検索</p>
       <div class="input_wrapper">
         <input
@@ -12,9 +12,7 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">
-        絞り込み検索
-      </p>
+      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
       <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
       <div class="facet_small_section">
         <p class="facet_small_title brush tsukushi bold">
@@ -27,7 +25,12 @@
         <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
           <ul>
             <li v-for="(author, index) in facets.author.data" :key="index">
-              <input type="checkbox" :id="removeTag(author.key)" :value="removeTag(author.key)" v-model="filters.author"/>
+              <input
+                type="checkbox"
+                :id="removeTag(author.key)"
+                :value="removeTag(author.key)"
+                v-model="filters.author"
+              />
               <label :for="removeTag(author.key)">
                 <span class="label">{{ removeTag(author.key) }}</span>
                 <span class="count mont">{{ author.doc_count }}</span>
@@ -48,25 +51,51 @@
           <ul class="taxon_1">
             <li v-for="(taxon, index) in facets.taxon.data" :key="index">
               <!-- taxon1 -->
-              <input type="checkbox" :id="taxon.key" :value="taxon.key" v-model="filters.taxon1" @click="checkTaxon('taxon1', null, null, null, taxon.taxonomy_2.buckets)"/>
+              <input
+                type="checkbox"
+                :id="taxon.key"
+                :value="taxon.key"
+                v-model="filters.taxon1"
+                @click="checkTaxon('taxon1', null, null, null, taxon.taxonomy_2.buckets)"
+              />
               <label :for="taxon.key">
                 <span class="label" v-html="taxon.key"></span>
                 <span class="count mont">{{ taxon.doc_count }}</span>
-                <span class="toggle_btn close" @click="toggleTaxon($event)" v-if="hasChildren(taxon.taxonomy_2.buckets)"></span>
+                <span
+                  class="toggle_btn close"
+                  @click="toggleTaxon($event)"
+                  v-if="hasChildren(taxon.taxonomy_2.buckets)"
+                ></span>
               </label>
               <ul class="taxon_2 close" v-if="hasChildren(taxon.taxonomy_2.buckets)">
                 <li v-for="(taxon_2, index_2) in taxon.taxonomy_2.buckets" :key="index_2">
                   <!-- taxon2 -->
-                  <input type="checkbox" :id="taxon_2.key" :value="taxon_2.key" v-model="filters.taxon2" @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"/>
+                  <input
+                    type="checkbox"
+                    :id="taxon_2.key"
+                    :value="taxon_2.key"
+                    v-model="filters.taxon2"
+                    @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"
+                  />
                   <label :for="taxon_2.key">
                     <span class="label" v-html="taxon_2.key"></span>
                     <span class="count mont">{{ taxon_2.doc_count }}</span>
-                    <span class="toggle_btn close" @click="toggleTaxon($event)" v-if="hasChildren(taxon_2.taxonomy_3.buckets)"></span>
+                    <span
+                      class="toggle_btn close"
+                      @click="toggleTaxon($event)"
+                      v-if="hasChildren(taxon_2.taxonomy_3.buckets)"
+                    ></span>
                   </label>
                   <ul class="taxon_3 close" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
                     <li v-for="(taxon_3, index_3) in taxon_2.taxonomy_3.buckets" :key="index_3">
                       <!-- taxon2 -->
-                      <input type="checkbox" :id="taxon_3.key" :value="taxon_3.key" v-model="filters.taxon3" @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"/>
+                      <input
+                        type="checkbox"
+                        :id="taxon_3.key"
+                        :value="taxon_3.key"
+                        v-model="filters.taxon3"
+                        @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"
+                      />
                       <label :for="taxon_3.key">
                         <span class="label" v-html="taxon_3.key"></span>
                         <span class="count mont">{{ taxon_3.doc_count }}</span>
@@ -90,7 +119,12 @@
         <div :class="['checkbox_wrapper', facets.other_tags.is_open ? '' : 'close']">
           <ul>
             <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
-              <input type="checkbox" :id="other_tag.key" :value="other_tag.key" v-model="filters.other_tags"/>
+              <input
+                type="checkbox"
+                :id="other_tag.key"
+                :value="other_tag.key"
+                v-model="filters.other_tags"
+              />
               <label :for="other_tag.key">
                 <span class="label" v-html="other_tag.key"></span>
                 <span class="count mont">{{ other_tag.doc_count }}</span>
@@ -100,7 +134,8 @@
         </div>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title format tsukushi bold">形式
+        <p class="facet_small_title format tsukushi bold">
+          形式
           <span
             :class="['toggle_btn', facets.pics.is_open ? '' : 'close']"
             @click="facets.pics.is_open = !facets.pics.is_open"
@@ -109,7 +144,7 @@
         <div :class="['checkbox_wrapper', facets.pics.is_open ? '' : 'close']">
           <ul>
             <li v-for="(pic, index) in facets.pics.data" :key="index">
-              <input type="checkbox" :id="pic.key" :value="pic.key" v-model="filters.pics"/>
+              <input type="checkbox" :id="pic.key" :value="pic.key" v-model="filters.pics" />
               <label :for="pic.key">
                 <span class="label" v-html="pic.key"></span>
                 <span class="count mont">{{ pic.doc_count }}</span>
@@ -124,6 +159,7 @@
         <h2 class="page_title mont bold">Togo picture gallery</h2>
         <div class="control_wrapper">
           <button
+            v-if="$store.state.display === 'card'"
             :class="['control_btn', 'download']"
             @click="toggleEditMode()"
             v-html="is_edit_on ? '終了' : '選択'"
@@ -169,11 +205,7 @@
             @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
-            <span
-              @click="selectPic(picture, $event)"
-              v-if="is_edit_on"
-              class="check_btn"
-            ></span>
+            <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
             <img
               :src="`http://togotv.dbcls.jp/images/s/${picture.original_png}`"
               :alt="picture.name"
@@ -182,10 +214,7 @@
           <div class="description_wrapper">
             <p class="name tsukushi bold">{{ picture.name }}</p>
             <p class="name_en mont">{{ picture.name_en }}</p>
-            <a
-              class="button png mont bold"
-              @click="setDonwnloadLink(picture)"
-            >ダウンロード</a>
+            <a class="button png mont bold" @click="setDonwnloadLink(picture)">ダウンロード</a>
             <nuxt-link
               class="button mont bold"
               :to="{name: 'picture', query: {id: picture.TogoTV_Image_ID}}"
@@ -193,21 +222,27 @@
           </div>
         </li>
       </ul>
-      <infinite-loading v-if="$store.state.display === 'card' && !is_filter_on" ref="infiniteLoading" spinner="spiral" @infinite="infiniteHandler">
+      <infinite-loading
+        v-if="$store.state.display === 'card' && !is_filter_on"
+        ref="infiniteLoading"
+        spinner="spiral"
+        @infinite="infiniteHandler"
+      >
         <div slot="no-more"></div>
         <div slot="no-results"></div>
       </infinite-loading>
       <ul v-if="$store.state.display === 'list'" class="picture_list">
-        <li v-for="(other_tag, index) in tags" :key="index" @click="fetchImageByTag(other_tag.key, index)" :class="other_tag.key == '' ? 'notag' : ''">
+        <li
+          v-for="(other_tag, index) in tags"
+          :key="index"
+          @click="fetchImageByTag(other_tag.key, index)"
+          :class="other_tag.key == '' ? 'notag' : ''"
+        >
           <div v-if="other_tag.key !== ''" class="category">
             {{ other_tag.key }}
-            <span
-              :id="`toggle_btn_${index}`"
-              :class="['toggle_btn', 'close']"
-            ></span>
+            <span :id="`toggle_btn_${index}`" :class="['toggle_btn', 'close']"></span>
           </div>
-          <ul :id="`picture_list_children_${index}`" class="picture_list_children">
-          </ul>
+          <ul :id="`picture_list_children_${index}`" class="picture_list_children"></ul>
         </li>
       </ul>
     </div>
@@ -221,9 +256,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import DownloadModal from '~/components/DownloadModal.vue'
-import axios from 'axios'
+import Vue from "vue";
+import DownloadModal from "~/components/DownloadModal.vue";
+import axios from "axios";
 
 export default Vue.extend({
   // async asyncData(params) {
@@ -234,39 +269,39 @@ export default Vue.extend({
   // },
   head() {
     return {
-      title: 'Togo picture gallery'
-    }
+      title: "Togo picture gallery"
+    };
   },
   created() {
-    Object.keys(this.facets).forEach((key) => {
+    Object.keys(this.facets).forEach(key => {
       axios
         .get(`http://togotv-api.bhx.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
-            return facet.key !== ""}
-          )
-          this.facets[key].data = data.data.facets
+            return facet.key !== "";
+          });
+          this.facets[key].data = data.data.facets;
           // リスト表示の為
-          if(key === 'other_tags') {
-            this.tags = data.data.facets
+          if (key === "other_tags") {
+            this.tags = data.data.facets;
           }
         })
         .catch(error => {
-          console.log('error', error)
-        })
-    })
+          console.log("error", error);
+        });
+    });
   },
   components: {
     DownloadModal
   },
   data() {
     return {
-      keyword: '',
+      keyword: "",
       canMessageSubmit: false,
       is_modal_on: false,
       selected_pic: {
-        id: '',
-        png: ''
+        id: "",
+        png: ""
       },
       selected_pics: [],
       is_single_download: true,
@@ -300,243 +335,277 @@ export default Vue.extend({
         taxon2: [],
         taxon3: [],
         other_tags: [],
-        pics: [],
+        pics: []
       }
-    }
+    };
   },
   watch: {
     filters: {
-      handler: function (val) {
+      handler: function(val) {
         setTimeout(() => {
-          let param = Object.assign({}, val)
+          let param = Object.assign({}, val);
           // 空のプロパティは削除
           Object.keys(param).forEach(key => {
-            param[key] = param[key].filter(data => data !== "")
-            if(param[key].length === 0) {
+            param[key] = param[key].filter(data => data !== "");
+            if (param[key].length === 0) {
               delete param[key];
             }
-          })
+          });
           if (!this.is_filter_on) {
             // フィルターなし]
-            this.pictures = this.loaded_pictures
+            this.pictures = this.loaded_pictures;
           } else {
             // 配列を文字列に変換
-            Object.keys(param).forEach((key => {
-              if(key === 'pics') {
-                param['exist'] = param['pics']
-                delete param['pics']
-                param['exist'] = param['exist'].join(',')
-              } else if(typeof param[key] === 'object') {
-                param[key] = param[key].join(',')
+            Object.keys(param).forEach(key => {
+              if (key === "pics") {
+                param["exist"] = param["pics"];
+                delete param["pics"];
+                param["exist"] = param["exist"].join(",");
+              } else if (typeof param[key] === "object") {
+                param[key] = param[key].join(",");
               }
-            }))
-            param['target'] = 'pictures'
-            param['rows'] = 1000
-            axios.get('http://togotv-api.bhx.jp/api/bool_search', {
-              params: param
-            }).then(data => {
-              this.pictures = data.data.data
-            }).catch(error => {
-              console.log('error', error)
             });
+            param["target"] = "pictures";
+            param["rows"] = 1000;
+            axios
+              .get("http://togotv-api.bhx.jp/api/bool_search", {
+                params: param
+              })
+              .then(data => {
+                this.pictures = data.data.data;
+              })
+              .catch(error => {
+                console.log("error", error);
+              });
           }
-        }, 0)
+        }, 0);
       },
       deep: true
     },
     keyword: function(val) {
-      if(val === '') {
-        this.clearFilter()
+      if (val === "") {
+        this.clearFilter();
       }
     }
   },
   computed: {
     is_filter_on() {
-      let frag = false
+      let frag = false;
       Object.keys(this.filters).forEach(key => {
-        if(this.filters[key].length !== 0) {
-            frag = true
+        if (this.filters[key].length !== 0) {
+          frag = true;
         }
-      })
-      return frag
+      });
+      return frag;
     }
   },
   methods: {
     clearFilter() {
       Object.keys(this.filters).forEach(key => {
-        this.filters[key] = []
-      })
+        this.filters[key] = [];
+      });
     },
     fetchImageByTag(tag, index) {
-      let target_element = document.getElementById(`toggle_btn_${index}`)
-      let classes = target_element.getAttribute('class')
-      let target_element_children = document.getElementById(`picture_list_children_${index}`)
-      if(classes.indexOf('close') === -1) {
-        target_element.classList.add('close')
-        target_element_children.classList.add('close')
+      let target_element = document.getElementById(`toggle_btn_${index}`);
+      let classes = target_element.getAttribute("class");
+      let target_element_children = document.getElementById(
+        `picture_list_children_${index}`
+      );
+      if (classes.indexOf("close") === -1) {
+        target_element.classList.add("close");
+        target_element_children.classList.add("close");
       } else {
-        target_element.classList.remove('close')
-        target_element_children.classList.remove('close')
-        if(!target_element_children.hasChildNodes()) {
-          axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${tag}`).then(data => {
-            let children_list = ''
-            data.data.data.forEach(tag => {
-              children_list += 
-                `<li>
-                  <a href="../picture?id=${tag.TogoTV_Image_ID}" onClick="event.stopPropagation()">
+        target_element.classList.remove("close");
+        target_element_children.classList.remove("close");
+        if (!target_element_children.hasChildNodes()) {
+          axios
+            .get(
+              `http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${tag}`
+            )
+            .then(data => {
+              let children_list = "";
+              data.data.data.forEach(tag => {
+                children_list += `<li>
+                  <a href="../picture?id=${
+                    tag.TogoTV_Image_ID
+                  }" onClick="event.stopPropagation()">
                     <div class="title">
-                      <img src="http://togotv.dbcls.jp/images/s/${tag.original_png}"/>
+                      <img src="http://togotv.dbcls.jp/images/s/${
+                        tag.original_png
+                      }"/>
                       <p>${tag.name}</p>
                     </div>
                     <p class="author">${this.removeTag(tag.author)}</p>
                   </a>
-                </li>`
-            })
-            target_element_children.innerHTML = children_list
-          })
+                </li>`;
+              });
+              target_element_children.innerHTML = children_list;
+            });
         }
       }
     },
     checkTaxon(type, granpa, parent, siblings, children, parents) {
-      let is_all_checked = true
-      if(type === "taxon1") {
+      let is_all_checked = true;
+      if (type === "taxon1") {
         // taxon1クリック時→子供の要素全てチェックor外す
         // 全てチェックが入ってるかチェック
-        is_all_checked = this.checkAllChildrenChecked(children, null, 2)
-        this.filters.taxon2 = this.removeArrayFromTaxonFilter('taxon2', children, 1)
-        this.filters.taxon3 = this.removeArrayFromTaxonFilter('taxon3', children, 2)
-        if(!is_all_checked) {
-          let taxon2_array = []
-          let taxon3_array = []
+        is_all_checked = this.checkAllChildrenChecked(children, null, 2);
+        this.filters.taxon2 = this.removeArrayFromTaxonFilter(
+          "taxon2",
+          children,
+          1
+        );
+        this.filters.taxon3 = this.removeArrayFromTaxonFilter(
+          "taxon3",
+          children,
+          2
+        );
+        if (!is_all_checked) {
+          let taxon2_array = [];
+          let taxon3_array = [];
           children.forEach(child => {
-            taxon2_array.push(child.key)
+            taxon2_array.push(child.key);
             child.taxonomy_3.buckets.forEach(taxon3 => {
-              taxon3_array.push(taxon3.key)
-            })
-          })
-          this.filters.taxon2 = this.filters.taxon2.concat(taxon2_array)
-          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array)
+              taxon3_array.push(taxon3.key);
+            });
+          });
+          this.filters.taxon2 = this.filters.taxon2.concat(taxon2_array);
+          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array);
         } else {
-          this.filters.taxon2 = []
-          this.filters.taxon3 = []
+          this.filters.taxon2 = [];
+          this.filters.taxon3 = [];
         }
       } else if (type === "taxon2") {
         // taxon2クリック時→子供の要素全てチェックor外す、兄弟要素確認し、親の状態決める
-        is_all_checked = this.checkAllChildrenChecked(children, 'taxon3', 1)
+        is_all_checked = this.checkAllChildrenChecked(children, "taxon3", 1);
 
-        this.filters.taxon3 = this.removeArrayFromTaxonFilter('taxon3', children, 1)
+        this.filters.taxon3 = this.removeArrayFromTaxonFilter(
+          "taxon3",
+          children,
+          1
+        );
 
-        if(!is_all_checked) {
-          let taxon3_array = []
+        if (!is_all_checked) {
+          let taxon3_array = [];
           children.forEach(child => {
-            taxon3_array.push(child.key)
-          })
-          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array)
+            taxon3_array.push(child.key);
+          });
+          this.filters.taxon3 = this.filters.taxon3.concat(taxon3_array);
         }
-        
+
         // check siblings state
         setTimeout(() => {
-          let is_siblings_all_checked = true
+          let is_siblings_all_checked = true;
           siblings.forEach(sibling => {
-            if(siblings.key === "") {
-              return
+            if (siblings.key === "") {
+              return;
             }
-            if(this.filters.taxon2.indexOf(sibling.key) === -1) {
-              is_siblings_all_checked = false
+            if (this.filters.taxon2.indexOf(sibling.key) === -1) {
+              is_siblings_all_checked = false;
             }
-          })
-          if(is_siblings_all_checked) {
-            this.filters.taxon1.push(parent)
+          });
+          if (is_siblings_all_checked) {
+            this.filters.taxon1.push(parent);
           } else {
-            this.filters.taxon1 = this.filters.taxon1.filter(taxon => taxon !== parent)
+            this.filters.taxon1 = this.filters.taxon1.filter(
+              taxon => taxon !== parent
+            );
           }
-        }, 0)
+        }, 0);
       } else if (type === "taxon3") {
-      // taxon3クリック時→兄弟要素確認し、親の状態決める。親の状態確認し、祖父の状態決める
+        // taxon3クリック時→兄弟要素確認し、親の状態決める。親の状態確認し、祖父の状態決める
         setTimeout(() => {
           // 親
-          let is_siblings_all_checked = true
+          let is_siblings_all_checked = true;
           siblings.forEach(sibling => {
-            if(sibling.key === "") {
-              return
+            if (sibling.key === "") {
+              return;
             }
-            if(this.filters.taxon3.indexOf(sibling.key) === -1) {
-              is_siblings_all_checked = false
+            if (this.filters.taxon3.indexOf(sibling.key) === -1) {
+              is_siblings_all_checked = false;
             }
-          })
-          if(is_siblings_all_checked) {
-            this.filters.taxon2.push(parent)
+          });
+          if (is_siblings_all_checked) {
+            this.filters.taxon2.push(parent);
           } else {
-            this.filters.taxon2 = this.filters.taxon2.filter(taxon => taxon !== parent)
+            this.filters.taxon2 = this.filters.taxon2.filter(
+              taxon => taxon !== parent
+            );
           }
 
           // 祖父
-          let is_parents_all_checked = true
+          let is_parents_all_checked = true;
           parents.forEach(parent => {
-            if(parent.key === "") {
-              return
+            if (parent.key === "") {
+              return;
             }
-            if(this.filters.taxon3.indexOf(parent.key) === -1) {
-              is_parents_all_checked = false
+            if (this.filters.taxon3.indexOf(parent.key) === -1) {
+              is_parents_all_checked = false;
             }
-          })
-          if(is_parents_all_checked) {
-            this.filters.taxon1.push(granpa)
+          });
+          if (is_parents_all_checked) {
+            this.filters.taxon1.push(granpa);
           } else {
-            this.filters.taxon1 = this.filters.taxon1.filter(taxon => taxon !== granpa)
+            this.filters.taxon1 = this.filters.taxon1.filter(
+              taxon => taxon !== granpa
+            );
           }
-        }, 0)
+        }, 0);
       }
     },
     checkAllChildrenChecked(array, target_filter, nest) {
-      let is_all_checked = true
-      if(nest === 1) {
+      let is_all_checked = true;
+      if (nest === 1) {
         array.forEach(child => {
-          if(this.filters[target_filter].indexOf(child.key) === -1) {
-            is_all_checked = false
+          if (this.filters[target_filter].indexOf(child.key) === -1) {
+            is_all_checked = false;
           }
-        })
+        });
       } else if (nest === 2) {
         array.forEach(child => {
-          if(this.filters.taxon2.indexOf(child.key) === -1) {
-            is_all_checked = false
+          if (this.filters.taxon2.indexOf(child.key) === -1) {
+            is_all_checked = false;
           }
           child.taxonomy_3.buckets.forEach(taxon3 => {
-            if(this.filters.taxon3.indexOf(taxon3.key) === -1) {
-              is_all_checked = false
+            if (this.filters.taxon3.indexOf(taxon3.key) === -1) {
+              is_all_checked = false;
             }
-          })
-        })
+          });
+        });
       }
-      return is_all_checked
+      return is_all_checked;
     },
     removeArrayFromTaxonFilter(target_filter, remove_array, nest) {
-      if(nest === 1) {
+      if (nest === 1) {
         return this.filters[target_filter].filter(taxon => {
-          let flag = true
+          let flag = true;
           remove_array.forEach(remove_taxon => {
             if (remove_taxon.key !== "" && remove_taxon.key === taxon) {
-              flag = false
+              flag = false;
             }
-          })
-          return flag
-        })
+          });
+          return flag;
+        });
       } else if (nest === 2) {
         return this.filters.taxon3.filter(taxon3 => {
-          let flag = true
+          let flag = true;
           remove_array.forEach(taxon2 => {
             taxon2.taxonomy_3.buckets.forEach(remove_taxon3 => {
               if (remove_taxon3.key !== "" && taxon3 === remove_taxon3.key) {
-                flag = false
+                flag = false;
               }
-            })
-          })
-          return flag
-        })
+            });
+          });
+          return flag;
+        });
       }
     },
     removeTag(text) {
-      return text.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '')
+      if(text !== undefined) {
+        return text.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, "");
+      } else {
+        return text
+      }
     },
     infiniteHandler($state) {
       if (!this.is_filter_on) {
@@ -544,125 +613,125 @@ export default Vue.extend({
           .get(
             `http://togotv-api.bhx.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
-          .then((data) => {
-            this.pictures = this.pictures.concat(data.data.data)
-            this.loaded_pictures = this.loaded_pictures.concat(data.data.data)
+          .then(data => {
+            this.pictures = this.pictures.concat(data.data.data);
+            this.loaded_pictures = this.loaded_pictures.concat(data.data.data);
             if (this.current_page === 1) {
-              this.last_page = data.data.last_page
+              this.last_page = data.data.last_page;
             }
             if (this.current_page === this.last_page) {
-              $state.complete()
+              $state.complete();
             } else {
-              this.current_page += 1
-              $state.loaded()
+              this.current_page += 1;
+              $state.loaded();
             }
           })
-          .catch((error) => {
-            console.log('error', error)
-          })
-       }
+          .catch(error => {
+            console.log("error", error);
+          });
+      }
     },
     setCanMessageSubmit() {
-      this.canMessageSubmit = true
+      this.canMessageSubmit = true;
     },
     searchByText(type) {
-      if (this.keyword === '') {
-        return
+      if (this.keyword === "") {
+        return;
       }
-      if (type === 'enter') {
+      if (type === "enter") {
         if (!this.canMessageSubmit) {
-          return
+          return;
         }
-        this.clearFilter()
+        this.clearFilter();
         axios
           .get(
             `http://togotv-api.bhx.jp/api/search?target=pictures&text=${this.keyword}`
           )
-          .then((data) => {
-            this.pictures = data.data.data
+          .then(data => {
+            this.pictures = data.data.data;
           })
-          .catch((error) => {
-            console.log('error', error)
-          })
+          .catch(error => {
+            console.log("error", error);
+          });
       }
     },
     toggleDisplay() {
-      this.$store.commit('toggleDisplay')
+      this.$store.commit("toggleDisplay");
     },
     setDonwnloadLink(pic) {
-      this.selected_pic = pic
-      this.is_single_download = true
-      this.is_modal_on = true
+      this.selected_pic = pic;
+      this.is_single_download = true;
+      this.is_modal_on = true;
     },
     moveDetailPage(next_page) {
-      this.$router.push(next_page)
+      this.$router.push(next_page);
     },
     selectPic(pic, e) {
-      e.stopPropagation()
-      let is_already_exist = false
+      e.stopPropagation();
+      let is_already_exist = false;
       this.selected_pics.forEach(selected_pic => {
         if (selected_pic.TogoTV_Image_ID === pic.TogoTV_Image_ID) {
-          is_already_exist = true
+          is_already_exist = true;
         }
-      })
+      });
       if (!is_already_exist) {
-        this.selected_pics.push(pic)
+        this.selected_pics.push(pic);
       } else {
         this.selected_pics = this.selected_pics.filter(selected_pic => {
-          return selected_pic.TogoTV_Image_ID !== pic.TogoTV_Image_ID
-        })
+          return selected_pic.TogoTV_Image_ID !== pic.TogoTV_Image_ID;
+        });
       }
     },
     checkIfSelected(id) {
-      let is_already_exist = false
-      this.selected_pics.forEach((pic) => {
+      let is_already_exist = false;
+      this.selected_pics.forEach(pic => {
         if (pic.TogoTV_Image_ID === id) {
-          is_already_exist = true
+          is_already_exist = true;
         }
-      })
+      });
       if (is_already_exist) {
-        return 'selected'
+        return "selected";
       } else {
-        return ''
+        return "";
       }
     },
     downloadSelectedImages() {
-      this.is_single_download = false
-      this.is_modal_on = true
+      this.is_single_download = false;
+      this.is_modal_on = true;
     },
     closeModal() {
-      this.is_modal_on = false
-      this.is_edit_on = false
-      this.selected_pics = []
+      this.is_modal_on = false;
+      this.is_edit_on = false;
+      this.selected_pics = [];
     },
     toggleEditMode() {
       if (this.is_edit_on) {
-        this.selected_pics = []
+        this.selected_pics = [];
       }
-      this.is_edit_on = !this.is_edit_on
+      this.is_edit_on = !this.is_edit_on;
     },
     hasChildren(array) {
-      let flag = false
+      let flag = false;
       array.forEach(item => {
-        if(item.key !== '') {
-          flag = true
+        if (item.key !== "") {
+          flag = true;
         }
-      })
-      return flag
+      });
+      return flag;
     },
     toggleTaxon(e) {
-      e.preventDefault()
-      let class_list = e.target.classList
-      if(class_list.value.indexOf('close') === -1) {
-        class_list.add('close')
-        e.target.parentNode.nextElementSibling.classList.add('close')
+      e.preventDefault();
+      let class_list = e.target.classList;
+      if (class_list.value.indexOf("close") === -1) {
+        class_list.add("close");
+        e.target.parentNode.nextElementSibling.classList.add("close");
       } else {
-        class_list.remove('close')
-        e.target.parentNode.nextElementSibling.classList.remove('close')
+        class_list.remove("close");
+        e.target.parentNode.nextElementSibling.classList.remove("close");
       }
     }
   }
-})
+});
 </script>
 
 <style lang="sass">
@@ -737,7 +806,7 @@ export default Vue.extend({
         transition: .5s
         max-height: 100vh
         &.taxon
-         max-height: 400vh
+          max-height: 400vh
         &.close
           max-height: 0
           overflow: hidden
