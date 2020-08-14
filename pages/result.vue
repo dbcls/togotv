@@ -1,9 +1,83 @@
 <template>
   <div class="result_wrapper">
-    <FacetVideo />
+    <div class="facet_wrapper">
+      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
+      <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
+      <div class="facet_small_section">
+        <p class="facet_small_title video tsukushi bold">番組のタイプ</p>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li>
+              <input type="checkbox" id="demonstration" value="動画マニュアル" v-model="filters.type">
+              <label for="demonstration">
+                <span>動画マニュアル</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="lecture" value="講演" v-model="filters.type">
+              <label for="lecture">
+                <span>講演</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="handson" value="実習" v-model="filters.type">
+              <label for="handson">
+                <span>ハンズオン講習</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="facet_small_section">
+        <p class="facet_small_title calender tsukushi bold">
+          公開時期
+          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">×クリア</span>
+        </p>
+        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
+      </div>
+      <div class="facet_small_section">
+        <p class="facet_small_title tag tsukushi bold">タグ</p>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li v-for="(tag, index) in tag_list" :key="index">
+              <input type="checkbox" :id="tag.key" :value="tag.key" v-model="filters.tags">
+              <label :for="tag.key">
+                <span>{{ tag.key }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="facet_small_section">
+        <p class="facet_small_title language tsukushi bold">言語</p>
+        <div class="checkbox_wrapper">
+          <ul>
+            <li>
+              <input type="checkbox" id="ja" value="ja" v-model="filters.lang">
+              <label for="ja">
+                <span>日本語</span>
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" id="en" value="en" v-model="filters.lang">
+              <label for="en">
+                <span>英語</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="facet_small_section">
+        <p class="facet_small_title time tsukushi bold">
+          時間
+          <span class="clear_btn" @click="filters['duration(ISO 8601)'] = [0, 4]">×クリア</span>
+        </p>
+        <vue-slider :marks="duration_range" :max="4" :minRange="1" v-model="filters['duration(ISO 8601)']" :tooltip="'none'"></vue-slider>
+      </div>
+    </div>
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">「{{this.$route.query.query}}」の検索結果</h2>
+        <h2 class="page_title tsukushi bold">「{{ $route.query.query }}」の検索結果</h2>
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
@@ -15,9 +89,10 @@
           </li>
         </ul>
       </div>
-      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="result_list"/>
-      <VideoList v-if="$store.state.display === 'list'" :video_info_array="result_list"/>
-      <Pagination ref="pagination" :lastpage="lastpage" @fetchData="fetchData" />
+      <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
+      <VideoList v-if="$store.state.display === 'list' && !is_loading" :video_info_array="result_list"/>
+      <div v-if="is_loading" class="loader">Loading...</div>
+      <Pagination ref="pagination" :props="{lastpage: lastpage}" @fetchData="fetchData" />
     </div>
   </div>
 </template>
@@ -27,12 +102,11 @@ import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
 import Pagination from '~/components/Pagination.vue'
-import FacetVideo from '~/components/FacetVideo.vue'
 import axios from 'axios'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
-  watchQuery: ['query'],
-  key: route => route.fullPath,
   head() {
     return {
       title: `「${this.$route.query.query}」の検索結果`
@@ -42,53 +116,383 @@ export default Vue.extend({
     VideoListCard,
     VideoList,
     Pagination,
-    FacetVideo
+    VueSlider
   },
   data () {
     return {
       lastpage: 0,
-      result_list: []
+      result_list: [],
+      filters: {
+        type: [],
+        uploadDate: [0, 4],
+        tags: [],
+        lang: [],
+        'duration(ISO 8601)': [0, 4]
+      },
+      duration_range: {
+        '0': '0分',
+        '1': '5分',
+        '2': '10分',
+        '3': '20分',
+        '4': '20分~',
+      },
+      tag_list: [],
+      is_loading: false
+    }
+  },
+  watchQuery(newQuery) {
+    if (!this.is_filter_on) {
+      this.fetchData()
+    } else {
+      this.fetchDataWithFilter(newQuery)
+    }
+  },
+  computed: {
+    upload_date_range: function() {
+      const this_year  = new Date().getFullYear();
+      return {
+        '0': '~' + (this_year - 4),
+        '1': String(this_year - 3),
+        '2': String(this_year - 2),
+        '3': String(this_year - 1),
+        '4': String(this_year)
+      }
+    },
+    is_filter_on() {
+      let flag = false;
+      Object.keys(this.filters).forEach(key => {
+        if (key === "duration(ISO 8601)" || key === "uploadDate") {
+          if (this.filters[key][0] !== 0 || this.filters[key][1] !== 4) {
+            flag = true;
+          }
+        } else if (this.filters[key].length !== 0) {
+          flag = true;
+        }
+      });
+      return flag;
+    }
+  },
+  watch: {
+    filters: {
+      handler: function(val) {
+        setTimeout(() => {
+          if (!this.is_filter_on) {
+            this.$router.push({ name: 'result', query: { query: this.$route.query.query, page: 1 } })
+            this.$refs.pagination.changeCurrentPage(1)
+          } else {
+            let param = Object.assign({}, this.filters);
+            // 空のプロパティは削除
+            Object.keys(param).forEach(key => {
+              if(key === "duration(ISO 8601)" || key === "uploadDate") {
+                if(param[key][0] === 0 && param[key][1] === 4 ) {
+                  delete param[key]
+                } else if (key === "duration(ISO 8601)") {
+                  param[key] = param[key].map(data => {
+                    if(this.duration_range[data].indexOf('~') !== -1) {
+                      data = 30
+                    } else {
+                      data = this.duration_range[data].replace('分', '')
+                    }
+                    return Number(data)
+                  })
+                  if(param[key][1] === 30) {
+                    param[key][1] = 0
+                  }
+                } else if (key === "uploadDate") {
+                  param[key] = param[key].map(data => {
+                    data = Number(data) - 4
+                    if (data < 0) {
+                      data = -data
+                    }
+                    return data
+                  })
+                  if(param[key][0] === 4) {
+                    param[key][0] = 0
+                  }
+                }
+              } else {
+                param[key] = param[key].filter(data => data !== "");
+                if (param[key].length === 0) {
+                  delete param[key];
+                }
+              }
+            });
+            
+            // 配列を文字列に変換
+            Object.keys(param).forEach(key => {
+              param[key] = param[key].join(",");
+            });
+            param["page"] =  1;
+            param["query"] = this.$route.query.query;
+            this.$refs.pagination.changeCurrentPage(1)
+            this.$router.push({ name: 'result', query: param })
+            this.fetchDataWithFilter(param)
+          }
+        }, 0);
+      },
+      deep: true
     }
   },
   mounted() {
-    this.fetchData(1, true)
+    if (
+        this.$route.query.type !== undefined ||
+        this.$route.query.uploadDate !== undefined ||
+        this.$route.query.tags !== undefined ||
+        this.$route.query.lang !== undefined ||
+        this.$route.query['duration(ISO 8601)'] !== undefined
+    ) {
+      Object.keys(this.filters).forEach(key => {
+        if (this.$route.query[key] !== undefined) {
+          this.filters[key] = this.$route.query[key].split(',')
+        }
+      })
+    } else {
+      this.fetchData()
+    }
+
+    axios
+      .get(`http://togotv-api.bhx.jp/api/facets/keywords`)
+      .then(data => {
+        this.tag_list = data.data.facets
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   methods: {
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
     },
-    fetchData(page, is_initial) {
-      axios.get(`http://togotv-api.bhx.jp/api/search?from=${page}&text=${this.$route.query.query}&rows=21`).then(data => {
-        this.result_list = data.data.data
-        if(is_initial) {
-          this.lastpage = data.data.last_page
+    fetchData() {
+      setTimeout(() => {
+        this.is_loading = true
+        if ( !this.is_filter_on ) {
+          axios.get(`http://togotv-api.bhx.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
+            this.lastpage = data.data.last_page
+            this.result_list = data.data.data
+            this.is_loading = false
+          })
         }
-        this.$refs.pagination.changeCurrentPage(page);
-      })
+      }, 0)
+    },
+    clearFilter() {
+      this.filters.type = []
+      this.filters.uploadDate = [0, 4]
+      this.filters.tags = []
+      this.filters.lang = []
+      this.filters['duration(ISO 8601)'] = [0, 4]
+    },
+    fetchDataWithFilter(param) {
+      this.is_loading = true
+      let query = Object.assign({}, param)
+      query['rows'] = 20
+      query["target"] = "movies";
+      query['text'] = param.query
+      query['from'] = param.page
+      delete query['query']
+      delete query['page']
+      axios
+        .get("http://togotv-api.bhx.jp/api/bool_search", {
+          params: query
+        })
+        .then(data => {
+          this.lastpage = data.data.last_page
+          this.result_list = data.data.data
+          this.is_loading = false
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
     }
   }
 })
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .result_wrapper
   padding: 0 $VIEW_PADDING
   display: flex
   align-items: flex-start
   justify-content: flex-start
+  > .facet_wrapper
+    @include facet
+    > p.facet_title
+      font-size: 18px
+      display: flex
+      align-items: center
+      margin: 30px 0 14px -3px
+      &:before
+        width: 32px
+        height: 32px
+      &.search
+        &:before
+          @include icon('search_color')
+      &.filter
+        &:before
+          @include icon('filter')
+    > p.clear_btn
+      text-decoration: underline
+      font-size: 12px
+      display: flex
+      align-items: center
+      &:before
+        width: 18px
+        height: 18px
+        margin-right: 2px
+        margin-left: 3px
+        @include icon('clear')
+      &:hover
+        cursor: pointer
+    > .input_wrapper
+      @include text_input
+      > input
+        width: 240px
+        height: 28px
+      > button
+        width: 18px
+        height: 18px
+    > .facet_small_section
+      border-bottom: 1px solid $MAIN_COLOR
+      padding-bottom: 26px
+      &:last-of-type
+        border-bottom: none
+      > .facet_small_title
+        font-size: 14px
+        display: flex
+        align-items: center
+        &:before
+          width: 23px
+          height: 23px
+          margin-top: -1px
+          margin-right: 2px
+        &.video
+          &:before
+            @include icon('video')
+        &.calender
+          &:before
+            @include icon('calender')
+        &.tag
+          &:before
+            @include icon('tag')
+        &.language
+          &:before
+            @include icon('language')
+        &.time
+          &:before
+            @include icon('time')
+        > span.clear_btn
+          font-family: "游ゴシック", "Yu Gothic", "游ゴシック体", YuGothic, sans-serif
+          font-weight: 500
+          font-size: 12px
+          text-decoration: underline
+          margin-left: 7px
+          &:hover
+            cursor: pointer
+      > .checkbox_wrapper
+        ul
+          li
+            position: relative
+            > label
+              > span
+                margin-left: 27px
+            > input[type=checkbox]
+              @include checkbox
+              margin-left: 3px
+      > .vue-slider
+        width: 90% !important
+        margin: 0 auto
+        transform: translateY(13px)
+        > .vue-slider-rail
+          background-color: #c2c2c2
+          height: 3px
+          > .vue-slider-process
+            background-color: $SUB_COLOR !important
+          > .vue-slider-dot
+            width: 11px !important
+            height: 11px !important
+            > .vue-slider-dot-handle
+              background-color: $POINT_COLOR !important
+              border: 2px solid $SUB_COLOR !important
+              box-shadow: none !important
+          > .vue-slider-marks
+            > .vue-slider-mark
+              width: 8px !important
+              height: 8px !important
+              > .vue-slider-mark-step
+                background-color: #c2c2c2
+                &.vue-slider-mark-step-active
+                  background-color: $SUB_COLOR
+                  &:hover
+                    cursor: pointer
+              > .vue-slider-mark-label
+                top: -21px !important
+                margin-top: 0px !important
+                font-family: montserrat, sans-serif
+                font-weight: 600
+                &:hover
+                  cursor: pointer
+      > .select_time_bar
+        position: relative
+        display: flex
+        justify-content: space-between
+        width: 213px
+        margin: 26px 0 0 6px
+        &:before
+          content: ''
+          width: 213px
+          height: 3px
+          background-color: $SUB_COLOR
+          position: absolute
+          top: 50%
+          left: 50%
+          transform: translate(-50%, -50%)
+        > span.tab
+          display: flex
+          flex-direction: column
+          position: relative
+          white-space: nowrap
+          > .duration_time
+            font-size: 14px
+            position: absolute
+            left: -90%
+            top: -19px
+            display: flex
+            align-items: flex-end
+            font-weight: 600
+            > span.unit
+              font-size: 10px
+              white-space: nowrap
+              font-weight: 500
+          &:after
+            content: ''
+            width: 11px
+            height: 11px
+            display: inline-block
+            border-radius: 11px
+            box-sizing: border-box
+            background-color: $SUB_COLOR
+          &.on
+            &:after
+              background-color: $POINT_COLOR
+              border: 2px solid $SUB_COLOR
+          &:hover
+            cursor: pointer
   > .video_section
     > .video_section_header
       display: flex
       justify-content: space-between
+      min-width: 60vw
       > .page_title
         @include page_title('barchart')
       > ul.display_icon_wrapper
         display: flex
-        margin-top: 64px
+        margin-top: 55px
         > li
           margin-left: 4px
           > img
             width: 27px
             &:hover
               cursor: pointer
+    > .loader
+      @include loader
 </style>

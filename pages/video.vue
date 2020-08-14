@@ -24,13 +24,14 @@
         </div>
         <div class="time_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
-          <p class="total_time mont bold" v-html="converSecToHour(videoData['duration(ISO 8601)'])"><span class="unit">分</span></p>
+          <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">分</span></p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
         </div>
         <div class="related_videos">
           <h3 class="tsukushi bold">関連動画</h3>
+          <VideoListHorizontalScroll :props="{id: 'related_videos', playList: related_videos, bg: 'white'}"/>
           <!-- <ul>
             <li v-for="video in videoData.related_videos" :key="video.id">
               <SingleVideoCard :props="{id: video.id, thumbnail: video.thumbnail, title: video.title, description: video.description, size: 'small'}"/>
@@ -41,9 +42,9 @@
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
         <div class="digest" v-if="videoData.headline.length !== 0">
           <h3 class="tsukushi bold">見どころダイジェスト</h3>
-          <ul>
-            <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration(ISO 8601)'])">
-              <span class="time" v-html="converSecToHour(digest.time)" @click="player.seekTo(digest.time)"></span>
+          <ul :class="videoData.headline.length >= 10 ? 'over10' : ''">
+            <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration'])">
+              <span class="time" v-html="converSecToHour(digest.time, false, true)" @click="player.seekTo(digest.time)"></span>
               <span class="title" @click="player.seekTo(digest.time)">{{ digest.name }}
               </span>
               <!-- <span :class="['full_title', digest_active === digest.time ? 'active' : '']">{{ digest.title }}</span> -->
@@ -139,6 +140,10 @@ export default Vue.extend({
       this.is_first_time = true
       localStorage.setItem('is_first_time', true)
     }
+    if (this.videoData !== undefined) {
+      console.log(this.videoData)
+      this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+    }
   },
   data () {
     return {
@@ -146,22 +151,42 @@ export default Vue.extend({
       current_video_index: 0,
       playlist_array: [],
       is_first_time: false,
-      finish_loading: false
+      finish_loading: false,
+      related_videos: [],
+      related_docs: []
     }
   },
   methods: {
-    converSecToHour(time){
+    converSecToHour(time, is_ISO, html){
       if(time === "") { return; }
-      const sec = (time % 60) % 60;
-      const min = Math.floor(time / 60) % 60;
-      const hour = Math.floor(time / 3600);
+      let hour = 0, min = 0, sec = 0, totalsec;
+      if (is_ISO) {
+        const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+        if (reptms.test(time)) {
+          const matches = reptms.exec(time);
+          if (matches[1]) hour = Number(matches[1]);
+          if (matches[2]) min = Number(matches[2]);
+          if (matches[3]) sec = Number(matches[3]);
+          totalsec = hour * 3600  + min * 60 + sec;
+        }
+      } else {
+        sec = (time % 60) % 60;
+        min = Math.floor(time / 60) % 60;
+        hour = Math.floor(time / 3600);
+      }
 
-      if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span class="unit">分</span><span class="time mont bold">${sec}</span><span class="unit">秒</span>`
-      }　else {        return `<span class="time mont bold">${hour}</span><span class="unit">時間</span><span class="time mont bold">${min}</span><span lass="unit">分</span><span class="time mont bold">${sec}</span><span clas="unit">秒</span>`
-      }    },
+      if (html) {
+        if(hour === 0) {
+          return `<span class="time mont bold">${min}</span><span class="unit">分</span><span class="time mont bold">${sec}</span><span class="unit">秒</span>`
+        }　else {        return `<span class="time mont bold">${hour}</span><span class="unit">時間</span><span class="time mont bold">${min}</span><span lass="unit">分</span><span class="time mont bold">${sec}</span><span clas="unit">秒</span>`
+        }
+      } else {
+        return totalsec
+      }
+
+    },
     calcYCoordinate(sec, total_sec) {
-      return `top: ${sec / total_sec * 348}px`
+      return `top: ${sec / this.converSecToHour(total_sec, true, false) * 348}px`
     },
     ready() {
       this.finish_loading = true
@@ -188,6 +213,27 @@ export default Vue.extend({
         this.$router.push({ name: 'video', query: { id: next_video_id } })
       }
       this.finish_loading = true
+    },
+    fetchRelatedVideos(id) {
+      axios
+        .get(`http://togotv-api.bhx.jp/api/recommend/movies/${id}`)
+        .then(data => {
+          this.related_videos = data.data.items
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
+    },
+    fetchRelatedDocs(id) {
+      axios
+        .get(`http://togotv-api.bhx.jp/api/recommend/ajacs-training/${id}`)
+        .then(data => {
+          console.log(data.data)
+          this.related_docs = data.data
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
     }
   }
 })
@@ -311,6 +357,7 @@ export default Vue.extend({
         line-height: 25px
         margin-top: 10px
       > .related_videos
+        width: calc(74vw - 80px * 2)
         > h3
           font-size: 18px
           display: flex
@@ -321,17 +368,14 @@ export default Vue.extend({
             width: 27px
             height: 27px
             margin-right: 4px
-        > ul
-          display: flex
-          > li
-            margin-right: 10px
-            &:last-of-type
-              margin-right: 0
+        .video_list_wrapper
+          margin-left: -$VIEW_PADDING
     > .right_section
       padding-top: 4px
       width: 300px
       width: 264px
       min-width: 264px
+      z-index: $LAYER_2
       &.is_in_course
         padding-top: 58px
       > div
@@ -356,6 +400,16 @@ export default Vue.extend({
           margin-left: 14px
           padding-left: 4px
           border-left: 2px solid $SUB_COLOR
+          &.over10
+            height: auto
+            margin-left: 0
+            padding-left: 0
+            border: none
+            > li
+              position: static
+              margin-bottom: 12px
+              &:before
+               display: none
           > li
             position: absolute
             display: flex
@@ -494,6 +548,8 @@ export default Vue.extend({
       flex-direction: column
       > .left_section
         margin-right: 0
+        > .related_videos
+          width: calc(100vw - 80px)
       > .right_section
         max-width: 100%
         width: 100%

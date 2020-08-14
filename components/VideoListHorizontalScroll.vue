@@ -1,9 +1,9 @@
 <template>
-  <div :class="['video_list_wrapper', props.bg, btn_state.left ? '' : 'left_hide', btn_state.right ? '' : 'right_hide']">
+  <div :class="['video_list_wrapper', props.bg, props.id, btn_state.left ? '' : 'left_hide', btn_state.right ? '' : 'right_hide']">
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-right`, direction: 'left'}"/>
     <ul class="video_list scroll-horizontal">
       <li class="video_list_box" v-for="video in props.playList" :key="video.id">
-        <SingleVideoCard :props="{id: getVideoId(video), thumbnail: video.thumbnailUrl, title: video.name, description: video.description, duration: getVideoDuration(video), courseId: props.courseId}"/>
+        <SingleVideoCard :props="{id: getVideoId(video), thumbnail: getVideoThumbnail(video), title: video.name, description: video.description, duration: video.duration, courseId: props.courseId}"/>
       </li>
     </ul>
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-left`, direction: 'right'}"/>
@@ -51,11 +51,11 @@ export default Vue.extend({
         return video['videoid']
       }
     },
-    getVideoDuration(video: any) {
-      if(video['duration(ISO 8601)'] !== undefined) {
-        return video['duration(ISO 8601)']
+    getVideoThumbnail(video: any) {
+      if(video['thumbnailUrl'] !== undefined) {
+        return video['thumbnailUrl']
       } else {
-        return video['duration']
+        return video['thumbnail']
       }
     }
   }
@@ -95,6 +95,8 @@ export default Vue.extend({
     &:after
       width: $VIEW_PADDING
       background-color: rgba(235, 247, 249, .67)
+  &.related_videos
+    width: calc(100% + #{$VIEW_PADDING} * 2)
   .video_list
     overflow: hidden
     overflow-x: scroll
@@ -103,7 +105,7 @@ export default Vue.extend({
     position: relative
     scrollbar-width: none
     &::-webkit-scrollbar
-      display: none
+      display: none      
     > .video_list_box
       vertical-align: top
       position: relative
@@ -112,7 +114,6 @@ export default Vue.extend({
       &:nth-of-type(1)
         margin-left: $VIEW_PADDING
       &:last-of-type
-        padding-right: 0px
         padding-right: $VIEW_PADDING
   button
     top: 38px

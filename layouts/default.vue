@@ -32,6 +32,9 @@ ul,ol
   margin: 0
   padding: 0
 
+a
+  color: $MAIN_COLOR
+
 .tsukushi
   font-family: fot-tsukuardgothic-std, sans-serif
   font-weight: 400
@@ -52,4 +55,11 @@ ul,ol
 
 .scroll-horizontal
   overscroll-behavior-x: contain
+
+.add_faq_icon
+  &:after
+    width: 20px
+    height: 20px
+    transform: translate(-5px, 4px)
+    @include icon('question')
 </style>

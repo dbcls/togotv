@@ -49,7 +49,9 @@
         の歴史
       </h2>
       <h3 class="tsukushi bold">YouTube版統合TVの月間番組再生数および再生時間の推移 (2007年〜2020年)</h3>
-      <div class="playtime_transition_graph"></div>
+      <div class="playtime_transition_graph">
+        <img src="~/static/togotv_youtube_stats.png" alt="">
+      </div>
       <h3 class="tsukushi bold">統合TV年表</h3>
       <div class="chronology_graph">
         <table class="table-history">
@@ -71,9 +73,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
-import history from "~/static/json/history.json"
+import axios from "axios"
 
 export default Vue.extend({
   head() {
@@ -83,11 +85,19 @@ export default Vue.extend({
   },
   data() {
     return {
-      history: history.history
+      history: []
     };
   },
+  mounted() {
+    this.fetchHistory()
+  },
   methods: {
-    displayHistoryYear(year: string, index: number) {
+    fetchHistory() {
+      axios.get(`${location.origin}/${this.$router.history.base}/json/history.json`).then(data => {
+        this.history = data.data.history
+      })
+    },
+    displayHistoryYear(year, index) {
       if(this.history[index + 1] !== undefined &&  this.history[index + 1].year !== year) {
         return year
       } else if (index + 1 === this.history.length) {
@@ -96,7 +106,8 @@ export default Vue.extend({
         return ''
       }
     },
-    convertToHtmlLink(content: string) {
+    convertToHtmlLink(content) {
+
       return content.replace(/\[(.+)\]\((.+)\)/g, '<a href="$2" target="_blank">$1</a>')
       
     }
@@ -144,13 +155,13 @@ h2
         z-index: $LAYER_1
         width: 463px
       > .welcome_main
-        width: 890px
+        max-width: 890px
         position: absolute
         top: 220px
         left: 50%
         transform: translateX(-50%)
       > .tutorial_text
-        width: 890px
+        max-width: 890px
         font-size: 16px
         line-height: 27px
         text-align: left
@@ -186,9 +197,14 @@ h2
     > h3
       font-size: 22px
       margin-bottom: 26px
+    > .playtime_transition_graph
+      margin-bottom: 70px
+      > img
+        width: 100%
+        max-width: 890px
     > .chronology_graph
       > table.table-history
-        width: 890px
+        max-width: 890px
         margin: 0 auto
         text-align: left
         tr:nth-of-type(1)

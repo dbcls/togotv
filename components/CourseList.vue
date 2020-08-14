@@ -6,7 +6,7 @@
         <nuxt-link class="title tsukushi bold" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
         <p class="total_time" v-html="converSecToHour(course.total_time)"></p>
         <div class="detail">
-          <p class="detail_title tsukushi bold" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</p>
+          <nuxt-link class="detail_title tsukushi bold" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
           <p class="detail_description">{{ course.description }}</p>
           <span class="tsukushi">再生リスト一覧</span>
           <ul class="detail_playlist">

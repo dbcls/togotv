@@ -1,7 +1,7 @@
 <template>
   <aside class="aside_wrapper">
     <section class="course_wrapper">
-      <p class="section_title tsukushi bold">スキル別コースから探す</p>
+      <p class="section_title tsukushi bold"><nuxt-link to="/courses">スキル別コースから探す</nuxt-link></p>
       <ul>
         <li v-for="course in course_list" :key="course.id">
           <span>
@@ -64,6 +64,9 @@ export default Vue.extend({
   margin-top: 36px
   .section_title
     font-size: 18px
+    > a
+      &:hover
+        color: $MAIN_COLOR
   a
     color: $BLACK
     text-decoration: none

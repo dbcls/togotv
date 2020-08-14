@@ -8,15 +8,15 @@
         <p class="name tsukushi bold">{{ picture.name }}</p>
         <p class="name_en mont">{{ picture.name_en }}</p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
-        <a href="" target="_blank" class="taxonomy mont">{{ picture.tax_id }}</a>
-        <a :href="picture.license" target="_blank" class="wiki mont">Wikipedia Commons</a>
+        <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
+        <a :href="`https://commons.wikimedia.org/wiki/File:${picture.original_svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
         <div class="download_btns">
-          <a :href="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" v-if="picture.original_png !== undefined" class="mont bold" download>png</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_svg}`" v-if="picture.original_svg !== undefined" class="mont bold" download>svg</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.original_ai}`" v-if="picture.original_ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.obj_mtl_zip}`" v-if="picture.obj_mtl_zip !== undefined" class="mont bold" download>obj_mtl_zip</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.apng}`" v-if="picture.apng !== undefined" class="mont bold" download>apng</a>
-          <a :href="`ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${picture.rotation}`" v-if="picture.rotation !== undefined" class="mont bold" download>rotation</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.original_png !== undefined" class="mont bold" download>png</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.original_svg !== undefined" class="mont bold" download>svg</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.original_ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.obj_mtl_zip !== undefined" class="mont bold" download>obj_mtl_zip</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.apng !== undefined" class="mont bold" download>apng</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.rotation !== undefined" class="mont bold" download>rotation</a>
         </div>
       </div>
     </div>
@@ -30,12 +30,19 @@
         </li>
       </ul>
     </div>
+    <DownloadModal
+      v-if="is_modal_on"
+      :props="{selected_pic: selected_pic, is_single_download: true}"
+      @closeModal="is_modal_on = false"
+    />
+    <div v-if="is_modal_on" @click="is_modal_on = false" class="modal_back"></div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+import DownloadModal from "~/components/DownloadModal.vue";
 
 export default Vue.extend({
   watchQuery: ['id'],
@@ -53,12 +60,20 @@ export default Vue.extend({
       title: this.picture.name
     }
   },
+  components: {
+    DownloadModal
+  },
   data () {
     return {
-
+      is_modal_on: false,
+      selected_pic: {}
     }
   },
   methods: {
+    setDonwnloadLink(pic) {
+      this.selected_pic = pic;
+      this.is_modal_on = true;
+    }
   }
 })
 </script>
@@ -163,4 +178,6 @@ export default Vue.extend({
             width: 146px
             &:hover
               cursor: pointer
+  > .modal_back
+    @include modal_back
 </style>

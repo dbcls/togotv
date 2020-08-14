@@ -1,6 +1,26 @@
 {
   "history": [
     {
+      "year": "2020",
+      "month": "6",
+      "event": "YouTubeチャンネル登録者数4,000人を突破"
+    },
+    {
+      "year": "2018",
+      "month": "10",
+      "event": "1,500件の動画を公開"
+    },
+    {
+      "year": "2018",
+      "month": "4",
+      "event": "YouTube 1,000,000 再生"
+    },
+    {
+      "year": "2017",
+      "month": "7",
+      "event": "500件のイラストを公開"
+    },
+    {
       "year": "2017",
       "month": "7",
       "event": "統合TVウェブサイト公開10周年"
@@ -18,12 +38,12 @@
     {
       "year": "2015",
       "month": "12",
-      "event": "1,000番組公開"
+      "event": "1,000件の動画公開"
     },
     {
       "year": "2015",
       "month": "10",
-      "event": "[統合TVウェブサイトリニューアル、各番組へのDOI付与、AJACS講習会資料との統合](https://dbcls.rois.ac.jp/archives/2905)"
+      "event": "[統合TVウェブサイトリニューアル、各動画へのDOI付与、AJACS講習会資料との統合](https://dbcls.rois.ac.jp/archives/2905)"
     },
     {
       "year": "2015",
@@ -33,12 +53,12 @@
     {
       "year": "2015",
       "month": "6",
-      "event": "900番組公開"
+      "event": "900件の動画を公開"
     },
     {
       "year": "2013",
       "month": "10",
-      "event": "800 番組公開"
+      "event": "800件の動画を公開"
     },
     {
       "year": "2013",
@@ -48,27 +68,12 @@
     {
       "year": "2013",
       "month": "7",
-      "event": "700 番組公開"
-    },
-    {
-      "year": "2013",
-      "month": "7",
-      "event": "累計データ転送量 20TB"
+      "event": "700件の動画を公開"
     },
     {
       "year": "2013",
       "month": "3",
-      "event": "tdiary版と統合TV Curatedの統合"
-    },
-    {
-      "year": "2012",
-      "month": "9",
-      "event": "累計データ転送量 15TB"
-    },
-    {
-      "year": "2012",
-      "month": "7",
-      "event": "統合TV + YouTube + ニコニコ動画 合計 400,000 再生"
+      "event": "tdiary版と統合TV Curatedの統合・一体化"
     },
     {
       "year": "2012",
@@ -78,17 +83,12 @@
     {
       "year": "2012",
       "month": "3",
-      "event": "600 番組公開"
-    },
-    {
-      "year": "2011",
-      "month": "12",
-      "event": "累計データ転送量 10TB"
+      "event": "600件の動画を公開"
     },
     {
       "year": "2011",
       "month": "8",
-      "event": "500 番組公開"
+      "event": "500件の動画を公開"
     },
     {
       "year": "2011",
@@ -97,13 +97,8 @@
     },
     {
       "year": "2011",
-      "month": "2",
-      "event": "累計データ転送量 5TB"
-    },
-    {
-      "year": "2011",
       "month": "1",
-      "event": "400 番組公開"
+      "event": "400件の動画を公開"
     },
     {
       "year": "2010",
@@ -128,22 +123,12 @@
     {
       "year": "2010",
       "month": "5",
-      "event": "300 番組公開"
-    },
-    {
-      "year": "2010",
-      "month": "1",
-      "event": "累計データ転送量 2TB"
+      "event": "300件の動画を公開"
     },
     {
       "year": "2009",
       "month": "11",
       "event": "YouTube 50,000 再生"
-    },
-    {
-      "year": "2009",
-      "month": "11",
-      "event": "200,000 hits"
     },
     {
       "year": "2009",
@@ -153,17 +138,7 @@
     {
       "year": "2009",
       "month": "8",
-      "event": "200 番組公開"
-    },
-    {
-      "year": "2009",
-      "month": "6",
-      "event": "統合TV + YouTube + ニコニコ動画 合計 100,000 再生"
-    },
-    {
-      "year": "2009",
-      "month": "4",
-      "event": "累計データ転送量 1TB"
+      "event": "200件の動画を公開"
     },
     {
       "year": "2009",
@@ -176,24 +151,14 @@
       "event": "YouTube 20,000 再生"
     },
     {
-      "year": "2009",
-      "month": "1",
-      "event": "100,000 hits"
-    },
-    {
       "year": "2008",
       "month": "9",
-      "event": "100 番組公開"
-    },
-    {
-      "year": "2008",
-      "month": "6",
-      "event": "50,000 hits"
+      "event": "100件の動画を公開"
     },
     {
       "year": "2008",
       "month": "2",
-      "event": "50 番組公開"
+      "event": "50件の動画を公開"
     },
     {
       "year": "2008",
@@ -201,39 +166,9 @@
       "event": "YouTube、ニコニコ動画に進出"
     },
     {
-      "year": "2008",
-      "month": "1",
-      "event": "20,000 hits"
-    },
-    {
-      "year": "2007",
-      "month": "11",
-      "event": "10,000 hits"
-    },
-    {
-      "year": "2007",
-      "month": "10",
-      "event": "5,000 hits"
-    },
-    {
-      "year": "2007",
-      "month": "9",
-      "event": "2,000 hits"
-    },
-    {
       "year": "2007",
       "month": "9",
       "event": "videocastをiTunes Storeより配信開始"
-    },
-    {
-      "year": "2007",
-      "month": "9",
-      "event": "1,000 hits"
-    },
-    {
-      "year": "2007",
-      "month": "8",
-      "event": "500 hits"
     },
     {
       "year": "2007",
@@ -243,17 +178,7 @@
     {
       "year": "2007",
       "month": "8",
-      "event": "10 番組公開"
-    },
-    {
-      "year": "2007",
-      "month": "8",
-      "event": "200 hits"
-    },
-    {
-      "year": "2007",
-      "month": "7",
-      "event": "100 hits"
+      "event": "10件の動画を公開"
     },
     {
       "year": "2007",
