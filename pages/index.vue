@@ -6,7 +6,7 @@
         <h1>
           <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
         </h1>
-        <p class="description">生命科学分野における有用な情報を紹介するウェブサイトです。</p>
+        <p class="description">生命科学分野における有用な情報を紹介するウェブサイトです。<br>だれでも自由に閲覧し再利用することができます。<nuxt-link :to="{name: 'faq', hash: '#copyrights' }" class="add_faq_icon"></nuxt-link></p>
         <ul class="description_list">
           <li>・データベースやツールの動画マニュアル</li>
           <li>・講演や講習会動画、資料</li>
@@ -95,6 +95,7 @@ export default Vue.extend({
       > .description
         margin-bottom: 8px
         white-space: nowrap
+        line-height: 24px
       > .description_list
         display: flex
         flex-wrap: wrap

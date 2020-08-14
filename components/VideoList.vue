@@ -51,9 +51,10 @@ export default Vue.extend({
           color: $MAIN_COLOR
       > p.description
         font-size: 14px
-        margin-top: 2px
+        margin-top: 6px
         margin-bottom: 8px
         line-height: 20px
+        font-weight: 500
       > ul
         display: flex
         flex-wrap: wrap

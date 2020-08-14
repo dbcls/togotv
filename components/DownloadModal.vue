@@ -3,24 +3,7 @@
     <p class="modal_title tsukushi bold">出典元、クレジットを必ず明記してください。</p>
     <div class="content_wrapper">
       <p>
-        この画像のご利用にあたっては、
-        <strong>出典元 (© 2016 DBCLS TogoTV) あるいはこのページのURLを必ず明記してください。</strong>出典の記載のみが条件で、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問わず、自由にご利用いただけます。 出典元の記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。論文等では、Acknowledgementや図のlegend 等にご記載いただいています。出典元表示用の画像セットも用意しておりますので、目的に応じて適宜ご自由にご利用ください。
-        統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートがとても重要です。
-      </p>
-      <br>
-      <p>
-        この画像は、
-        <a
-          href="https://creativecommons.org/licenses/by/4.0/deed.ja"
-          target="_blank"
-        >クリエイティブ・コモンズ表示ライセンス</a>の下で利用可能です。 利用にあたっては、下記のクレジットを必ず表示してください。
-        &copy;2016
-        <a target="_blank" href="https://dbcls.rois.ac.jp/">DBCLS</a> TogoTV / CC-BY-4.0
-        <img
-          alt="Creative Commons License"
-          style="border-width:0"
-          src="https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by.svg"
-        />
+        この画像は、 クリエイティブ・コモンズ表示ライセンスの下で利用可能です。 ご利用の際は、<strong>出典元 (©2016 DBCLS TogoTV / CC-BY-4.0) あるいは該当ページのURLを必ず明記してください。</strong><br>出典の記載のみが条件で、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問わず、自由にご利用いただけます。 出典元の記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。<a href="https://togotv.dbcls.jp/togopic-copyright-set.zip" download>出典元表示用の画像セット</a>も用意しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等（<a href="https://dbcls.rois.ac.jp/references.html#TogoTV" target="_blank">引用例</a>）では、Acknowledgementや図のlegend 等にご記載いただいています。(例: "The image of XX is from TogoTV (©2016 DBCLS TogoTV / CC-BY-4.0).")<br>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。
       </p>
     </div>
     <div class="btn_wrapper">

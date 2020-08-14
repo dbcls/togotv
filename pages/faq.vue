@@ -2,7 +2,7 @@
   <div class="faq_wrapper">
     <h2 class="page_title tsukushi bold">よくある質問</h2>
     <ul class="faq_list">
-      <li class="faq" v-for="(faq, index) in faq_list" :key="index">
+      <li class="faq" v-for="faq in faq_list" :id="faq.id" :key="faq.id">
         <h3 class="question tsukushi bold"><span>{{ faq.question }}</span></h3>
         <p class="answer"><span v-html="convertLinksToHTML(faq.answer)"></span></p>
       </li>
@@ -10,9 +10,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
-import faq_json from '~/static/json/FAQ.json'
+import axios from "axios"
 
 export default Vue.extend({
   head() {
@@ -22,11 +22,28 @@ export default Vue.extend({
   },
   data () {
     return {
-      faq_list: faq_json.faq_list
+      faq_list: []
     }
   },
+  mounted() {
+    this.fetchFAQ()
+  },
   methods: {
-    convertLinksToHTML(text: string) {
+    fetchFAQ() {
+      axios.get(`${location.origin}/${this.$router.history.base}/json/FAQ.json`).then(data => {
+        this.faq_list = data.data.faq_list
+      }).then(() => {
+        let hash = this.$route.hash
+        if (hash) {
+          let offset = document.getElementById(hash.slice(1)).offsetTop
+          window.scrollTo({
+              top: offset - 100,
+              behavior: "smooth"
+          });
+        }
+      })
+    },
+    convertLinksToHTML(text) {
       const convertedHTML = text.replace(/\[([^\[]+)\]\((((https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)))\)/g, '<a href="$2" target="_blank">$1</a>')
       return convertedHTML
     }

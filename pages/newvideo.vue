@@ -17,7 +17,7 @@
       </div>
       <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="new_video_list"/>
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="new_video_list"/>
-      <Pagination ref="pagination" :lastpage="lastpage" @fetchData="fetchData" />
+      <Pagination ref="pagination" :props="{lastpage: lastpage}" @fetchData="fetchData" />
       </div>
   </div>
 </template>

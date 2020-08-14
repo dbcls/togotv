@@ -4,7 +4,7 @@
       class="thumbnail_wrapper"
       :to="{name: 'video', query: {id: props.id, course: props.courseId}}">
       <img :class="['thumbnail', props.size]" :src="props.thumbnail" :alt="props.title">
-      <span class="duration" v-html="converSecToHour(props.duration)"></span>
+      <span v-if="props.duration !== ''" class="duration" v-html="converSecToHour(props.duration)"></span>
     </nuxt-link>
     <div class="description_wrapper">
       <p :class="['description', props.size]" v-html="props.description"></p>
@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -22,15 +22,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    converSecToHour(time: number){
-      const sec: number = (time % 60) % 60;
-      const min: number = Math.floor(time / 60) % 60;
-      const hour: number = Math.floor(time / 3600);
+    converSecToHour(time){
+      let hour = 0, min = 0, sec = 0;
+      const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+      if (reptms.test(time)) {
+        const matches = reptms.exec(time);
+        if (matches[1]) hour = Number(matches[1]);
+        if (matches[2]) min = Number(matches[2]);
+        if (matches[3]) sec = Number(matches[3]);
+      }
 
       if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
+        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span><span class="time mont bold">${sec}</span><span class="unit">秒</span>`
       }　else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
+        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span><span class="time mont bold">${sec}</span><span clas="unit">秒</span>`
       }
     }
   }
@@ -79,6 +84,7 @@ export default Vue.extend({
     height: 30px
     > .description
       font-size: 12px
+      font-weight: 500
       line-height: 15px
       margin: 0
       display: -webkit-box

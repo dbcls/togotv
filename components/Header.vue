@@ -9,20 +9,20 @@
       <div class="right_area">
         <nav>
           <ul class="links">
-            <li class="link about"><nuxt-link to="welcome">TogoTVについて</nuxt-link></li>
+            <li class="link about"><nuxt-link to="/welcome">TogoTVについて</nuxt-link></li>
             <li class="link circlevideo has_child_nav">動画を探す<span class="arrow"></span>
               <ul class="child_nav">
-                <li class="link course"><nuxt-link to="courses">スキル別コース</nuxt-link></li>
-                <li class="link new"><nuxt-link to="newvideo">新着動画</nuxt-link></li>
-                <li class="link barchart"><nuxt-link to="realtime">リアルタイム視聴ランキング</nuxt-link></li>
+                <li class="link course"><nuxt-link to="/courses">スキル別コース</nuxt-link></li>
+                <li class="link new"><nuxt-link to="/newvideo">新着動画</nuxt-link></li>
+                <li class="link barchart"><nuxt-link to="/realtime">リアルタイム視聴ランキング</nuxt-link></li>
               </ul>
             </li>
-            <li class="link picture"><nuxt-link to="pictures">画像を探す</nuxt-link></li>
+            <li class="link picture"><nuxt-link to="/pictures">画像を探す</nuxt-link></li>
             <li class="link contact has_child_nav">お問合せ<span class="arrow"></span>
               <ul class="child_nav contact">
-                <li class="link question"><nuxt-link to="faq">よくある質問</nuxt-link></li>
-                <li class="link video"><nuxt-link to="request">番組リクエスト</nuxt-link></li>
-                <li class="link people"><nuxt-link to="staff">スタッフ</nuxt-link></li>
+                <li class="link question"><nuxt-link to="/faq">よくある質問</nuxt-link></li>
+                <li class="link video"><nuxt-link to="/request">番組リクエスト</nuxt-link></li>
+                <li class="link people"><nuxt-link to="/staff">スタッフ</nuxt-link></li>
               </ul>
             </li>
             <li>

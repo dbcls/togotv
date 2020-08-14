@@ -29,7 +29,7 @@
                 type="checkbox"
                 :id="removeTag(author.key)"
                 :value="removeTag(author.key)"
-                v-model="filters.author"
+                v-model="filters.author_str"
               />
               <label :for="removeTag(author.key)">
                 <span class="label">{{ removeTag(author.key) }}</span>
@@ -199,7 +199,7 @@
           </ul>
         </div>
       </div>
-      <ul v-if="$store.state.display === 'card'" class="picture_list_card">
+      <ul v-if="$store.state.display === 'card' && !is_loading" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
             @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
@@ -222,6 +222,7 @@
           </div>
         </li>
       </ul>
+      <div v-if="is_loading" class="loader">Loading...</div>
       <infinite-loading
         v-if="$store.state.display === 'card' && !is_filter_on"
         ref="infiniteLoading"
@@ -296,6 +297,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      is_loading: false,
       keyword: "",
       canMessageSubmit: false,
       is_modal_on: false,
@@ -330,7 +332,7 @@ export default Vue.extend({
         }
       },
       filters: {
-        author: [],
+        author_str: [],
         taxon1: [],
         taxon2: [],
         taxon3: [],
@@ -355,6 +357,7 @@ export default Vue.extend({
             // フィルターなし]
             this.pictures = this.loaded_pictures;
           } else {
+            this.is_loading = true
             // 配列を文字列に変換
             Object.keys(param).forEach(key => {
               if (key === "pics") {
@@ -373,6 +376,7 @@ export default Vue.extend({
               })
               .then(data => {
                 this.pictures = data.data.data;
+                this.is_loading = false;
               })
               .catch(error => {
                 console.log("error", error);
@@ -950,6 +954,8 @@ export default Vue.extend({
           &.close
             visibility: hidden
             max-height: 0
+    > .loader
+      @include loader
     > ul.picture_list_card
       display: flex
       flex-wrap: wrap

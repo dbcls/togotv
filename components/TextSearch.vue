@@ -38,9 +38,9 @@ export default Vue.extend({
         if (!this.canMessageSubmit) {
           return;
         }
-        this.$router.push({ name: 'result', query: { query: this.keyword } })
+        this.$router.push({ name: 'result', query: { query: this.keyword, page: "1" } })
       } else if (type === "click") {
-        this.$router.push({ name: 'result', query: { query: this.keyword } })
+        this.$router.push({ name: 'result', query: { query: this.keyword, page: "1" } })
       }
     }
   }
