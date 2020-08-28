@@ -3,7 +3,7 @@
     <ul>
       <li v-for="video in video_info_array" :key="video.embedUrl">
         <img :src="video.thumbnailUrl" :alt="video.name">
-        <nuxt-link :to="{name: 'video', query: {id: video.embedUrl}}" class="title tsukushi bold">{{ video.name }}</nuxt-link>
+        <nuxt-link :to="{name: 'video', params: {video: video.uploadDate.replace(/-/g, '')}}" class="title tsukushi bold">{{ video.name }}</nuxt-link>
         <p class="description" v-html="video.description"></p>
         <ul>
           <li v-for="(tag, index) in video.keywords" :key="index">

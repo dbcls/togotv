@@ -202,12 +202,12 @@
       <ul v-if="$store.state.display === 'card' && !is_loading" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
-            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', query: {id: picture.TogoTV_Image_ID}})"
+            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
             <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
             <img
-              :src="`http://togotv.dbcls.jp/images/s/${picture.original_png}`"
+              :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`"
               :alt="picture.name"
             />
           </a>
@@ -217,7 +217,7 @@
             <a class="button png mont bold" @click="setDonwnloadLink(picture)">ダウンロード</a>
             <nuxt-link
               class="button mont bold"
-              :to="{name: 'picture', query: {id: picture.TogoTV_Image_ID}}"
+              :to="{name: 'picture', params: {picture: picture.id.split('/').pop()}}"
             >詳細</nuxt-link>
           </div>
         </li>
@@ -430,12 +430,12 @@ export default Vue.extend({
               let children_list = "";
               data.data.data.forEach(tag => {
                 children_list += `<li>
-                  <a href="../picture?id=${
-                    tag.TogoTV_Image_ID
+                  <a href="../${
+                    tag.id.split('/').pop()
                   }" onClick="event.stopPropagation()">
                     <div class="title">
-                      <img src="http://togotv.dbcls.jp/images/s/${
-                        tag.original_png
+                      <img src="https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${
+                        tag.png
                       }"/>
                       <p>${tag.name}</p>
                     </div>
@@ -618,6 +618,7 @@ export default Vue.extend({
             `http://togotv-api.bhx.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
+            console.log(data.data.data)
             this.pictures = this.pictures.concat(data.data.data);
             this.loaded_pictures = this.loaded_pictures.concat(data.data.data);
             if (this.current_page === 1) {

@@ -78,9 +78,9 @@ export default Vue.extend({
       this.changeCurrentPageRange();
     },
     fetchData(page) {
-      if (this.$route.name === 'result') {
+      if (this.$route.name === 'result' || this.$route.name === 'ajacs_text') {
         this.changeCurrentPage(page);
-        this.$router.replace({name: 'result', query: {...this.$route.query, page: page}})
+        this.$router.push({name: this.$route.name, query: {...this.$route.query, page: page}})
       } else {
         this.$emit("fetchData", page, false);
       }

@@ -2,18 +2,18 @@
   <div class="picture_wrapper">
     <div class="pic_section">
       <div class="img_wrapper">
-        <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.original_png}`" :alt="picture.name">
+        <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`" :alt="picture.name">
       </div>
       <div class="pic_detail">
         <p class="name tsukushi bold">{{ picture.name }}</p>
         <p class="name_en mont">{{ picture.name_en }}</p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
-        <a :href="`https://commons.wikimedia.org/wiki/File:${picture.original_svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
+        <a :href="`https://commons.wikimedia.org/wiki/File:${picture.svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
         <div class="download_btns">
-          <a @click="setDonwnloadLink(picture)" v-if="picture.original_png !== undefined" class="mont bold" download>png</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.original_svg !== undefined" class="mont bold" download>svg</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.original_ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.png !== undefined" class="mont bold" download>png</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.svg !== undefined" class="mont bold" download>svg</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.obj_mtl_zip !== undefined" class="mont bold" download>obj_mtl_zip</a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.apng !== undefined" class="mont bold" download>apng</a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.rotation !== undefined" class="mont bold" download>rotation</a>
@@ -24,8 +24,8 @@
       <p class="related_title tsukushi bold">関連画像</p>
       <ul class="related_images">
         <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
-          <nuxt-link :to="{name: 'picture', query: {id: data.TogoTV_Image_ID}}">
-            <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.original_png}`" :alt="data.name">
+          <nuxt-link :to="{name: 'picture', params: {picture: data.id.split('/').pop()}}">
+            <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
           </nuxt-link>
         </li>
       </ul>
@@ -45,10 +45,9 @@ import axios from 'axios'
 import DownloadModal from "~/components/DownloadModal.vue";
 
 export default Vue.extend({
-  watchQuery: ['id'],
   key: route => route.fullPath,
-  async asyncData ( { query, error } ) {
-    let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&TogoTV_Image_ID=${query.id}`)
+  async asyncData ( { params, error } ) {
+    let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&id=${params.picture}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
     return {
       picture: data.data.data[0],

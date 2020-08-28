@@ -2,7 +2,7 @@
   <div class="single_video_wrapper">
     <nuxt-link
       class="thumbnail_wrapper"
-      :to="{name: 'video', query: {id: props.id, course: props.courseId}}">
+      :to="{name: 'video', params: {video: `${props.uploadDate.replace(/-/g, '')}`}}">
       <img :class="['thumbnail', props.size]" :src="props.thumbnail" :alt="props.title">
       <span v-if="props.duration !== ''" class="duration" v-html="converSecToHour(props.duration)"></span>
     </nuxt-link>

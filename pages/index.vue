@@ -34,7 +34,7 @@
     </section>
     <section class="realtime_view_video_section bg_blue">
       <h2 class="tsukushi bold">
-        <nuxt-link to="realtime">リアルタイム視聴ランキング</nuxt-link>
+        <nuxt-link to="rankings">リアルタイム視聴ランキング</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
     </section>

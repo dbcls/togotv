@@ -8,9 +8,9 @@
     </div>
     <div class="btn_wrapper">
       <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
-      <a class="button mont bold" v-if="extension_exist.original_png" target="_blank" @click="controlDownload('original_png')">png</a>
-      <a class="button mont bold" v-if="extension_exist.original_svg" target="_blank" @click="controlDownload('original_svg')">svg</a>
-      <a class="button mont bold" v-if="extension_exist.original_ai" target="_blank" @click="controlDownload('original_ai')">AI<span>(Adobe Illustrator)</span></a>
+      <a class="button mont bold" v-if="extension_exist.png" target="_blank" @click="controlDownload('png')">png</a>
+      <a class="button mont bold" v-if="extension_exist.svg" target="_blank" @click="controlDownload('svg')">svg</a>
+      <a class="button mont bold" v-if="extension_exist.ai" target="_blank" @click="controlDownload('ai')">AI<span>(Adobe Illustrator)</span></a>
       <a class="button mont bold" v-if="extension_exist.obj_mtl_zip" target="_blank" @click="controlDownload('obj_mtl_zip')">obj_mtl_zip</a>
       <a class="button mont bold" v-if="extension_exist.apng" target="_blank" @click="controlDownload('apng')">apng</a>
       <a class="button mont bold" v-if="extension_exist.rotation" target="_blank" @click="controlDownload('rotation')">rotation</a>
@@ -47,9 +47,9 @@ export default Vue.extend({
   data() {
     return {
       extension_exist: {
-        'original_png': false,
-        'original_svg': false,
-        'original_ai': false,
+        'png': false,
+        'svg': false,
+        'ai': false,
         'obj_mtl_zip': false,
         'apng': false,
         'rotation': false,

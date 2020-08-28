@@ -9,7 +9,7 @@
       <section class="video_section">
         <ul>
           <li v-for="video in course.playlist" :key="video.id">
-            <SingleVideoCard :props="{id: video.videoid, thumbnail: video.thumbnailUrl, title: video.title, description: video.description, duration: video.duration, courseId: course.id}" />
+            <SingleVideoCard :props="{id: video.videoid, thumbnail: video.thumbnailUrl, title: video.title, description: video.description, duration: video.duration, courseId: course.id, uploadDate: video.uploadDate}" />
           </li>
         </ul>
       </section>
@@ -31,6 +31,7 @@ export default Vue.extend({
         return_course = course
       }
     })
+    console.log(return_course)
     return { course:  return_course}
   },
   head() {

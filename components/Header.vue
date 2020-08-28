@@ -14,10 +14,11 @@
               <ul class="child_nav">
                 <li class="link course"><nuxt-link to="/courses">スキル別コース</nuxt-link></li>
                 <li class="link new"><nuxt-link to="/newvideo">新着動画</nuxt-link></li>
-                <li class="link barchart"><nuxt-link to="/realtime">リアルタイム視聴ランキング</nuxt-link></li>
+                <li class="link barchart"><nuxt-link to="/rankings">リアルタイム視聴ランキング</nuxt-link></li>
               </ul>
             </li>
-            <li class="link picture"><nuxt-link to="/pictures">画像を探す</nuxt-link></li>
+            <li class="link picture"><nuxt-link to="/pics">画像を探す</nuxt-link></li>
+            <li class="link ajacs"><nuxt-link :to="{name: 'ajacs_text', query: {page: 1} }">講習会資料を探す</nuxt-link></li>
             <li class="link contact has_child_nav">お問合せ<span class="arrow"></span>
               <ul class="child_nav contact">
                 <li class="link question"><nuxt-link to="/faq">よくある質問</nuxt-link></li>
@@ -89,7 +90,6 @@ header
         font-size: 16px
         font-weight: 600
         > ul.links
-          width: 830px
           display: flex
           align-items: center
           justify-content: space-between
@@ -98,6 +98,7 @@ header
           li.link
             display: flex
             align-items: center
+            margin-right: 12px
             > a
               text-decoration: none
               color: $BLACK
@@ -141,6 +142,9 @@ header
             &.picture
               &:before
                 @include icon('img')
+            &.ajacs
+              &:before
+                @include icon('file')
             &.contact
               &:before
                 @include icon('mail')
@@ -174,7 +178,6 @@ header
       > .right_area
         > nav
           > ul.links
-            width: 547px
             .input_wrapper
               display: none
 </style>
