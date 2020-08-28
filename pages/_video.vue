@@ -60,12 +60,18 @@
           </ul>
         </div>
         <div class="document">
-          <h3 class="tsukushi bold">関連するAJACS講習会資料</h3>
-          <!-- <ul>
-            <li v-for="(doc, index) in videoData.documents" :key="index">
-              <a :href="doc.download_link" download>{{ doc.name }}</a>
+          <h3 class="tsukushi bold">
+            関連するAJACS講習会資料
+            <span
+              :class="['toggle_btn', is_ajacs_open ? '' : 'close']"
+              @click="is_ajacs_open = !is_ajacs_open"
+            ></span>
+          </h3>
+          <ul :class="is_ajacs_open ? '' : 'close'">
+            <li v-for="(ajacs, index) in ajacs_list" :key="index">
+              <nuxt-link :to="{name: 'ajacs', query: {id: ajacs.id}}">{{ ajacs.title }}</nuxt-link>
             </li>
-          </ul> -->
+          </ul>
         </div>
         <div class="original">
           <h3 class="tsukushi bold">動画ファイルのダウンロード</h3>
@@ -99,16 +105,19 @@ import axios from 'axios'
 Vue.use(VueYoutube)
 
 export default Vue.extend({
-  watchQuery: ['id'],
   key: route => route.fullPath,
   async asyncData( params ) {
+    let upload_date = params.route.params.video
+    upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
+    upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
     let [videoData, course_list, new_video_list, realtime_video_list] = await Promise.all([
-      axios.get(`http://togotv-api.bhx.jp/api/search?embedUrl=${params.query.id}`),
+      axios.get(`http://togotv-api.bhx.jp/api/search?uploadDate=${upload_date}`),
       axios.get(`http://togotv-api.bhx.jp/api/skillset`),
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
+    
     if(params.query.course !== undefined) {
       Object.keys(videoData).forEach(res => {
         if(res.indexOf('skillset_') !== -1) {
@@ -141,8 +150,8 @@ export default Vue.extend({
       localStorage.setItem('is_first_time', true)
     }
     if (this.videoData !== undefined) {
-      console.log(this.videoData)
-      this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+      // this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+      // this.fetchAjacs(this.videoData.TogoTV_Video_ID)
     }
   },
   data () {
@@ -153,7 +162,9 @@ export default Vue.extend({
       is_first_time: false,
       finish_loading: false,
       related_videos: [],
-      related_docs: []
+      related_docs: [],
+      ajacs_list: [],
+      is_ajacs_open: false
     }
   },
   methods: {
@@ -224,11 +235,21 @@ export default Vue.extend({
           console.log('error', error)
         })
     },
+    fetchAjacs(id) {
+      axios
+        .get(`http://togotv-api.bhx.jp/api/recommend/ajacs-training/${id}`)
+        .then(data => {
+          console.log('ajacs', data)
+          this.ajacs_list = data.data.items
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
+    },
     fetchRelatedDocs(id) {
       axios
         .get(`http://togotv-api.bhx.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
-          console.log(data.data)
           this.related_docs = data.data
         })
         .catch(error => {
@@ -264,7 +285,7 @@ export default Vue.extend({
     margin: 34px auto 0
     > .left_section
       margin-right: 27px
-      width: 100%
+      width: calc(100% - 264px)
       > .video_control
         display: flex
         justify-content: center
@@ -357,7 +378,7 @@ export default Vue.extend({
         line-height: 25px
         margin-top: 10px
       > .related_videos
-        width: calc(74vw - 80px * 2)
+        width: 100%
         > h3
           font-size: 18px
           display: flex
@@ -460,7 +481,7 @@ export default Vue.extend({
             span.unit
               font-size: 10px
       > div.tag_list
-        margin-top: 34px
+        // margin-top: 34px
         > h3
           margin-bottom: 8px
           &:before
@@ -479,10 +500,18 @@ export default Vue.extend({
           margin-bottom: 3px
           &:before
             @include icon('file')
+          > .toggle_btn
+            @include toggle_arrow
         > ul
+          max-height: 100vh
+          transition: .5s
+          overflow: hidden
+          &.close
+            max-height: 125px
           > li
             > a
               color: $BLACK
+              font-size: 14px
               line-height: 25px
       > div.original
         margin-top: 37px
@@ -548,8 +577,7 @@ export default Vue.extend({
       flex-direction: column
       > .left_section
         margin-right: 0
-        > .related_videos
-          width: calc(100vw - 80px)
+        width: 100%
       > .right_section
         max-width: 100%
         width: 100%
@@ -557,6 +585,7 @@ export default Vue.extend({
         &.is_in_course
           padding-top: 35px
         > div.digest
+          margin-bottom: 43px
           > ul
             > li
               > .title

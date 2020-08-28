@@ -399,38 +399,7 @@ export default Vue.extend({
               @include checkbox
               margin-left: 3px
       > .vue-slider
-        width: 90% !important
-        margin: 0 auto
-        transform: translateY(13px)
-        > .vue-slider-rail
-          background-color: #c2c2c2
-          height: 3px
-          > .vue-slider-process
-            background-color: $SUB_COLOR !important
-          > .vue-slider-dot
-            width: 11px !important
-            height: 11px !important
-            > .vue-slider-dot-handle
-              background-color: $POINT_COLOR !important
-              border: 2px solid $SUB_COLOR !important
-              box-shadow: none !important
-          > .vue-slider-marks
-            > .vue-slider-mark
-              width: 8px !important
-              height: 8px !important
-              > .vue-slider-mark-step
-                background-color: #c2c2c2
-                &.vue-slider-mark-step-active
-                  background-color: $SUB_COLOR
-                  &:hover
-                    cursor: pointer
-              > .vue-slider-mark-label
-                top: -21px !important
-                margin-top: 0px !important
-                font-family: montserrat, sans-serif
-                font-weight: 600
-                &:hover
-                  cursor: pointer
+        @include vue-slider
       > .select_time_bar
         position: relative
         display: flex

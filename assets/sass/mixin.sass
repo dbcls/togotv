@@ -66,9 +66,9 @@ $VIEW_PADDING_SP: 40px
   padding: 4.2px 14px
   transition: .3s
   text-decoration: none
-  // &:hover
-  //   color: #ffffff
-  //   background-color: $MAIN_COLOR
+  white-space: nowrap
+  &:hover
+    cursor: pointer
 
 @mixin total_time
   font-size: 16px
@@ -276,3 +276,41 @@ $VIEW_PADDING_SP: 40px
     box-shadow: 0 15px 0 -7px
   40%
     box-shadow: 0 15px 0 0
+
+@mixin vue-slider
+  width: 90% !important
+  margin: 0 auto
+  transform: translateY(13px)
+  > .vue-slider-rail
+    background-color: #c2c2c2
+    height: 3px
+    > .vue-slider-process
+      background-color: $SUB_COLOR !important
+    > .vue-slider-dot
+      width: 11px !important
+      height: 11px !important
+      > .vue-slider-dot-handle
+        background-color: $POINT_COLOR !important
+        border: 2px solid $SUB_COLOR !important
+        box-shadow: 0 2px 3px rgba(0, 0, 0, .24)
+    > .vue-slider-marks
+      > .vue-slider-mark
+        width: 8px !important
+        height: 8px !important
+        > .vue-slider-mark-step
+          background-color: #c2c2c2
+          &.vue-slider-mark-step-active
+            border-radius: 0
+            background: $BLACK
+            width: 1px
+            height: 6px
+            transform: translate(3px, -5px)
+            &:hover
+              cursor: pointer
+        > .vue-slider-mark-label
+          top: -21px !important
+          margin-top: 0px !important
+          font-family: montserrat, sans-serif
+          font-weight: 600
+          &:hover
+            cursor: pointer

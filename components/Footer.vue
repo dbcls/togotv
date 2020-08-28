@@ -20,12 +20,12 @@
                 <nuxt-link to="newvideo">新着動画</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="realtime">リアルタイム視聴ランキング</nuxt-link>
+                <nuxt-link to="rankings">リアルタイム視聴ランキング</nuxt-link>
               </li>
             </ul>
           </li>
           <li>
-            <nuxt-link to="pictures">画像を探す</nuxt-link>
+            <nuxt-link to="pics">画像を探す</nuxt-link>
           </li>
           <li>
             お問合せ

@@ -11,7 +11,7 @@
           <span class="tsukushi">再生リスト一覧</span>
           <ul class="detail_playlist">
             <li v-for="video in course.playlist" :key="video.videoid">
-              <nuxt-link :to="{name: 'video', query: {id: video.videoid, course: course.id}}" class="tsukushi bold">{{ video.title }}</nuxt-link>
+              <nuxt-link :to="{name: 'video', params: {id: video.uploadDate.replace(/-/g, '')}}" class="tsukushi bold">{{ video.title }}</nuxt-link>
             </li>
           </ul>
         </div>

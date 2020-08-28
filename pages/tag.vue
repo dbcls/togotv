@@ -39,7 +39,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.fetchData(1, true)
+    this.fetchData(1)
   },
   components: {
     VideoListCard,
@@ -53,17 +53,18 @@ export default Vue.extend({
       selected_release_season: [],
       selected_language: [],
       selected_duration: 0,
-      result_list: []
+      result_list: [],
+      lastpage: 0
     }
   },
   methods: {
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
     },
-    fetchData (page, is_initial) {
+    fetchData (page) {
       axios.get(`http://togotv-api.bhx.jp/api/search?keywords=${this.$route.query.name}&from=${page}&rows=21`).then(data => {
         this.result_list = data.data.data
-        if(is_initial) {
+        if(data.data.last_page !== undefined) {
           this.lastpage = data.data.last_page
         }
         this.$refs.pagination.changeCurrentPage(page);
