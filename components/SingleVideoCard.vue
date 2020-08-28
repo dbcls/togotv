@@ -24,12 +24,18 @@ export default Vue.extend({
   methods: {
     converSecToHour(time){
       let hour = 0, min = 0, sec = 0;
-      const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
-      if (reptms.test(time)) {
-        const matches = reptms.exec(time);
-        if (matches[1]) hour = Number(matches[1]);
-        if (matches[2]) min = Number(matches[2]);
-        if (matches[3]) sec = Number(matches[3]);
+      if(String(time).indexOf('PT') !== -1) {
+        const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+        if (reptms.test(time)) {
+          const matches = reptms.exec(time);
+          if (matches[1]) hour = Number(matches[1]);
+          if (matches[2]) min = Number(matches[2]);
+          if (matches[3]) sec = Number(matches[3]);
+        }
+      } else {
+        sec = (time % 60) % 60;
+        min = Math.floor(time / 60) % 60;
+        hour = Math.floor(time / 3600);
       }
 
       if(hour === 0) {

@@ -31,7 +31,6 @@ export default Vue.extend({
         return_course = course
       }
     })
-    console.log(return_course)
     return { course:  return_course}
   },
   head() {

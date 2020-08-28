@@ -40,10 +40,10 @@ import AsideParts from '~/components/AsideParts.vue'
 export default Vue.extend({
   key: route => route.fullPath,
   async asyncData ( { params, error } ) {
-    let id = params.ajacs.replace('ajacs', 'togopic.')
-    id = `${id.slice(0,12)}.${id.slice(12)}`
-    console.log(id)
+    let id = params.ajacs.replace('ajacs', 'ajacs.')
+    id = `${id.slice(0,10)}.${id.slice(10)}`
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+    console.log(data)
     return {
       ajacs_data: data.data.data[0],
     }
@@ -128,10 +128,7 @@ export default Vue.extend({
             margin-right: 6px
       > .iframe_wrapper
         position: relative
-        width: 100%
         padding-bottom: 56%
-        max-width: 777px
-        max-height: 435px
         > iframe
           position: absolute
           top: 0
