@@ -32,11 +32,6 @@
         <div class="related_videos">
           <h3 class="tsukushi bold">関連動画</h3>
           <VideoListHorizontalScroll :props="{id: 'related_videos', playList: related_videos, bg: 'white'}"/>
-          <!-- <ul>
-            <li v-for="video in videoData.related_videos" :key="video.id">
-              <SingleVideoCard :props="{id: video.id, thumbnail: video.thumbnail, title: video.title, description: video.description, size: 'small'}"/>
-            </li>
-          </ul> -->
         </div>
       </div>
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
@@ -69,7 +64,7 @@
           </h3>
           <ul :class="is_ajacs_open ? '' : 'close'">
             <li v-for="(ajacs, index) in ajacs_list" :key="index">
-              <nuxt-link :to="{name: 'ajacs', query: {id: ajacs.id}}">{{ ajacs.title }}</nuxt-link>
+              <nuxt-link :to="{name: 'ajacs', params: { ajacs: ajacs.url.split('/').pop().replace(/\.html/g, '') }}">{{ ajacs.title }}</nuxt-link>
             </li>
           </ul>
         </div>
@@ -105,6 +100,7 @@ import axios from 'axios'
 Vue.use(VueYoutube)
 
 export default Vue.extend({
+  watchQuery: ['course'],
   key: route => route.fullPath,
   async asyncData( params ) {
     let upload_date = params.route.params.video
@@ -117,7 +113,6 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
-    
     if(params.query.course !== undefined) {
       Object.keys(videoData).forEach(res => {
         if(res.indexOf('skillset_') !== -1) {
@@ -150,8 +145,24 @@ export default Vue.extend({
       localStorage.setItem('is_first_time', true)
     }
     if (this.videoData !== undefined) {
-      // this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
-      // this.fetchAjacs(this.videoData.TogoTV_Video_ID)
+      this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+      if(this.videoData.TogoTV_Handson_ID !== null) {
+        this.fetchAjacs(this.videoData.TogoTV_Handson_ID)
+      }
+    }
+
+    function onPlayerStateChange () {
+      this.player.getPlaylist().then(data => {
+        this.playlist_array = data
+      })
+
+      this.player.getPlaylistIndex().then(data => {
+        if(this.current_video_index !== data) {
+          this.finish_loading = false
+          this.current_video_index = data
+          this.fetchVideoData()
+        }
+      })
     }
   },
   data () {
@@ -221,7 +232,10 @@ export default Vue.extend({
     fetchVideoData() {
       if(this.playlist_array !== null) {
         let next_video_id = this.playlist_array[this.current_video_index]
-        this.$router.push({ name: 'video', query: { id: next_video_id } })
+        axios.get(`http://togotv-api.bhx.jp/api/search?embedUrl=${next_video_id}`).then(data => {
+          let next_video = data.data.data[0]
+          this.$router.push({ name: 'video', params: { video: next_video.uploadDate.replace(/-/g, '') } })
+        })
       }
       this.finish_loading = true
     },
@@ -239,7 +253,6 @@ export default Vue.extend({
       axios
         .get(`http://togotv-api.bhx.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
-          console.log('ajacs', data)
           this.ajacs_list = data.data.items
         })
         .catch(error => {

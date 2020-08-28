@@ -618,7 +618,6 @@ export default Vue.extend({
             `http://togotv-api.bhx.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
-            console.log(data.data.data)
             this.pictures = this.pictures.concat(data.data.data);
             this.loaded_pictures = this.loaded_pictures.concat(data.data.data);
             if (this.current_page === 1) {

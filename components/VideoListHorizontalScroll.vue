@@ -3,7 +3,7 @@
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-right`, direction: 'left'}"/>
     <ul class="video_list scroll-horizontal">
       <li class="video_list_box" v-for="video in props.playList" :key="video.id">
-        <SingleVideoCard :props="{id: getVideoId(video), thumbnail: getVideoThumbnail(video), title: video.name, description: video.description, duration: video.duration, courseId: props.courseId, uploadDate: video.uploadDate}"/>
+        <SingleVideoCard :props="{id: getVideoId(video), thumbnail: getVideoThumbnail(video), title: video.name, description: video.description, duration: video.duration, courseId: props.courseId, uploadDate: video.uploadDate !== undefined ? video.uploadDate : video.date}"/>
       </li>
     </ul>
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-left`, direction: 'right'}"/>

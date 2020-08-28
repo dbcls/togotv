@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 export default {
   mode: 'spa',
   /*
@@ -49,7 +49,39 @@ export default {
    ** Build configuration
    */
   generate: {
-    dir: 'togotv'
+    dir: 'togotv',
+    routes() {
+      const videos = axios
+        .get(`http://togotv-api.bhx.jp/api/entries?rows=10000`)
+        .then(data => {
+          return [...data.data.data.map(entry => entry.uploadDate.replace(/-/g, ''))]
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
+      
+      const pictures = axios
+        .get(`http://togotv-api.bhx.jp/api/entries?target=pictures&rows=10000`)
+        .then(data => {
+          return [...data.data.data.map(pic => pic.id.split('/').pop())]
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
+      
+      const ajacs_list = axios
+        .get(`http://togotv-api.bhx.jp/api/entries?target=ajacs-training&rows=10000`)
+        .then(data => {
+          return [...data.data.data.map(ajacs => ajacs.id.split('/').pop().replace(/\./g, ''))]
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
+      
+      return Promise.all([videos, pictures, ajacs_list]).then(values => {
+        return [...values[0], ...values[1], ...values[2]]
+      })
+    }
   },
   router: {
     base: process.env.NODE_ENV === 'dev' ? '/' : '/dbcls/togotv/'
