@@ -102,8 +102,10 @@ Vue.use(VueYoutube)
 export default Vue.extend({
   watchQuery: ['course'],
   key: route => route.fullPath,
-  async asyncData( params ) {
-    let upload_date = params.route.params.video
+  async asyncData({ params, payload }) {
+    console.log(payload)
+    if(payload) return { videoData: payload }
+    let upload_date = params.video
     upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
     upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
     let [videoData, course_list, new_video_list, realtime_video_list] = await Promise.all([
@@ -113,15 +115,15 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
-    if(params.query.course !== undefined) {
-      Object.keys(videoData).forEach(res => {
-        if(res.indexOf('skillset_') !== -1) {
-          if(params.query.course === videoData[res].id) {
-            videoData.skillset_1 = videoData[res]
-          }
-        }
-      })
-    }
+    // if(params.query.course !== undefined) {
+    //   Object.keys(videoData).forEach(res => {
+    //     if(res.indexOf('skillset_') !== -1) {
+    //       if(params.query.course === videoData[res].id) {
+    //         videoData.skillset_1 = videoData[res]
+    //       }
+    //     }
+    //   })
+    // }
     return { videoData, course_list: course_list.data.cources, new_video_list, realtime_video_list };
   },
   head() {
