@@ -46,7 +46,9 @@ import DownloadModal from "~/components/DownloadModal.vue";
 
 export default Vue.extend({
   key: route => route.fullPath,
-  async asyncData ( { params, error } ) {
+  async asyncData ( { params, error, payload } ) {
+    console.log(payload)
+    if(payload) return { picture: payload }
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&id=${params.picture}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
     return {
