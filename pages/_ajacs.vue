@@ -21,7 +21,8 @@
         <h3 class="tsukushi bold download">講習資料</h3>
         <a :href="ajacs_data.contentUrl" target="_blank">{{ ajacs_data.contentUrl }}</a>
         <h3 class="tsukushi bold pdf">講習資料PDF<span>（リンク先のページ中央のDownloadボタンを押すとダウンロードできます。）</span></h3>
-        <a :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
+        <a v-if="ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
+        <p v-else>該当なし</p>
         <h3 class="tsukushi bold circlevideo">講習会動画</h3>
         <div class="iframe_wrapper">
           <iframe :src="`https://www.youtube.com/embed/${ajacs_data.embedUrl}`" frameborder="0" allowfullscreen=""></iframe>
@@ -46,6 +47,7 @@ export default Vue.extend({
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+    console.log(data.data.data[0])
     return {
       ajacs_data: data.data.data[0],
     }
@@ -74,11 +76,15 @@ export default Vue.extend({
   align-items: flex-start
   justify-content: flex-start
   > .ajacs_section
+    width: calc(100% - 264px)
     > .ajacs_section_header
       display: flex
       justify-content: space-between
       > .page_title
         @include page_title('file')
+        white-space: break-spaces
+        &:before
+          margin-right: 6px
     > .ajacs_content
       > h3
         font-size: 18px
