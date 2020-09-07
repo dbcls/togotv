@@ -50,7 +50,7 @@
       </h2>
       <h3 class="tsukushi bold">YouTube版統合TVの月間番組再生数および再生時間の推移 (2007年〜2020年)</h3>
       <div class="playtime_transition_graph">
-        <img src="~/static/togotv_youtube_stats.png" alt="">
+        <img src="~/static/TogoTV_YouTube_stats.png" alt="">
       </div>
       <h3 class="tsukushi bold">統合TV年表</h3>
       <div class="chronology_graph">
