@@ -104,7 +104,8 @@ export default {
     subFolders: false,
   },
   router: {
-    base: process.env.NODE_ENV === "dev" ? "/" : "/dbcls/togotv/",
+    base: "/",
+    // base: process.env.NODE_ENV === "dev" ? "/" : "/dbcls/togotv/",
     extendRoutes(routes, resolve) {
       routes.forEach((route) => {
         if (route.name === "video") {
