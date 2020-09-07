@@ -131,4 +131,6 @@ export default Vue.extend({
     padding-bottom: 52px
     > h2
       @include section_title('barchart')
+
+
 </style>

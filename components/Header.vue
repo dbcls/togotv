@@ -170,7 +170,6 @@ header
   &.top
     box-shadow: none
     > .header_contents
-      min-width: 1108px
       > h1
         > a
           > img.logo

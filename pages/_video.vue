@@ -22,9 +22,11 @@
           </div>
           <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : '', autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
         </div>
-        <div class="time_data">
+        <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">分</span></p>
+          <p></p>
+          <p></p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
@@ -62,8 +64,9 @@
               @click="is_ajacs_open = !is_ajacs_open"
             ></span>
           </h3>
-          <ul :class="is_ajacs_open ? '' : 'close'">
+          <ul :class="['ajacs_list', is_ajacs_open ? '' : 'close']">
             <li v-for="(ajacs, index) in ajacs_list" :key="index">
+              <span>・</span>
               <nuxt-link :to="{name: 'ajacs', params: { ajacs: ajacs.url.split('/').pop().replace(/\.html/g, '') }}">{{ ajacs.title }}</nuxt-link>
             </li>
           </ul>
@@ -115,6 +118,7 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
+    console.log('hoge', videoData)
     // if(params.query.course !== undefined) {
     //   Object.keys(videoData).forEach(res => {
     //     if(res.indexOf('skillset_') !== -1) {
@@ -368,7 +372,7 @@ export default Vue.extend({
           left: 0
           width: 100%
           height: 100%
-      > .time_data
+      > .meta_data
         margin-top: 12px
         margin-bottom: 4px
         > p
@@ -511,25 +515,66 @@ export default Vue.extend({
               @include tag
       > div.document
         margin-top: 38px
+        position: relative
         > h3
           margin-bottom: 3px
           &:before
             @include icon('file')
           > .toggle_btn
-            @include toggle_arrow
-        > ul
+            width: 28px
+            height: 28px
+            border-radius: 100px
+            background-color: $MAIN_COLOR
+            box-shadow: -1px -2px 6px rgba(0, 0, 0, 0.16)
+            border: none
+            position: absolute
+            left: 50%
+            bottom: -32px
+            transition: .3s
+            z-index: $LAYER_1
+            transform: translateX(-50%) rotate(180deg)
+            &:hover
+              cursor: pointer
+            &:after
+              content: ''
+              border: 5px solid transparent
+              border-top: 7px solid #fff
+              position: absolute
+              top: 63%
+              left: 50%
+              transform: translate(-50%, -50%)
+            &.close
+              bottom: 0
+              transform: translateX(-50%) rotate(0deg)
+              box-shadow: 0 3px 6px rgba(0, 0, 0, .16)
+        > ul.ajacs_list
           max-height: 100vh
           transition: .5s
           overflow: hidden
+          position: relative
+          margin-bottom: 50px
           &.close
-            max-height: 125px
+            max-height: 166px
+            margin-bottom: 0
+            &:after
+              content: ''
+              width: 100%
+              height: 70px
+              background: linear-gradient(to top, #fff 0%, #fff 30%, transparent)
+              position: absolute
+              left: 0
+              bottom: 0
           > li
+            display: flex
+            align-items: flex-start
+            > span
+              margin-top: 2px
             > a
               color: $BLACK
               font-size: 14px
               line-height: 25px
       > div.original
-        margin-top: 37px
+        margin-top: 17px
         > h3
           margin-bottom: 6px
           &:before
