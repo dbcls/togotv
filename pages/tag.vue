@@ -206,4 +206,10 @@ export default Vue.extend({
 @media screen and (max-width: 896px)
   .result_wrapper
     padding: 0 $VIEW_PADDING_SP
+    flex-direction: column-reverse
+    > .video_section
+      > .video_section_header
+        > ul.display_icon_wrapper
+          margin-top: 9px
+
 </style>

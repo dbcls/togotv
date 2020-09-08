@@ -26,7 +26,7 @@
     "nuxt": "^2.0.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-slider-component": "^3.2.2",
-    "vue-youtube": "^1.4.0"
+    "vue-youtube": "git+https://github.com/reika0717/vue-youtube.git"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^0.6.0",

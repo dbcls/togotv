@@ -268,18 +268,27 @@ h2
     .intro_section
       margin: 0
       > .tutorial_video_wrapper
+        margin-top: 30px
         > iframe
           width: 85vw
           height: 48vw
+          position: relative
+          top: auto
+          left: auto
+          transform: none
         > img
           &.welcome_main
             display: none
           &.welcome_main_sp
             display: block
-            width: 95%
-            top: 282px
+            width: 85vw
+            margin: 0 auto
+            top: -4px
+            left: 0
+            transform: none
+            position: relative
         > .tutorial_text
-          padding-top: 360px
+          padding-top: 10px
           width: 90%
           font-size: 14px
     .feature_section

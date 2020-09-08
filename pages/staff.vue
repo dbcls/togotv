@@ -123,7 +123,7 @@ export default Vue.extend({
     font-size: 14px
     line-height: 25px
 
-@media screen and (max-width: 896px)
+@media screen and (max-width: 480px)
   .staff_wrapper
     padding: 0 $VIEW_PADDING_SP
     > .main_members
