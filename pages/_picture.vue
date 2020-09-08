@@ -51,6 +51,7 @@ export default Vue.extend({
     if(payload) return { picture: payload }
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&id=${params.picture}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
+    console.log(data.data.data[0])
     return {
       picture: data.data.data[0],
       tag_data: tag_data.data.data
@@ -58,8 +59,41 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: this.picture.name
+      title: this.picture.name,
+      script: [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(this.jsonld, null, 2)
+      }]
     }
+  },
+  computed: {
+    jsonld() {
+      return  {
+        "@context": "http://schema.org",
+        "@type": "Dataset",
+        "name": this.picture.name,
+        "url": location.href,
+        "identifier": this.picture.id,
+        "keywords": this.picture.other_tags,
+        "liscense": this.picture.liscense,
+        "creator":[
+          {
+            "@type":"Organization",
+            "url": "http://dbcls.rois.ac.jp/",
+            "name":"Database Center for Life Science",
+            "contactPoint":{
+                "@type":"ContactPoint",
+                "contactType": "customer service",
+                "telephone":"81-4-7135-5508"
+            }
+          },
+          {
+            "@type": "Person",
+            "name": this.picture.author_str
+          }
+        ]
+      };
+    },
   },
   components: {
     DownloadModal
@@ -177,6 +211,8 @@ export default Vue.extend({
           margin-bottom: 20px
           > img
             width: 146px
+            height: 146px
+            object-fit: contain
             &:hover
               cursor: pointer
   > .modal_back
@@ -197,7 +233,7 @@ export default Vue.extend({
         > img
           min-width: auto
           width: calc(100% - #{$VIEW_PADDING_SP} * 2)
-          max-height: initial
+          max-height: 360px
       > .pic_detail
         width: 100%
         padding: 30px $VIEW_PADDING_SP
