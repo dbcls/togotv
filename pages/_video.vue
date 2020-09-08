@@ -119,7 +119,6 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
-    console.log(videoData)
     // if(params.query.course !== undefined) {
     //   Object.keys(videoData).forEach(res => {
     //     if(res.indexOf('skillset_') !== -1) {
@@ -144,7 +143,7 @@ export default Vue.extend({
     player() {
       return this.$refs.youtube.player
     },
-     jsonld() {
+    jsonld() {
       return  {
         "@context": "http://schema.org",
         "@type": "Dataset",
@@ -169,7 +168,7 @@ export default Vue.extend({
             "@type": "Person",
             "name": this.videoData.author
           }
-        ],
+        ]
       };
     },
   },
