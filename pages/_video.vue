@@ -60,6 +60,7 @@
           <h3 class="tsukushi bold">
             関連するAJACS講習会資料
             <span
+              v-if="ajacs_list.length >= 5"
               :class="['toggle_btn', is_ajacs_open ? '' : 'close']"
               @click="is_ajacs_open = !is_ajacs_open"
             ></span>
@@ -118,7 +119,6 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
-    console.log('hoge', videoData)
     // if(params.query.course !== undefined) {
     //   Object.keys(videoData).forEach(res => {
     //     if(res.indexOf('skillset_') !== -1) {

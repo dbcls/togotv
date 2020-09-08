@@ -267,7 +267,7 @@ export default Vue.extend({
   .course_wrapper
     &:before,&:after
       width: calc(#{$VIEW_PADDING_SP} + 83px)
-      height: 186px
+      height: 206px
     &:before
       background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
     &:after

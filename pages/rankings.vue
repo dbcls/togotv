@@ -15,13 +15,18 @@
           </li>
         </ul>
       </div>
-      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="realtime_video_list"/>
-      <VideoList v-if="$store.state.display === 'list'" :video_info_array="realtime_video_list"/>
+      <ul class="span_tab_wrapper">
+        <li @click="active_tab = 'year'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'year' ? 'active' : '']">過去一年間</li>
+        <li @click="active_tab = 'month'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'month' ? 'active' : '']">過去一ヶ月間</li>
+        <li @click="active_tab = 'weekly'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'weekly' ? 'active' : '']">過去一週間</li>
+      </ul>
+      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="getActiveData()"/>
+      <VideoList v-if="$store.state.display === 'list'" :video_info_array="getActiveData()"/>
       </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
@@ -29,13 +34,25 @@ import AsideParts from '~/components/AsideParts.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData ( params ) {
-    const { data } = await axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
-    return { realtime_video_list: data.data }
+  async asyncData ( ) {
+    let year_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/year`)
+    let month_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/month`)
+    let weekly_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
+    console.log(year_data.data)
+    return {
+      year_data: year_data.data,
+      month_data: month_data.data,
+      weekly_data: weekly_data.data
+    }
   },
   head() {
     return {
       title: '視聴ランキング'
+    }
+  },
+  data () {
+    return {
+      active_tab: 'year'
     }
   },
   components: {
@@ -46,6 +63,17 @@ export default Vue.extend({
   methods: {
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
+    },
+    getActiveData() {
+      switch (this.active_tab) {
+        case 'year':
+          return this.year_data
+        case 'month':
+          return this.month_data
+        case 'weekly':
+          return this.weekly_data
+
+      }
     }
   }
 })
@@ -72,7 +100,18 @@ export default Vue.extend({
             width: 27px
             &:hover
               cursor: pointer
-
+    > .span_tab_wrapper
+      display: flex
+      margin-bottom: 8px
+      > .span_tab
+        font-size: 18px
+        margin-right: 40px
+        padding: 0 10px 22px
+        &:hover
+          cursor: pointer
+        &.active
+          @include blue_underline
+          background-position: 10px 26px
 @media screen and (max-width: 896px)
   .realtime_rank_wrapper
     padding: 0 $VIEW_PADDING_SP
