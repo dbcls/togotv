@@ -12,6 +12,7 @@ $LAYER_3: 3
 $LAYER_4: 4
 $LAYER_MODAL_BACK: 15
 $LAYER_MODAL: 16
+$LAYER_UNDER_HEADER: 10
 $LAYER_HEADER: 20
 
 /* RESPONSIVE */
@@ -38,6 +39,14 @@ $VIEW_PADDING_SP: 40px
     width: 55px
     height: 55px
     @include icon($code)
+  @media screen and (max-width: 896px)
+    margin-top: 0px
+    font-size: 24px
+    white-space: break-spaces
+    &:before
+      min-width: 45px
+      width: 45px
+      height: 45px
 
 @mixin section_title($code)
   font-size: 18px
@@ -83,6 +92,8 @@ $VIEW_PADDING_SP: 40px
     @include icon('time')
   > span.unit
     font-size: 10px
+  // @media screen and (max-width: 896px)
+  //   font-size: 12px
 
 @mixin download_btn()
   font-size: 13px
@@ -106,6 +117,8 @@ $VIEW_PADDING_SP: 40px
   background-color: rgba(242, 251, 252, .9)
   position: relative
   top: 0
+  @media screen and (max-width: 480px)
+    width: 100%
 
 @mixin text_input
   position: relative

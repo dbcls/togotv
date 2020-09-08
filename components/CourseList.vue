@@ -262,4 +262,43 @@ export default Vue.extend({
     margin-top: -40px
     button
       top: 122px
+
+@media screen and (max-width: 896px)
+  .course_wrapper
+    &:before,&:after
+      width: calc(#{$VIEW_PADDING_SP} + 83px)
+      height: 186px
+    &:before
+      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    &:after
+      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    &.right_hide
+      &:after
+        width: $VIEW_PADDING_SP
+    &.blue
+      &:before
+        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      &:after
+        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    .course_list
+      > .course_box
+        &:nth-of-type(1)
+          margin-left: $VIEW_PADDING_SP
+        &:last-of-type
+          &:after
+            width: $VIEW_PADDING_SP
+        &:before
+          border-top: 78px solid rgba(255, 255, 255, 0.15)
+          border-right: 78px solid transparent
+          border-bottom: 78px solid transparent
+          border-left: 78px solid rgba(255, 255, 255, 0.15)
+        > a.title
+          font-size: 16px
+          line-height: 24px
+          width: 126px
+          height: 126px
+          padding: 15px
+          box-sizing: content-box
+        > .total_time
+          display: none
 </style>

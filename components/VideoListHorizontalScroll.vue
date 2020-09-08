@@ -118,4 +118,30 @@ export default Vue.extend({
   button
     top: 38px
     z-index: $LAYER_3
+
+@media screen and (max-width: 896px)
+  .video_list_wrapper
+    &:before,&:after
+      width: calc(#{$VIEW_PADDING_SP} + 83px)
+      top: -10px
+    &:before
+      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    &:after
+      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    &.blue
+      &:before
+        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,transparent)
+      &:after
+        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,transparent)
+    &.right_hide
+      &:after
+        width: $VIEW_PADDING_SP
+    &.related_videos
+      width: calc(100% + #{$VIEW_PADDING_SP} * 2)
+    .video_list
+      > .video_list_box
+        &:nth-of-type(1)
+          margin-left: $VIEW_PADDING_SP
+        &:last-of-type
+          padding-right: $VIEW_PADDING_SP
 </style>

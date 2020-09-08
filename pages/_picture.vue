@@ -181,4 +181,37 @@ export default Vue.extend({
               cursor: pointer
   > .modal_back
     @include modal_back
+
+@media screen and (max-width: 896px)
+  .picture_wrapper
+    padding: 0
+    > .related_images_wrapper
+      padding: 0 $VIEW_PADDING_SP
+    > .pic_section
+      flex-direction: column
+      > .img_wrapper
+        width: 100%
+        height: auto
+        background: none
+        padding: 40px 0px
+        > img
+          min-width: auto
+          width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+          max-height: initial
+      > .pic_detail
+        width: 100%
+        padding: 30px $VIEW_PADDING_SP
+        margin: 0 auto
+        border-radius: 13px
+        color: $BLACK
+        background-color: transparent
+        &:before
+          display: none
+        > a.taxonomy,
+        > a.wiki
+          color: $BLACK
+        > div.download_btns
+          > a
+            color: $MAIN_COLOR
+            border: 1px solid $MAIN_COLOR
 </style>

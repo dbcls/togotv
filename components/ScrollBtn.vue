@@ -81,7 +81,12 @@ export default Vue.extend({
       let current_position_x: number = target_section.scrollLeft
       const child_width = target_section.children[1].clientWidth//子要素の幅
       const num_of_element = target_section.childElementCount//要素数
-      let substraction: number = document.body.clientWidth - 160
+      let substraction: number = 0
+      if(document.body.clientWidth > 897) {
+        substraction = document.body.clientWidth - 160
+      } else {
+        substraction = document.body.clientWidth - 80
+      }
       if (this.props.id.indexOf('video') !== -1) {
         substraction += 10
       }
@@ -131,4 +136,8 @@ export default Vue.extend({
   &.left
     transform: rotate(180deg)
     left: 65px
+
+@media screen and (max-width: 896px)
+  .btn_scroll_next
+    display: none
 </style>

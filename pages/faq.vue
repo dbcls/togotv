@@ -89,4 +89,18 @@ export default Vue.extend({
           font-size: 16px
           line-height: 24px
           padding-top: 8px
+
+@media screen and (max-width: 896px)
+  .faq_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    > .faq_list
+      > .faq
+        padding: 13px  0px 19px
+        > h3.question
+          > span
+            font-size: 20px
+        > .answer
+          > span
+            font-size: 14px
+            line-height: 24px
 </style>

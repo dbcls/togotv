@@ -20,7 +20,7 @@
                 <nuxt-link to="newvideo">新着動画</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="rankings">リアルタイム視聴ランキング</nuxt-link>
+                <nuxt-link to="rankings">視聴ランキング</nuxt-link>
               </li>
             </ul>
           </li>
@@ -130,4 +130,27 @@ footer
       > img.logo
         margin-top: 10px
         margin-bottom: 35px
+
+@media screen and (max-width: 896px)
+  footer
+    width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+    padding: 19px 0px 23px
+    > .logo_sitemap_wrapper
+      flex-direction: column-reverse
+      > img.logo
+        margin-bottom: 18px
+        margin-top: 30px
+        width: 200px
+      > .sitemap
+        margin: 0
+        width: 100%
+        > ul
+          width: auto
+          flex-direction: column
+          > li
+            line-height: 30px
+            > ul.child_nav
+              margin-top: 0
+    > ul.sns
+      margin-top: 5px
 </style>

@@ -144,4 +144,14 @@ export default Vue.extend({
           width: 100%
           height: 100%
           border-radius: 5px
+
+@media screen and (max-width: 896px)
+  .ajacs_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    flex-direction: column-reverse
+    > .ajacs_section
+      width: 100%
+      > .ajacs_content
+        > a, p
+          word-break: break-all
 </style>
