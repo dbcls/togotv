@@ -119,6 +119,7 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
     ]);
     videoData = videoData.data.data[0]
+    console.log(videoData)
     // if(params.query.course !== undefined) {
     //   Object.keys(videoData).forEach(res => {
     //     if(res.indexOf('skillset_') !== -1) {
@@ -132,13 +133,45 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: this.videoData.name
+      title: this.videoData.name,
+      script: [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(this.jsonld, null, 2)
+      }]
     }
   },
   computed: {
     player() {
       return this.$refs.youtube.player
-    }
+    },
+     jsonld() {
+      return  {
+        "@context": "http://schema.org",
+        "@type": "Dataset",
+        "name": this.videoData.name,
+        "description": this.videoData.description,
+        "url": location.href,
+        "identifier": this.videoData.id,
+        "keywords": this.videoData.keywords,
+        "liscense": this.videoData.liscense,
+        "creator":[
+          {
+            "@type":"Organization",
+            "url": "http://dbcls.rois.ac.jp/",
+            "name":"Database Center for Life Science",
+            "contactPoint":{
+                "@type":"ContactPoint",
+                "contactType": "customer service",
+                "telephone":"81-4-7135-5508"
+            }
+          },
+          {
+            "@type": "Person",
+            "name": this.videoData.author
+          }
+        ],
+      };
+    },
   },
   components:  {
     CourseList,
