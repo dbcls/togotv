@@ -15,6 +15,7 @@
           allowfullscreen
         ></iframe>
         <img class="welcome_main" src="~/assets/img/welcome_main.png" alt />
+        <img class="welcome_main_sp" src="~/assets/img/welcome_main_sp.png" alt />
         <div
           class="tutorial_text"
         >統合TVは、生命科学分野の有用なデータベース(DB)やウェブツールの動画マニュアルや講演・講義動画、イラスト、講習資料などを紹介するポータルサイトです。生命科学研究の規模拡大や多様化に伴って、データベースやウェブツールの利用方法も複雑化・専門化しています。いまや研究の効率的な進展にデータベースやウェブツールの利用は不可欠であり、その活用術は研究者として必要な素養のひとつとなっています。統合TVでは、研究者や技術者、それらを志す初学者が研究に役立つリソースに到達し、さらにそれらを使いこなすためのさまざまな情報を作成し、整理しています。</div>
@@ -28,18 +29,24 @@
       <ul class="feature_list">
         <li class="feature">
           <img class="feature_img" src="~/assets/img/welcome_feature_1.png" alt />
-          <p class="feature_title tsukushi bold">無料で使えます</p>
-          <p class="feature_description">動画・イラスト・講習資料は出典明記のみで自由に利用できます。</p>
+          <div class="feature_description_wrapper">
+            <p class="feature_title tsukushi bold">無料で使えます</p>
+            <p class="feature_description">動画・イラスト・講習資料は出典明記のみで自由に利用できます。</p>
+          </div>
         </li>
         <li class="feature">
           <img class="feature_img" src="~/assets/img/welcome_feature_2.png" alt />
-          <p class="feature_title tsukushi bold">初学者から研究者まで</p>
-          <p class="feature_description">大学院生を主な想定利用者層とし、分野の違う研究者でも分かりやすいように。</p>
+          <div class="feature_description_wrapper">
+            <p class="feature_title tsukushi bold">初学者から研究者まで</p>
+            <p class="feature_description">大学院生を主な想定利用者層とし、分野の違う研究者でも分かりやすいように。</p>
+          </div>
         </li>
         <li class="feature">
           <img class="feature_img" src="~/assets/img/welcome_feature_3.png" alt />
-          <p class="feature_title tsukushi bold">スキル別コース</p>
-          <p class="feature_description">「この順で動画をみていくと、このスキルを習得できる」といった体系的な教育にも。</p>
+          <div class="feature_description_wrapper">
+            <p class="feature_title tsukushi bold">スキル別コース</p>
+            <p class="feature_description">「この順で動画をみていくと、このスキルを習得できる」といった体系的な教育にも。</p>
+          </div>
         </li>
       </ul>
     </section>
@@ -154,12 +161,14 @@ h2
         border-radius: 3px
         z-index: $LAYER_1
         width: 463px
-      > .welcome_main
+      > img
         max-width: 890px
         position: absolute
         top: 220px
         left: 50%
         transform: translateX(-50%)
+        &.welcome_main_sp
+          display: none
       > .tutorial_text
         max-width: 890px
         font-size: 16px
@@ -183,13 +192,14 @@ h2
           margin-right: 0
         > img.feature_img
           width: 205px
-        > .feature_title
-          font-size: 22px
-          margin-bottom: 12px
-        > .feature_description
-          margin-top: 0
-          font-size: 16px
-          line-height: 28px
+        > .feature_description_wrapper
+          > .feature_title
+            font-size: 22px
+            margin-bottom: 12px
+          > .feature_description
+            margin-top: 0
+            font-size: 16px
+            line-height: 28px
   .history_section
     padding-top: 76.3px
     > h2
@@ -248,4 +258,54 @@ h2
                 position: absolute
                 left: 6px
                 top: 2px
+
+@media screen and (max-width: 896px)
+  h2
+    font-size: 19px
+    > img.logo
+      width: 155px
+  .welcome_wrapper
+    .intro_section
+      margin: 0
+      > .tutorial_video_wrapper
+        > iframe
+          width: 85vw
+          height: 48vw
+        > img
+          &.welcome_main
+            display: none
+          &.welcome_main_sp
+            display: block
+            width: 95%
+            top: 282px
+        > .tutorial_text
+          padding-top: 360px
+          width: 90%
+          font-size: 14px
+    .feature_section
+      > .feature_list
+        flex-direction: column
+        > .feature
+          width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+          min-height: 130px
+          display: flex
+          align-items: flex-start
+          margin: 0 auto
+          &:last-of-type
+            margin-right: auto
+          > img.feature_img
+            width:  100px
+            margin-right: 10px
+          > .feature_description_wrapper
+            text-align: left
+            margin-top: -6px
+            > .feature_title
+              font-size: 18px
+              margin-bottom: 8px
+            > .feature_description
+              font-size: 14px
+              line-height: 22px
+    .history_section
+      width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+      margin: 0 auto
 </style>

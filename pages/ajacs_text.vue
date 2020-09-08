@@ -39,31 +39,33 @@
       <div class="gallery_section_header">
         <h2 class="page_title tsukushi bold">講習会資料を探す</h2>
       </div>
-      <table class="ajacs_list" v-if="!is_loading">
-        <thead>
-          <tr>
-            <th>講習タイトル</th>
-            <th>講師</th>
-            <th>日時</th>
-            <th>AJACS</th>
-            <th>関連するタグ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(ajacs, index) in ajacs_list"
-            :key="index"
-          >
-            <td class="title" @click="moveDetailPage({name: 'ajacs', params: { ajacs: ajacs.id.split('/').pop().replace(/\./g, '') }})">{{ ajacs.name }}</td>
-            <td class="author">{{ ajacs.author }}</td>
-            <td class="date">{{ ajacs.uploadDate }}</td>
-            <td class="AJACS_jp">{{ ajacs.AJACS_jp }}</td>
-            <td>
-              <span @click="filters.keywords = [tag]" v-for="(tag, tag_index) in ajacs.keywords" :key="tag_index" :class="['tag', tag === '' ? 'hide': '']">{{ tag }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table_wrapper">
+        <table class="ajacs_list" v-if="!is_loading">
+          <thead>
+            <tr>
+              <th>講習タイトル</th>
+              <th>講師</th>
+              <th>日時</th>
+              <th>AJACS</th>
+              <th>関連するタグ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(ajacs, index) in ajacs_list"
+              :key="index"
+            >
+              <td class="title" @click="moveDetailPage({name: 'ajacs', params: { ajacs: ajacs.id.split('/').pop().replace(/\./g, '') }})">{{ ajacs.name }}</td>
+              <td class="author">{{ ajacs.author }}</td>
+              <td class="date">{{ ajacs.uploadDate }}</td>
+              <td class="AJACS_jp">{{ ajacs.AJACS_jp }}</td>
+              <td>
+                <span @click="filters.keywords = [tag]" v-for="(tag, tag_index) in ajacs.keywords" :key="tag_index" :class="['tag', tag === '' ? 'hide': '']">{{ tag }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div v-if="is_loading" class="loader">Loading...</div>
       <Pagination ref="pagination" :props="{lastpage: lastpage}" @fetchData="fetchData" />
     </div>
@@ -430,43 +432,56 @@ export default Vue.extend({
               width: 27px
               &:hover
                 cursor: pointer
-
-    > table.ajacs_list
-      border-collapse: collapse
-      > thead
-        font-size: 12px
-        line-height: 32px
-        text-align: left
-        > tr
-          > th
-            border-top: 2px solid $MAIN_COLOR
-            border-bottom: 1px solid $MAIN_COLOR
-            padding-left: 10px
-      > tbody
-        font-size: 14px
-        > tr
-          > td
-            padding: 8px 0 8px 10px
-            position: relative
-            &.date
-              white-space: nowrap
-            &.AJACS_jp
-              min-width: 74px
-            &.author
-              min-width: 74px
-            &:after
-              @include dot_border_bottom
-            &.title
-              &:hover
-                cursor: pointer
-                text-decoration: underline
-            > span.tag
-              @include tag
-              font-size: 12px
-              line-height: 26px
-              margin-right: 6px
-              &.hide
-                display: none
+    > .table_wrapper
+      > table.ajacs_list
+        border-collapse: collapse
+        > thead
+          font-size: 12px
+          line-height: 32px
+          text-align: left
+          > tr
+            > th
+              border-top: 2px solid $MAIN_COLOR
+              border-bottom: 1px solid $MAIN_COLOR
+              padding-left: 10px
+        > tbody
+          font-size: 14px
+          > tr
+            > td
+              padding: 8px 0 8px 10px
+              position: relative
+              &.date
+                white-space: nowrap
+              &.AJACS_jp
+                min-width: 74px
+              &.author
+                min-width: 74px
+              &:after
+                @include dot_border_bottom
+              &.title
+                &:hover
+                  cursor: pointer
+                  text-decoration: underline
+              > span.tag
+                @include tag
+                font-size: 12px
+                line-height: 26px
+                margin-right: 6px
+                &.hide
+                  display: none
     > .loader
       @include loader
+
+@media screen and (max-width: 480px)
+  .ajacs_list_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    flex-direction: column
+    > .facet_wrapper
+      display: none
+    > .gallery_wrapper
+      > .table_wrapper
+        width: 100%
+        overflow: auto
+        > table.ajacs_list
+          width: 690px
 </style>

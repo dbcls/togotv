@@ -202,4 +202,8 @@ export default Vue.extend({
             width: 27px
             &:hover
               cursor: pointer
+
+@media screen and (max-width: 896px)
+  .result_wrapper
+    padding: 0 $VIEW_PADDING_SP
 </style>

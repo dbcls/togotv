@@ -122,4 +122,20 @@ export default Vue.extend({
     margin: 0
     font-size: 14px
     line-height: 25px
+
+@media screen and (max-width: 896px)
+  .staff_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    > .main_members
+      flex-wrap: wrap
+      > .single_role_wrapper
+        margin: 0
+        width: 50%
+        &:first-of-type
+          width: 100%
+          margin-bottom: 18px
+    > .recruit_wrapper
+      padding: 30px 40px
+      > h3
+        font-size: 24px
 </style>

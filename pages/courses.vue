@@ -58,6 +58,7 @@ export default Vue.extend({
   > .page_title
     @include page_title('course')
     padding-left: $VIEW_PADDING
+    margin-left: -10px
   > .video_section
     > ul
       > li
@@ -74,11 +75,12 @@ export default Vue.extend({
           > a
             font-size: 18px
             display: flex
-            align-items: center
+            align-items: flex-start
             text-decoration: none
             color: $BLACK
             transition: .2s
             &:before
+              min-width: 26px
               width: 26px
               height: 26px
               margin-right: 2px
@@ -88,4 +90,18 @@ export default Vue.extend({
               color: $MAIN_COLOR
           > .total_time
             @include total_time
+
+@media screen and (max-width: 896px)
+  .courses_wrapper
+    > .page_title
+      padding-left: $VIEW_PADDING_SP
+    > .video_section
+      > ul
+        > li
+          > h3.course_name
+            padding-left: $VIEW_PADDING_SP
+            flex-direction: column
+            align-items: flex-start
+            > .total_time
+              margin: 0
 </style>

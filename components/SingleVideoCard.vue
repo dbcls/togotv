@@ -98,4 +98,17 @@ export default Vue.extend({
       -webkit-line-clamp: 2
       &.small
         width: 166px
+
+@media screen and (max-width: 896px)
+  .single_video_wrapper
+    a
+      > .thumbnail
+        width: 150px
+        max-width: 150px
+        min-width: 150px
+        height: 86px
+        min-height: 86px
+        max-height: 86px
+    > .description_wrapper
+      width: 150px
 </style>

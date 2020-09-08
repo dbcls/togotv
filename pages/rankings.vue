@@ -3,7 +3,7 @@
     <AsideParts />
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">リアルタイム視聴ランキング</h2>
+        <h2 class="page_title tsukushi bold">視聴ランキング</h2>
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
@@ -35,7 +35,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'リアルタイム視聴ランキング'
+      title: '視聴ランキング'
     }
   },
   components: {
@@ -72,4 +72,13 @@ export default Vue.extend({
             width: 27px
             &:hover
               cursor: pointer
+
+@media screen and (max-width: 896px)
+  .realtime_rank_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    flex-direction: column-reverse
+    > .video_section
+      > .video_section_header
+        > ul.display_icon_wrapper
+          margin-top: 9px
 </style>

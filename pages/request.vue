@@ -30,4 +30,11 @@ export default Vue.extend({
     padding-left: 5px
   > iframe
     margin-left: -30px
+
+@media screen and (max-width: 896px)
+  .request_wrapper
+    padding: 0 $VIEW_PADDING_SP
+    > iframe
+      margin: 0
+      width: 100%
 </style>

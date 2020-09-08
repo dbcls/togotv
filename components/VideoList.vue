@@ -70,4 +70,20 @@ export default Vue.extend({
         margin-left: 12px
         float: right
         border-radius: 4px
+
+@media screen and (max-width: 480px)
+  .video_list_wrapper
+    min-width: 100%
+    > ul
+      > li
+        // > a.title
+        // > p.description
+        // > ul
+        //   > li
+        //     > a
+        > img
+          float: none
+          width: 100%
+          margin: 0
+
 </style>

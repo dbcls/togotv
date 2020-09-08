@@ -25,8 +25,8 @@
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">分</span></p>
-          <p></p>
-          <p></p>
+          <p class="author tsukushi bold">{{ videoData.author }}</p>
+          <p class="editor tsukushi bold">{{ videoData.editor }}</p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
@@ -86,7 +86,7 @@
       <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list.data.data, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue">
-      <h3 class="tsukushi bold">リアルタイム視聴ランキング</h3>
+      <h3 class="tsukushi bold">視聴ランキング</h3>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
     </section>
   </div>
@@ -375,19 +375,29 @@ export default Vue.extend({
       > .meta_data
         margin-top: 12px
         margin-bottom: 4px
+        display: flex
+        align-items: center
         > p
-          margin: 0
-        > .update
-          display: inline-block
+          margin: 0 11px 0 0
+          display: flex
+          align-items: center
           &:before
             width: 20px
             height: 20px
-            transform: translateY(4px)
-            @include icon('update')
-        > .total_time
-          display: inline-block
-          @include total_time
-          bottom: -6px
+          &.author
+            &:before
+              @include icon('author')
+          &.editor
+            &:before
+              @include icon('editor')
+          &.update
+            &:before
+              @include icon('update')
+          &.total_time
+            @include total_time
+            margin-left: 0
+            &:before
+              transform: none
       > h2.title
         font-size: 27px
         line-height: 39px
@@ -650,4 +660,28 @@ export default Vue.extend({
             > li
               > .title
                 max-width: 100%
+
+@media screen and (max-width: 896px)
+  .video_wrapper
+    > .course_info
+      > p.course_title
+        padding: 2px 0 2px $VIEW_PADDING_SP
+    > .video_description_wrapper
+      width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+      > .left_section
+        > .related_videos
+          .video_list_wrapper
+            margin-left: -$VIEW_PADDING_SP
+        > .meta_data
+          flex-wrap: wrap
+          line-height: 24px
+    .course_section
+      > h3
+        margin-left: $VIEW_PADDING_SP
+    .newvideo_section
+      > h3
+        margin-left: $VIEW_PADDING_SP
+    .realtime_view_video_section
+      > h3
+        margin-left: $VIEW_PADDING_SP
 </style>

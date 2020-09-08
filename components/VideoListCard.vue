@@ -44,4 +44,8 @@ export default Vue.extend({
     margin-left: -18px
     > li
       margin: 0 0 21px 19px
+
+@media screen and (max-width: 896px)
+  .video_list_wrapper
+    min-width: auto
 </style>

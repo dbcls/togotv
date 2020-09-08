@@ -74,4 +74,11 @@ export default Vue.extend({
         > li
           margin-left: 10px
           margin-bottom: 28px
+
+@media screen and (max-width: 896px)
+  .courses_wrapper
+    > .page_title
+      padding-left: $VIEW_PADDING_SP
+    > .content_wrapper
+      padding: 0 $VIEW_PADDING_SP
 </style>
