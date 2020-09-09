@@ -5,6 +5,11 @@
       @click="fetchData(1)"
       class="arrow left"
     ></span>
+    <span
+      v-if="currentpage !== 1"
+      @click="fetchData(currentpage - 1)"
+      class="single_arrow left"
+    ></span>
     <ul v-if="props.lastpage <= 5 && typeof props.lastpage === 'number'">
       <li
         v-for="index in props.lastpage"
@@ -21,6 +26,11 @@
         @click="fetchData(currentpageRange[0] - 1 + index)"
       >{{ currentpageRange[0] - 1 + index }}</li>
     </ul>
+    <span
+      v-if="currentpage !== Number(props.lastpage)"
+      @click="fetchData(currentpage + 1)"
+      class="single_arrow right"
+    ></span>
     <span
       v-if="currentpage !== Number(props.lastpage)"
       @click="fetchData(props.lastpage)"
@@ -95,26 +105,32 @@ export default Vue.extend({
   justify-content: center
   align-items: center
   margin-top: 30px
-  > span.arrow, span.arrow:after
+  > span.arrow, span.arrow:after, span.single_arrow
     display: inline-block
     width: 8px
     height: 8px
     border-top: 1px solid rgba(51, 51, 51, .5)
     border-right: 1px solid rgba(51, 51, 51, .5)
+  > span.single_arrow
+    &:hover
+      cursor: pointer
   > span.arrow
     &:after
       content: ''
       margin: 0px 0px 3px -4px
     &:hover
       cursor: pointer
-  > span.arrow.right
+  > span.arrow.right,
+  > span.single_arrow.right
     transform: rotate(45deg)
-  > span.arrow.left
+    margin-left: 20px
+  > span.arrow.left,
+  > span.single_arrow.left
     transform: rotate(-135deg)
+    margin-right: 20px
   > ul
     display: flex
     justify-content: center
-    margin: 0 20px
     > .pagination
       width: 35px
       height: 35px
