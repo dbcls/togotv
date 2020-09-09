@@ -2,7 +2,7 @@
   <div class="faq_wrapper">
     <h2 class="page_title tsukushi bold">{{ $t('faq') }}</h2>
     <ul class="faq_list">
-      <li class="faq" v-for="faq in faq_list" :id="faq.id" :key="faq.id">
+      <li class="faq" v-for="faq in $i18n.locale === 'ja' ? faq_list : faq_list_en" :id="faq.id" :key="faq.id">
         <h3 class="question tsukushi bold"><span>{{ faq.question }}</span></h3>
         <p class="answer"><span v-html="convertLinksToHTML(faq.answer)"></span></p>
       </li>
@@ -22,7 +22,8 @@ export default Vue.extend({
   },
   data () {
     return {
-      faq_list: []
+      faq_list: [],
+      faq_list_en: []
     }
   },
   mounted() {
@@ -32,6 +33,19 @@ export default Vue.extend({
     fetchFAQ() {
       axios.get(`${location.origin}/${this.$router.history.base}/json/FAQ.json`).then(data => {
         this.faq_list = data.data.faq_list
+      }).then(() => {
+        let hash = this.$route.hash
+        if (hash) {
+          let offset = document.getElementById(hash.slice(1)).offsetTop
+          window.scrollTo({
+              top: offset - 100,
+              behavior: "smooth"
+          });
+        }
+      })
+
+      axios.get(`${location.origin}/${this.$router.history.base}/json/FAQ_en.json`).then(data => {
+        this.faq_list_en = data.data.faq_list
       }).then(() => {
         let hash = this.$route.hash
         if (hash) {

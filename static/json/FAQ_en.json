@@ -1,0 +1,59 @@
+{
+  "faq_list": [
+    {
+      "id": "whatisDBCLS",
+      "question": "DBCLSとはなんですか？",
+      "answer": "[DBCLSのウェブサイト](https://dbcls.rois.ac.jp/about.html)をご覧ください。また[DBCLSについてのよくある質問](https://dbcls.rois.ac.jp/faq)もあります。"
+    },
+    {
+      "id": "Howtocite_copyrights",
+      "question": "統合TVのコンテンツを再利用したいのですが、著作権の扱いはどうなっていますか? また、引用の方法はどのようにすればよいですか?",
+      "answer": "統合TVのコンテンツは、[クリエイティブコモンズ・ライセンス(CC)表示 4.0(CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/deed.ja) のもとでライセンスされており、各コンテンツの著作権は「DBCLS TogoTV」が保持しますが、サイエンスコミュニティの共有物として、出典(クレジット)の明記を条件に、転載・改変・再利用(営利目的での二次利用も含め)を許可なく自由に行えます。<p>統合TVに掲載されている個別の動画・教材コンテンツについてご引用いただく際には、恒久的な URL として [DOI(Digital Object Identifier)](https://biosciencedbc.jp/blog/20200722-01.html)を使用することができます。<ul><li>(引用の例1: 統合TV「統合TVプロモーションムービー2016」DOI: 10.7875/togotv.2016.052)</li><li>(引用の例2: TogoTV \"DBCLS 10th Anniversary Track @ BioHackathon2017\" DOI: 10.7875/togotv.2018.039)</li><ul><br>また、統合TVの論文もありますので、合わせてご記載ください。<br>[Tutorial videos of bioinformatics resources: online distribution trial in Japan named TogoTV.](http://bib.oxfordjournals.org/content/13/2/258.full)<br>Kawano S, Ono H, Takagi T, Bono H.<br>Brief Bioinform. 2012 Mar;13(2):258-68. doi: 10.1093/bib/bbr039.</p><p>画像のご利用にあたっては、出典元 (© 2016 DBCLS TogoTV) あるいは該当ページのURLを必ず明記してください。 出典の記載のみが条件で、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問わず、自由にご利用いただけます。 出典元の記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。[出典元表示用の画像セットも用意](https://togotv.dbcls.jp/togopic-copyright-set.zip)しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等（[引用例](https://dbcls.rois.ac.jp/references.html#TogoTV)）では、Acknowledgementや図のlegend 等にご記載いただいています。(例: \"The image of XX is from TogoTV (© 2016 DBCLS TogoTV).\")</p><p>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。</p>"
+    },
+    {
+      "id": "whymovie",
+      "question": "統合TVでは、なぜ動画マニュアルを作り始めたのですか?",
+      "answer": "サービス開始当初に、スクリーンキャプチャ+解説文という書籍のようなスタイルだと、初学者にとってはその操作の「行間」が分からないことが多いのではないかという仮説を立てました。 そこで、事の始終を収録してその都度、解説文を加えていくスタイルであれば、初学者もわかりやすいだろうということで動画マニュアルを作成し始めました。"
+    },
+    {
+      "id": "motivation",
+      "question": "統合TVのコンテンツを作ってる人のMotivationは何なのですか?",
+      "answer": "生命科学系に属していても「全然分からなかった、知らなかったツール」を紹介するために勉強して「日本で一番自分が詳しいのでは?」と思うほど自信になる、自分の研究にも役立つ、プレゼンテーション作成力が上がる、大学の講義などで紹介されたりYouTubeの再生数が伸びて嬉しい、がモチベーションになる、とのコメントが得られています。"
+    },
+    {
+      "id": "selection",
+      "question": "統合TVで紹介しているコンテンツの選定はどのように行われていますか？",
+      "answer": "統合TV制作スタッフが、使いこなせると非常に有用と考えるDB・ウェブツールを「独断と偏見」で選定しています。 原則的には無償で誰でも使えるものを紹介することにしていますが、有償のソフトウェア等についてもその有用性が高いものについては紹介することもあります。"
+    },
+    {
+      "id": "request",
+      "question": "紹介して欲しいDBやウェブツールのリクエストをしたいのですが？",
+      "answer": "利用者の方が日々お使いになっているにも関わらず未収録のDB・ウェブツールがありましたら、[統合TV 番組リクエストフォーム](https://togotv.dbcls.jp/contact.html)からリクエストをお願いします。そのDB・ウェブツールの有用な点や便利な機能・使い方などを具体的に教えていただけると助かります。"
+    },
+    {
+      "id": "howtoshoot",
+      "question": "統合TVの動画はどのように撮影・編集していますか？",
+      "answer": "統合TVの作り方についての番組[「画面録画/編集ソフトウェア Camtasia 2019 を使って 統合TVの動画を作成する」](https://togotv.dbcls.jp/20200129.html)をご参照ください。"
+    },
+    {
+      "id": "recruit",
+      "question": "統合TVのコンテンツ作成に参加したいとおもっていますが、どのようにしたらよいですか?",
+      "answer": "動画・静止画の作成をお手伝いいただける方は随時募集しております。学生や大学院生の方や社会人、主婦の方などが現在参加してくれています。「本業優先」がポリシーで、DB・ウェブツールについて詳しくなくても、勉強しながら進めることができます。動画・静止画の作成が未経験の方でもサポートします。納期は自由に設定でき、内容に応じて謝金をお支払いします。基本的には、在宅作業による外部発注方式です。作業用PCも貸与可能です。詳細についてご興味ある方は、[DBCLSのお問い合わせフォーム](https://dbcls.rois.ac.jp/contact.html) からご連絡いただくか、担当 小野 hono@dbcls.rois.ac.jp まで 電子メールにてご連絡ください。"
+    },
+    {
+      "id": "BGM",
+      "question": "動画のBGMには何を使用していますか?",
+      "answer": "[TAM Music Factory](https://www.tam-music.com/)さんが公開されている効果音・音楽素材から「学校チャイム風(1)(短)ステレオ」と「Flash向け1」を使用しております。"
+    },
+    {
+      "id": "audioreadout",
+      "question": "動画に読み上げ音声はつけないのですか?",
+      "answer": "DB・ウェブツール紹介動画に関しては研究室や実験室での利用を想定しているため、現在は読み上げ音声は付与せず文字によるキャプションのみで公開しています。 今後字幕読み上げソフトなどを活用して音声対応することも検討しています。"
+    },
+    {
+      "id": "videosize_speed",
+      "question": "動画サイズや再生速度を変更できますか?",
+      "answer": "統合TVの動画はすべてYouTubeに掲載されており、その動画再生プレーヤーが埋め込まれていますので、おなじみのYouTube再生プレーヤーで動画サイズや再生速度を変更することができます。"
+    }
+  ]
+}

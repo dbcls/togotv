@@ -65,7 +65,7 @@
       <h3 class="tsukushi bold">{{ $t('chronological_table') }}</h3>
       <div class="chronology_graph">
         <table class="table-history">
-          <tr v-for="(event, index) in history" :key="index">
+          <tr v-for="(event, index) in $i18n.locale === 'ja' ? history : history_en" :key="index">
             <td>
               <time class="history_year mont" v-html="displayHistoryYear(event.year, index)"></time>
             </td>
@@ -95,7 +95,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      history: []
+      history: [],
+      history_en: []
     };
   },
   mounted() {
@@ -105,6 +106,10 @@ export default Vue.extend({
     fetchHistory() {
       axios.get(`${location.origin}/${this.$router.history.base}/json/history.json`).then(data => {
         this.history = data.data.history
+      })
+
+      axios.get(`${location.origin}/${this.$router.history.base}/json/history_en.json`).then(data => {
+        this.history_en = data.data.history
       })
     },
     displayHistoryYear(year, index) {
