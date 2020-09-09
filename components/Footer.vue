@@ -5,39 +5,39 @@
       <div class="sitemap">
         <ul>
           <li>
-            <nuxt-link to="/">トップページ</nuxt-link>
+            <nuxt-link to="/">{{ $t('top') }}</nuxt-link>
           </li>
           <li>
-            <nuxt-link to="welcome">TogoTVについて</nuxt-link>
+            <nuxt-link to="welcome">{{ $t('about') }}</nuxt-link>
           </li>
           <li>
-            動画を探す
+            {{ $t('search_videos') }}
             <ul class="child_nav">
               <li>
-                <nuxt-link to="courses">スキル別コース</nuxt-link>
+                <nuxt-link to="courses">{{ $t('courses') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="newvideo">新着動画</nuxt-link>
+                <nuxt-link to="newvideo">{{ $t('new_videos') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="rankings">視聴ランキング</nuxt-link>
+                <nuxt-link to="rankings">{{ $t('ranking') }}</nuxt-link>
               </li>
             </ul>
           </li>
           <li>
-            <nuxt-link to="pics">画像を探す</nuxt-link>
+            <nuxt-link to="pics">{{ $t('search_pictures') }}</nuxt-link>
           </li>
           <li>
-            お問合せ
+            {{ $t('contact') }}
             <ul class="child_nav">
               <li>
-                <nuxt-link to="faq">よくある質問</nuxt-link>
+                <nuxt-link to="faq">{{ $t('faq') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="request">番組リクエスト</nuxt-link>
+                <nuxt-link to="request">{{ $t('request') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="staff">スタッフ</nuxt-link>
+                <nuxt-link to="staff">{{ $t('staff') }}</nuxt-link>
               </li>
             </ul>
           </li>

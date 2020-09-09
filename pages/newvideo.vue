@@ -3,7 +3,7 @@
     <AsideParts />
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">新着動画</h2>
+        <h2 class="page_title tsukushi bold">{{ $t("new_videos") }}</h2>
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">

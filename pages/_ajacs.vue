@@ -6,24 +6,24 @@
         <h2 class="page_title tsukushi bold">{{ ajacs_data.name }}</h2>
       </div>
       <div class="ajacs_content">
-        <h3 class="tsukushi bold calender">講習会</h3>
+        <h3 class="tsukushi bold calender">{{ $t('lecture') }}</h3>
         <a :href="ajacs_data.event_url" target="_blank">{{ ajacs_data.AJACS_jp }}</a>
-        <h3 class="tsukushi bold lecture">講師</h3>
+        <h3 class="tsukushi bold lecture">{{ $t('lecturer') }}</h3>
         <p>{{ ajacs_data.author }}</p>
-        <h3 class="tsukushi bold pin">会場</h3>
+        <h3 class="tsukushi bold pin">{{ $t('venue') }}</h3>
         <p>{{ ajacs_data.venue }}</p>
-        <h3 class="tsukushi bold tag">タグ</h3>
+        <h3 class="tsukushi bold tag">{{ $t('tags') }}</h3>
         <ul class="tags_wrapper">
           <li v-for="(tag, index) in ajacs_data.keywords" :key="index">
-            <nuxt-link :to="{name: 'ajacs_text', query: {keywords: tag, page: 1}}">{{ tag }}</nuxt-link>
+            <nuxt-link :to="localePath({name: 'ajacs_text', query: {keywords: tag, page: 1}})">{{ tag }}</nuxt-link>
           </li>
         </ul>
-        <h3 class="tsukushi bold download">講習資料</h3>
+        <h3 class="tsukushi bold download">{{ $t('ajacs_text') }}</h3>
         <a :href="ajacs_data.contentUrl" target="_blank">{{ ajacs_data.contentUrl }}</a>
-        <h3 class="tsukushi bold pdf">講習資料PDF<span>（リンク先のページ中央のDownloadボタンを押すとダウンロードできます。）</span></h3>
+        <h3 class="tsukushi bold pdf">{{ $t('ajacs_pdf') }}<span>（{{ $t('you_can_download_data_by_clicking_download_button') }}）</span></h3>
         <a v-if="ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
-        <p v-else>該当なし</p>
-        <h3 class="tsukushi bold circlevideo">講習会動画</h3>
+        <p v-else>{{ $t('no_result') }}</p>
+        <h3 class="tsukushi bold circlevideo">{{ $t('ajacs_video') }}</h3>
         <div class="iframe_wrapper">
           <iframe :src="`https://www.youtube.com/embed/${ajacs_data.embedUrl}`" frameborder="0" allowfullscreen=""></iframe>
         </div>

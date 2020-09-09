@@ -6,11 +6,11 @@
         <h1>
           <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
         </h1>
-        <p class="description">生命科学分野における有用な情報を紹介するウェブサイトです。<span class="br"><br></span>だれでも自由に閲覧し再利用することができます。<nuxt-link :to="{name: 'faq', hash: '#copyrights' }" class="add_faq_icon"></nuxt-link></p>
+        <p class="description">{{ $t("top_description_1") }}<span class="br"><br></span>{{ $t("top_description_2") }}<nuxt-link :to="localePath({name: 'faq', hash: '#copyrights' })" class="add_faq_icon"></nuxt-link></p>
         <ul class="description_list">
-          <li>・データベースやツールの動画マニュアル</li>
-          <li>・講演や講習会動画、資料</li>
-          <li>・イラスト</li>
+          <li>・{{ $t("manual_of_database_and_tool") }}</li>
+          <li>・{{ $t("ajacs_videos_and_documents") }}</li>
+          <li>・{{ $t("illustration") }}</li>
         </ul>
         <TextSearch props="index"/>
         <!-- <form>
@@ -22,19 +22,19 @@
     </div>
     <section class="course_section">
       <h2 class="tsukushi bold">
-        <nuxt-link to="courses">スキル別コースから探す</nuxt-link>
+        <nuxt-link to="courses">{{ $t("search_for_courses") }}</nuxt-link>
       </h2>
       <CourseList :props="{bg: 'white', courses: course_list}"/>
     </section>
     <section class="newvideo_section bg_blue">
       <h2 class="tsukushi bold">
-        <nuxt-link to="newvideo">新着動画</nuxt-link>
+        <nuxt-link to="newvideo">{{ $t("new_videos") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list.data.data, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue">
       <h2 class="tsukushi bold">
-        <nuxt-link to="rankings">視聴ランキング</nuxt-link>
+        <nuxt-link to="rankings">{{ $t("ranking") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
     </section>
@@ -50,7 +50,6 @@ import axios from 'axios'
 
 export default Vue.extend({
   async asyncData() {
-    // 2つのHTTPのレスポンスを受けてからページがレンダリングされる
     const [course_list, new_video_list, realtime_video_list] = await Promise.all([
       axios.get(`http://togotv-api.bhx.jp/api/skillset`),
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),

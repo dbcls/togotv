@@ -1,28 +1,28 @@
 <template>
   <div class="result_wrapper">
     <div class="facet_wrapper">
-      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
-      <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
+      <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
+      <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
       <div class="facet_small_section">
-        <p class="facet_small_title video tsukushi bold">番組のタイプ</p>
+        <p class="facet_small_title video tsukushi bold">{{ $t('program_type') }}</p>
         <div class="checkbox_wrapper">
           <ul>
             <li>
-              <input type="checkbox" id="demonstration" value="動画マニュアル" v-model="filters.type">
+              <input type="checkbox" id="demonstration" :value="$t('video_manual')" v-model="filters.type">
               <label for="demonstration">
-                <span>動画マニュアル</span>
+                <span>{{ $t('video_manual') }}</span>
               </label>
             </li>
             <li>
               <input type="checkbox" id="lecture" value="講演" v-model="filters.type">
               <label for="lecture">
-                <span>講演</span>
+                <span>{{ $t('ajacs_lecture') }}</span>
               </label>
             </li>
             <li>
               <input type="checkbox" id="handson" value="実習" v-model="filters.type">
               <label for="handson">
-                <span>ハンズオン講習</span>
+                <span>{{ $t('hands_on') }}</span>
               </label>
             </li>
           </ul>
@@ -30,13 +30,13 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title calender tsukushi bold">
-          公開時期
-          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">×クリア</span>
+          {{ $t('publish_date') }}
+          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
         </p>
         <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">タグ</p>
+        <p class="facet_small_title tag tsukushi bold">{{ $t('tags') }}</p>
         <div class="checkbox_wrapper">
           <ul>
             <li v-for="(tag, index) in tag_list" :key="index">
@@ -49,19 +49,19 @@
         </div>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title language tsukushi bold">言語</p>
+        <p class="facet_small_title language tsukushi bold">{{ $t('language') }}</p>
         <div class="checkbox_wrapper">
           <ul>
             <li>
               <input type="checkbox" id="ja" value="ja" v-model="filters.lang">
               <label for="ja">
-                <span>日本語</span>
+                <span>{{ $t('ja') }}</span>
               </label>
             </li>
             <li>
               <input type="checkbox" id="en" value="en" v-model="filters.lang">
               <label for="en">
-                <span>英語</span>
+                <span>{{ $t('en') }}</span>
               </label>
             </li>
           </ul>
@@ -69,15 +69,19 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title time tsukushi bold">
-          時間
-          <span class="clear_btn" @click="filters['duration(ISO 8601)'] = [0, 4]">×クリア</span>
+          {{ $t('duration') }}
+          <span class="clear_btn" @click="filters['duration(ISO 8601)'] = [0, 4]">{{ $t('clear') }}</span>
         </p>
         <vue-slider :marks="duration_range" :max="4" :minRange="1" v-model="filters['duration(ISO 8601)']" :tooltip="'none'"></vue-slider>
       </div>
     </div>
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">「{{ $route.query.query }}」の検索結果</h2>
+        <h2 class="page_title tsukushi bold">
+          <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
+          「{{ $route.query.query }}」
+          <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
+        </h2>
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
@@ -177,7 +181,7 @@ export default Vue.extend({
       handler: function(val) {
         setTimeout(() => {
           if (!this.is_filter_on) {
-            this.$router.push({ name: 'result', query: { query: this.$route.query.query, page: 1 } })
+            this.$router.push(this.localePath({ name: 'result', query: { query: this.$route.query.query, page: 1 } }))
             this.$refs.pagination.changeCurrentPage(1)
           } else {
             let param = Object.assign({}, this.filters);
@@ -225,7 +229,7 @@ export default Vue.extend({
             param["page"] =  1;
             param["query"] = this.$route.query.query;
             this.$refs.pagination.changeCurrentPage(1)
-            this.$router.push({ name: 'result', query: param })
+            this.$router.push(this.localePath({ name: 'result', query: param }))
             this.fetchDataWithFilter(param)
           }
         }, 0);

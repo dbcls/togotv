@@ -1,6 +1,6 @@
 <template>
   <div class="faq_wrapper">
-    <h2 class="page_title tsukushi bold">よくある質問</h2>
+    <h2 class="page_title tsukushi bold">{{ $t('faq') }}</h2>
     <ul class="faq_list">
       <li class="faq" v-for="faq in faq_list" :id="faq.id" :key="faq.id">
         <h3 class="question tsukushi bold"><span>{{ faq.question }}</span></h3>

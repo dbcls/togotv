@@ -1,10 +1,8 @@
 <template>
   <div class="download_modal_wrapper">
-    <p class="modal_title tsukushi bold">出典元、クレジットを必ず明記してください。</p>
+    <p class="modal_title tsukushi bold">{{ $t('specify_credits') }}</p>
     <div class="content_wrapper">
-      <p>
-        この画像は、 クリエイティブ・コモンズ表示ライセンスの下で利用可能です。 ご利用の際は、<strong>出典元 (©2016 DBCLS TogoTV / CC-BY-4.0) あるいは該当ページのURLを必ず明記してください。</strong><br>出典の記載のみが条件で、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問わず、自由にご利用いただけます。 出典元の記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。<a href="https://togotv.dbcls.jp/togopic-copyright-set.zip" download>出典元表示用の画像セット</a>も用意しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等（<a href="https://dbcls.rois.ac.jp/references.html#TogoTV" target="_blank">引用例</a>）では、Acknowledgementや図のlegend 等にご記載いただいています。(例: "The image of XX is from TogoTV (©2016 DBCLS TogoTV / CC-BY-4.0).")<br>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。
-      </p>
+      <p v-html="$t('picture_liscense_text')"></p>
     </div>
     <div class="btn_wrapper">
       <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>

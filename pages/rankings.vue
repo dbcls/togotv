@@ -3,7 +3,7 @@
     <AsideParts />
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">視聴ランキング</h2>
+        <h2 class="page_title tsukushi bold">{{ $t('ranking') }}</h2>
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
@@ -16,9 +16,9 @@
         </ul>
       </div>
       <ul class="span_tab_wrapper">
-        <li @click="active_tab = 'year'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'year' ? 'active' : '']">過去一年間</li>
-        <li @click="active_tab = 'month'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'month' ? 'active' : '']">過去一ヶ月間</li>
-        <li @click="active_tab = 'weekly'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'weekly' ? 'active' : '']">過去一週間</li>
+        <li @click="active_tab = 'year'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'year' ? 'active' : '']">{{ $t('last_year') }}</li>
+        <li @click="active_tab = 'month'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'month' ? 'active' : '']">{{ $t('last_month') }}</li>
+        <li @click="active_tab = 'weekly'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'weekly' ? 'active' : '']">{{ $t('last_week') }}</li>
       </ul>
       <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="getActiveData()"/>
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="getActiveData()"/>

@@ -1,4 +1,7 @@
 import axios from "axios";
+import ja from "./static/json/ja.json"
+import en from "./static/json/en.json"
+
 export default {
   mode: "spa",
   /*
@@ -44,7 +47,22 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: [
+    [
+      'nuxt-i18n',
+      {
+        locales: ['en', 'ja'],
+        defaultLocale: 'ja',
+        vueI18n: {
+          fallbackLocale: 'ja',
+          messages: {
+            en: en,
+            ja: ja
+          }
+        }
+      }
+    ]
+  ],
   /*
    ** Build configuration
    */

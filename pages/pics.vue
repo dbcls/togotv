@@ -1,7 +1,7 @@
 <template>
   <div class="pictures_wrapper">
     <div class="facet_wrapper" v-if="$store.state.display === 'card'">
-      <p class="facet_title search tsukushi bold">テキスト検索</p>
+      <p class="facet_title search tsukushi bold">{{ $t("text_search") }}</p>
       <div class="input_wrapper">
         <input
           type="text"
@@ -12,11 +12,11 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
-      <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
+      <p class="facet_title filter tsukushi bold">{{ $t("filter_search") }}</p>
+      <p class="clear_btn" @click="clearFilter">{{ $t("clear_filter") }}</p>
       <div class="facet_small_section">
         <p class="facet_small_title brush tsukushi bold">
-          作者
+          {{ $t("author") }}
           <span
             :class="['toggle_btn', facets.author.is_open ? '' : 'close']"
             @click="facets.author.is_open = !facets.author.is_open"
@@ -41,7 +41,7 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title taxonomy tsukushi bold">
-          生物分類
+          {{ $t('taxonomy') }}
           <span
             :class="['toggle_btn', facets.taxon.is_open ? '' : 'close']"
             @click="facets.taxon.is_open = !facets.taxon.is_open"
@@ -110,7 +110,7 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">
-          タグ
+          {{ $t('tags') }}
           <span
             :class="['toggle_btn', facets.other_tags.is_open ? '' : 'close']"
             @click="facets.other_tags.is_open = !facets.other_tags.is_open"
@@ -135,7 +135,7 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title format tsukushi bold">
-          形式
+          {{ $t("format") }}
           <span
             :class="['toggle_btn', facets.pics.is_open ? '' : 'close']"
             @click="facets.pics.is_open = !facets.pics.is_open"
@@ -162,13 +162,13 @@
             v-if="$store.state.display === 'card'"
             :class="['control_btn', 'download']"
             @click="toggleEditMode()"
-            v-html="is_edit_on ? '終了' : '選択'"
+            v-html="is_edit_on ? $t('finish') : $t('select')"
           ></button>
           <button
             v-if="is_edit_on"
             @click="downloadSelectedImages"
             :class="['control_btn', 'download', selected_pics.length === 0 ? 'off' : '']"
-          >ダウンロード</button>
+          >{{ $t('download') }}</button>
           <ul class="display_icon_wrapper">
             <li>
               <img
@@ -214,11 +214,11 @@
           <div class="description_wrapper">
             <p class="name tsukushi bold">{{ picture.name }}</p>
             <p class="name_en mont">{{ picture.name_en }}</p>
-            <a class="button png mont bold" @click="setDonwnloadLink(picture)">ダウンロード</a>
+            <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
             <nuxt-link
               class="button mont bold"
-              :to="{name: 'picture', params: {picture: picture.id.split('/').pop()}}"
-            >詳細</nuxt-link>
+              :to="localePath({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
+            >{{ $t('detail') }}</nuxt-link>
           </div>
         </li>
       </ul>
@@ -668,7 +668,7 @@ export default Vue.extend({
       this.is_modal_on = true;
     },
     moveDetailPage(next_page) {
-      this.$router.push(next_page);
+      this.$router.push(this.localePath((next_page)));
     },
     selectPic(pic, e) {
       e.stopPropagation();

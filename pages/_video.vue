@@ -8,23 +8,23 @@
         <div v-if="videoData.skillset_1 !== undefined" class="video_control">
           <div class="control" @click="player.previousVideo()">
             <img class="prev" src="~/assets/img/icon/icon_prev_video.svg"/>
-            <p class="control_text prev">前</p>
+            <p class="control_text prev">{{ $t('prev') }}</p>
           </div>
           <p class="video_title tsukushi bold"><span v-if="finish_loading">{{ current_video_index + 1 }}.</span> {{ videoData.name }}</p>
           <div class="control" @click="player.nextVideo()">
-            <p class="control_text next">次</p>
+            <p class="control_text next">{{ $t('next') }}</p>
             <img class="next" src="~/assets/img/icon/icon_next_video.svg"/>
           </div>
         </div>
         <div class="iframe_wrapper">
           <div v-if="videoData.skillset_1 !== undefined" :class="['list_emphasize', is_first_time ? 'on' : '']">
-            <p class="list_description tsukushi">ここをクリックするとコース内の動画が確認できます。</p>
+            <p class="list_description tsukushi">{{ $t('you_can_see_playlist') }}</p>
           </div>
           <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : '', autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
         </div>
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
-          <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">分</span></p>
+          <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
           <p class="author tsukushi bold">{{ videoData.author }}</p>
           <p class="editor tsukushi bold">{{ videoData.editor }}</p>
         </div>
@@ -32,13 +32,13 @@
         <div class="description" v-html="videoData.description">
         </div>
         <div class="related_videos">
-          <h3 class="tsukushi bold">関連動画</h3>
+          <h3 class="tsukushi bold">{{ $t('related_videos') }}</h3>
           <VideoListHorizontalScroll :props="{id: 'related_videos', playList: related_videos, bg: 'white'}"/>
         </div>
       </div>
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
         <div class="digest" v-if="videoData.headline.length !== 0">
-          <h3 class="tsukushi bold">見どころダイジェスト</h3>
+          <h3 class="tsukushi bold">{{ $t('digest') }}</h3>
           <ul :class="videoData.headline.length >= 10 ? 'over10' : ''">
             <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration'])">
               <span class="time" v-html="converSecToHour(digest.time, false, true)" @click="player.seekTo(digest.time)"></span>
@@ -49,16 +49,16 @@
           </ul>
         </div>
         <div class="tag_list">
-          <h3 class="tsukushi bold">この動画のタグ</h3>
+          <h3 class="tsukushi bold">{{ $t('this_video_tags') }}</h3>
           <ul>
             <li v-for="(tag, index) in videoData.keywords" :key="index">
-              <nuxt-link :to="{path: 'tag', query: {name: tag}}">{{ tag }}</nuxt-link>
+              <nuxt-link :to="localePath({path: 'tag', query: {name: tag}})">{{ tag }}</nuxt-link>
             </li>
           </ul>
         </div>
         <div class="document">
           <h3 class="tsukushi bold">
-            関連するAJACS講習会資料
+            {{ $t('related_ajacs_tests') }}
             <span
               v-if="ajacs_list.length >= 5"
               :class="['toggle_btn', is_ajacs_open ? '' : 'close']"
@@ -68,26 +68,26 @@
           <ul :class="['ajacs_list', is_ajacs_open ? '' : 'close']">
             <li v-for="(ajacs, index) in ajacs_list" :key="index">
               <span>・</span>
-              <nuxt-link :to="{name: 'ajacs', params: { ajacs: ajacs.url.split('/').pop().replace(/\.html/g, '') }}">{{ ajacs.title }}</nuxt-link>
+              <nuxt-link :to="localePath({name: 'ajacs', params: { ajacs: ajacs.url.split('/').pop().replace(/\.html/g, '') }})">{{ ajacs.title }}</nuxt-link>
             </li>
           </ul>
         </div>
         <div class="original">
-          <h3 class="tsukushi bold">動画ファイルのダウンロード</h3>
+          <h3 class="tsukushi bold">{{ $t('download_video_data') }}</h3>
           <a :href="videoData.contentUrl" download>{{ videoData.contentUrl.split('/').pop() }}</a>
         </div>
       </div>
     </section>
     <section class="course_section bg_blue">
-      <h3 class="tsukushi bold">スキル別コースから探す</h3>
+      <h3 class="tsukushi bold">{{ $t('search_for_courses') }}</h3>
       <CourseList :props="{bg: 'blue', courses: course_list}"/>
     </section>
     <section class="newvideo_section bg_blue">
-      <h3 class="tsukushi bold">新着動画</h3>
+      <h3 class="tsukushi bold">{{ $t('new_videos') }}</h3>
       <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list.data.data, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue">
-      <h3 class="tsukushi bold">視聴ランキング</h3>
+      <h3 class="tsukushi bold">{{ $t('ranking') }}</h3>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
     </section>
   </div>
@@ -272,7 +272,7 @@ export default Vue.extend({
         let next_video_id = this.playlist_array[this.current_video_index]
         axios.get(`http://togotv-api.bhx.jp/api/search?embedUrl=${next_video_id}`).then(data => {
           let next_video = data.data.data[0]
-          this.$router.push({ name: 'video', params: { video: next_video.uploadDate.replace(/-/g, '') } })
+          this.$router.push(this.localePath({ name: 'video', params: { video: next_video.uploadDate.replace(/-/g, '') } }))
         })
       }
       this.finish_loading = true

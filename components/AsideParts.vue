@@ -1,20 +1,20 @@
 <template>
   <aside class="aside_wrapper">
     <section class="course_wrapper">
-      <p class="section_title tsukushi bold"><nuxt-link to="/courses">スキル別コースから探す</nuxt-link></p>
+      <p class="section_title tsukushi bold"><nuxt-link :to="localePath({ name: 'courses' })">{{ $t("search_for_courses") }}</nuxt-link></p>
       <ul>
         <li v-for="course in course_list" :key="course.id">
           <span>
-            <nuxt-link class="tsukushi" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
+            <nuxt-link class="tsukushi" :to="localePath({name: 'course', query: {id: course.id}})">{{ course.title }}</nuxt-link>
           </span>
         </li>
       </ul>
     </section>
     <section class="tag_wrapper">
-      <p class="section_title tsukushi bold">タグから探す</p>
+      <p class="section_title tsukushi bold">{{ $t("search_for_tags") }}</p>
       <ul>
         <li v-for="(tag, index) in tag_list" :key="index">
-          <nuxt-link :to="{name: 'tag', query: {name: tag.key}}">{{ tag.key }}</nuxt-link>
+          <nuxt-link :to="localePath({name: 'tag', query: {name: tag.key}})">{{ tag.key }}</nuxt-link>
         </li>
       </ul>
     </section>

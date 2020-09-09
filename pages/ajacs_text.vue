@@ -1,7 +1,7 @@
 <template>
   <div class="ajacs_list_wrapper">
     <div class="facet_wrapper" v-if="$store.state.display === 'card'">
-      <p class="facet_title search tsukushi bold">テキスト検索</p>
+      <p class="facet_title search tsukushi bold">{{ $t('text_search') }}</p>
       <div class="input_wrapper">
         <input
           type="text"
@@ -12,10 +12,10 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">絞り込み検索</p>
-      <p class="clear_btn" @click="clearFilter">フィルターをクリア</p>
+      <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
+      <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
       <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">タグ</p>
+        <p class="facet_small_title tag tsukushi bold">{{ $t('tags') }}</p>
         <div class="checkbox_wrapper">
           <ul>
             <li v-for="(tag, index) in tag_list" :key="index">
@@ -29,25 +29,25 @@
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title calender tsukushi bold">
-          公開時期
-          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">×クリア</span>
+          {{ $t('publish_date') }}
+          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
         </p>
         <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
       </div>
     </div>
     <div class="gallery_wrapper">
       <div class="gallery_section_header">
-        <h2 class="page_title tsukushi bold">講習会資料を探す</h2>
+        <h2 class="page_title tsukushi bold">{{ $t('search_ajacs_text') }}</h2>
       </div>
       <div class="table_wrapper">
         <table class="ajacs_list" v-if="!is_loading">
           <thead>
             <tr>
-              <th>講習タイトル</th>
-              <th>講師</th>
-              <th>日時</th>
-              <th>AJACS</th>
-              <th>関連するタグ</th>
+              <th>{{ $t('ajacs_title') }}</th>
+              <th>{{ $t('lecturer') }}</th>
+              <th>{{ $t('date') }}</th>
+              <th>{{ $t('ajacs') }}</th>
+              <th>{{ $t('related_tags') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -91,7 +91,7 @@ export default Vue.extend({
   },
   mounted() {
     if(this.$route.query.page === undefined) {
-      this.$router.push({ name: 'ajacs_text', query: { page: 1 } })
+      this.$router.push(this.localePath({ name: 'ajacs_text', query: { page: 1 } }))
     }
     if (
         this.$route.query.uploadDate !== undefined ||
@@ -164,7 +164,7 @@ export default Vue.extend({
       handler: function(val) {
         setTimeout(() => {
           if (!this.is_filter_on) {
-            this.$router.push({ name: 'ajacs_text', query: { page: 1 } })
+            this.$router.push(this.localePath({ name: 'ajacs_text', query: { page: 1 } }))
             this.$refs.pagination.changeCurrentPage(1)
           } else {
             let param = Object.assign({}, this.filters);
@@ -205,7 +205,7 @@ export default Vue.extend({
             });
             param["page"] =  1;
             this.$refs.pagination.changeCurrentPage(1)
-            this.$router.push({ name: 'ajacs_text', query: param })
+            this.$router.push(this.localePath({ name: 'ajacs_text', query: param }))
           }
         }, 0);
       },
@@ -305,7 +305,7 @@ export default Vue.extend({
       }
     },
     moveDetailPage(next_page) {
-      this.$router.push(next_page);
+      this.$router.push(this.localePath(next_page));
     }
   }
 });
