@@ -47,14 +47,45 @@ export default Vue.extend({
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
-    console.log(data.data.data[0])
     return {
       ajacs_data: data.data.data[0],
     }
   },
   head() {
     return {
-      title: this.ajacs_data.name
+      title: this.ajacs_data.name,
+      script: [{
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(this.jsonld, null, 2)
+      }]
+    }
+  },
+  computed: {
+    jsonld() {
+      return  {
+        "@context": "http://schema.org",
+        "@type": "Dataset",
+        "name": this.ajacs_data.name,
+        "url": location.href,
+        "identifier": this.ajacs_data.id,
+        "keywords": this.ajacs_data.keywords,
+        "creator":[
+          {
+            "@type":"Organization",
+            "url": "http://dbcls.rois.ac.jp/",
+            "name":"Database Center for Life Science",
+            "contactPoint":{
+                "@type":"ContactPoint",
+                "contactType": "customer service",
+                "telephone":"81-4-7135-5508"
+            }
+          },
+          {
+            "@type": "Person",
+            "name": this.ajacs_data.author
+          }
+        ]
+      };
     }
   },
   components: {

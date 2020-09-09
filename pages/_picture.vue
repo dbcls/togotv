@@ -51,7 +51,6 @@ export default Vue.extend({
     if(payload) return { picture: payload }
     let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&id=${params.picture}`)
     let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
-    console.log(data.data.data[0])
     return {
       picture: data.data.data[0],
       tag_data: tag_data.data.data
@@ -93,7 +92,7 @@ export default Vue.extend({
           }
         ]
       };
-    },
+    }
   },
   components: {
     DownloadModal
