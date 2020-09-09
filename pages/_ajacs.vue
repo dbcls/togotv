@@ -66,6 +66,7 @@ export default Vue.extend({
         "@context": "http://schema.org",
         "@type": "Dataset",
         "name": this.ajacs_data.name,
+        "description": this.ajacs_data.description,
         "url": location.href,
         "identifier": this.ajacs_data.id,
         "keywords": this.ajacs_data.keywords,

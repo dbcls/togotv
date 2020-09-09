@@ -71,6 +71,7 @@ export default Vue.extend({
         "@context": "http://schema.org",
         "@type": "Dataset",
         "name": this.picture.name,
+        "description": `${this.picture.name}のイラスト`,
         "url": location.href,
         "identifier": this.picture.id,
         "keywords": this.picture.other_tags,
