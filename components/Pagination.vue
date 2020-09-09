@@ -80,7 +80,7 @@ export default Vue.extend({
     fetchData(page) {
       if (this.$route.name === 'result' || this.$route.name === 'ajacs_text') {
         this.changeCurrentPage(page);
-        this.$router.push({name: this.$route.name, query: {...this.$route.query, page: page}})
+        this.$router.push(this.localePath({ name: this.$route.name, query: {...this.$route.query, page: page }}))
       } else {
         this.$emit("fetchData", page, false);
       }

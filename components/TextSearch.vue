@@ -2,7 +2,7 @@
   <div :class="['input_wrapper', props]">
     <input
       type="text"
-      placeholder="動画を検索"
+      :placeholder="$t('search_videos')"
       v-model="keyword"
       @keyup.enter="submit('enter')"
       @keypress="setCanMessageSubmit()"
@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -30,7 +30,7 @@ export default Vue.extend({
     setCanMessageSubmit() {
       this.canMessageSubmit = true;
     },
-    submit(type: string) {
+    submit(type) {
       if(this.keyword === '') {
         return;
       }
@@ -38,9 +38,9 @@ export default Vue.extend({
         if (!this.canMessageSubmit) {
           return;
         }
-        this.$router.push({ name: 'result', query: { query: this.keyword, page: "1" } })
+        this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1" } }))
       } else if (type === "click") {
-        this.$router.push({ name: 'result', query: { query: this.keyword, page: "1" } })
+        this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1" } }))
       }
     }
   }

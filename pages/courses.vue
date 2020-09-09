@@ -1,14 +1,14 @@
 <template>
   <div class="courses_wrapper">
-    <h2 class="page_title tsukushi bold">スキル別コース</h2>
+    <h2 class="page_title tsukushi bold">{{ $t('courses') }}</h2>
     <section class="video_section">
       <ul>
         <li v-for="course in courses" :key="course.id">
           <h3 class="course_name">
-            <nuxt-link class="tsukushi bold" :to="{name: 'course', query: {id: course.id}}">
+            <nuxt-link class="tsukushi bold" :to="localePath({name: 'course', query: {id: course.id}})">
               {{ course.title }}
             </nuxt-link>
-            <span class="total_time mont bold" v-html="converSecToHour(course.total_time)"><span class="unit">分</span></span>
+            <span class="total_time mont bold" v-html="converSecToHour(course.total_time)"><span class="unit">{{ $t("minutes") }}</span></span>
           </h3>
           <VideoListHorizontalScroll
             :props="{id: `video_${course.id}`, playList: course.playlist, bg:'white', courseId: course.id}"

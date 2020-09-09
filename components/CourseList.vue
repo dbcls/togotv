@@ -3,15 +3,15 @@
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: 'course-left', direction: 'left'}"/>
     <ul class="course_list scroll-horizontal">
       <li :class="['course_box', is_shorter_than_vw ? 'short' : '']" v-for="course in props.courses" :key="course.id">
-        <nuxt-link class="title tsukushi bold" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
+        <nuxt-link class="title tsukushi bold" :to="localePath({name: 'course', query: {id: course.id}})">{{ course.title }}</nuxt-link>
         <p class="total_time" v-html="converSecToHour(course.total_time)"></p>
         <div class="detail">
-          <nuxt-link class="detail_title tsukushi bold" :to="{name: 'course', query: {id: course.id}}">{{ course.title }}</nuxt-link>
+          <nuxt-link class="detail_title tsukushi bold" :to="localePath({name: 'course', query: {id: course.id}})">{{ course.title }}</nuxt-link>
           <p class="detail_description">{{ course.description }}</p>
           <span class="tsukushi">再生リスト一覧</span>
           <ul class="detail_playlist">
             <li v-for="video in course.playlist" :key="video.videoid">
-              <nuxt-link :to="{name: 'video', params: {video: video.uploadDate.replace(/-/g, '')}}" class="tsukushi bold">{{ video.title }}</nuxt-link>
+              <nuxt-link :to="localePath({name: 'video', params: {video: video.uploadDate.replace(/-/g, '')}})" class="tsukushi bold">{{ video.title }}</nuxt-link>
             </li>
           </ul>
         </div>

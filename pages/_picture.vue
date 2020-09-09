@@ -21,10 +21,10 @@
       </div>
     </div>
     <div class="related_images_wrapper">
-      <p class="related_title tsukushi bold">関連画像</p>
+      <p class="related_title tsukushi bold">{{ $t('related_pictures') }}</p>
       <ul class="related_images">
         <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
-          <nuxt-link :to="{name: 'picture', params: {picture: data.id.split('/').pop()}}">
+          <nuxt-link :to="localePath({name: 'picture', params: {picture: data.id.split('/').pop()}})">
             <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
           </nuxt-link>
         </li>
