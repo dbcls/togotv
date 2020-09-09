@@ -2,7 +2,7 @@
   <div class="video_list_wrapper">
     <ul>
       <li v-for="video in video_info_array" :key="video.embedUrl">
-        <SingleVideoCard :props="{id: video.embedUrl, thumbnail: video.thumbnailUrl, title: video.name, description: video.description, uploadDate: video.uploadDate, duration: video['duration(ISO 8601)']}"/>
+        <SingleVideoCard :props="{id: video.embedUrl, thumbnail: video.thumbnailUrl, title: video.name, description: video.description, uploadDate: video.uploadDate, duration: video['duration(ISO 8601)'] ? video['duration(ISO 8601)'] : video.duration}"/>
       </li>
     </ul>
   </div>
