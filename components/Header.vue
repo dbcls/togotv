@@ -20,7 +20,7 @@
               </ul>
             </li>
             <li class="link picture"><nuxt-link :to="localePath('/pics')">{{ $t('search_pictures') }}</nuxt-link></li>
-            <li class="link ajacs"><nuxt-link :to="localePath({name: 'ajacs_text', query: {page: 1} })">{{ $t('se arch_ajacs_text') }}</nuxt-link></li>
+            <li class="link ajacs"><nuxt-link :to="localePath({name: 'ajacs_text', query: {page: 1} })">{{ $t('search_ajacs_text') }}</nuxt-link></li>
             <li class="link contact has_child_nav">{{ $t('contact') }}<span class="arrow"></span>
               <ul class="child_nav contact">
                 <li class="link question"><nuxt-link :to="localePath('/faq')">{{ $t('faq') }}</nuxt-link></li>
