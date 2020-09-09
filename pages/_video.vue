@@ -25,8 +25,8 @@
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
-          <p class="author tsukushi bold">{{ videoData.author }}</p>
-          <p class="editor tsukushi bold">{{ videoData.editor }}</p>
+          <p class="author tsukushi bold" v-html="videoData.author"></p>
+          <p class="editor tsukushi bold" v-html="videoData.editor"></p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">

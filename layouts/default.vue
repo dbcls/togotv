@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
@@ -16,6 +16,15 @@ export default Vue.extend({
   components: {
     Header,
     Footer
+  },
+  mounted() {
+    const language = (window.navigator.languages && window.navigator.languages[0]) ||
+            window.navigator.language ||
+            window.navigator.userLanguage ||
+            window.navigator.browserLanguage;
+    if(language === 'en-US') {
+      this.$router.push(this.switchLocalePath('en'))
+    }
   }
 })
 </script>
