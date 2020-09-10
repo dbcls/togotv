@@ -22,7 +22,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - name: Update database
-        run: curl -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.ES_UPDATE_ENDPOINT }}
+        run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.ES_UPDATE_ENDPOINT }}
       - name: setup node
         uses: actions/setup-node@v1
         with:
