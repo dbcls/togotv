@@ -88,9 +88,12 @@ export default Vue.extend({
       this.changeCurrentPageRange();
     },
     fetchData(page) {
-      if (this.$route.name === 'result' || this.$route.name === 'ajacs_text') {
+      if (this.$route.name.indexOf('result') !== -1) {
         this.changeCurrentPage(page);
-        this.$router.push(this.localePath({ name: this.$route.name, query: {...this.$route.query, page: page }}))
+        this.$router.push(this.localePath({ name: 'result', query: {...this.$route.query, page: page }}))
+      } else if (this.$route.name.indexOf('ajacs') !== -1) {
+        this.changeCurrentPage(page);
+        this.$router.push(this.localePath({ name: 'ajacs_text', query: {...this.$route.query, page: page }}))
       } else {
         this.$emit("fetchData", page, false);
       }

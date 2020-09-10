@@ -56,7 +56,14 @@ export default Vue.extend({
       this.$store.commit('toggleDisplay')
     },
     fetchData(page, is_initial) {
-      axios.get(`http://togotv-api.bhx.jp/api/entries?from=${page}&rows=21`).then(data => {
+      let url = ''
+      if(this.$i18n.locale === 'ja') {
+        url = `http://togotv-api.bhx.jp/api/entries?from=${page}&rows=21`
+      } else if (this.$i18n.locale === 'en') {
+        url = `http://togotv-api.bhx.jp/api/bool_search?lang=en&from=${page}&rows=21`
+      }
+
+      axios.get(url).then(data => {
         this.new_video_list = data.data.data
         if(is_initial) {
           this.lastpage = data.data.last_page

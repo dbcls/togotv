@@ -7,7 +7,7 @@
           <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
         </h1>
         <p class="description">{{ $t("top_description_1") }}<span class="br"><br></span>{{ $t("top_description_2") }}<nuxt-link :to="localePath({name: 'faq', hash: '#copyrights' })" class="add_faq_icon"></nuxt-link></p>
-        <ul class="description_list">
+        <ul :class="['description_list', $i18n.locale]">
           <li>・{{ $t("manual_of_database_and_tool") }}</li>
           <li>・{{ $t("ajacs_videos_and_documents") }}</li>
           <li>・{{ $t("illustration") }}</li>
@@ -106,6 +106,11 @@ export default Vue.extend({
       li
         &:last-child
           margin-left: 10px
+      &.en
+        width: 382px
+        li
+          &:last-child
+            margin-left: 0px
 .course_section,
 .newvideo_section,
 .realtime_view_video_section
