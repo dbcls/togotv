@@ -5,7 +5,7 @@ name: update database
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -22,4 +22,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: curl
-        run: curl -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.ES_UPDATE_ENDPOINT }}
+        run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.ES_UPDATE_ENDPOINT }}
