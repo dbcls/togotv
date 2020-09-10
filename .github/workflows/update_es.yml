@@ -1,0 +1,14 @@
+name: Elasticsearch の更新
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update ES database
+        run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.UPDATE_ES_ENDPOINT }}
