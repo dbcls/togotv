@@ -31,7 +31,7 @@ export default Vue.extend({
   },
   methods: {
     fetchFAQ() {
-      axios.get(`${location.origin}/${this.$router.history.base}/json/FAQ.json`).then(data => {
+      axios.get(`${location.origin}${this.$router.history.base}/json/FAQ.json`).then(data => {
         this.faq_list = data.data.faq_list
       }).then(() => {
         let hash = this.$route.hash
@@ -44,7 +44,7 @@ export default Vue.extend({
         }
       })
 
-      axios.get(`${location.origin}/${this.$router.history.base}/json/FAQ_en.json`).then(data => {
+      axios.get(`${location.origin}${this.$router.history.base}/json/FAQ_en.json`).then(data => {
         this.faq_list_en = data.data.faq_list
       }).then(() => {
         let hash = this.$route.hash
