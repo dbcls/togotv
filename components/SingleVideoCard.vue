@@ -37,11 +37,23 @@ export default Vue.extend({
         min = Math.floor(time / 60) % 60;
         hour = Math.floor(time / 3600);
       }
-
+      let hour_unit = ''
+      let min_unit = ''
+      let sec_unit = ''
+      if(this.$i18n.locale === 'ja') {
+        hour_unit = '時間'
+        min_unit = '分'
+        sec_unit = '秒'
+      } else if (this.$i18n.locale === 'en') {
+        hour_unit = 'h'
+        min_unit = 'min'
+        sec_unit = 'sec'
+      }
+      
       if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span><span class="time mont bold">${sec}</span><span class="unit">秒</span>`
+        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span class="unit">${sec_unit}</span>`
       }　else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span><span class="time mont bold">${sec}</span><span clas="unit">秒</span>`
+        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">${hour_unit}</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span clas="unit">${sec_unit}</span>`
       }
     }
   }

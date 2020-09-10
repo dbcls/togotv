@@ -5,7 +5,7 @@
       <div class="input_wrapper">
         <input
           type="text"
-          placeholder="イラストを検索"
+          :placeholder="$t('search_ajacs_text')"
           v-model="keyword"
           @keyup.enter="searchByText('enter')"
           @keypress="setCanMessageSubmit()"

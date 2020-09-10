@@ -40,7 +40,8 @@
     <p class="staff_name">{{ $t('develop_site_member_list') }}</p>
     <div class="recruit_wrapper">
       <h3 class="tsukushi bold" v-html="$t('recruit_title')"></h3>
-      <p>作業内容は相談の上、決定します。内容に応じて謝金をお支払いします。<br>RA採用 (柏勤務) のほか、遠隔地の場合は在宅作業による外部発注方式も対応可能です。<br>納期は自由に設定できます。DB・ウェブツールについて詳しくなくても、勉強しながらでOK。「本業優先」がポリシーです。<br>動画・静止画の作成が未経験の方でもサポートします。作業用PCも貸与可能です。<br>動画制作の実際は、<nuxt-link :to="localePath({name: 'video', query: {id: '4G4xM9A7pOA'}})" >「画面録画/編集ソフトウェア Camtasia 2019 を使って統合TVの動画を作成する」</nuxt-link>をご覧ください。<br>静止画制作の実際は、<nuxt-link :to="localePath({name: 'video', query: {id: 'yDN-rEB5VEo'}})" >「ライフサイエンス分野のイラスト集を作る仕事@AJACS本郷8」</nuxt-link>をご覧ください。<br>詳細についてご興味ある方は、<a href="https://dbcls.rois.ac.jp/contact" target="_blank">DBCLSのお問い合わせフォーム</a> からご連絡いただくか、担当 小野 hono@dbcls.rois.ac.jp まで ご連絡ください。</p>
+      <p v-if="$i18n.locale === 'ja'">作業内容は相談の上、決定します。内容に応じて謝金をお支払いします。<br>RA採用 (柏勤務) のほか、遠隔地の場合は在宅作業による外部発注方式も対応可能です。<br>納期は自由に設定できます。DB・ウェブツールについて詳しくなくても、勉強しながらでOK。「本業優先」がポリシーです。<br>動画・静止画の作成が未経験の方でもサポートします。作業用PCも貸与可能です。<br>動画制作の実際は、<nuxt-link :to="localePath({name: 'video', query: {id: '4G4xM9A7pOA'}})" >「画面録画/編集ソフトウェア Camtasia 2019 を使って統合TVの動画を作成する」</nuxt-link>をご覧ください。<br>静止画制作の実際は、<nuxt-link :to="localePath({name: 'video', query: {id: 'yDN-rEB5VEo'}})" >「ライフサイエンス分野のイラスト集を作る仕事@AJACS本郷8」</nuxt-link>をご覧ください。<br>詳細についてご興味ある方は、<a href="https://dbcls.rois.ac.jp/contact" target="_blank">DBCLSのお問い合わせフォーム</a> からご連絡いただくか、担当 小野 hono@dbcls.rois.ac.jp まで ご連絡ください。</p>
+      <p v-else>We are looking for content creators in Japan only.</p>
     </div>
   </div>
 </template>

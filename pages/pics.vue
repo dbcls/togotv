@@ -5,7 +5,7 @@
       <div class="input_wrapper">
         <input
           type="text"
-          placeholder="イラストを検索"
+          :placeholder="$t('search_pictures')"
           v-model="keyword"
           @keyup.enter="searchByText('enter')"
           @keypress="setCanMessageSubmit()"
@@ -211,9 +211,9 @@
               :alt="picture.name"
             />
           </a>
-          <div class="description_wrapper">
-            <p class="name tsukushi bold">{{ picture.name }}</p>
-            <p class="name_en mont">{{ picture.name_en }}</p>
+          <div :class="['description_wrapper', $i18n.locale]">
+            <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
+            <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
             <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
             <nuxt-link
               class="button mont bold"
@@ -1029,14 +1029,18 @@ export default Vue.extend({
             left: -18px
             border: 10px solid transparent
             border-right: 10px solid $MAIN_COLOR
-          > p.name
-            font-size: 20px
-            margin: 0
           > p.name_en
             font-size: 14px
             margin: 0 0 21px
+          > p.name
+            font-size: 20px
+            margin: 0
           > a.button
             @include download_btn
+          &.en
+            width: 300px
+            > p.name
+              margin-bottom: 21px
         &:hover
           > .description_wrapper
             display: block

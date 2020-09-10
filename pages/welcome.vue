@@ -24,9 +24,9 @@
     </section>
     <section class="feature_section bg_blue">
       <h2 class="tsukushi bold">
-        <span v-if="$i18n.locale === 'en'">{{ $t('of_feautre') }}</span>
+        <span v-if="$i18n.locale === 'en'">{{ $t('of_feature') }}</span>
         <img src="~/assets/img/logo.png" class="logo" alt="togo tv" />
-        <span v-if="$i18n.locale === 'ja'">{{ $t('of_feautre') }}</span>
+        <span v-if="$i18n.locale === 'ja'">{{ $t('of_feature') }}</span>
       </h2>
       <ul class="feature_list">
         <li class="feature">
