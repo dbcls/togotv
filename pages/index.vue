@@ -36,7 +36,7 @@
       <h2 class="tsukushi bold">
         <nuxt-link to="rankings">{{ $t("ranking") }}</nuxt-link>
       </h2>
-      <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
+      <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
   </div>
 </template>
@@ -53,9 +53,9 @@ export default Vue.extend({
     const [course_list, new_video_list, realtime_video_list] = await Promise.all([
       axios.get(`http://togotv-api.bhx.jp/api/skillset`),
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
-      axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
+      axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
     ]);
-    return { course_list: course_list.data.cources, new_video_list, realtime_video_list };
+    return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
   head() {
     return {

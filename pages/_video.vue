@@ -88,7 +88,7 @@
     </section>
     <section class="realtime_view_video_section bg_blue">
       <h3 class="tsukushi bold">{{ $t('ranking') }}</h3>
-      <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list.data.data, bg: 'blue'}"/>
+      <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
   </div>
 </template>
@@ -116,7 +116,7 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/search?uploadDate=${upload_date}`),
       axios.get(`http://togotv-api.bhx.jp/api/skillset`),
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
-      axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`)
+      axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
     ]);
     videoData = videoData.data.data[0]
     // if(params.query.course !== undefined) {
@@ -128,7 +128,7 @@ export default Vue.extend({
     //     }
     //   })
     // }
-    return { videoData, course_list: course_list.data.cources, new_video_list, realtime_video_list };
+    return { videoData, course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
   head() {
     return {
