@@ -70,6 +70,7 @@ export default Vue.extend({
         "url": location.href,
         "identifier": this.ajacs_data.id,
         "keywords": this.ajacs_data.keywords,
+        "license": "https://creativecommons.org/licenses/by/4.0/",
         "creator":[
           {
             "@type":"Organization",

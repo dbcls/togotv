@@ -15,8 +15,14 @@
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
       <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">{{ $t('tags') }}</p>
-        <div class="checkbox_wrapper">
+        <p class="facet_small_title tag tsukushi bold">
+          {{ $t('tags') }}
+          <span
+            :class="['toggle_btn', facets_toggle_state.tags ? '' : 'close']"
+            @click="facets_toggle_state.tags = !facets_toggle_state.tags"
+          ></span>
+        </p>
+        <div :class="['checkbox_wrapper', facets_toggle_state.tags ? '' : 'close']">
           <ul>
             <li v-for="(tag, index) in tag_list" :key="index">
               <input type="checkbox" :id="tag.key" :value="tag.key" v-model="filters.keywords">
@@ -134,6 +140,9 @@ export default Vue.extend({
           checked: [],
           is_open: true
         }
+      },
+      facets_toggle_state: {
+        tags: true
       },
       filters: {
         text: "",
@@ -371,6 +380,8 @@ export default Vue.extend({
         &.calender
           &:before
             @include icon('calender')
+        > .toggle_btn
+          @include toggle_arrow
         > span.clear_btn
           font-family: "游ゴシック", "Yu Gothic", "游ゴシック体", YuGothic, sans-serif
           font-weight: 500
@@ -384,12 +395,18 @@ export default Vue.extend({
       > .vue-slider
         @include vue-slider
       > .checkbox_wrapper
+        transition: .5s
+        max-height: 100vh
+        &.close
+          max-height: 0
+          overflow: hidden
         ul
           li
             position: relative
             > label
               > span
                 margin-left: 27px
+                padding-top: 1px
             > input[type=checkbox]
               @include checkbox
               margin-left: 3px

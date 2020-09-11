@@ -23,6 +23,10 @@ export default Vue.extend({
   },
   methods: {
     converSecToHour(time){
+      if(time.indexOf('duration') !== -1) {
+        time = JSON.parse(time)
+        time = time.duration
+      }
       let hour = 0, min = 0, sec = 0;
       if(String(time).indexOf('PT') !== -1) {
         const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
