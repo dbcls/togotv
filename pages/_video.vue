@@ -152,6 +152,7 @@ export default Vue.extend({
         "url": location.href,
         "identifier": this.videoData.id,
         "keywords": this.videoData.keywords,
+        "license": "https://creativecommons.org/licenses/by/4.0/",
         "liscense": this.videoData.liscense,
         "creator":[
           {

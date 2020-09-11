@@ -820,6 +820,7 @@ export default Vue.extend({
             > label
               > .label
                 margin-left: 27px
+                padding-top: 1px
               > .count
                 font-size: 10px
                 min-width: 16px

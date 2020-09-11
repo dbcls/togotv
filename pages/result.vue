@@ -4,8 +4,14 @@
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
       <div class="facet_small_section">
-        <p class="facet_small_title video tsukushi bold">{{ $t('program_type') }}</p>
-        <div class="checkbox_wrapper">
+        <p class="facet_small_title video tsukushi bold">
+          {{ $t('program_type') }}
+          <span
+            :class="['toggle_btn', facets_toggle_state.type ? '' : 'close']"
+            @click="facets_toggle_state.type = !facets_toggle_state.type"
+          ></span>
+        </p>
+        <div :class="['checkbox_wrapper', facets_toggle_state.type ? '' : 'close']">
           <ul>
             <li>
               <input type="checkbox" id="demonstration" :value="$t('video_manual')" v-model="filters.type">
@@ -36,8 +42,14 @@
         <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">{{ $t('tags') }}</p>
-        <div class="checkbox_wrapper">
+        <p class="facet_small_title tag tsukushi bold">
+          {{ $t('tags') }}
+          <span
+            :class="['toggle_btn', facets_toggle_state.tags ? '' : 'close']"
+            @click="facets_toggle_state.tags = !facets_toggle_state.tags"
+          ></span>
+        </p>
+        <div :class="['checkbox_wrapper', facets_toggle_state.tags ? '' : 'close']">
           <ul>
             <li v-for="(tag, index) in tag_list" :key="index">
               <input type="checkbox" :id="tag.key" :value="tag.key" v-model="filters.tags">
@@ -49,8 +61,14 @@
         </div>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title language tsukushi bold">{{ $t('language') }}</p>
-        <div class="checkbox_wrapper">
+        <p class="facet_small_title language tsukushi bold">
+          {{ $t('language') }}
+          <span
+            :class="['toggle_btn', facets_toggle_state.lang ? '' : 'close']"
+            @click="facets_toggle_state.lang = !facets_toggle_state.lang"
+          ></span>
+        </p>
+        <div :class="['checkbox_wrapper', facets_toggle_state.lang ? '' : 'close']">
           <ul>
             <li>
               <input type="checkbox" id="ja" value="ja" v-model="filters.lang">
@@ -132,6 +150,11 @@ export default Vue.extend({
         tags: [],
         lang: [],
         'duration(ISO 8601)': [0, 4]
+      },
+      facets_toggle_state: {
+        type: true,
+        tags: true,
+        lang: true
       },
       duration_range: {
         '0': '0分',
@@ -384,6 +407,8 @@ export default Vue.extend({
         &.time
           &:before
             @include icon('time')
+        > .toggle_btn
+          @include toggle_arrow
         > span.clear_btn
           font-family: "游ゴシック", "Yu Gothic", "游ゴシック体", YuGothic, sans-serif
           font-weight: 500
@@ -393,12 +418,18 @@ export default Vue.extend({
           &:hover
             cursor: pointer
       > .checkbox_wrapper
+        transition: .5s
+        max-height: 100vh
+        &.close
+          max-height: 0
+          overflow: hidden
         ul
           li
             position: relative
             > label
               > span
                 margin-left: 27px
+                padding-top: 1px
             > input[type=checkbox]
               @include checkbox
               margin-left: 3px

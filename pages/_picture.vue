@@ -75,7 +75,7 @@ export default Vue.extend({
         "url": location.href,
         "identifier": this.picture.id,
         "keywords": this.picture.other_tags,
-        "liscense": this.picture.liscense,
+        "license": "https://creativecommons.org/licenses/by/4.0/",
         "creator":[
           {
             "@type":"Organization",

@@ -60,7 +60,8 @@
       </h2>
       <h3 class="tsukushi bold">{{ $t('play_number_transition') }}</h3>
       <div class="playtime_transition_graph">
-        <img src="~/static/TogoTV_YouTube_stats.png" alt="">
+        <img v-if="$i18n.locale === 'en'" src="~/static/20200831_TogoTVYouTube_stats_En.png" alt="">
+        <img v-if="$i18n.locale === 'ja'" src="~/static/20200831_TogoTVYouTube_stats_Ja.png" alt="">
       </div>
       <h3 class="tsukushi bold">{{ $t('chronological_table') }}</h3>
       <div class="chronology_graph">
@@ -104,11 +105,11 @@ export default Vue.extend({
   },
   methods: {
     fetchHistory() {
-      axios.get(`${location.origin}/${this.$router.history.base}/json/history.json`).then(data => {
+      axios.get(`${location.origin}${this.$router.history.base}/json/history.json`).then(data => {
         this.history = data.data.history
       })
 
-      axios.get(`${location.origin}/${this.$router.history.base}/json/history_en.json`).then(data => {
+      axios.get(`${location.origin}${this.$router.history.base}/json/history_en.json`).then(data => {
         this.history_en = data.data.history
       })
     },

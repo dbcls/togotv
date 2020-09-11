@@ -25,11 +25,6 @@ export default Vue.extend({
   },
   components: {
     SingleVideoCard
-  },
-  methods: {
-    infiniteHandler() {
-      console.log('おらああああ')
-    }
   }
 })
 </script>
