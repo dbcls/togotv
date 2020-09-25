@@ -28,14 +28,15 @@ export default Vue.extend({
   mounted() {
     if(this.props.is_single_download) {
       Object.keys(this.extension_exist).forEach(extension => {
-        if(this.props.selected_pic[extension] !== undefined) {
+        if(this.props.selected_pic[extension] !== undefined &&
+        this.props.selected_pic[extension] !== "-") {
           this.extension_exist[extension] = true
         }
       })
     } else {
       this.props.selected_pics.forEach(selected_pic => {
         Object.keys(this.extension_exist).forEach(extension => {
-          if(selected_pic[extension] !== undefined) {
+          if(selected_pic[extension] !== undefined && selected_pic[extension] !== "-") {
             this.extension_exist[extension] = true
           }
         })

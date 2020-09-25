@@ -17,6 +17,22 @@ export default Vue.extend({
     Header,
     Footer
   },
+  head() {
+    return {
+      script: [
+        // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
+        {
+          "type": "text/javascript",
+          "src": "https://dbcls.rois.ac.jp/DBCLS-common-header-footer/common-header-and-footer/script/common-header-and-footer.js",
+          "style": "display: block",
+          "id": "common-header-and-footer__script",
+          "data-color": "mono",
+          "data-show-footer": "true",
+          "data-width": "auto"
+        }
+      ]
+    }
+  },
   mounted() {
     const language = (window.navigator.languages && window.navigator.languages[0]) ||
             window.navigator.language ||
@@ -37,7 +53,7 @@ html
   padding-top: 78.88px
   scrollbar-width: none
   &:-webkit-scrollbar
-    display:none
+    display: none
 
 ul,ol
   list-style: none
