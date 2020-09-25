@@ -22,10 +22,13 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.4.0",
+    "@nuxtjs/pwa": "^3.0.2",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.0.0",
+    "vue": "^2.6.12",
     "vue-infinite-loading": "^2.4.5",
     "vue-slider-component": "^3.2.2",
+    "vue-template-compiler": "^2.6.12",
     "vue-youtube": "git+https://github.com/reika0717/vue-youtube.git"
   },
   "devDependencies": {
@@ -42,7 +45,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.0.0",
     "lint-staged": "^10.0.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "nuxt-i18n": "^6.14.2",
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",

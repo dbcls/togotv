@@ -11,12 +11,12 @@
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
         <a :href="`https://commons.wikimedia.org/wiki/File:${picture.svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
         <div class="download_btns">
-          <a @click="setDonwnloadLink(picture)" v-if="picture.png !== undefined" class="mont bold" download>png</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.svg !== undefined" class="mont bold" download>svg</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.ai !== undefined" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.obj_mtl_zip !== undefined" class="mont bold" download>obj_mtl_zip</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.apng !== undefined" class="mont bold" download>apng</a>
-          <a @click="setDonwnloadLink(picture)" v-if="picture.rotation !== undefined" class="mont bold" download>rotation</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.png !== undefined && picture.png !== '-'" class="mont bold" download>png</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.svg !== undefined && picture.svg !== '-'" class="mont bold" download>svg</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.ai !== undefined && picture.ai !== '-'" class="mont bold" download>AI <span class="mont">(Adobe Illustrator)</span></a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.obj_mtl_zip !== undefined && picture.obj_mtl_zip !== '-'" class="mont bold" download>obj_mtl_zip</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.apng !== undefined && picture.apng !== '-'" class="mont bold" download>apng</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.rotation !== undefined && picture.rotation !== '-'" class="mont bold" download>rotation</a>
         </div>
       </div>
     </div>
@@ -106,6 +106,7 @@ export default Vue.extend({
   },
   methods: {
     setDonwnloadLink(pic) {
+      console.log('pic', pic)
       this.selected_pic = pic;
       this.is_modal_on = true;
     }

@@ -77,7 +77,7 @@ header
   box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
   background-color: #fff
   position: fixed
-  top: 0
+  top: 24px
   z-index: $LAYER_HEADER
   > .sp_toggle_menu
     display: none
@@ -201,7 +201,7 @@ header
       background-image: none
       display: inline-block
       position: fixed
-      top: 16px
+      top: 39px
       right: 17px
       z-index: $LAYER_HEADER
       &:before,
@@ -274,12 +274,12 @@ header
                     right: auto
             .input_wrapper
               position: fixed
-              top: 17px
+              top: 37px
     &.close
       > .header_contents
         > h1
           position: fixed
-          top: -10px
+          top: 12px
           left: 21px
           > a
             > img.logo
