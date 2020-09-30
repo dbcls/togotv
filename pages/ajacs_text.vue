@@ -109,7 +109,16 @@ export default Vue.extend({
       }
       Object.keys(this.filters).forEach(key => {
         if (this.$route.query[key] !== undefined) {
-          this.filters[key] = this.$route.query[key].split(',')
+          if (key === "uploadDate") {
+            let update_year_param = this.$route.query["uploadDate"].split(',')
+            const this_year  = Number(new Date().getFullYear());
+            let upload_date = []
+            upload_date.push(Number(update_year_param[0]) - this_year + 4)
+            upload_date.push(Number(update_year_param[1]) - this_year + 4)
+            this.filters["uploadDate"] = upload_date
+          } else {
+            this.filters[key] = this.$route.query[key].split(',')
+          }
         }
       })
       this.fetchDataWithFilter(this.$route.query)
@@ -183,15 +192,12 @@ export default Vue.extend({
                 if(param["uploadDate"][0] === 0 && param["uploadDate"][1] === 4 ) {
                   delete param["uploadDate"]
                 } else {
-                  param["uploadDate"] = param["uploadDate"].map(data => {
-                    data = Number(data) - 4
-                    if (data < 0) {
-                      data = -data
-                    }
-                    return data
-                  })
-                  if(param["uploadDate"][0] === 4) {
-                    param["uploadDate"][0] = 0
+                  if(Number(param["uploadDate"][0]) < 2000) {
+                    const this_year  = new Date().getFullYear();
+                    param["uploadDate"] = param["uploadDate"].map(data => {
+                      data = Number(this_year) - (Number(data) - 4) * -1
+                      return data
+                    })
                   }
                 }
               } else if (key === "keywords") {

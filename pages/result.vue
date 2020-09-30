@@ -226,16 +226,28 @@ export default Vue.extend({
                     param[key][1] = 0
                   }
                 } else if (key === "uploadDate") {
-                  param[key] = param[key].map(data => {
-                    data = Number(data) - 4
-                    if (data < 0) {
-                      data = -data
+                  if(param["uploadDate"][0] === 0 && param["uploadDate"][1] === 4 ) {
+                    delete param["uploadDate"]
+                  } else {
+                    if(Number(param["uploadDate"][0]) < 2000) {
+                      const this_year  = new Date().getFullYear();
+                      param["uploadDate"] = param["uploadDate"].map(data => {
+                        data = Number(this_year) - (Number(data) - 4) * -1
+                        return data
+                      })
                     }
-                    return data
-                  })
-                  if(param[key][0] === 4) {
-                    param[key][0] = 0
                   }
+
+                  // param[key] = param[key].map(data => {
+                  //   data = Number(data) - 4
+                  //   if (data < 0) {
+                  //     data = -data
+                  //   }
+                  //   return data
+                  // })
+                  // if(param[key][0] === 4) {
+                  //   param[key][0] = 0
+                  // }
                 }
               } else {
                 param[key] = param[key].filter(data => data !== "");
@@ -270,7 +282,16 @@ export default Vue.extend({
     ) {
       Object.keys(this.filters).forEach(key => {
         if (this.$route.query[key] !== undefined) {
+          if (key === "uploadDate") {
+            let update_year_param = this.$route.query["uploadDate"].split(',')
+            const this_year  = Number(new Date().getFullYear());
+            let upload_date = []
+            upload_date.push(Number(update_year_param[0]) - this_year + 4)
+            upload_date.push(Number(update_year_param[1]) - this_year + 4)
+            this.filters["uploadDate"] = upload_date
+          } else {
           this.filters[key] = this.$route.query[key].split(',')
+          }
         }
       })
     } else {
