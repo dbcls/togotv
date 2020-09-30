@@ -14,6 +14,13 @@
       </div>
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
+      <div class="facet_small_section publish_date">
+        <p class="facet_small_title calender tsukushi bold">
+          {{ $t('publish_date') }}
+          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
+        </p>
+        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
+      </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">
           {{ $t('tags') }}
@@ -32,13 +39,6 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="facet_small_section">
-        <p class="facet_small_title calender tsukushi bold">
-          {{ $t('publish_date') }}
-          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
-        </p>
-        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
       </div>
     </div>
     <div class="gallery_wrapper">
@@ -371,6 +371,9 @@ export default Vue.extend({
     > .facet_small_section
       border-bottom: 1px solid $MAIN_COLOR
       padding-bottom: 14px
+      &.publish_date
+        padding-bottom: 24px
+        margin-top: 20px
       &:last-of-type
         border-bottom: none
       > .facet_small_title
