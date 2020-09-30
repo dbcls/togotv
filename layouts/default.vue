@@ -23,11 +23,11 @@ export default Vue.extend({
         // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
         {
           "type": "text/javascript",
-          "src": "https://dbcls.rois.ac.jp/DBCLS-common-header-footer/common-header-and-footer/script/common-header-and-footer.js",
+          "src": "https://dbcls.rois.ac.jp/DBCLS-common-header-footer/v2/script/common-header-and-footer.js",
           "style": "display: block",
           "id": "common-header-and-footer__script",
+          "data-header-menu-type": "deployed",
           "data-color": "mono",
-          "data-show-footer": "true",
           "data-width": "auto"
         }
       ]
