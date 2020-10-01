@@ -564,8 +564,10 @@ export default Vue.extend({
             line-height: 30px
             > a
               @include tag
+      > div.tag_list
+        margin-top: 30px
       > div.document
-        margin-top: 38px
+        margin-top: 30px
         position: relative
         > h3
           margin-bottom: 3px
