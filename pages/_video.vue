@@ -45,7 +45,7 @@
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
         <div class="digest" v-if="videoData.headline.length !== 0">
           <h3 class="tsukushi bold">{{ $t('digest') }}</h3>
-          <ul :class="videoData.headline.length >= 10 ? 'over10' : ''">
+          <ul :class="videoData.headline.length >= 5 ? 'over5' : ''">
             <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration'])">
               <span class="time" v-html="converSecToHour(digest.time, false, true)" @click="player.seekTo(digest.time)"></span>
               <span class="title" @click="player.seekTo(digest.time)">{{ digest.name }}
@@ -491,7 +491,7 @@ export default Vue.extend({
           margin-left: 14px
           padding-left: 4px
           border-left: 2px solid $SUB_COLOR
-          &.over10
+          &.over5
             height: auto
             margin-left: 0
             padding-left: 0
