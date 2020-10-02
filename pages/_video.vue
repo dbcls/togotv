@@ -25,8 +25,8 @@
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
-          <p class="author tsukushi bold" v-html="videoData.author"></p>
-          <p class="editor tsukushi bold" v-html="videoData.editor"></p>
+          <p class="author tsukushi bold" v-html="`${$t('author')}:&nbsp;${videoData.author}`"></p>
+          <p class="editor tsukushi bold" v-html="`${$t('editor')}:&nbsp;${videoData.editor}`"></p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
@@ -603,7 +603,7 @@ export default Vue.extend({
               content: ''
               width: 100%
               height: 70px
-              background: linear-gradient(to top, #fff 0%, #fff 30%, transparent)
+              background: linear-gradient(to top, #fff 0%, #fff 30%, rgba(255, 255, 255, 0))
               position: absolute
               left: 0
               bottom: 0

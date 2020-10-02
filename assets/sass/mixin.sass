@@ -61,7 +61,7 @@ $VIEW_PADDING_SP: 40px
     @include icon($code)
 
 @mixin blue_underline
-  background: linear-gradient(transparent 70%, rgba(59, 180, 193, .15) 0%)
+  background: linear-gradient(rgba(255, 255, 255, 0) 70%, rgba(59, 180, 193, .15) 0%)
   display: inline
   padding: 0 10px 22px
   background-position: 10px 34px
@@ -231,7 +231,7 @@ $VIEW_PADDING_SP: 40px
   content: ''
   width: 100%
   height: 1px
-  background-image: linear-gradient(to right, $MAIN_COLOR, $MAIN_COLOR 3px, transparent 3px, transparent 7px)
+  background-image: linear-gradient(to right, $MAIN_COLOR, $MAIN_COLOR 3px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0) 7px)
   background-size: 7px 1px
   background-repeat: repeat-x
   position: absolute

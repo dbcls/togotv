@@ -13,6 +13,14 @@
           <li>・{{ $t("illustration") }}</li>
         </ul>
         <TextSearch props="index"/>
+        <div class="search_example">
+          <p class="search_example_title">検索例:&nbsp;</p>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', page: '1' } }))">PubMed</nuxt-link>
+          <span class="comma">,</span>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', page: '1' } }))">BLAST</nuxt-link>
+          <span class="comma">,</span>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">NGSのハンズオン講習</nuxt-link>
+        </div>
         <!-- <form>
           <input type="text" name="" id="" placeholder="動画を検索">
           <button type="submit"></button>
@@ -75,19 +83,23 @@ export default Vue.extend({
   display: flex
   align-items: center
   justify-content: center
-  width: 100vw
+  width: 100%
+  max-width: 1464px
+  margin: 0 auto
   > img
     object-fit: contain
   > .main_visual_1
     width: 32.6%
     min-width: 404px
+    transform: translateY(-26px)
+    z-index: 20
   > .main_visual_2
     width: 19.8%
     min-width: 233px
     transform: translateY(77px)
   > .main_text
     margin-top: 58px
-    margin-left: 34px
+    margin-left: 42px
     margin-right: 15px
     > h1
       > img.logo
@@ -111,6 +123,15 @@ export default Vue.extend({
         li
           &:last-child
             margin-left: 0px
+    > .search_example
+      display: flex
+      align-items: center
+      font-size: 12px
+      margin-top: -4px
+      margin-left: 14px
+      text-align: center
+      > .comma
+        margin: 0 3px
 .course_section,
 .newvideo_section,
 .realtime_view_video_section
@@ -164,6 +185,8 @@ export default Vue.extend({
         font-size: 14px
         line-height: 22px
         margin-top: 12px
+      > .search_example
+        justify-content: center
       > .input_wrapper
         &.index
           margin: 20px auto 0

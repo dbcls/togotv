@@ -78,16 +78,16 @@ export default Vue.extend({
     opacity: 1
     transition: opacity .2s
   &:before
-    background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     left: 0
   &:after
-    background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     right: 0
   &.blue
     &:before
-      background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(235, 247, 249, 0.25) 63% ,transparent)
+      background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
     &:after
-      background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(235, 247, 249, 0.25) 63% ,transparent)
+      background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
   &.left_hide
     &:before
       opacity: 0
@@ -125,14 +125,14 @@ export default Vue.extend({
       width: calc(#{$VIEW_PADDING_SP} + 83px)
       top: -10px
     &:before
-      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     &:after
-      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     &.blue
       &:before
-        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,transparent)
+        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
       &:after
-        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,transparent)
+        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
     &.right_hide
       &:after
         width: $VIEW_PADDING_SP

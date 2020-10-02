@@ -95,10 +95,10 @@ export default Vue.extend({
     opacity: 1
     transition: opacity .2s
   &:before
-    background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     left: 0
   &:after
-    background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+    background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     right: 0
   &.left_hide
     &:before
@@ -110,10 +110,10 @@ export default Vue.extend({
   &.blue
     background-color: rgba(235, 247, 249, .67)
     &:before
-      background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
       left: 0
     &:after
-      background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
   .course_list
     overflow: hidden
     overflow-x: scroll
@@ -147,8 +147,8 @@ export default Vue.extend({
         left: 0
         content: ''
         border-top: 103px solid rgba(255, 255, 255, .15)
-        border-right: 103px solid transparent
-        border-bottom: 103px solid transparent
+        border-right: 103px solid rgba(255, 255, 255, 0)
+        border-bottom: 103px solid rgba(255, 255, 255, 0)
         border-left: 103px solid rgba(255, 255, 255, .15)
       &.short
         &:after
@@ -202,7 +202,7 @@ export default Vue.extend({
             position: absolute
             top: 15%
             left: -26px
-            border: 15px solid transparent
+            border: 15px solid rgba(255, 255, 255, 0)
             border-right: 15px solid $MAIN_COLOR
           > .detail_title
             font-size: 20px
@@ -269,17 +269,17 @@ export default Vue.extend({
       width: calc(#{$VIEW_PADDING_SP} + 83px)
       height: 206px
     &:before
-      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     &:after
-      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     &.right_hide
       &:after
         width: $VIEW_PADDING_SP
     &.blue
       &:before
-        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
       &:after
-        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,transparent)
+        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
     .course_list
       > .course_box
         &:nth-of-type(1)
@@ -289,8 +289,8 @@ export default Vue.extend({
             width: $VIEW_PADDING_SP
         &:before
           border-top: 78px solid rgba(255, 255, 255, 0.15)
-          border-right: 78px solid transparent
-          border-bottom: 78px solid transparent
+          border-right: 78px solid rgba(255, 255, 255, 0)
+          border-bottom: 78px solid rgba(255, 255, 255, 0)
           border-left: 78px solid rgba(255, 255, 255, 0.15)
         > a.title
           font-size: 16px
