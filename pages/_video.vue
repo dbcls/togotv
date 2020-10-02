@@ -25,8 +25,14 @@
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
-          <p class="author tsukushi bold" v-html="`${$t('author')}:&nbsp;${videoData.author}`"></p>
-          <p class="editor tsukushi bold" v-html="`${$t('editor')}:&nbsp;${videoData.editor}`"></p>
+          <p class="author tsukushi bold">
+            <span class="label">{{ `${$t('author')}:&nbsp;` }}</span>
+            <span v-html="videoData.author"></span>
+          </p>
+          <p class="editor tsukushi bold">
+            <span class="label">{{ `${$t('editor')}:&nbsp;` }}</span>
+            <span v-html="videoData.editor"></span>
+          </p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
@@ -39,7 +45,7 @@
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
         <div class="digest" v-if="videoData.headline.length !== 0">
           <h3 class="tsukushi bold">{{ $t('digest') }}</h3>
-          <ul :class="videoData.headline.length >= 10 ? 'over10' : ''">
+          <ul :class="videoData.headline.length >= 5 ? 'over5' : ''">
             <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration'])">
               <span class="time" v-html="converSecToHour(digest.time, false, true)" @click="player.seekTo(digest.time)"></span>
               <span class="title" @click="player.seekTo(digest.time)">{{ digest.name }}
@@ -431,6 +437,8 @@ export default Vue.extend({
             margin-left: 0
             &:before
               transform: none
+          > span.label
+            font-size: 14px
       > h2.title
         font-size: 27px
         line-height: 39px
@@ -483,7 +491,7 @@ export default Vue.extend({
           margin-left: 14px
           padding-left: 4px
           border-left: 2px solid $SUB_COLOR
-          &.over10
+          &.over5
             height: auto
             margin-left: 0
             padding-left: 0
@@ -556,8 +564,10 @@ export default Vue.extend({
             line-height: 30px
             > a
               @include tag
+      > div.tag_list
+        margin-top: 30px
       > div.document
-        margin-top: 38px
+        margin-top: 30px
         position: relative
         > h3
           margin-bottom: 3px

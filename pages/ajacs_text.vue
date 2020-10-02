@@ -14,6 +14,13 @@
       </div>
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
+      <div class="facet_small_section publish_date">
+        <p class="facet_small_title calender tsukushi bold">
+          {{ $t('publish_date') }}
+          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
+        </p>
+        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
+      </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">
           {{ $t('tags') }}
@@ -32,13 +39,6 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="facet_small_section">
-        <p class="facet_small_title calender tsukushi bold">
-          {{ $t('publish_date') }}
-          <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
-        </p>
-        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
       </div>
     </div>
     <div class="gallery_wrapper">
@@ -109,7 +109,16 @@ export default Vue.extend({
       }
       Object.keys(this.filters).forEach(key => {
         if (this.$route.query[key] !== undefined) {
-          this.filters[key] = this.$route.query[key].split(',')
+          if (key === "uploadDate") {
+            let update_year_param = this.$route.query["uploadDate"].split(',')
+            const this_year  = Number(new Date().getFullYear());
+            let upload_date = []
+            upload_date.push(Number(update_year_param[0]) - this_year + 4)
+            upload_date.push(Number(update_year_param[1]) - this_year + 4)
+            this.filters["uploadDate"] = upload_date
+          } else {
+            this.filters[key] = this.$route.query[key].split(',')
+          }
         }
       })
       this.fetchDataWithFilter(this.$route.query)
@@ -183,15 +192,12 @@ export default Vue.extend({
                 if(param["uploadDate"][0] === 0 && param["uploadDate"][1] === 4 ) {
                   delete param["uploadDate"]
                 } else {
-                  param["uploadDate"] = param["uploadDate"].map(data => {
-                    data = Number(data) - 4
-                    if (data < 0) {
-                      data = -data
-                    }
-                    return data
-                  })
-                  if(param["uploadDate"][0] === 4) {
-                    param["uploadDate"][0] = 0
+                  if(Number(param["uploadDate"][0]) < 2000) {
+                    const this_year  = new Date().getFullYear();
+                    param["uploadDate"] = param["uploadDate"].map(data => {
+                      data = Number(this_year) - (Number(data) - 4) * -1
+                      return data
+                    })
                   }
                 }
               } else if (key === "keywords") {
@@ -365,6 +371,9 @@ export default Vue.extend({
     > .facet_small_section
       border-bottom: 1px solid $MAIN_COLOR
       padding-bottom: 14px
+      &.publish_date
+        padding-bottom: 24px
+        margin-top: 20px
       &:last-of-type
         border-bottom: none
       > .facet_small_title
