@@ -51,9 +51,6 @@ html
   color: $BLACK
   box-sizing: border-box
   padding-top: 78.88px
-  scrollbar-width: none
-  &:-webkit-scrollbar
-    display: none
 
 ul,ol
   list-style: none

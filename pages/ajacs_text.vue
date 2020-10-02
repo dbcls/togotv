@@ -465,7 +465,7 @@ export default Vue.extend({
           font-size: 14px
           > tr
             > td
-              padding: 8px 0 8px 10px
+              padding: 8px 0 4px 10px
               position: relative
               &.date
                 white-space: nowrap
@@ -482,8 +482,9 @@ export default Vue.extend({
               > span.tag
                 @include tag
                 font-size: 12px
-                line-height: 26px
                 margin-right: 6px
+                margin-bottom: 4px
+                display: inline-block
                 &.hide
                   display: none
     > .loader

@@ -71,8 +71,6 @@ div.input_wrapper
     > input
       width: 334px
       height: 36px
-      border: none
-      background-color: #F6F5F5
     > button
       top: 49%
       right: 15px
