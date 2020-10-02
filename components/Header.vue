@@ -1,6 +1,6 @@
 <template>
   <header :class="[checkIfTop(), is_sp_menu_on ? '' : 'close']">
-    <span :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']" @click="is_sp_menu_on = !is_sp_menu_on"></span>
+    <span :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']" @click="toggleMenu()"></span>
     <div class="header_contents">
       <h1>
         <nuxt-link to="/">
@@ -38,14 +38,15 @@
   </header>
 </template>
 
-<script lang="ts">
+<script>
 import TextSearch from '~/components/TextSearch.vue'
 import Vue from 'vue'
 export default Vue.extend({
   watch: {
-      '$route': function(to, from) {
-        this.is_sp_menu_on = false
-      }
+    '$route': function(to, from) {
+      this.is_sp_menu_on = false
+      this.$emit('toggleMenu', false)
+    }
   },
   data () {
     return {
@@ -64,8 +65,13 @@ export default Vue.extend({
   methods: {
     checkIfTop() {
       return this.$nuxt.$route.fullPath === '/' ? 'top' : ''
+    },
+    toggleMenu() {
+      this.is_sp_menu_on = !this.is_sp_menu_on
+      if(document.body.clientWidth < 896) {
+        this.$emit('toggleMenu', this.is_sp_menu_on)
+      }
     }
-
   }
 })
 </script>
@@ -240,13 +246,15 @@ header
         background: #ffffff
         height: 100vh
         width: 100vw
+        overflow: auto
         > nav
+          padding-bottom: 50px
           > ul.links
             flex-direction: column
             align-items: baseline
             padding-left: 0
             padding-left: 24px
-            padding-top: 70px
+            padding-top: 60px
             > li.link,
             > li.link > a
               font-size: 20px
@@ -274,7 +282,8 @@ header
                     right: auto
             .input_wrapper
               position: fixed
-              top: 37px
+              top: 40px
+              z-index: $LAYER_2
     &.close
       > .header_contents
         > h1

@@ -120,4 +120,8 @@ export default Vue.extend({
       > .video_section_header
         > ul.display_icon_wrapper
           margin-top: 9px
+      > .span_tab_wrapper
+        > .span_tab
+          margin-right: 8px
+          padding: 0
 </style>

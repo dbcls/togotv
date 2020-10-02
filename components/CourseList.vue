@@ -190,7 +190,7 @@ export default Vue.extend({
           background-color: $MAIN_COLOR
           border-radius: 5px
           top: -20px
-          left: 219px
+          left: 205px
           color: #fff
           text-decoration: none
           width: 330px
@@ -266,7 +266,7 @@ export default Vue.extend({
 @media screen and (max-width: 896px)
   .course_wrapper
     &:before,&:after
-      width: calc(#{$VIEW_PADDING_SP} + 83px)
+      width: calc(#{$VIEW_PADDING_SP} + 20px)
       height: 206px
     &:before
       background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
@@ -286,7 +286,7 @@ export default Vue.extend({
           margin-left: $VIEW_PADDING_SP
         &:last-of-type
           &:after
-            width: $VIEW_PADDING_SP
+            display: none
         &:before
           border-top: 78px solid rgba(255, 255, 255, 0.15)
           border-right: 78px solid rgba(255, 255, 255, 0)
@@ -301,4 +301,7 @@ export default Vue.extend({
           box-sizing: content-box
         > .total_time
           display: none
+        &:hover
+          > .detail
+            display: none
 </style>
