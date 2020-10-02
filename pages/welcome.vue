@@ -276,6 +276,10 @@ h2
   .welcome_wrapper
     .intro_section
       margin: 0
+      > h2
+        &:before,
+        &:after
+          display: none
       > .tutorial_video_wrapper
         margin-top: 30px
         > iframe

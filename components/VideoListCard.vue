@@ -38,9 +38,14 @@ export default Vue.extend({
     flex-wrap: wrap
     margin-left: -18px
     > li
-      margin: 0 0 21px 19px
+      margin: 0 0 21px 18px
 
 @media screen and (max-width: 896px)
   .video_list_wrapper
     min-width: auto
+    > ul
+      margin-left: -18px
+      > li
+        margin: 0 0 21px 18px
+        width: 150px
 </style>

@@ -105,7 +105,7 @@ export default Vue.extend({
     position: relative
     scrollbar-width: none
     &::-webkit-scrollbar
-      display: none      
+      display: none
     > .video_list_box
       vertical-align: top
       position: relative
@@ -122,7 +122,7 @@ export default Vue.extend({
 @media screen and (max-width: 896px)
   .video_list_wrapper
     &:before,&:after
-      width: calc(#{$VIEW_PADDING_SP} + 83px)
+      width: calc(#{$VIEW_PADDING_SP} + 20px)
       top: -10px
     &:before
       background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))

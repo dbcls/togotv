@@ -85,7 +85,7 @@ export default Vue.extend({
       if(document.body.clientWidth > 897) {
         substraction = document.body.clientWidth - 160
       } else {
-        substraction = document.body.clientWidth - 80
+        substraction = document.body.clientWidth - 40
       }
       if (this.props.id.indexOf('video') !== -1) {
         substraction += 10

@@ -76,4 +76,14 @@ div.input_wrapper
       right: 15px
       &:hover
         cursor: pointer
+
+@media screen and (max-width: 896px)
+  div.input_wrapper
+    > input
+      width: 242px
+    &.index
+      > input
+        width: 80%
+      > button
+        right: 42px
 </style>

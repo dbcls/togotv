@@ -1,7 +1,7 @@
 <template>
   <div class="courses_wrapper">
     <h2 class="page_title tsukushi bold">
-      {{ course.title }}
+      <span class="course_title">{{ course.title }}</span>
       <span class="total_time" v-html="converSecToHour(course.total_time)"></span>
     </h2>
     <div class="content_wrapper">
@@ -67,18 +67,30 @@ export default Vue.extend({
   > .content_wrapper
     padding: 0 $VIEW_PADDING
     > .video_section
-      margin-left: -10px
       > ul
+        margin-left: -14px
         display: flex
         flex-wrap: wrap
         > li
-          margin-left: 10px
+          margin-left: 14px
           margin-bottom: 28px
 
 @media screen and (max-width: 896px)
   .courses_wrapper
     > .page_title
       padding-left: $VIEW_PADDING_SP
+      align-items: flex-start
+      position: relative
+      margin-bottom: 30px
+      > .course_title
+        margin-top: 9px
+      > .total_time
+        position: absolute
+        bottom: -18px
     > .content_wrapper
       padding: 0 $VIEW_PADDING_SP
+      > .video_section
+        > ul
+          > li
+            width: calc((100% - 28px) / 2)
 </style>

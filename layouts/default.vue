@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header @toggleMenu="toggleMenu"/>
     <nuxt />
     <Footer />
   </div>
@@ -40,6 +40,15 @@ export default Vue.extend({
             window.navigator.browserLanguage;
     if(language === 'en-US') {
       this.$router.push(this.switchLocalePath('en'))
+    }
+  },
+  methods: {
+    toggleMenu(menu_state) { 
+      if(menu_state) {
+        document.getElementsByTagName('html')[0].style.overflow = "hidden";
+      } else {
+        document.getElementsByTagName('html')[0].style.overflow = "visible";
+      }
     }
   }
 })
