@@ -46,7 +46,7 @@ export default Vue.extend({
   watch: {
     '$route': function(to, from) {
       this.is_sp_menu_on = false
-      this.$emit('toggleMenu', false)
+      // this.$emit('toggleMenu', false)
     }
   },
   data () {
@@ -75,9 +75,9 @@ export default Vue.extend({
     },
     toggleMenu() {
       this.is_sp_menu_on = !this.is_sp_menu_on
-      if(document.body.clientWidth < 896) {
-        this.$emit('toggleMenu', this.is_sp_menu_on)
-      }
+      // if(document.body.clientWidth < 896) {
+      //   this.$emit('toggleMenu', this.is_sp_menu_on)
+      // }
     }
   }
 })
