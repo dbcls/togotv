@@ -121,8 +121,6 @@ header
             display: flex
             align-items: center
             margin-right: 12px
-            &.home
-              display: none
             > a
               text-decoration: none
               color: $BLACK
@@ -210,6 +208,13 @@ header
 @media screen and (max-width: 896px)
   header
     height: 60px
+    &.top
+      > .header_contents
+        > .right_area
+          > nav
+            > ul.links
+              .input_wrapper
+                display: block
     > .sp_toggle_menu
       background-image: none
       display: inline-block
@@ -217,6 +222,8 @@ header
       top: 39px
       right: 17px
       z-index: $LAYER_HEADER
+      width: 30px
+      height: 30px
       &:before,
       &:after
         content: ''
@@ -225,7 +232,7 @@ header
         background-color: $BLACK
         position: absolute
         top: 16px
-        left: -30px
+        left: 0px
       &.close
         width: 30px
         height: 30px
@@ -249,7 +256,7 @@ header
         position: absolute
         align-items: flex-start
         top: 0
-        right: 0
+        left: 0
         background: #ffffff
         height: 100vh
         width: 100vw
@@ -277,6 +284,8 @@ header
               font-size: 20px
               line-height: 66px
               font-family: fot-tsukuardgothic-std, sans-serif
+              margin: 0
+              box-sizing: border-box
               &.home
                 display: flex
               &.null
@@ -322,7 +331,7 @@ header
               transform: translateX(-50%)
               z-index: $LAYER_2
               width: 100vw
-              height: 70px
+              height: 90px
               display: flex
               align-items: center
               justify-content: center
