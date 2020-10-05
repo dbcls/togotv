@@ -262,6 +262,8 @@ header
         width: 100vw
         > nav
           height: calc(100vh - 114px)
+          padding-bottom: 70px
+          box-sizing: border-box
           overflow: auto
           > ul.links
             flex-direction: column
