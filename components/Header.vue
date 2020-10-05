@@ -253,7 +253,7 @@ header
       width: 100vw
       > .right_area
         opacity: 1
-        position: absolute
+        position: absol
         align-items: flex-start
         top: 0
         left: 0
@@ -266,14 +266,13 @@ header
           // box-sizing: border-box
           // overflow: auto
           > ul.links
-            flex-direction: column
-            align-items: baseline
-            justify-content: flex-start
             padding-left: 0
             padding-top: 40px
-            padding-bottom: 40px
+            padding-bottom: 100px
             height: calc(100vh - 154px)
             overflow: auto
+            box-sizing: border-box
+            display: block
             > li.link
               padding-left: 24px
               width: 100vw
@@ -283,7 +282,7 @@ header
                 @include blue_underline()
                 padding: 0
                 background-position: center 8px
-                background-size: auto 43px
+                background-size: 100% 43px
                 background-repeat: no-repeat
             > li.link,
             > li.link > a
