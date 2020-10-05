@@ -117,6 +117,8 @@ export default Vue.extend({
     padding: 0 $VIEW_PADDING_SP
     flex-direction: column-reverse
     > .video_section
+      width: 100%
+      overflow: hidden
       > .video_section_header
         > ul.display_icon_wrapper
           margin-top: 9px

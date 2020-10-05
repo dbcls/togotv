@@ -163,6 +163,7 @@ export default Vue.extend({
     flex-direction: column
     text-align: center
     width: 100vw
+    overflow: hidden
     > .main_visual_1,
     > .main_visual_2
       display: none

@@ -89,7 +89,10 @@ export default Vue.extend({
         bottom: -18px
     > .content_wrapper
       padding: 0 $VIEW_PADDING_SP
+      overflow: hidden
       > .video_section
+        width: 100%
+        overflow: hidden
         > ul
           > li
             width: calc((100% - 28px) / 2)
