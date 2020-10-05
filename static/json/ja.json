@@ -90,7 +90,8 @@
   "top": "トップページ",
   "about": "TogoTVについて",
   "search_pictures": "画像を探す",
-  "search_videos": "キーワードから動画を探す",
+  "search_videos": "動画を探す",
+  "search_videos_by_keyword": "キーワードから動画を探す",
   "contact": "お問合せ",
   "today": "今日",
   "years_ago": "年前"

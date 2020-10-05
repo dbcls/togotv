@@ -1048,15 +1048,24 @@ export default Vue.extend({
   > .modal_back
     @include modal_back
 
+@media screen and (max-width: 896px)
+  .pictures_wrapper
+    > .facet_wrapper
+      display: none
+
 @media screen and (max-width: 480px)
   .pictures_wrapper
     padding: 0 $VIEW_PADDING_SP
     flex-direction: column
-    > .facet_wrapper
-      display: none
     > .gallery_wrapper
       > ul.picture_list_card
-        margin: 0
+        > li.single_picture
+          > a
+            > img
+              width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 20px) / 2)
+          &:hover
+            > .description_wrapper
+              display: none
       > .gallery_section_header
         > .control_wrapper
           > .control_btn

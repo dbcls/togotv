@@ -97,7 +97,7 @@
       <div class="video_section_header">
         <h2 class="page_title tsukushi bold">
           <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
-          「{{ $route.query.query }}」
+          <span>「{{ $route.query.query.trim() }}」</span>
           <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
         </h2>
         <ul class="display_icon_wrapper">
@@ -528,6 +528,7 @@ export default Vue.extend({
     > .video_section
       > .video_section_header
         flex-wrap: wrap
+        flex-direction: column
         > ul.display_icon_wrapper
           margin: 0 0 10px auto
         > .page_title

@@ -2,7 +2,7 @@
   <div :class="['input_wrapper', props]">
     <input
       type="text"
-      :placeholder="$t('search_videos')"
+      :placeholder="$t('search_videos_by_keyword')"
       v-model="keyword"
       @keyup.enter="submit('enter')"
       @keypress="setCanMessageSubmit()"
@@ -80,7 +80,7 @@ div.input_wrapper
 @media screen and (max-width: 896px)
   div.input_wrapper
     > input
-      width: 242px
+      width:  80vw
     &.index
       > input
         width: 80%

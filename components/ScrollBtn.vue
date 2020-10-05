@@ -79,7 +79,7 @@ export default Vue.extend({
       let parent: any = doc.getElementById(this.props.id).parentNode
       let target_section = parent.getElementsByClassName('scroll-horizontal')[0]
       let current_position_x: number = target_section.scrollLeft
-      const child_width = target_section.children[1].clientWidth//子要素の幅
+      const child_width = target_section.children[1].getBoundingClientRect().width//子要素の幅
       const num_of_element = target_section.childElementCount//要素数
       let substraction: number = 0
       if(document.body.clientWidth > 897) {
@@ -91,11 +91,11 @@ export default Vue.extend({
         substraction += 10
       }
       // console.log('current_position_x', current_position_x)
-      // console.log(child_width * num_of_element - substraction)
+      // console.log(Math.ceil(child_width * num_of_element - substraction))
       if(current_position_x === 0) {
         this.btn_state.left = false
         this.$emit('toggleBtn', 'hide_left')
-      } else if (current_position_x === child_width * num_of_element - substraction) {
+      } else if (current_position_x === Math.ceil(child_width * num_of_element - substraction)) {
         this.btn_state.right = false
         this.$emit('toggleBtn', 'hide_right')
       } else {
