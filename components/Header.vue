@@ -268,8 +268,7 @@ header
           > ul.links
             padding-left: 0
             padding-top: 40px
-            padding-bottom: 100px
-            height: calc(100vh - 154px)
+            height: calc(100vh - 194px)
             overflow: auto
             box-sizing: border-box
             display: block
