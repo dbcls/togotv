@@ -269,6 +269,7 @@ header
             padding-left: 0
             padding-top: 40px
             height: calc(100vh - 194px)
+            padding-bottom: 40px
             overflow: auto
             box-sizing: border-box
             display: block
