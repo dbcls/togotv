@@ -45,9 +45,9 @@ export default Vue.extend({
   methods: {
     toggleMenu(menu_state) { 
       if(menu_state) {
-        document.getElementsByTagName('html')[0].style.overflow = "hidden";
+        document.getElementsByTagName('body')[0].style.overflow = "hidden";
       } else {
-        document.getElementsByTagName('html')[0].style.overflow = "visible";
+        document.getElementsByTagName('body')[0].style.overflow = "visible";
       }
     }
   }
