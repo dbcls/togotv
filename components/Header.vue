@@ -253,7 +253,7 @@ header
       width: 100vw
       > .right_area
         opacity: 1
-        position: absol
+        position: absolute
         align-items: flex-start
         top: 0
         left: 0
