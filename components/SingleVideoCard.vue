@@ -119,12 +119,12 @@ export default Vue.extend({
   .single_video_wrapper
     a
       > .thumbnail
-        width: 150px
-        max-width: 150px
-        min-width: 150px
-        height: 86px
-        min-height: 86px
-        max-height: 86px
+        width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
+        max-width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
+        min-width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
+        height: calc(((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2) * 0.57)
+        max-height: calc(((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2) * 0.57)
+        min-height: calc(((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2) * 0.57)
     > .description_wrapper
-      width: 150px
+      width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
 </style>

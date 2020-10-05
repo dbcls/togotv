@@ -286,7 +286,8 @@ export default Vue.extend({
           margin-left: $VIEW_PADDING_SP
         &:last-of-type
           &:after
-            display: none
+            width: $VIEW_PADDING_SP
+        //     display: none
         &:before
           border-top: 78px solid rgba(255, 255, 255, 0.15)
           border-right: 78px solid rgba(255, 255, 255, 0)

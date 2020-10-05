@@ -47,5 +47,5 @@ export default Vue.extend({
       margin-left: -18px
       > li
         margin: 0 0 21px 18px
-        width: 150px
+        width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
 </style>

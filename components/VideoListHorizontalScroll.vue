@@ -66,11 +66,12 @@ export default Vue.extend({
 .video_list_wrapper
   width: 100%
   position: relative
+  overflow: hidden
   &:before,&:after
     content: ''
     display: inline-block
     width: calc(#{$VIEW_PADDING} + 83px)
-    height: 200px
+    height: 300px
     position: absolute
     top: 0
     right: 0
@@ -122,17 +123,17 @@ export default Vue.extend({
 @media screen and (max-width: 896px)
   .video_list_wrapper
     &:before,&:after
-      width: calc(#{$VIEW_PADDING_SP} + 20px)
+      width: calc(#{$VIEW_PADDING_SP} + 25px)
       top: -10px
     &:before
-      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
+      background: linear-gradient(to right, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 75% ,rgba(255, 255, 255, 0))
     &:after
-      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 63% ,rgba(255, 255, 255, 0))
+      background: linear-gradient(to left, #fff 0%, #fff $VIEW_PADDING_SP, rgba(255, 255, 255, 0.25) 75% ,rgba(255, 255, 255, 0))
     &.blue
       &:before
-        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
+        background: linear-gradient(to right, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 75% ,rgba(255, 255, 255, 0))
       &:after
-        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 63% ,rgba(255, 255, 255, 0))
+        background: linear-gradient(to left, #EEF9FA 0%, #EEF9FA $VIEW_PADDING_SP, rgba(235, 247, 249, 0.25) 75% ,rgba(255, 255, 255, 0))
     &.right_hide
       &:after
         width: $VIEW_PADDING_SP
