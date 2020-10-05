@@ -46,7 +46,7 @@ export default Vue.extend({
   watch: {
     '$route': function(to, from) {
       this.is_sp_menu_on = false
-      // this.$emit('toggleMenu', false)
+      this.$emit('toggleMenu', false)
     }
   },
   data () {
@@ -75,9 +75,9 @@ export default Vue.extend({
     },
     toggleMenu() {
       this.is_sp_menu_on = !this.is_sp_menu_on
-      // if(document.body.clientWidth < 896) {
-      //   this.$emit('toggleMenu', this.is_sp_menu_on)
-      // }
+      if(document.body.clientWidth < 896) {
+        this.$emit('toggleMenu', this.is_sp_menu_on)
+      }
     }
   }
 })
@@ -261,15 +261,19 @@ header
         height: 100vh
         width: 100vw
         > nav
-          height: calc(100vh - 114px)
-          padding-bottom: 70px
-          box-sizing: border-box
-          overflow: auto
+          // height: calc(100vh - 114px)
+          // padding-bottom: 70px
+          // box-sizing: border-box
+          // overflow: auto
           > ul.links
             flex-direction: column
             align-items: baseline
+            justify-content: flex-start
             padding-left: 0
             padding-top: 40px
+            padding-bottom: 40px
+            height: calc(100vh - 154px)
+            overflow: auto
             > li.link
               padding-left: 24px
               width: 100vw
@@ -338,7 +342,7 @@ header
               display: flex
               align-items: center
               justify-content: center
-              background: #ffffff
+              background: rgba(255, 255, 255, .8)
     &.close
       > .header_contents
         > h1

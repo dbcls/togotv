@@ -43,13 +43,13 @@ export default Vue.extend({
     }
   },
   methods: {
-    // toggleMenu(menu_state) { 
-    //   if(menu_state) {
-    //     document.getElementsByTagName('html')[0].style.overflow = "hidden";
-    //   } else {
-    //     document.getElementsByTagName('html')[0].style.overflow = "visible";
-    //   }
-    // }
+    toggleMenu(menu_state) { 
+      if(menu_state) {
+        document.getElementsByTagName('html')[0].style.overflow = "hidden";
+      } else {
+        document.getElementsByTagName('html')[0].style.overflow = "visible";
+      }
+    }
   }
 })
 </script>
