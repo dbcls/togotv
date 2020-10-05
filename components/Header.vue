@@ -28,7 +28,7 @@
                 <li @click="$event.stopPropagation()" class="link people"><nuxt-link :to="localePath('/staff')">{{ $t('staff') }}</nuxt-link></li>
               </ul>
             </li>
-            <li class="link null"></li>
+            <!-- <li class="link null"></li> -->
             <li class="list_text_search">
               <TextSearch props="header"/>
             </li>
@@ -260,9 +260,9 @@ header
         background: #ffffff
         height: 100vh
         width: 100vw
-        overflow: auto
         > nav
-          padding-bottom: 50px
+          height: calc(100vh - 114px)
+          overflow: auto
           > ul.links
             flex-direction: column
             align-items: baseline
@@ -288,8 +288,8 @@ header
               box-sizing: border-box
               &.home
                 display: flex
-              &.null
-                height: 110px
+              // &.null
+              //   height: 110px
               &.has_child_nav
                 position: relative
                 padding-bottom: 0
@@ -309,8 +309,9 @@ header
                   left: 20px
                   line-height: 44px
                   z-index: -1
-                  height: 0
+                  max-height: 0
                   transition: .3s
+                  overflow: hidden
                   > li
                     > a.nuxt-link-exact-active
                       @include blue_underline()
@@ -319,7 +320,7 @@ header
                       background-size: auto 43px
                       background-repeat: no-repeat
                   &.open
-                    height: auto
+                    max-height: 200px
                 &.contact
                   > ul.child_nav
                     left: 20px
