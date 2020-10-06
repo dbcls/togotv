@@ -94,6 +94,7 @@
   "search_videos_by_keyword": "キーワードから動画を探す",
   "contact": "お問合せ",
   "today": "今日",
-  "years_ago": "年前"
-  "example_query": "検索例"
+  "years_ago": "年前",
+  "example_query": "検索例",
+  "license": "ライセンス"
 }

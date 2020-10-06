@@ -95,6 +95,7 @@
   "contact": "Contact",
   "today": "today",
   "years_ago": "year",
-  "Example_query": "e.g.: "
+  "Example_query": "e.g.: ",
+  "license": "License"
 }
 

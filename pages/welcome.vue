@@ -19,7 +19,8 @@
         <img class="welcome_main_sp" src="~/assets/img/welcome_main_sp.png" alt />
         <div
           class="tutorial_text"
-        >{{ $t("about_description") }}</div>
+          v-html="$t('about_description')"
+        ></div>
       </div>
     </section>
     <section class="feature_section bg_blue">

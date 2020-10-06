@@ -50,7 +50,6 @@
               <span class="time" v-html="converSecToHour(digest.time, false, true)" @click="player.seekTo(digest.time)"></span>
               <span class="title" @click="player.seekTo(digest.time)">{{ digest.name }}
               </span>
-              <!-- <span :class="['full_title', digest_active === digest.time ? 'active' : '']">{{ digest.title }}</span> -->
             </li>
           </ul>
         </div>
@@ -62,7 +61,7 @@
             </li>
           </ul>
         </div>
-        <div class="document">
+        <div class="document" v-if="ajacs_list.length > 0">
           <h3 class="tsukushi bold">
             {{ $t('related_ajacs_tests') }}
             <span
@@ -80,7 +79,12 @@
         </div>
         <div class="original">
           <h3 class="tsukushi bold">{{ $t('download_video_data') }}</h3>
-          <a :href="videoData.contentUrl" download>{{ videoData.contentUrl.split('/').pop() }}</a>
+          <p @click="is_modal_on = true">{{ videoData.contentUrl.split('/').pop() }}</p>
+        </div>
+        <div class="license">
+          <h3 class="tsukushi bold">{{ $t('license') }}</h3>
+          <a :href="videoData.license" target="_blank">{{ videoData.license }}</a>
+          <nuxt-link :to="localePath({name: 'faq', hash: '#copyrights' })" class="add_faq_icon"></nuxt-link>
         </div>
       </div>
     </section>
@@ -96,6 +100,12 @@
       <h3 class="tsukushi bold">{{ $t('ranking') }}</h3>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
+    <DownloadModal
+      v-if="is_modal_on"
+      :props="{selected_video: videoData.contentUrl }"
+      @closeModal="is_modal_on = false"
+    />
+    <div v-if="is_modal_on" @click="is_modal_on = false" class="modal_back"></div>
   </div>
 </template>
 
@@ -105,6 +115,7 @@ import VueYoutube from 'vue-youtube'
 import CourseList from '~/components/CourseList.vue'
 import SingleVideoCard from '~/components/SingleVideoCard.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
+import DownloadModal from "~/components/DownloadModal.vue";
 import axios from 'axios'
 
 Vue.use(VueYoutube)
@@ -182,7 +193,8 @@ export default Vue.extend({
   components:  {
     CourseList,
     VideoListHorizontalScroll,
-    SingleVideoCard
+    SingleVideoCard,
+    DownloadModal
   },
   mounted() {
     if(!localStorage.getItem('is_first_time')) {
@@ -220,7 +232,8 @@ export default Vue.extend({
       related_videos: [],
       related_docs: [],
       ajacs_list: [],
-      is_ajacs_open: false
+      is_ajacs_open: false,
+      is_modal_on: false
     }
   },
   methods: {
@@ -413,7 +426,7 @@ export default Vue.extend({
           height: 100%
       > .meta_data
         margin-top: 12px
-        margin-bottom: 4px
+        margin-bottom: 10px
         display: flex
         align-items: center
         > p
@@ -445,8 +458,8 @@ export default Vue.extend({
         @include blue_underline
       > div.description
         font-size: 16px
-        line-height: 25px
-        margin-top: 10px
+        line-height: 27px
+        margin-top: 16px
       > .related_videos
         width: 100%
         > h3
@@ -632,8 +645,21 @@ export default Vue.extend({
           margin-bottom: 6px
           &:before
             @include icon('download')
+        > p
+          color: $MAIN_COLOR
+          text-decoration: underline
+          &:hover
+            cursor: pointer
+      > div.license
+        margin-top: 20px
+        > h3
+          margin-bottom: 6px
+          &:before
+            @include icon('cc')
         > a
-          color: $BLACK
+          word-break: break-all
+          &.add_faq_icon
+            margin-left: 3px
   .course_section
     margin-top: 80px
     padding-top: 30px
@@ -651,6 +677,8 @@ export default Vue.extend({
     > h3
       margin-left: $VIEW_PADDING
       @include section_title('barchart')
+  > .modal_back
+    @include modal_back
 
 @keyframes fade-in-out
   0%
