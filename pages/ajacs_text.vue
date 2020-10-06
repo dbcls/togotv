@@ -1,6 +1,6 @@
 <template>
   <div class="ajacs_list_wrapper">
-    <div class="facet_wrapper" v-if="$store.state.display === 'card'">
+    <div class="facet_wrapper">
       <p class="facet_title search tsukushi bold">{{ $t('text_search') }}</p>
       <div class="input_wrapper">
         <input

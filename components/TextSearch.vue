@@ -39,16 +39,16 @@ export default Vue.extend({
           return;
         }
         if(this.$i18n.locale === 'ja') {
-          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1" } }))
+          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1" } }))
         } else if (this.$i18n.locale === 'en') {
-          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1", lang: "en" } }))
+          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1", lang: "en" } }))
         }
       } else if (type === "click") {
-        this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1" } }))
+        this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1" } }))
         if(this.$i18n.locale === 'ja') {
-          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1" } }))
+          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1" } }))
         } else if (this.$i18n.locale === 'en') {
-          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, page: "1", lang: "en" } }))
+          this.$router.push(this.localePath({ name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1", lang: "en" } }))
         }
       }
     }

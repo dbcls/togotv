@@ -24,10 +24,7 @@
         <a v-if="ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
         <p v-else>{{ $t('no_result') }}</p>
         <h3 class="tsukushi bold circlevideo">{{ $t('ajacs_video') }}</h3>
-        <div class="iframe_wrapper">
-          <iframe :src="`https://www.youtube.com/embed/${ajacs_data.embedUrl}`" frameborder="0" allowfullscreen=""></iframe>
-        </div>
-        <p class="description">{{ ajacs_data.description }}</p>
+        <a :href="`${location_origin}/${ajacs_data.embedUrl2.split('/').pop()}`">{{ ajacs_data.name }}</a>
       </div>
     </div>
   </div>
@@ -95,6 +92,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      location_origin: location.origin
     }
   },
   methods: {
@@ -123,7 +121,7 @@ export default Vue.extend({
         font-size: 18px
         display: flex
         align-items: center
-        margin: 30px 0 4px 0px
+        margin: 30px 0 6px 0px
         flex-wrap: wrap
         &:first-of-type
           margin-top: 0

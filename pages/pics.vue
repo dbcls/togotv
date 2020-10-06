@@ -214,11 +214,11 @@
           <div :class="['description_wrapper', $i18n.locale]">
             <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
             <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
-            <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
+            <!-- <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
             <nuxt-link
               class="button mont bold"
               :to="localePath({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
-            >{{ $t('detail') }}</nuxt-link>
+            >{{ $t('detail') }}</nuxt-link> -->
           </div>
         </li>
       </ul>
@@ -1011,28 +1011,37 @@ export default Vue.extend({
               filter: drop-shadow(15px 8px 0px rgba(253, 211, 101, .8))
         > .description_wrapper
           display: none
+          pointer-events: none
           text-align: center
           position: absolute
           z-index: $LAYER_4
           background-color: $MAIN_COLOR
           border-radius: 9px
           top: 10px
-          left: 158px
+          left: -270px
           width: 238px
           color: #fff
           box-shadow: 0 3px 20px rgba(0, 0, 0, .4)
-          padding: 19px 24px 28px
+          padding: 19px 24px 4px
           box-sizing: border-box
+          &:after
+            content: ""
+            position: absolute
+            top: 0
+            right: -30px
+            width: 30px
+            height: 100%
+            background: transparent
           &:before
             content: ""
             position: absolute
             top: 22%
-            left: -18px
+            right: -18px
             border: 10px solid transparent
-            border-right: 10px solid $MAIN_COLOR
+            border-left: 10px solid $MAIN_COLOR
           > p.name_en
             font-size: 14px
-            margin: 0 0 21px
+            margin: 5px 0 21px
           > p.name
             font-size: 20px
             margin: 0

@@ -1,9 +1,9 @@
 <template>
-  <header :class="[checkIfTop(), is_sp_menu_on ? '' : 'close']">
+  <header :class="[this.$route.name ? this.$route.name.replace('___ja', '').replace('___en', '') : '', is_sp_menu_on ? '' : 'close', this.$route.path.match(/\/\d+/) ? 'video' : '', checkIfTop($route.path)]">
     <span :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']" @click="toggleMenu()"></span>
     <div class="header_contents">
       <h1>
-        <nuxt-link to="/">
+        <nuxt-link :to="localePath('/')">
           <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
         </nuxt-link>
       </h1>
@@ -24,11 +24,14 @@
             <li :class="['link', 'contact', 'has_child_nav', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']" @click="toggleChildMenu('contact')">{{ $t('contact') }}<span class="arrow"></span>
               <ul :class="['child_nav', 'contact', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']">
                 <li @click="$event.stopPropagation()" class="link question"><nuxt-link :to="localePath('/faq')">{{ $t('faq') }}</nuxt-link></li>
-                <li @click="$event.stopPropagation()" class="link video"><nuxt-link :to="localePath('/request')">{{ $t('request') }}</nuxt-link></li>
-                <li @click="$event.stopPropagation()" class="link people"><nuxt-link :to="localePath('/staff')">{{ $t('staff') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link video">
+                  <nuxt-link :to="localePath('/request')">{{ $t('request') }}</nuxt-link>
+                </li>
+                <li @click="$event.stopPropagation()" class="link people">
+                  <nuxt-link :to="localePath('/staff')">{{ $t('staff') }}</nuxt-link>
+                </li>
               </ul>
             </li>
-            <!-- <li class="link null"></li> -->
             <li class="list_text_search">
               <TextSearch props="header"/>
             </li>
@@ -43,6 +46,9 @@
 import TextSearch from '~/components/TextSearch.vue'
 import Vue from 'vue'
 export default Vue.extend({
+  props: {
+    data: ""
+  },
   watch: {
     '$route': function(to, from) {
       this.is_sp_menu_on = false
@@ -61,17 +67,17 @@ export default Vue.extend({
   components: {
     TextSearch
   },
-  computed: {
-  },
   methods: {
+    checkIfTop(path) {
+      if(path === "/" || path.indexOf("index.html") !== -1) {
+        return "index"
+      }
+    },
     toggleChildMenu(type) {
       if(document.body.clientWidth < 896) {
         // this.has_child_nav_elements[type] = !this.has_child_nav_elements[type]
         this.$store.commit("toggleSPMenu", type)
       }
-    },
-    checkIfTop() {
-      return this.$nuxt.$route.fullPath === '/' ? 'top' : ''
     },
     toggleMenu() {
       this.is_sp_menu_on = !this.is_sp_menu_on
@@ -115,8 +121,9 @@ header
           display: flex
           align-items: center
           justify-content: space-between
-          // margin-right: 27px
           padding-left: 20px
+          .input_wrapper
+            display: none
           li.link
             display: flex
             align-items: center
@@ -191,30 +198,34 @@ header
             &.people
               &:before
                 @include icon('people')
-
-  &.top
+  &.index
     box-shadow: none
     > .header_contents
       > h1
         > a
           > img.logo
             visibility: hidden
+  &.courses,
+  &.course,
+  &.newvideo,
+  &.rankings,
+  &.video,
+  &.result
+    > .header_contents
       > .right_area
         > nav
           > ul.links
             .input_wrapper
-              display: none
-
+              display: block
 @media screen and (max-width: 896px)
   header
     height: 60px
-    &.top
-      > .header_contents
-        > .right_area
-          > nav
-            > ul.links
-              .input_wrapper
-                display: block
+    > .header_contents
+      > .right_area
+        > nav
+          > ul.links
+            .input_wrapper
+              display: block
     > .sp_toggle_menu
       background-image: none
       display: inline-block
@@ -278,7 +289,7 @@ header
               width: 100vw
               background: #ffffff
               z-index: 1
-              > a.nuxt-link-exact-active
+              > a.active
                 @include blue_underline()
                 padding: 0
                 background-position: center 8px
