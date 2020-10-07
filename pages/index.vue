@@ -14,10 +14,10 @@
         </ul>
         <TextSearch props="index"/>
         <div class="search_example">
-          <p class="search_example_title">検索例:&nbsp;</p>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', page: '1' } }))">PubMed</nuxt-link>
+          <p class="search_example_title">{{ `${$t('example_query')}:&nbsp;` }}</p>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', type: '動画マニュアル', page: '1' } }))">PubMed</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', page: '1' } }))">BLAST</nuxt-link>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
           <span class="comma">,</span>
           <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">NGSのハンズオン講習</nuxt-link>
         </div>

@@ -333,7 +333,7 @@ export default Vue.extend({
       }, 0)
     },
     clearFilter() {
-      this.filters.type = []
+      this.filters.type = ['動画マニュアル']
       this.filters.uploadDate = [0, 4]
       this.filters.tags = []
       this.filters.lang = []
