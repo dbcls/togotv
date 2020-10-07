@@ -83,7 +83,7 @@
         </div>
         <div class="license">
           <h3 class="tsukushi bold">{{ $t('license') }}</h3>
-          <a :href="videoData.license" target="_blank">{{ videoData.license }}</a>
+          <a :href="videoData.license" target="_blank">{{ $t('creativecommons') }}</a>
           <nuxt-link :to="localePath({name: 'faq', hash: '#copyrights' })" class="add_faq_icon"></nuxt-link>
         </div>
       </div>
