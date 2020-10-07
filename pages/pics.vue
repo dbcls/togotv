@@ -213,7 +213,7 @@
           </a>
           <div :class="['description_wrapper', $i18n.locale]">
             <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
-            <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
+            <p v-if="$i18n.locale === 'en'" :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
             <!-- <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
             <nuxt-link
               class="button mont bold"
@@ -1014,37 +1014,39 @@ export default Vue.extend({
           pointer-events: none
           text-align: center
           position: absolute
-          z-index: $LAYER_4
+          z-index: 4
           background-color: $MAIN_COLOR
           border-radius: 9px
-          top: 10px
-          left: -270px
-          width: 238px
+          bottom: -40px
+          left: 0
           color: #fff
-          box-shadow: 0 3px 20px rgba(0, 0, 0, .4)
-          padding: 19px 24px 4px
+          box-shadow: 0 3px 20px rgba(0, 0, 0, 0.4)
+          padding: 2px 11px
           box-sizing: border-box
-          &:after
-            content: ""
-            position: absolute
-            top: 0
-            right: -30px
-            width: 30px
-            height: 100%
-            background: transparent
+          min-width: 140px
+          max-width: 160px
+          // &:after
+          //   content: ""
+          //   position: absolute
+          //   top: 0
+          //   right: -30px
+          //   width: 30px
+          //   height: 100%
+          //   background: transparent
           &:before
             content: ""
             position: absolute
-            top: 22%
-            right: -18px
+            top: -18px
+            left: 50%
+            transform: translateX(-50%)
             border: 10px solid transparent
-            border-left: 10px solid $MAIN_COLOR
-          > p.name_en
+            border-bottom: 10px solid $MAIN_COLOR
+          > p
             font-size: 14px
-            margin: 5px 0 21px
-          > p.name
-            font-size: 20px
-            margin: 0
+            // margin: 5px 0 21px
+          // > p.name
+          //   font-size: 20px
+          //   margin: 0
           > a.button
             @include download_btn
           &.en
