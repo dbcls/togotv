@@ -19,7 +19,7 @@
           <span class="comma">,</span>
           <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">NGSのハンズオン講習</nuxt-link>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
         <!-- <form>
           <input type="text" name="" id="" placeholder="動画を検索">
