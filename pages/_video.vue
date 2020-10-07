@@ -640,7 +640,7 @@ export default Vue.extend({
               font-size: 14px
               line-height: 25px
       > div.original
-        margin-top: 17px
+        margin-top: 30px
         > h3
           margin-bottom: 6px
           &:before
@@ -652,7 +652,7 @@ export default Vue.extend({
           &:hover
             cursor: pointer
       > div.license
-        margin-top: 20px
+        margin-top: 30px
         > h3
           margin-bottom: 6px
           &:before
