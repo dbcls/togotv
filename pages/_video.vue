@@ -648,6 +648,7 @@ export default Vue.extend({
         > p
           color: $MAIN_COLOR
           text-decoration: underline
+          margin: 0
           &:hover
             cursor: pointer
       > div.license
