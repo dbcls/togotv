@@ -270,7 +270,12 @@ export default Vue.extend({
   // },
   head() {
     return {
-      title: "Togo picture gallery"
+      title: "Togo picture gallery",
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: 'Togo picture gallery' },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_img.svg'},
+      ]
     };
   },
   created() {

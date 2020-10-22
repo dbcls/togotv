@@ -136,7 +136,12 @@ import 'vue-slider-component/theme/default.css'
 export default Vue.extend({
   head() {
     return {
-      title: `「${this.$route.query.query}」の検索結果`
+      title: `「${this.$route.query.query}」の検索結果`,
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: `「${this.$route.query.query}」の検索結果` },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_search_color.svg'},
+      ]
     }
   },
   components: {
@@ -517,7 +522,9 @@ export default Vue.extend({
       justify-content: space-between
       min-width: 60vw
       > .page_title
-        @include page_title('barchart')
+        @include page_title('search_color')
+        &:before
+          margin-right: -8px
       > ul.display_icon_wrapper
         display: flex
         margin-top: 55px

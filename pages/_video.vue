@@ -37,7 +37,7 @@
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
         <div class="description" v-html="videoData.description">
         </div>
-        <div class="related_videos">
+        <div class="related_videos related_videos_section">
           <h3 class="tsukushi bold">{{ $t('related_videos') }}</h3>
           <VideoListHorizontalScroll :props="{id: 'related_videos', playList: related_videos, bg: 'white'}"/>
         </div>
@@ -60,6 +60,10 @@
               <nuxt-link :to="localePath({path: 'tag', query: {name: tag}})">{{ tag }}</nuxt-link>
             </li>
           </ul>
+        </div>
+        <div class="related_videos related_videos_section">
+          <h3 class="tsukushi bold">{{ $t('related_videos') }}</h3>
+          <VideoListHorizontalScroll :props="{id: 'related_videos_sp', playList: related_videos, bg: 'white'}"/>
         </div>
         <div class="document" v-if="ajacs_list.length > 0">
           <h3 class="tsukushi bold">
@@ -145,6 +149,7 @@ export default Vue.extend({
     //     }
     //   })
     // }
+    console.log('videoData', videoData)
     return { videoData, course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
   head() {
@@ -153,7 +158,13 @@ export default Vue.extend({
       script: [{
         type: 'application/ld+json',
         innerHTML: JSON.stringify(this.jsonld, null, 2)
-      }]
+      }],
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.videoData.name},
+        { hid: 'og:description', property: 'og:description', content: this.videoData.description },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: this.videoData.thumbnailUrl },
+      ]
     }
   },
   computed: {
@@ -460,20 +471,19 @@ export default Vue.extend({
         font-size: 16px
         line-height: 27px
         margin-top: 16px
-      > .related_videos
-        width: 100%
-        > h3
-          font-size: 18px
-          display: flex
-          align-items: center
-          margin: 28px 0 9px
-          &:before
-            @include icon('relation')
-            width: 27px
-            height: 27px
-            margin-right: 4px
-        .video_list_wrapper
-          margin-left: -$VIEW_PADDING
+    .related_videos
+      > h3
+        font-size: 18px
+        display: flex
+        align-items: center
+        margin: 28px 0 9px
+        &:before
+          @include icon('relation')
+          width: 27px
+          height: 27px
+          margin-right: 4px
+      .video_list_wrapper
+        margin-left: -$VIEW_PADDING
     > .right_section
       padding-top: 4px
       width: 300px
@@ -482,6 +492,8 @@ export default Vue.extend({
       z-index: $LAYER_2
       &.is_in_course
         padding-top: 58px
+      > .related_videos
+        display: none
       > div
         > h3
           font-size: 18px
@@ -658,7 +670,7 @@ export default Vue.extend({
           &:before
             @include icon('cc')
         > a
-          word-break: break-all
+          // word-break: break-all
           &.add_faq_icon
             margin-left: 3px
   .course_section
@@ -740,13 +752,21 @@ export default Vue.extend({
         padding: 2px 0 2px $VIEW_PADDING_SP
     > .video_description_wrapper
       width: calc(100% - #{$VIEW_PADDING_SP} * 2)
+      .related_videos_section
+        margin-top: 30px
+        .related_videos
+          margin-top: 10px
+        .video_list_wrapper
+          margin-left: -$VIEW_PADDING_SP
       > .left_section
-        > .related_videos
-          .video_list_wrapper
-            margin-left: -$VIEW_PADDING_SP
         > .meta_data
           flex-wrap: wrap
           line-height: 24px
+        > .related_videos_section
+          display: none
+      > .right_section
+        > .related_videos_section
+          display: block
     .course_section
       > h3
         margin-left: $VIEW_PADDING_SP

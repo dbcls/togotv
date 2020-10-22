@@ -92,7 +92,12 @@ import axios from "axios"
 export default Vue.extend({
   head() {
     return {
-      title: "アバウト"
+      title: "TogoTVへようこそ！",
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: "TogoTVへようこそ！"},
+        { hid: 'og:description', property: 'og:description', content: this.$t('about_description') },
+        { hid: 'og:url', property: 'og:url', content: location.href }
+      ]
     };
   },
   data() {
@@ -124,9 +129,7 @@ export default Vue.extend({
       }
     },
     convertToHtmlLink(content) {
-
       return content.replace(/\[(.+)\]\((.+)\)/g, '<a href="$2" target="_blank">$1</a>')
-      
     }
   }
 });

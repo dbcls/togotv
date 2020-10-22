@@ -2,8 +2,12 @@
   <div class="video_list_wrapper">
     <ul>
       <li v-for="video in video_info_array" :key="video.embedUrl">
-        <img :src="video.thumbnailUrl" :alt="video.name">
+        <!-- <img :src="video.thumbnailUrl" :alt="video.name"> -->
+        <div class="thumbnail_wrapper">
+          <Thumbnail :props="{size: 'list', thumbnail: video.thumbnailUrl, title: video.name, duration: video.duration}" />
+        </div>
         <nuxt-link :to="localePath({name: 'video', params: {video: video.uploadDate.replace(/-/g, '')}})" class="title tsukushi bold">{{ video.name }}</nuxt-link>
+        <span class="upload_date mont bold">{{ video.uploadDate.replace(/-/g, '.') }}</span>
         <p class="description" v-html="video.description"></p>
         <ul>
           <li v-for="(tag, index) in video.keywords" :key="index">
@@ -17,13 +21,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import Thumbnail from '~/components/Thumbnail.vue'
 
 export default Vue.extend({
   props: {
     video_info_array: {
       required: true
     }
+  },
+  components: {
+    Thumbnail
   }
 })
 </script>
@@ -49,9 +56,21 @@ export default Vue.extend({
         color: $BLACK
         &:hover
           color: $MAIN_COLOR
+      > .upload_date
+        font-size: 12px
+        margin-top: 4px
+        // letter-spacing: 0.8px
+        display: flex
+        align-items: center
+        &:before
+          width: 18px
+          height: 16px
+          margin-right: 2px
+          margin-top: -2px
+          @include icon('calender')
       > p.description
         font-size: 14px
-        margin-top: 6px
+        margin-top: 8px
         margin-bottom: 8px
         line-height: 20px
         font-weight: 500
@@ -65,7 +84,7 @@ export default Vue.extend({
           > a
             @include tag
             margin-right: 9px
-      > img
+      > .thumbnail_wrapper
         width: 176px
         margin-left: 12px
         float: right

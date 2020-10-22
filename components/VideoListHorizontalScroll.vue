@@ -96,7 +96,8 @@ export default Vue.extend({
     &:after
       width: $VIEW_PADDING
       background-color: rgba(235, 247, 249, .67)
-  &.related_videos
+  &.related_videos,
+  &.related_videos_sp
     width: calc(100% + #{$VIEW_PADDING} * 2)
   .video_list
     overflow: hidden
@@ -137,7 +138,8 @@ export default Vue.extend({
     &.right_hide
       &:after
         width: $VIEW_PADDING_SP
-    &.related_videos
+    &.related_videos,
+    &.related_videos_sp
       width: calc(100% + #{$VIEW_PADDING_SP} * 2)
     .video_list
       > .video_list_box

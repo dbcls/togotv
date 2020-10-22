@@ -62,7 +62,12 @@ export default Vue.extend({
       script: [{
         type: 'application/ld+json',
         innerHTML: JSON.stringify(this.jsonld, null, 2)
-      }]
+      }],
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.picture.name},
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${this.picture.png}` },
+      ]
     }
   },
   computed: {
