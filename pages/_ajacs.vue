@@ -54,7 +54,12 @@ export default Vue.extend({
       script: [{
         type: 'application/ld+json',
         innerHTML: JSON.stringify(this.jsonld, null, 2)
-      }]
+      }],
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.ajacs_data.name},
+        { hid: 'og:description', property: 'og:description', content: this.ajacs_data.description },
+        { hid: 'og:url', property: 'og:url', content: location.href }
+      ]
     }
   },
   computed: {

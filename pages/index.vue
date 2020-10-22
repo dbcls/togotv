@@ -63,6 +63,7 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
       axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
     ]);
+    console.log('course_list.data.cources', course_list.data.cources)
     return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
   head() {

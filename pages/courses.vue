@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
 import axios from 'axios'
@@ -31,17 +31,22 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'スキル別コース'
+      title: this.$t('courses'),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.$t('courses') },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_course.svg'},
+      ]
     }
   },
   components: {
     VideoListHorizontalScroll
   },
   methods: {
-    converSecToHour(time: number){
+    converSecToHour(time){
       // const sec: number = (time % 60) % 60;
-      const min: number = Math.floor(time / 60) % 60;
-      const hour: number = Math.floor(time / 3600);
+      const min = Math.floor(time / 60) % 60;
+      const hour = Math.floor(time / 3600);
 
       if(hour === 0) {
         return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
