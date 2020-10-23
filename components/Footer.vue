@@ -41,6 +41,16 @@
               </li>
             </ul>
           </li>
+          <li>
+            <ul class="lang_switch">
+              <li>
+                <a :class="$route.path.indexOf('/en') === -1 ? 'active' : ''" @click="switchLocalePath('ja')">日本語</a><span>/</span>
+              </li>
+              <li>
+                <a :class="$route.path.indexOf('/en') !== -1 ? 'active' : ''" @click="switchLocalePath('en')">English</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -64,14 +74,21 @@
   </footer>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {}
   },
-  computed: {},
-  methods: {}
+  methods: {
+    switchLocalePath(lang) {
+      if(lang === 'ja') {
+        location.href = location.origin + location.pathname.replace('/en', '')
+      } else if (lang === 'en') {
+        location.href = location.origin + '/en' + location.pathname
+      }
+    }
+  }
 })
 </script>
 
@@ -110,6 +127,20 @@ footer
               &:before
                 content: '−'
                 margin-right: 2px
+          > ul.lang_switch
+            display: flex
+            align-items: center
+            > li
+              font-size: 12px
+              font-weight: normal
+              white-space: nowrap
+              &:hover
+                cursor: pointer
+              > a.active
+                color: $MAIN_COLOR
+                font-weight: bold
+              > span
+                margin: 0 5px
   > ul.sns
     display: flex
     justify-content: center

@@ -1,6 +1,6 @@
 <template>
   <div class="ajacs_list_wrapper">
-    <div class="facet_wrapper" v-if="$store.state.display === 'card'">
+    <div class="facet_wrapper">
       <p class="facet_title search tsukushi bold">{{ $t('text_search') }}</p>
       <div class="input_wrapper">
         <input
@@ -88,7 +88,12 @@ import 'vue-slider-component/theme/default.css'
 export default Vue.extend({
   head() {
     return {
-      title: "講習会資料を探す"
+      title: this.$t('text_search'),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.$t('text_search') },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_file.svg'},
+      ]
     };
   },
   components: {

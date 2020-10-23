@@ -4,7 +4,10 @@
     <div class="content_wrapper">
       <p v-html="$t('picture_liscense_text')"></p>
     </div>
-    <div class="btn_wrapper">
+    <div v-if="props.selected_video" class="btn_wrapper">
+      <a class="button mont bold" :href="props.selected_video" download>{{ props.selected_video.split('/').pop() }}</a>
+    </div>
+    <div v-else class="btn_wrapper">
       <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
       <a class="button mont bold" v-if="extension_exist.png" target="_blank" @click="controlDownload('png')">png</a>
       <a class="button mont bold" v-if="extension_exist.svg" target="_blank" @click="controlDownload('svg')">svg</a>
@@ -33,7 +36,7 @@ export default Vue.extend({
           this.extension_exist[extension] = true
         }
       })
-    } else {
+    } else if (!this.props.selected_video) {
       this.props.selected_pics.forEach(selected_pic => {
         Object.keys(this.extension_exist).forEach(extension => {
           if(selected_pic[extension] !== undefined && selected_pic[extension] !== "-") {

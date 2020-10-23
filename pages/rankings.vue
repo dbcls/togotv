@@ -38,7 +38,6 @@ export default Vue.extend({
     let year_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/year`)
     let month_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/month`)
     let weekly_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
-
     return {
       year_data: year_data.data,
       month_data: month_data.data,
@@ -47,7 +46,12 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: '視聴ランキング'
+      title: this.$t('ranking'),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.$t('ranking') },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_barchart.svg'},
+      ]
     }
   },
   data () {

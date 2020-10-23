@@ -3,7 +3,7 @@
     <div class="facet_wrapper">
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
-      <div class="facet_small_section">
+      <!-- <div class="facet_small_section">
         <p class="facet_small_title video tsukushi bold">
           {{ $t('program_type') }}
           <span
@@ -33,7 +33,7 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
       <div class="facet_small_section">
         <p class="facet_small_title calender tsukushi bold">
           {{ $t('publish_date') }}
@@ -111,10 +111,15 @@
           </li>
         </ul>
       </div>
+      <ul class="span_tab_wrapper">
+        <li @click="switchTypeTab('動画マニュアル')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '動画マニュアル' ? 'active' : '']">{{ $t('video_manual') }}</li>
+        <li @click="switchTypeTab('講演')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '講演' ? 'active' : '']">{{ $t('ajacs_lecture') }}</li>
+        <li @click="switchTypeTab('実習')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '実習' ? 'active' : '']">{{ $t('hands_on') }}</li>
+      </ul>
       <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
       <VideoList v-if="$store.state.display === 'list' && !is_loading" :video_info_array="result_list"/>
       <div v-if="is_loading" class="loader">Loading...</div>
-      <Pagination ref="pagination" :props="{lastpage: lastpage}" @fetchData="fetchData" />
+      <Pagination ref="pagination" :props="{lastpage: lastpage, is_null: result_list.length === 0}" @fetchData="fetchData" />
     </div>
   </div>
 </template>
@@ -131,7 +136,12 @@ import 'vue-slider-component/theme/default.css'
 export default Vue.extend({
   head() {
     return {
-      title: `「${this.$route.query.query}」の検索結果`
+      title: `「${this.$route.query.query}」の検索結果`,
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: `「${this.$route.query.query}」の検索結果` },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_search_color.svg'},
+      ]
     }
   },
   components: {
@@ -308,6 +318,10 @@ export default Vue.extend({
       })
   },
   methods: {
+    switchTypeTab(type) {
+      this.filters.type = []
+      this.filters.type.push(type)
+    },
     toggleDisplay() {
       this.$store.commit('toggleDisplay')
     },
@@ -324,7 +338,7 @@ export default Vue.extend({
       }, 0)
     },
     clearFilter() {
-      this.filters.type = []
+      this.filters.type = ['動画マニュアル']
       this.filters.uploadDate = [0, 4]
       this.filters.tags = []
       this.filters.lang = []
@@ -508,7 +522,9 @@ export default Vue.extend({
       justify-content: space-between
       min-width: 60vw
       > .page_title
-        @include page_title('barchart')
+        @include page_title('search_color')
+        &:before
+          margin-right: -8px
       > ul.display_icon_wrapper
         display: flex
         margin-top: 55px
@@ -518,6 +534,18 @@ export default Vue.extend({
             width: 27px
             &:hover
               cursor: pointer
+    > .span_tab_wrapper
+      display: flex
+      margin-bottom: 8px
+      > .span_tab
+        font-size: 18px
+        margin-right: 40px
+        padding: 0 10px 22px
+        &:hover
+          cursor: pointer
+        &.active
+          @include blue_underline
+          background-position: 10px 26px
     > .loader
       @include loader
 
