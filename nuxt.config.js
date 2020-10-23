@@ -3,7 +3,7 @@ import ja from "./static/json/ja.json"
 import en from "./static/json/en.json"
 
 export default {
-  mode: "universal",
+  mode: "spa",
   /*
    ** Headers of the page
    */
