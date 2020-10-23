@@ -39,7 +39,12 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: '新着動画'
+      title: this.$t("new_videos"),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.$t("new_videos") },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_new.svg'},
+      ]
     }
   },
   mounted() {

@@ -12,7 +12,12 @@ import Vue from 'vue'
 export default Vue.extend({
   head() {
     return {
-      title: this.$t('request')
+      title: this.$t('request'),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: this.$t('request') },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_video.svg'},
+      ]
     }
   }
 })

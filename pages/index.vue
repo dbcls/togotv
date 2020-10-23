@@ -14,12 +14,12 @@
         </ul>
         <TextSearch props="index"/>
         <div class="search_example">
-          <p class="search_example_title">検索例:&nbsp;</p>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', page: '1' } }))">PubMed</nuxt-link>
+          <p class="search_example_title">{{ `${$t('example_query')}:&nbsp;` }}</p>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', type: '動画マニュアル', page: '1' } }))">PubMed</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', page: '1' } }))">BLAST</nuxt-link>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">NGSのハンズオン講習</nuxt-link>
+          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
         <!-- <form>
           <input type="text" name="" id="" placeholder="動画を検索">
@@ -63,6 +63,7 @@ export default Vue.extend({
       axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
       axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
     ]);
+    console.log('course_list.data.cources', course_list.data.cources)
     return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
   head() {

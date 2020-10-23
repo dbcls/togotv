@@ -213,12 +213,12 @@
           </a>
           <div :class="['description_wrapper', $i18n.locale]">
             <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
-            <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
-            <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
+            <p v-if="$i18n.locale === 'en'" :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
+            <!-- <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
             <nuxt-link
               class="button mont bold"
               :to="localePath({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
-            >{{ $t('detail') }}</nuxt-link>
+            >{{ $t('detail') }}</nuxt-link> -->
           </div>
         </li>
       </ul>
@@ -270,7 +270,12 @@ export default Vue.extend({
   // },
   head() {
     return {
-      title: "Togo picture gallery"
+      title: "Togo picture gallery",
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: 'Togo picture gallery' },
+        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_img.svg'},
+      ]
     };
   },
   created() {
@@ -1011,31 +1016,42 @@ export default Vue.extend({
               filter: drop-shadow(15px 8px 0px rgba(253, 211, 101, .8))
         > .description_wrapper
           display: none
+          pointer-events: none
           text-align: center
           position: absolute
-          z-index: $LAYER_4
+          z-index: 4
           background-color: $MAIN_COLOR
           border-radius: 9px
-          top: 10px
-          left: 158px
-          width: 238px
+          bottom: -40px
+          left: 0
           color: #fff
-          box-shadow: 0 3px 20px rgba(0, 0, 0, .4)
-          padding: 19px 24px 28px
+          box-shadow: 0 3px 20px rgba(0, 0, 0, 0.4)
+          padding: 2px 11px
           box-sizing: border-box
+          min-width: 140px
+          max-width: 160px
+          // &:after
+          //   content: ""
+          //   position: absolute
+          //   top: 0
+          //   right: -30px
+          //   width: 30px
+          //   height: 100%
+          //   background: transparent
           &:before
             content: ""
             position: absolute
-            top: 22%
-            left: -18px
+            top: -18px
+            left: 50%
+            transform: translateX(-50%)
             border: 10px solid transparent
-            border-right: 10px solid $MAIN_COLOR
-          > p.name_en
+            border-bottom: 10px solid $MAIN_COLOR
+          > p
             font-size: 14px
-            margin: 0 0 21px
-          > p.name
-            font-size: 20px
-            margin: 0
+            // margin: 5px 0 21px
+          // > p.name
+          //   font-size: 20px
+          //   margin: 0
           > a.button
             @include download_btn
           &.en

@@ -8,15 +8,17 @@ export default {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      prefix: 'og: http://ogp.me/ns#'
+    },
     titleTemplate: "%s | 統合TV",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        hid: "description",
-        name: "description",
-        content: process.env.npm_package_description || "",
+        hid: "description", name: "description", content: process.env.npm_package_description || "",
       },
+      { name: 'twitter:card', content: 'summary' }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "favicon.ico" }],
   },

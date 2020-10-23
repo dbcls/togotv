@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header @toggleMenu="toggleMenu"/>
-    <nuxt />
+    <Header @toggleMenu="toggleMenu" ref="header"/>
+    <nuxt ref="content"/>
     <Footer />
   </div>
 </template>
@@ -32,6 +32,8 @@ export default Vue.extend({
         }
       ]
     }
+  },
+  created() {
   },
   mounted() {
     const language = (window.navigator.languages && window.navigator.languages[0]) ||
