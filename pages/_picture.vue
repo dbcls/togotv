@@ -49,8 +49,8 @@ export default Vue.extend({
   async asyncData ( { params, error, payload } ) {
     console.log(payload)
     if(payload) return { picture: payload }
-    let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&id=${params.picture}`)
-    let tag_data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
+    let data = await axios.get(`http://54.95.237.130/api/search?target=pictures&id=${params.picture}`)
+    let tag_data = await axios.get(`http://54.95.237.130/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
     return {
       picture: data.data.data[0],
       tag_data: tag_data.data.data
@@ -111,7 +111,6 @@ export default Vue.extend({
   },
   methods: {
     setDonwnloadLink(pic) {
-      console.log('pic', pic)
       this.selected_pic = pic;
       this.is_modal_on = true;
     }

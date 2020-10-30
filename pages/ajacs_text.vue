@@ -131,7 +131,7 @@ export default Vue.extend({
       this.fetchData()
     }
     axios
-      .get(`http://togotv-api.bhx.jp/api/facets/keywords?target=ajacs-training`)
+      .get(`http://54.95.237.130/api/facets/keywords?target=ajacs-training`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -262,7 +262,7 @@ export default Vue.extend({
         this.is_loading = true
         axios
           .get(
-            `http://togotv-api.bhx.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
+            `http://54.95.237.130/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
           )
           .then(data => {
             this.ajacs_list = data.data.data
@@ -287,7 +287,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("http://togotv-api.bhx.jp/api/bool_search?target=ajacs-training", {
+        .get("http://54.95.237.130/api/bool_search?target=ajacs-training", {
           params: query
         })
         .then(data => {
@@ -314,7 +314,7 @@ export default Vue.extend({
         // this.clearFilter();
         // axios
         //   .get(
-        //     `http://togotv-api.bhx.jp/api/search?target=ajacs-training&text=${this.keyword}`
+        //     `http://54.95.237.130/api/search?target=ajacs-training&text=${this.keyword}`
         //   )
         //   .then(data => {
         //     this.ajacs = data.data.data;

@@ -59,12 +59,16 @@ import axios from 'axios'
 export default Vue.extend({
   async asyncData() {
     const [course_list, new_video_list, realtime_video_list] = await Promise.all([
-      axios.get(`http://togotv-api.bhx.jp/api/skillset`),
-      axios.get(`http://togotv-api.bhx.jp/api/entries?rows=20`),
-      axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
+      axios.get(`http://54.95.237.130/api/skillset`),
+      axios.get(`http://54.95.237.130/api/entries?rows=20`),
+      axios.get(`http://54.95.237.130/api/yt_view/weekly`)
     ]);
-    console.log('course_list.data.cources', course_list.data.cources)
     return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
+  },
+  created() {
+    if(location.pathname.indexOf('html') === -1) {
+      this.$router.push('/index.html')
+    }
   },
   head() {
     return {

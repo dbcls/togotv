@@ -34,7 +34,7 @@ export default Vue.extend({
   },
   mounted() {
     axios
-      .get(`http://togotv-api.bhx.jp/api/skillset`)
+      .get(`http://54.95.237.130/api/skillset`)
       .then(data => {
         this.course_list = data.data.cources
       })
@@ -43,7 +43,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`http://togotv-api.bhx.jp/api/facets/keywords`)
+      .get(`http://54.95.237.130/api/facets/keywords`)
       .then(data => {
         this.tag_list = data.data.facets
       })

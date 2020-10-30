@@ -74,7 +74,7 @@ export default {
     async routes() {
       let generates = [];
       await axios
-        .get(`http://togotv-api.bhx.jp/api/entries?rows=10000`)
+        .get(`http://54.95.237.130/api/entries?rows=10000`)
         .then((data) => {
           data.data.data.forEach((entry) => {
             generates.push({
@@ -88,7 +88,7 @@ export default {
         });
 
       await axios
-        .get(`http://togotv-api.bhx.jp/api/entries?target=pictures&rows=10000`)
+        .get(`http://54.95.237.130/api/entries?target=pictures&rows=10000`)
         .then((data) => {
           data.data.data.forEach((pic) => {
             generates.push({
@@ -103,7 +103,7 @@ export default {
 
       await axios
         .get(
-          `http://togotv-api.bhx.jp/api/entries?target=ajacs-training&rows=10000`
+          `http://54.95.237.130/api/entries?target=ajacs-training&rows=10000`
         )
         .then((data) => {
           data.data.data.forEach((ajacs) => {

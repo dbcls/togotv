@@ -34,7 +34,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import AsideParts from '~/components/AsideParts.vue'
-
 export default Vue.extend({
   key: route => route.fullPath,
   async asyncData ( { params, error, payload } ) {
@@ -43,7 +42,7 @@ export default Vue.extend({
     let id = params.ajacs
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
-    let data = await axios.get(`http://togotv-api.bhx.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+    let data = await axios.get(`http://54.95.237.130/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
     return {
       ajacs_data: data.data.data[0],
     }
