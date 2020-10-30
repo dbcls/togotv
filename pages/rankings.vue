@@ -35,9 +35,9 @@ import axios from 'axios'
 
 export default Vue.extend({
   async asyncData ( ) {
-    let year_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/year`)
-    let month_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/month`)
-    let weekly_data = await axios.get(`http://togotv-api.bhx.jp/api/yt_view/weekly`)
+    let year_data = await axios.get(`http://54.95.237.130/api/yt_view/year`)
+    let month_data = await axios.get(`http://54.95.237.130/api/yt_view/month`)
+    let weekly_data = await axios.get(`http://54.95.237.130/api/yt_view/weekly`)
     return {
       year_data: year_data.data,
       month_data: month_data.data,

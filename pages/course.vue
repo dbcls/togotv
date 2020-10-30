@@ -24,7 +24,7 @@ import axios from 'axios'
 
 export default Vue.extend({
   async asyncData ( params ) {
-    const { data } = await axios.get(`http://togotv-api.bhx.jp/api/skillset`)
+    const { data } = await axios.get(`http://54.95.237.130/api/skillset`)
     let return_course = []
     data.cources.forEach(course => {
       if(course.id === params.query.id) {
