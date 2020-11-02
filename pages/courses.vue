@@ -26,7 +26,7 @@ import axios from 'axios'
 
 export default Vue.extend({
   async asyncData ( params ) {
-    const { data } = await axios.get(`http://54.95.237.130/api/skillset`)
+    const { data } = await axios.get(`https://togotv-api.dbcls.jp/api/skillset`)
     return { courses: data.cources}
   },
   head() {
