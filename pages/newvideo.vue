@@ -63,9 +63,9 @@ export default Vue.extend({
     fetchData(page, is_initial) {
       let url = ''
       if(this.$i18n.locale === 'ja') {
-        url = `http://54.95.237.130/api/entries?from=${page}&rows=21`
+        url = `https://togotv-api.dbcls.jp/api/entries?from=${page}&rows=21`
       } else if (this.$i18n.locale === 'en') {
-        url = `http://54.95.237.130/api/bool_search?lang=en&from=${page}&rows=21`
+        url = `https://togotv-api.dbcls.jp/api/bool_search?lang=en&from=${page}&rows=21`
       }
 
       axios.get(url).then(data => {

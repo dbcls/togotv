@@ -264,7 +264,7 @@ import axios from "axios";
 export default Vue.extend({
   // async asyncData(params) {
   //   const { data } = await axios.get(
-  //     `http://54.95.237.130/api/entries?target=pictures&from=1&rows=40`
+  //     `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=40`
   //   )
   //   return { pictures: data.data }
   // },
@@ -281,7 +281,7 @@ export default Vue.extend({
   created() {
     Object.keys(this.facets).forEach(key => {
       axios
-        .get(`http://54.95.237.130/api/facets/${key}?target=pictures`)
+        .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
             return facet.key !== "";
@@ -376,7 +376,7 @@ export default Vue.extend({
             param["target"] = "pictures";
             param["rows"] = 1000;
             axios
-              .get("http://54.95.237.130/api/bool_search", {
+              .get("https://togotv-api.dbcls.jp/api/bool_search", {
                 params: param
               })
               .then(data => {
@@ -429,7 +429,7 @@ export default Vue.extend({
         if (!target_element_children.hasChildNodes()) {
           axios
             .get(
-              `http://54.95.237.130/api/search?target=pictures&other_tags=${tag}`
+              `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
             )
             .then(data => {
               let children_list = "";
@@ -620,7 +620,7 @@ export default Vue.extend({
       if (!this.is_filter_on) {
         axios
           .get(
-            `http://54.95.237.130/api/entries?target=pictures&from=${this.current_page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
             this.pictures = this.pictures.concat(data.data.data);
@@ -654,7 +654,7 @@ export default Vue.extend({
         this.clearFilter();
         axios
           .get(
-            `http://54.95.237.130/api/search?target=pictures&text=${this.keyword}`
+            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
           )
           .then(data => {
             this.pictures = data.data.data;
