@@ -309,7 +309,7 @@ export default Vue.extend({
     }
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
+      .get(`//togotv-api.dbcls.jp/api/facets/keywords`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -329,7 +329,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.is_loading = true
         if ( !this.is_filter_on ) {
-          axios.get(`https://togotv-api.dbcls.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
+          axios.get(`//togotv-api.dbcls.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
             this.lastpage = data.data.last_page
             this.result_list = data.data.data
             this.is_loading = false
@@ -354,7 +354,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("https://togotv-api.dbcls.jp/api/bool_search", {
+        .get("//togotv-api.dbcls.jp/api/bool_search", {
           params: query
         })
         .then(data => {

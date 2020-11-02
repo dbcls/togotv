@@ -42,7 +42,7 @@ export default Vue.extend({
     let id = params.ajacs
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
-    let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+    let data = await axios.get(`//togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
     return {
       ajacs_data: data.data.data[0],
     }

@@ -59,9 +59,9 @@ import axios from 'axios'
 export default Vue.extend({
   async asyncData() {
     const [course_list, new_video_list, realtime_video_list] = await Promise.all([
-      axios.get(`https://togotv-api.dbcls.jp/api/skillset`),
-      axios.get(`https://togotv-api.dbcls.jp/api/entries?rows=20`),
-      axios.get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      axios.get(`//togotv-api.dbcls.jp/api/skillset`),
+      axios.get(`//togotv-api.dbcls.jp/api/entries?rows=20`),
+      axios.get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
     ]);
     return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
