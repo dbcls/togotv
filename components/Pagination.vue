@@ -91,10 +91,10 @@ export default Vue.extend({
       this.changeCurrentPageRange();
     },
     fetchData(page) {
-      if (this.$route.name.indexOf('result') !== -1) {
+      if (this.$route.path.indexOf('result') !== -1) {
         this.changeCurrentPage(page);
         this.$router.push(this.localePath({ name: 'result', query: {...this.$route.query, page: page }}))
-      } else if (this.$route.name.indexOf('ajacs') !== -1) {
+      } else if (this.$route.path.indexOf('ajacs') !== -1) {
         this.changeCurrentPage(page);
         this.$router.push(this.localePath({ name: 'ajacs_text', query: {...this.$route.query, page: page }}))
       } else {

@@ -38,7 +38,7 @@ import axios from "axios";
 
 export default Vue.extend({
   created() {
-    axios.get(`//togotv-api.dbcls.jp/api/skillset`).then(data => {
+    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
       this.courses = data.data.cources;
     });
   },

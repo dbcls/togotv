@@ -24,7 +24,7 @@ import axios from 'axios'
 
 export default Vue.extend({
   created() {
-    axios.get(`//togotv-api.dbcls.jp/api/skillset`).then(data => {
+    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
       let return_course = []
       data.data.cources.forEach(course => {
         if(course.id === this.$route.query.id) {

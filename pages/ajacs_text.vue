@@ -19,9 +19,9 @@
           {{ $t('publish_date') }}
           <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
         </p>
-        <no-ssr placeholder="Loading...">
+        <client-only placeholder="Loading...">
           <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
-        </no-ssr>
+        </client-only>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">
@@ -63,7 +63,7 @@
               v-for="(ajacs, index) in ajacs_list"
               :key="index"
             >
-              <td class="title" @click="moveDetailPage({name: 'ajacs', params: { ajacs: ajacs.id.split('/').pop().replace(/\./g, '') }})">{{ ajacs.name }}</td>
+              <td class="title" @click="moveDetailPage(`/${ajacs.id.split('/').pop().replace(/\./g, '')}.html`)">{{ ajacs.name }}</td>
               <td class="author">{{ ajacs.author }}</td>
               <td class="date">{{ ajacs.uploadDate }}</td>
               <td class="AJACS_jp">{{ ajacs.AJACS_jp }}</td>
@@ -101,7 +101,7 @@ export default Vue.extend({
   },
   mounted() {
     if(this.$route.query.page === undefined) {
-      this.$router.push(this.localePath({ name: 'ajacs_text', query: { page: 1 } }))
+      this.$router.push(this.localePath('/ajacs_text.html?page=1'))
     }
     if (
         this.$route.query.uploadDate !== undefined ||
@@ -130,7 +130,7 @@ export default Vue.extend({
       this.fetchData()
     }
     axios
-      .get(`//togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
+      .get(`https://togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -186,7 +186,7 @@ export default Vue.extend({
       handler: function(val) {
         setTimeout(() => {
           if (!this.is_filter_on) {
-            this.$router.push(this.localePath({ name: 'ajacs_text', query: { page: 1 } }))
+            this.$router.push(this.localePath('/ajacs_text.html?page=1'))
             this.$refs.pagination.changeCurrentPage(1)
           } else {
             let param = Object.assign({}, this.filters);
@@ -224,7 +224,12 @@ export default Vue.extend({
             });
             param["page"] =  1;
             this.$refs.pagination.changeCurrentPage(1)
-            this.$router.push(this.localePath({ name: 'ajacs_text', query: param }))
+            let param_text = ''
+            Object.keys(param).forEach((key, index) => {
+              if(index !== 0) param_text += '&'
+              param_text += `${key}=${param[key]}`
+            })
+            this.$router.push(this.localePath(`/ajacs_text.html?${param_text}`))
           }
         }, 0);
       },
@@ -261,7 +266,7 @@ export default Vue.extend({
         this.is_loading = true
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
           )
           .then(data => {
             this.ajacs_list = data.data.data
@@ -286,7 +291,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("//togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
+        .get("https://togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
           params: query
         })
         .then(data => {
@@ -313,7 +318,7 @@ export default Vue.extend({
         // this.clearFilter();
         // axios
         //   .get(
-        //     `//togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
+        //     `https://togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
         //   )
         //   .then(data => {
         //     this.ajacs = data.data.data;

@@ -1,11 +1,11 @@
 <template>
   <aside class="aside_wrapper">
     <section class="course_wrapper">
-      <p class="section_title tsukushi bold"><nuxt-link :to="localePath({ name: 'courses' })">{{ $t("search_for_courses") }}</nuxt-link></p>
+      <p class="section_title tsukushi bold"><nuxt-link :to="localePath('/courses.html')">{{ $t("search_for_courses") }}</nuxt-link></p>
       <ul>
         <li v-for="course in course_list" :key="course.id">
           <span>
-            <nuxt-link class="tsukushi" :to="localePath({name: 'course', query: {id: course.id}})">{{ course.title }}</nuxt-link>
+            <nuxt-link class="tsukushi" :to="localePath(`/course.html?id=${course.id}`)">{{ course.title }}</nuxt-link>
           </span>
         </li>
       </ul>
@@ -34,7 +34,7 @@ export default Vue.extend({
   },
   mounted() {
     axios
-      .get(`//togotv-api.dbcls.jp/api/skillset`)
+      .get(`https://togotv-api.dbcls.jp/api/skillset`)
       .then(data => {
         this.course_list = data.data.cources
       })
@@ -43,7 +43,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`//togotv-api.dbcls.jp/api/facets/keywords`)
+      .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
       .then(data => {
         this.tag_list = data.data.facets
       })

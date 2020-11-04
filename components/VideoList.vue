@@ -6,12 +6,12 @@
         <div class="thumbnail_wrapper">
           <Thumbnail :props="{size: 'list', thumbnail: video.thumbnailUrl, title: video.name, duration: video.duration}" />
         </div>
-        <nuxt-link :to="localePath({name: 'video', params: {video: video.uploadDate.replace(/-/g, '')}})" class="title tsukushi bold">{{ video.name }}</nuxt-link>
+        <nuxt-link :to="localePath(`/${video.uploadDate.replace(/-/g, '')}.html`)" class="title tsukushi bold">{{ video.name }}</nuxt-link>
         <span class="upload_date mont bold">{{ video.uploadDate.replace(/-/g, '.') }}</span>
         <p class="description" v-html="video.description"></p>
         <ul>
           <li v-for="(tag, index) in video.keywords" :key="index">
-            <nuxt-link :to="localePath({name: 'tag', query: {name: tag}})">{{ tag }}</nuxt-link>
+            <nuxt-link :to="localePath(`/tag.html?name=${tag}`)">{{ tag }}</nuxt-link>
           </li>
         </ul>
       </li>

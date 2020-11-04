@@ -24,7 +24,7 @@
       <p class="related_title tsukushi bold">{{ $t('related_pictures') }}</p>
       <ul class="related_images">
         <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
-          <nuxt-link :to="localePath({name: 'picture', params: {picture: data.id.split('/').pop()}})">
+          <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
             <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
           </nuxt-link>
         </li>
@@ -48,7 +48,7 @@ export default Vue.extend({
   key: route => route.fullPath,
   created() {
     axios
-      .get(`//togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
+      .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
       .then(data => {
         this.picture = data.data.data[0]
         this.fetchRelatedPics(this.picture.other_tag1)
@@ -119,7 +119,7 @@ export default Vue.extend({
     },
     fetchRelatedPics(tag) {
       axios
-        .get(`//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
+        .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
         .then(data => {
           this.tag_data = data.data.data
         })
