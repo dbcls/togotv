@@ -130,8 +130,6 @@ import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
 import Pagination from '~/components/Pagination.vue'
 import axios from 'axios'
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
   head() {
@@ -147,8 +145,7 @@ export default Vue.extend({
   components: {
     VideoListCard,
     VideoList,
-    Pagination,
-    VueSlider
+    Pagination
   },
   data () {
     return {
