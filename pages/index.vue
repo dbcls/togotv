@@ -55,7 +55,7 @@ import axios from 'axios'
 export default Vue.extend({
   created() {
     axios
-      .get(`https://togotv-api.dbcls.jp/api/skillset`)
+      .get(`//togotv-api.dbcls.jp/api/skillset`)
       .then(data => {
         this.course_list = data.data.cources
       })
@@ -64,7 +64,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
+      .get(`//togotv-api.dbcls.jp/api/entries?rows=20`)
       .then(data => {
         this.new_video_list = data.data.data
       })
@@ -73,7 +73,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
       .then(data => {
         this.realtime_video_list = data.data
       })

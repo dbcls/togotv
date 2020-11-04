@@ -48,7 +48,7 @@ export default Vue.extend({
   key: route => route.fullPath,
   created() {
     axios
-      .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
+      .get(`//togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
       .then(data => {
         this.picture = data.data.data[0]
         this.fetchRelatedPics(this.picture.other_tag1)
@@ -119,7 +119,7 @@ export default Vue.extend({
     },
     fetchRelatedPics(tag) {
       axios
-        .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
+        .get(`//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
         .then(data => {
           this.tag_data = data.data.data
         })

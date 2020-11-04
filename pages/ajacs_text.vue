@@ -130,7 +130,7 @@ export default Vue.extend({
       this.fetchData()
     }
     axios
-      .get(`https://togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
+      .get(`//togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -261,7 +261,7 @@ export default Vue.extend({
         this.is_loading = true
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
+            `//togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
           )
           .then(data => {
             this.ajacs_list = data.data.data
@@ -286,7 +286,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("https://togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
+        .get("//togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
           params: query
         })
         .then(data => {
@@ -313,7 +313,7 @@ export default Vue.extend({
         // this.clearFilter();
         // axios
         //   .get(
-        //     `https://togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
+        //     `//togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
         //   )
         //   .then(data => {
         //     this.ajacs = data.data.data;

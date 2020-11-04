@@ -36,7 +36,7 @@ import axios from 'axios'
 export default Vue.extend({
   created() {
     axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/year`)
+      .get(`//togotv-api.dbcls.jp/api/yt_view/year`)
       .then(data => {
         this.year_data = data.data
       })
@@ -45,7 +45,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/month`)
+      .get(`//togotv-api.dbcls.jp/api/yt_view/month`)
       .then(data => {
         this.month_data = data.data
       })
@@ -54,7 +54,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
       .then(data => {
         this.weekly_data = data.data
       })
