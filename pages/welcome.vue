@@ -96,7 +96,7 @@ export default Vue.extend({
       meta: [
         { hid: 'og:title', property: 'og:title', content: "TogoTVへようこそ！"},
         { hid: 'og:description', property: 'og:description', content: this.$t('about_description') },
-        { hid: 'og:url', property: 'og:url', content: location.href }
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' }
       ]
     };
   },

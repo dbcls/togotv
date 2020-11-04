@@ -2,7 +2,7 @@
   <div class="courses_wrapper">
     <h2 class="page_title tsukushi bold">
       <span class="course_title">{{ course.title }}</span>
-      <span class="total_time" v-html="converSecToHour(course.total_time)"></span>
+      <span class="total_time" v-if="course.total_time" v-html="converSecToHour(course.total_time)"></span>
     </h2>
     <div class="content_wrapper">
       <p>{{ course.description }}</p>
@@ -23,15 +23,21 @@ import SingleVideoCard from '~/components/SingleVideoCard.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData ( params ) {
-    const { data } = await axios.get(`//togotv-api.dbcls.jp/api/skillset`)
-    let return_course = []
-    data.cources.forEach(course => {
-      if(course.id === params.query.id) {
-        return_course = course
-      }
+  created() {
+    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
+      let return_course = []
+      data.data.cources.forEach(course => {
+        if(course.id === this.$route.query.id) {
+          return_course = course
+        }
+      })
+      this.course = return_course
     })
-    return { course:  return_course}
+  },
+  data() {
+    return {
+      course: {}
+    }
   },
   head() {
     return {

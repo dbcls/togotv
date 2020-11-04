@@ -46,15 +46,16 @@ import DownloadModal from "~/components/DownloadModal.vue";
 
 export default Vue.extend({
   key: route => route.fullPath,
-  async asyncData ( { params, error, payload } ) {
-    console.log(payload)
-    if(payload) return { picture: payload }
-    let data = await axios.get(`//togotv-api.dbcls.jp/api/search?target=pictures&id=${params.picture}`)
-    let tag_data = await axios.get(`//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${data.data.data[0].other_tag1}`)
-    return {
-      picture: data.data.data[0],
-      tag_data: tag_data.data.data
-    }
+  created() {
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
+      .then(data => {
+        this.picture = data.data.data[0]
+        this.fetchRelatedPics(this.picture.other_tag1)
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   head() {
     return {
@@ -65,7 +66,7 @@ export default Vue.extend({
       }],
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.picture.name},
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${this.picture.png}` },
       ]
     }
@@ -77,7 +78,7 @@ export default Vue.extend({
         "@type": "Dataset",
         "name": this.picture.name,
         "description": `${this.picture.name} ${this.picture.name_en} ${this.picture.other_tags}`,
-        "url": location.href,
+        "url": process.client ? location.href : '',
         "identifier": this.picture.id,
         "keywords": this.picture.other_tags,
         "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -106,13 +107,25 @@ export default Vue.extend({
   data () {
     return {
       is_modal_on: false,
-      selected_pic: {}
+      selected_pic: {},
+      picture: {},
+      tag_data: []
     }
   },
   methods: {
     setDonwnloadLink(pic) {
       this.selected_pic = pic;
       this.is_modal_on = true;
+    },
+    fetchRelatedPics(tag) {
+      axios
+        .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
+        .then(data => {
+          this.tag_data = data.data.data
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
     }
   }
 })

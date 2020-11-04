@@ -55,7 +55,7 @@ export default Vue.extend({
       title: this.$t('staff'),
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$t('staff') },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_people.svg'},
       ]
     }

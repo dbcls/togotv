@@ -3,7 +3,7 @@ import ja from "./static/json/ja.json"
 import en from "./static/json/en.json"
 
 export default {
-  mode: "spa",
+  mode: "universal",
   /*
    ** Headers of the page
    */
@@ -33,7 +33,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: "~/plugins/infiniteloading", ssr: false }],
+  plugins: [
+    { src: "~/plugins/infiniteloading", ssr: true },
+    { src: "~/plugins/vue-slider-component.js", ssr: false }
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -74,7 +77,7 @@ export default {
     async routes() {
       let generates = [];
       await axios
-        .get(`//togotv-api.dbcls.jp/api/entries?rows=10000`)
+        .get(`https://togotv-api.dbcls.jp/api/entries?rows=10000`)
         .then((data) => {
           data.data.data.forEach((entry) => {
             generates.push({
@@ -88,7 +91,7 @@ export default {
         });
 
       await axios
-        .get(`//togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`)
+        .get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`)
         .then((data) => {
           data.data.data.forEach((pic) => {
             generates.push({
@@ -103,7 +106,7 @@ export default {
 
       await axios
         .get(
-          `//togotv-api.dbcls.jp/api/entries?target=ajacs-training&rows=10000`
+          `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&rows=10000`
         )
         .then((data) => {
           data.data.data.forEach((ajacs) => {
@@ -119,7 +122,6 @@ export default {
         .catch((error) => {
           console.log("error", error);
         });
-      console.log(generates);
       return generates;
     },
     subFolders: false,
