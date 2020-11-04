@@ -1,5 +1,5 @@
 <template>
-  <header :class="[this.$route.name ? this.$route.name.replace('___ja', '').replace('___en', '') : '', is_sp_menu_on ? '' : 'close', this.$route.path.match(/\/\d+/) ? 'video' : '', checkIfTop($route.path)]">
+  <header :class="[this.$route.path.split('/').pop().replace('/', '').replace('\.html', ''), is_sp_menu_on ? '' : 'close', this.$route.path.match(/\/\d+/) ? 'video' : '', checkIfTop($route.path)]">
     <span :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']" @click="toggleMenu()"></span>
     <div class="header_contents">
       <h1>
@@ -11,24 +11,24 @@
         <nav>
           <ul class="links">
             <li class="link home"><nuxt-link :to="localePath('/')">{{ $t('top') }}</nuxt-link></li>
-            <li class="link about"><nuxt-link :to="localePath('/welcome')">{{ $t('about') }}</nuxt-link></li>
+            <li class="link about"><nuxt-link :to="localePath('/welcome.html')">{{ $t('about') }}</nuxt-link></li>
             <li :class="['link', 'circlevideo', 'has_child_nav', $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '']" @click="toggleChildMenu('search_videos')">{{ $t('search_videos') }}<span class="arrow"></span>
               <ul :class="['child_nav', $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '']">
-                <li @click="$event.stopPropagation()" class="link course"><nuxt-link :to="localePath('/courses')">{{ $t('courses') }}</nuxt-link></li>
-                <li @click="$event.stopPropagation()" class="link new"><nuxt-link :to="localePath('/newvideo')">{{ $t('new_videos') }}</nuxt-link></li>
-                <li @click="$event.stopPropagation()" class="link barchart"><nuxt-link :to="localePath('/rankings')">{{ $t('ranking') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link course"><nuxt-link :to="localePath('/courses.html')">{{ $t('courses') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link new"><nuxt-link :to="localePath('/newvideo.html')">{{ $t('new_videos') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link barchart"><nuxt-link :to="localePath('/rankings.html')">{{ $t('ranking') }}</nuxt-link></li>
               </ul>
             </li>
-            <li class="link picture"><nuxt-link :to="localePath('/pics')">{{ $t('search_pictures') }}</nuxt-link></li>
-            <li class="link ajacs"><nuxt-link :to="localePath({name: 'ajacs_text', query: {page: 1} })">{{ $t('search_ajacs_text') }}</nuxt-link></li>
+            <li class="link picture"><nuxt-link :to="localePath('/pics.html')">{{ $t('search_pictures') }}</nuxt-link></li>
+            <li class="link ajacs"><nuxt-link :to="localePath('/ajacs_text.html?page=1')">{{ $t('search_ajacs_text') }}</nuxt-link></li>
             <li :class="['link', 'contact', 'has_child_nav', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']" @click="toggleChildMenu('contact')">{{ $t('contact') }}<span class="arrow"></span>
               <ul :class="['child_nav', 'contact', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']">
-                <li @click="$event.stopPropagation()" class="link question"><nuxt-link :to="localePath('/faq')">{{ $t('faq') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link question"><nuxt-link :to="localePath('/faq.html')">{{ $t('faq') }}</nuxt-link></li>
                 <li @click="$event.stopPropagation()" class="link video">
-                  <nuxt-link :to="localePath('/request')">{{ $t('request') }}</nuxt-link>
+                  <nuxt-link :to="localePath('/request.html')">{{ $t('request') }}</nuxt-link>
                 </li>
                 <li @click="$event.stopPropagation()" class="link people">
-                  <nuxt-link :to="localePath('/staff')">{{ $t('staff') }}</nuxt-link>
+                  <nuxt-link :to="localePath('/staff.html')">{{ $t('staff') }}</nuxt-link>
                 </li>
               </ul>
             </li>

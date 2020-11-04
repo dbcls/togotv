@@ -15,7 +15,7 @@
         <h3 class="tsukushi bold tag">{{ $t('tags') }}</h3>
         <ul class="tags_wrapper">
           <li v-for="(tag, index) in ajacs_data.keywords" :key="index">
-            <nuxt-link :to="localePath({name: 'ajacs_text', query: {keywords: tag, page: 1}})">{{ tag }}</nuxt-link>
+            <nuxt-link :to="localePath(`/ajacs_text.html?keywords=${tag}&page=1`)">{{ tag }}</nuxt-link>
           </li>
         </ul>
         <h3 class="tsukushi bold download">{{ $t('ajacs_text') }}</h3>
@@ -24,7 +24,7 @@
         <a v-if="ajacs_data && ajacs_data.github_PDF && ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
         <p v-else>{{ $t('no_result') }}</p>
         <h3 class="tsukushi bold circlevideo">{{ $t('ajacs_video') }}</h3>
-        <a :href="`${process && process.client ? location.origin : ''}/${ajacs_data.embedUrl2 ? ajacs_data.embedUrl2.split('/').pop() : ''}`">{{ ajacs_data.name }}</a>
+        <a :href="`${process !== undefined && process.client ? location.origin : ''}/${ajacs_data.embedUrl2 ? ajacs_data.embedUrl2.split('/').pop() : ''}`">{{ ajacs_data.name }}</a>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@ export default Vue.extend({
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
     axios
-      .get(`//togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+      .get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
       .then(data => {
         this.ajacs_data = data.data.data[0]
       })

@@ -218,15 +218,17 @@
         </li>
       </ul>
       <div v-if="is_loading" class="loader">Loading...</div>
-      <infinite-loading
-        v-if="$store.state.display === 'card' && !is_filter_on"
-        ref="infiniteLoading"
-        spinner="spiral"
-        @infinite="infiniteHandler"
-      >
-        <div slot="no-more"></div>
-        <div slot="no-results"></div>
-      </infinite-loading>
+      <client-only>
+        <infinite-loading
+          v-if="$store.state.display === 'card' && !is_filter_on"
+          ref="infiniteLoading"
+          spinner="spiral"
+          @infinite="infiniteHandler"
+        >
+          <div slot="no-more"></div>
+          <div slot="no-results"></div>
+        </infinite-loading>
+      </client-only>
       <ul v-if="$store.state.display === 'list'" class="picture_list">
         <li
           v-for="(other_tag, index) in tags"
@@ -270,7 +272,7 @@ export default Vue.extend({
   created() {
     Object.keys(this.facets).forEach(key => {
       axios
-        .get(`//togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
+        .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
             return facet.key !== "";
@@ -365,7 +367,7 @@ export default Vue.extend({
             param["target"] = "pictures";
             param["rows"] = 1000;
             axios
-              .get("//togotv-api.dbcls.jp/api/bool_search", {
+              .get("https://togotv-api.dbcls.jp/api/bool_search", {
                 params: param
               })
               .then(data => {
@@ -419,7 +421,7 @@ export default Vue.extend({
           if (!target_element_children.hasChildNodes()) {
             axios
               .get(
-                `//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
+                `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
               )
               .then(data => {
                 let children_list = "";
@@ -611,7 +613,7 @@ export default Vue.extend({
       if (!this.is_filter_on) {
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
             this.pictures = this.pictures.concat(data.data.data);
@@ -645,7 +647,7 @@ export default Vue.extend({
         this.clearFilter();
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
+            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
           )
           .then(data => {
             this.pictures = data.data.data;

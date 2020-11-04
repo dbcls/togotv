@@ -2,12 +2,11 @@
   <div class="single_video_wrapper">
     <nuxt-link
       class="thumbnail_wrapper"
-      :to="localePath({name: 'video', params: {video: `${props.uploadDate.replace(/-/g, '')}`}})">
+      :to="localePath(`/${props.uploadDate.replace(/-/g, '')}.html`)">
       <Thumbnail :props="{size: props.size, thumbnail: props.thumbnail, title: props.title, duration: props.duration, uploadDate: props.uploadDate}" />
     </nuxt-link>
     <div class="description_wrapper">
-      <!-- <span class="upload_date" v-html="props.uploadDate"></span> -->
-      <p :class="['description', props.size]"><span class="upload_date mont bold">{{ props.uploadDate.replace(/-/g, '.') }}</span><span v-html="props.description"></span></p>
+      <p :class="['description', props.size]"><span class="upload_date mont bold">{{ props.uploadDate }}</span><span v-html="props.description"></span></p>
     </div>
   </div>
 </template>

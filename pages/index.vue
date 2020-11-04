@@ -6,7 +6,7 @@
         <h1>
           <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
         </h1>
-        <p class="description">{{ $t("top_description_1") }}<span class="br"><br></span>{{ $t("top_description_2") }}<nuxt-link :to="localePath({name: 'faq', hash: '#copyrights' })" class="add_faq_icon"></nuxt-link></p>
+        <p class="description">{{ $t("top_description_1") }}<span class="br"><br></span>{{ $t("top_description_2") }}<nuxt-link :to="localePath(`/faq.html#copyrights`)" class="add_faq_icon"></nuxt-link></p>
         <ul :class="['description_list', $i18n.locale]">
           <li>・{{ $t("manual_of_database_and_tool") }}</li>
           <li>・{{ $t("ajacs_videos_and_documents") }}</li>
@@ -55,7 +55,7 @@ import axios from 'axios'
 export default Vue.extend({
   created() {
     axios
-      .get(`//togotv-api.dbcls.jp/api/skillset`)
+      .get(`https://togotv-api.dbcls.jp/api/skillset`)
       .then(data => {
         this.course_list = data.data.cources
       })
@@ -64,7 +64,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`//togotv-api.dbcls.jp/api/entries?rows=20`)
+      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
       .then(data => {
         this.new_video_list = data.data.data
       })
@@ -73,7 +73,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
       .then(data => {
         this.realtime_video_list = data.data
       })
