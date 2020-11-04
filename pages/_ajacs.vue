@@ -41,10 +41,9 @@ export default Vue.extend({
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
     axios
-      .get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+      .get(`//togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
       .then(data => {
         this.ajacs_data = data.data.data[0]
-        console.log(this.ajacs_data)
       })
       .catch(error => {
         console.log('error', error)

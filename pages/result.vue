@@ -3,37 +3,6 @@
     <div class="facet_wrapper">
       <p class="facet_title filter tsukushi bold">{{ $t('filter_search') }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t('clear_filter') }}</p>
-      <!-- <div class="facet_small_section">
-        <p class="facet_small_title video tsukushi bold">
-          {{ $t('program_type') }}
-          <span
-            :class="['toggle_btn', facets_toggle_state.type ? '' : 'close']"
-            @click="facets_toggle_state.type = !facets_toggle_state.type"
-          ></span>
-        </p>
-        <div :class="['checkbox_wrapper', facets_toggle_state.type ? '' : 'close']">
-          <ul>
-            <li>
-              <input type="checkbox" id="demonstration" :value="$t('video_manual')" v-model="filters.type">
-              <label for="demonstration">
-                <span>{{ $t('video_manual') }}</span>
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" id="lecture" value="講演" v-model="filters.type">
-              <label for="lecture">
-                <span>{{ $t('ajacs_lecture') }}</span>
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" id="handson" value="実習" v-model="filters.type">
-              <label for="handson">
-                <span>{{ $t('hands_on') }}</span>
-              </label>
-            </li>
-          </ul>
-        </div>
-      </div> -->
       <div class="facet_small_section">
         <p class="facet_small_title calender tsukushi bold">
           {{ $t('publish_date') }}
@@ -97,7 +66,7 @@
       <div class="video_section_header">
         <h2 class="page_title tsukushi bold">
           <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
-          <span>「{{ $route.query.query.trim() }}」</span>
+          <span>「{{ $route ? $route.query.query : "" }}」</span>
           <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
         </h2>
         <ul class="display_icon_wrapper">
@@ -306,7 +275,7 @@ export default Vue.extend({
     }
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
+      .get(`//togotv-api.dbcls.jp/api/facets/keywords`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -326,7 +295,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.is_loading = true
         if ( !this.is_filter_on ) {
-          axios.get(`https://togotv-api.dbcls.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
+          axios.get(`//togotv-api.dbcls.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
             this.lastpage = data.data.last_page
             this.result_list = data.data.data
             this.is_loading = false
@@ -351,7 +320,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("https://togotv-api.dbcls.jp/api/bool_search", {
+        .get("//togotv-api.dbcls.jp/api/bool_search", {
           params: query
         })
         .then(data => {

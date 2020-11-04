@@ -133,7 +133,7 @@ export default Vue.extend({
     upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
+      .get(`//togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
       .then(data => {
         this.videoData = data.data.data[0]
         this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
@@ -146,7 +146,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/skillset`)
+      .get(`//togotv-api.dbcls.jp/api/skillset`)
       .then(data => {
         this.course_list = data.data.cources
       })
@@ -155,7 +155,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
+      .get(`//togotv-api.dbcls.jp/api/entries?rows=20`)
       .then(data => {
         this.new_video_list = data.data.data
       })
@@ -164,7 +164,7 @@ export default Vue.extend({
       })
 
     axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
       .then(data => {
         this.realtime_video_list = data.data
       })
@@ -319,7 +319,7 @@ export default Vue.extend({
     fetchVideoData() {
       if(this.playlist_array !== null) {
         let next_video_id = this.playlist_array[this.current_video_index]
-        axios.get(`https://togotv-api.dbcls.jp/api/search?embedUrl=${next_video_id}`).then(data => {
+        axios.get(`//togotv-api.dbcls.jp/api/search?embedUrl=${next_video_id}`).then(data => {
           let next_video = data.data.data[0]
           this.$router.push(this.localePath({ name: 'video', params: { video: next_video.uploadDate.replace(/-/g, '') } }))
         })
@@ -328,7 +328,7 @@ export default Vue.extend({
     },
     fetchRelatedVideos(id) {
       axios
-        .get(`https://togotv-api.dbcls.jp/api/recommend/movies/${id}`)
+        .get(`//togotv-api.dbcls.jp/api/recommend/movies/${id}`)
         .then(data => {
           this.related_videos = data.data.items
         })
@@ -338,7 +338,7 @@ export default Vue.extend({
     },
     fetchAjacs(id) {
       axios
-        .get(`https://togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
+        .get(`//togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
           this.ajacs_list = data.data.items
         })
@@ -348,7 +348,7 @@ export default Vue.extend({
     },
     fetchRelatedDocs(id) {
       axios
-        .get(`https://togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
+        .get(`//togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
           this.related_docs = data.data
         })

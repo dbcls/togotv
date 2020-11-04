@@ -270,7 +270,7 @@ export default Vue.extend({
   created() {
     Object.keys(this.facets).forEach(key => {
       axios
-        .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
+        .get(`//togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
             return facet.key !== "";
@@ -365,7 +365,7 @@ export default Vue.extend({
             param["target"] = "pictures";
             param["rows"] = 1000;
             axios
-              .get("https://togotv-api.dbcls.jp/api/bool_search", {
+              .get("//togotv-api.dbcls.jp/api/bool_search", {
                 params: param
               })
               .then(data => {
@@ -404,7 +404,7 @@ export default Vue.extend({
       });
     },
     fetchImageByTag(tag, index) {
-      if(process.client) {
+      if(process.client && document !== undefined) {
         let target_element = document.getElementById(`toggle_btn_${index}`);
         let classes = target_element.getAttribute("class");
         let target_element_children = document.getElementById(
@@ -419,7 +419,7 @@ export default Vue.extend({
           if (!target_element_children.hasChildNodes()) {
             axios
               .get(
-                `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
+                `//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
               )
               .then(data => {
                 let children_list = "";
@@ -611,7 +611,7 @@ export default Vue.extend({
       if (!this.is_filter_on) {
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
+            `//togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
             this.pictures = this.pictures.concat(data.data.data);
@@ -645,7 +645,7 @@ export default Vue.extend({
         this.clearFilter();
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
+            `//togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
           )
           .then(data => {
             this.pictures = data.data.data;
