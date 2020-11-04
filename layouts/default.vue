@@ -10,7 +10,10 @@
 import Vue from 'vue'
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
-import '~/assets/js/font.js'
+
+if (process.client) {
+  require('~/assets/js/font.js')
+}
 
 export default Vue.extend({
   components: {
@@ -32,8 +35,6 @@ export default Vue.extend({
         }
       ]
     }
-  },
-  created() {
   },
   mounted() {
     const language = (window.navigator.languages && window.navigator.languages[0]) ||

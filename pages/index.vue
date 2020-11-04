@@ -21,26 +21,22 @@
           <span class="comma">,</span>
           <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
-        <!-- <form>
-          <input type="text" name="" id="" placeholder="動画を検索">
-          <button type="submit"></button>
-        </form> -->
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
-    <section class="course_section">
+    <section class="course_section" v-if="course_list">
       <h2 class="tsukushi bold">
         <nuxt-link to="courses">{{ $t("search_for_courses") }}</nuxt-link>
       </h2>
       <CourseList :props="{bg: 'white', courses: course_list}"/>
     </section>
-    <section class="newvideo_section bg_blue">
+    <section class="newvideo_section bg_blue" v-if="new_video_list">
       <h2 class="tsukushi bold">
         <nuxt-link to="newvideo">{{ $t("new_videos") }}</nuxt-link>
       </h2>
-      <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list.data.data, bg: 'blue'}"/>
+      <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list, bg: 'blue'}"/>
     </section>
-    <section class="realtime_view_video_section bg_blue">
+    <section class="realtime_view_video_section bg_blue" v-if="realtime_video_list">
       <h2 class="tsukushi bold">
         <nuxt-link to="rankings">{{ $t("ranking") }}</nuxt-link>
       </h2>
@@ -49,7 +45,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
 import CourseList from '~/components/CourseList.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
@@ -57,13 +53,40 @@ import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData() {
-    const [course_list, new_video_list, realtime_video_list] = await Promise.all([
-      axios.get(`//togotv-api.dbcls.jp/api/skillset`),
-      axios.get(`//togotv-api.dbcls.jp/api/entries?rows=20`),
-      axios.get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
-    ]);
-    return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
+  created() {
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/skillset`)
+      .then(data => {
+        this.course_list = data.data.cources
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
+      .then(data => {
+        this.new_video_list = data.data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .then(data => {
+        this.realtime_video_list = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+  },
+  data() {
+    return {
+      course_list: [],
+      new_video_list: [],
+      realtime_video_list: []
+    }
   },
   head() {
     return {

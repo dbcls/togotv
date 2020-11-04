@@ -34,29 +34,50 @@ import AsideParts from '~/components/AsideParts.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData ( ) {
-    let year_data = await axios.get(`//togotv-api.dbcls.jp/api/yt_view/year`)
-    let month_data = await axios.get(`//togotv-api.dbcls.jp/api/yt_view/month`)
-    let weekly_data = await axios.get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
-    return {
-      year_data: year_data.data,
-      month_data: month_data.data,
-      weekly_data: weekly_data.data
-    }
+  created() {
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/year`)
+      .then(data => {
+        this.year_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/month`)
+      .then(data => {
+        this.month_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .then(data => {
+        this.weekly_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   head() {
     return {
       title: this.$t('ranking'),
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$t('ranking') },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_barchart.svg'},
       ]
     }
   },
   data () {
     return {
-      active_tab: 'year'
+      active_tab: 'year',
+      year_data: [],
+      month_data: [],
+      weekly_data: []
     }
   },
   components: {

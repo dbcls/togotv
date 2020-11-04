@@ -44,7 +44,7 @@ export default Vue.extend({
       let single_course_width = 204
       if(this.props.courses !== undefined) {
         let course_width = this.props.courses.length * single_course_width
-        if(window.innerWidth - 160 >= course_width) {
+        if(process.client && window.innerWidth - 160 >= course_width) {
           return true
         }
       }

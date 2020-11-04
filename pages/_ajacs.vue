@@ -21,10 +21,10 @@
         <h3 class="tsukushi bold download">{{ $t('ajacs_text') }}</h3>
         <a :href="ajacs_data.contentUrl" target="_blank">{{ ajacs_data.contentUrl }}</a>
         <h3 class="tsukushi bold pdf">{{ $t('ajacs_pdf') }}<span>（{{ $t('you_can_download_data_by_clicking_download_button') }}）</span></h3>
-        <a v-if="ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
+        <a v-if="ajacs_data && ajacs_data.github_PDF && ajacs_data.github_PDF.indexOf('pdf') !== -1" :href="ajacs_data.github_PDF" target="_blank">{{ ajacs_data.github_PDF }}</a>
         <p v-else>{{ $t('no_result') }}</p>
         <h3 class="tsukushi bold circlevideo">{{ $t('ajacs_video') }}</h3>
-        <a :href="`${location_origin}/${ajacs_data.embedUrl2.split('/').pop()}`">{{ ajacs_data.name }}</a>
+        <a :href="`${process && process.client ? location.origin : ''}/${ajacs_data.embedUrl2 ? ajacs_data.embedUrl2.split('/').pop() : ''}`">{{ ajacs_data.name }}</a>
       </div>
     </div>
   </div>
@@ -36,15 +36,23 @@ import axios from 'axios'
 import AsideParts from '~/components/AsideParts.vue'
 export default Vue.extend({
   key: route => route.fullPath,
-  async asyncData ( { params, error, payload } ) {
-    console.log(payload)
-    if(payload) return { ajacs_data: payload }
-    let id = params.ajacs
+  created() {
+    let id = this.$route.params.ajacs
     id = `${id.slice(0,5)}.${id.slice(5)}`
     id = `${id.slice(0,10)}.${id.slice(10)}`
-    let data = await axios.get(`//togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+      .then(data => {
+        this.ajacs_data = data.data.data[0]
+        console.log(this.ajacs_data)
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+  },
+  data () {
     return {
-      ajacs_data: data.data.data[0],
+      ajacs_data: {},
     }
   },
   head() {
@@ -57,7 +65,7 @@ export default Vue.extend({
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.ajacs_data.name},
         { hid: 'og:description', property: 'og:description', content: this.ajacs_data.description },
-        { hid: 'og:url', property: 'og:url', content: location.href }
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' }
       ]
     }
   },
@@ -68,7 +76,7 @@ export default Vue.extend({
         "@type": "Dataset",
         "name": this.ajacs_data.name,
         "description": this.ajacs_data.description,
-        "url": location.href,
+        "url": process.client ? location.href : '',
         "identifier": this.ajacs_data.id,
         "keywords": this.ajacs_data.keywords,
         "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -93,11 +101,6 @@ export default Vue.extend({
   },
   components: {
     AsideParts
-  },
-  data () {
-    return {
-      location_origin: location.origin
-    }
   },
   methods: {
   }

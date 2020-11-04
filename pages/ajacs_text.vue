@@ -19,7 +19,9 @@
           {{ $t('publish_date') }}
           <span class="clear_btn" @click="filters.uploadDate = [0, 4]">{{ $t('clear') }}</span>
         </p>
-        <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
+        <no-ssr placeholder="Loading...">
+          <vue-slider :marks="upload_date_range" :max="4" :minRange="1" v-model="filters.uploadDate" :tooltip="'none'"></vue-slider>
+        </no-ssr>
       </div>
       <div class="facet_small_section">
         <p class="facet_small_title tag tsukushi bold">
@@ -82,8 +84,6 @@
 import Vue from "vue";
 import axios from "axios";
 import Pagination from '~/components/Pagination.vue'
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
   head() {
@@ -91,14 +91,13 @@ export default Vue.extend({
       title: this.$t('text_search'),
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$t('text_search') },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_file.svg'},
       ]
     };
   },
   components: {
-    Pagination,
-    VueSlider
+    Pagination
   },
   mounted() {
     if(this.$route.query.page === undefined) {
@@ -131,7 +130,7 @@ export default Vue.extend({
       this.fetchData()
     }
     axios
-      .get(`//togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
+      .get(`https://togotv-api.dbcls.jp/api/facets/keywords?target=ajacs-training`)
       .then(data => {
         this.tag_list = data.data.facets
       })
@@ -262,7 +261,7 @@ export default Vue.extend({
         this.is_loading = true
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
           )
           .then(data => {
             this.ajacs_list = data.data.data
@@ -287,7 +286,7 @@ export default Vue.extend({
       delete query['query']
       delete query['page']
       axios
-        .get("//togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
+        .get("https://togotv-api.dbcls.jp/api/bool_search?target=ajacs-training", {
           params: query
         })
         .then(data => {
@@ -314,7 +313,7 @@ export default Vue.extend({
         // this.clearFilter();
         // axios
         //   .get(
-        //     `//togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
+        //     `https://togotv-api.dbcls.jp/api/search?target=ajacs-training&text=${this.keyword}`
         //   )
         //   .then(data => {
         //     this.ajacs = data.data.data;

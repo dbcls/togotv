@@ -214,11 +214,6 @@
           <div :class="['description_wrapper', $i18n.locale]">
             <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
             <p v-if="$i18n.locale === 'en'" :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
-            <!-- <a class="button png mont bold" @click="setDonwnloadLink(picture)">{{ $t('download') }}</a>
-            <nuxt-link
-              class="button mont bold"
-              :to="localePath({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
-            >{{ $t('detail') }}</nuxt-link> -->
           </div>
         </li>
       </ul>
@@ -262,18 +257,12 @@ import DownloadModal from "~/components/DownloadModal.vue";
 import axios from "axios";
 
 export default Vue.extend({
-  // async asyncData(params) {
-  //   const { data } = await axios.get(
-  //     `//togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=40`
-  //   )
-  //   return { pictures: data.data }
-  // },
   head() {
     return {
       title: "Togo picture gallery",
       meta: [
         { hid: 'og:title', property: 'og:title', content: 'Togo picture gallery' },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_img.svg'},
       ]
     };
@@ -281,7 +270,7 @@ export default Vue.extend({
   created() {
     Object.keys(this.facets).forEach(key => {
       axios
-        .get(`//togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
+        .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
             return facet.key !== "";
@@ -376,7 +365,7 @@ export default Vue.extend({
             param["target"] = "pictures";
             param["rows"] = 1000;
             axios
-              .get("//togotv-api.dbcls.jp/api/bool_search", {
+              .get("https://togotv-api.dbcls.jp/api/bool_search", {
                 params: param
               })
               .then(data => {
@@ -415,41 +404,43 @@ export default Vue.extend({
       });
     },
     fetchImageByTag(tag, index) {
-      let target_element = document.getElementById(`toggle_btn_${index}`);
-      let classes = target_element.getAttribute("class");
-      let target_element_children = document.getElementById(
-        `picture_list_children_${index}`
-      );
-      if (classes.indexOf("close") === -1) {
-        target_element.classList.add("close");
-        target_element_children.classList.add("close");
-      } else {
-        target_element.classList.remove("close");
-        target_element_children.classList.remove("close");
-        if (!target_element_children.hasChildNodes()) {
-          axios
-            .get(
-              `//togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
-            )
-            .then(data => {
-              let children_list = "";
-              data.data.data.forEach(tag => {
-                children_list += `<li>
-                  <a href="../${
-                    tag.id.split('/').pop()
-                  }" onClick="event.stopPropagation()">
-                    <div class="title">
-                      <img src="https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${
-                        tag.png
-                      }"/>
-                      <p>${tag.name}</p>
-                    </div>
-                    <p class="author">${this.removeTag(tag.author)}</p>
-                  </a>
-                </li>`;
+      if(process.client) {
+        let target_element = document.getElementById(`toggle_btn_${index}`);
+        let classes = target_element.getAttribute("class");
+        let target_element_children = document.getElementById(
+          `picture_list_children_${index}`
+        );
+        if (classes.indexOf("close") === -1) {
+          target_element.classList.add("close");
+          target_element_children.classList.add("close");
+        } else {
+          target_element.classList.remove("close");
+          target_element_children.classList.remove("close");
+          if (!target_element_children.hasChildNodes()) {
+            axios
+              .get(
+                `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
+              )
+              .then(data => {
+                let children_list = "";
+                data.data.data.forEach(tag => {
+                  children_list += `<li>
+                    <a href="../${
+                      tag.id.split('/').pop()
+                    }" onClick="event.stopPropagation()">
+                      <div class="title">
+                        <img src="https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${
+                          tag.png
+                        }"/>
+                        <p>${tag.name}</p>
+                      </div>
+                      <p class="author">${this.removeTag(tag.author)}</p>
+                    </a>
+                  </li>`;
+                });
+                target_element_children.innerHTML = children_list;
               });
-              target_element_children.innerHTML = children_list;
-            });
+          }
         }
       }
     },
@@ -620,7 +611,7 @@ export default Vue.extend({
       if (!this.is_filter_on) {
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
           )
           .then(data => {
             this.pictures = this.pictures.concat(data.data.data);
@@ -654,7 +645,7 @@ export default Vue.extend({
         this.clearFilter();
         axios
           .get(
-            `//togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
+            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
           )
           .then(data => {
             this.pictures = data.data.data;

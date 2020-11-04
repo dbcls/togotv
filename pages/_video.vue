@@ -23,7 +23,7 @@
           <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : '', autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
         </div>
         <div class="meta_data">
-          <p class="update mont bold">{{ videoData.uploadDate.replace(/-/g, '.') }}</p>
+          <p class="update mont bold">{{ videoData.uploadDate ? videoData.uploadDate.replace(/-/g, '.') : '' }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
           <p class="author tsukushi bold">
             <span class="label">{{ `${$t('author')}:&nbsp;` }}</span>
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
-        <div class="digest" v-if="videoData.headline.length !== 0">
+        <div class="digest" v-if="videoData.headline && videoData.headline.length !== 0">
           <h3 class="tsukushi bold">{{ $t('digest') }}</h3>
           <ul :class="videoData.headline.length >= 5 ? 'over5' : ''">
             <li v-for="(digest, index) in videoData.headline" :key="index" :style="calcYCoordinate(digest.time, videoData['duration'])">
@@ -65,7 +65,7 @@
           <h3 class="tsukushi bold">{{ $t('related_videos') }}</h3>
           <VideoListHorizontalScroll :props="{id: 'related_videos_sp', playList: related_videos, bg: 'white'}"/>
         </div>
-        <div class="document" v-if="ajacs_list.length > 0">
+        <div class="document" v-if="ajacs_list && ajacs_list.length > 0">
           <h3 class="tsukushi bold">
             {{ $t('related_ajacs_tests') }}
             <span
@@ -83,7 +83,7 @@
         </div>
         <div class="original">
           <h3 class="tsukushi bold">{{ $t('download_video_data') }}</h3>
-          <p @click="is_modal_on = true">{{ videoData.contentUrl.split('/').pop() }}</p>
+          <p @click="is_modal_on = true">{{ videoData.contentUrl ? videoData.contentUrl.split('/').pop() : ''}}</p>
         </div>
         <div class="license">
           <h3 class="tsukushi bold">{{ $t('license') }}</h3>
@@ -98,7 +98,7 @@
     </section>
     <section class="newvideo_section bg_blue">
       <h3 class="tsukushi bold">{{ $t('new_videos') }}</h3>
-      <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list.data.data, bg: 'blue'}"/>
+      <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue">
       <h3 class="tsukushi bold">{{ $t('ranking') }}</h3>
@@ -127,29 +127,50 @@ Vue.use(VueYoutube)
 export default Vue.extend({
   watchQuery: ['course'],
   key: route => route.fullPath,
-  async asyncData({ params, payload }) {
-    console.log(payload)
-    if(payload) return { videoData: payload }
-    let upload_date = params.video
+  created() {
+    let upload_date = this.$route.params.video
     upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
     upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
-    let [videoData, course_list, new_video_list, realtime_video_list] = await Promise.all([
-      axios.get(`//togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`),
-      axios.get(`//togotv-api.dbcls.jp/api/skillset`),
-      axios.get(`//togotv-api.dbcls.jp/api/entries?rows=20`),
-      axios.get(`//togotv-api.dbcls.jp/api/yt_view/weekly`)
-    ]);
-    videoData = videoData.data.data[0]
-    // if(params.query.course !== undefined) {
-    //   Object.keys(videoData).forEach(res => {
-    //     if(res.indexOf('skillset_') !== -1) {
-    //       if(params.query.course === videoData[res].id) {
-    //         videoData.skillset_1 = videoData[res]
-    //       }
-    //     }
-    //   })
-    // }
-    return { videoData, course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
+      .then(data => {
+        this.videoData = data.data.data[0]
+        this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+        if(this.videoData.TogoTV_Handson_ID !== null) {
+          this.fetchAjacs(this.videoData.TogoTV_Handson_ID)
+        }
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/skillset`)
+      .then(data => {
+        this.course_list = data.data.cources
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
+      .then(data => {
+        this.new_video_list = data.data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .then(data => {
+        this.realtime_video_list = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   head() {
     return {
@@ -161,7 +182,7 @@ export default Vue.extend({
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.videoData.name},
         { hid: 'og:description', property: 'og:description', content: this.videoData.description },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: this.videoData.thumbnailUrl },
       ]
     }
@@ -176,7 +197,7 @@ export default Vue.extend({
         "@type": "Dataset",
         "name": this.videoData.name,
         "description": this.videoData.description,
-        "url": location.href,
+        "url": process.client ? location.href : '',
         "identifier": this.videoData.id,
         "keywords": this.videoData.keywords,
         "license": "https://creativecommons.org/licenses/by/4.0/",
@@ -211,12 +232,6 @@ export default Vue.extend({
       this.is_first_time = true
       localStorage.setItem('is_first_time', true)
     }
-    if (this.videoData !== undefined) {
-      this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
-      if(this.videoData.TogoTV_Handson_ID !== null) {
-        this.fetchAjacs(this.videoData.TogoTV_Handson_ID)
-      }
-    }
 
     function onPlayerStateChange () {
       this.player.getPlaylist().then(data => {
@@ -243,7 +258,11 @@ export default Vue.extend({
       related_docs: [],
       ajacs_list: [],
       is_ajacs_open: false,
-      is_modal_on: false
+      is_modal_on: false,
+      course_list: [],
+      new_video_list: [],
+      realtime_video_list: [],
+      videoData: {}
     }
   },
   methods: {
@@ -300,7 +319,7 @@ export default Vue.extend({
     fetchVideoData() {
       if(this.playlist_array !== null) {
         let next_video_id = this.playlist_array[this.current_video_index]
-        axios.get(`//togotv-api.dbcls.jp/api/search?embedUrl=${next_video_id}`).then(data => {
+        axios.get(`https://togotv-api.dbcls.jp/api/search?embedUrl=${next_video_id}`).then(data => {
           let next_video = data.data.data[0]
           this.$router.push(this.localePath({ name: 'video', params: { video: next_video.uploadDate.replace(/-/g, '') } }))
         })
@@ -309,7 +328,7 @@ export default Vue.extend({
     },
     fetchRelatedVideos(id) {
       axios
-        .get(`//togotv-api.dbcls.jp/api/recommend/movies/${id}`)
+        .get(`https://togotv-api.dbcls.jp/api/recommend/movies/${id}`)
         .then(data => {
           this.related_videos = data.data.items
         })
@@ -319,7 +338,7 @@ export default Vue.extend({
     },
     fetchAjacs(id) {
       axios
-        .get(`//togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
+        .get(`https://togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
           this.ajacs_list = data.data.items
         })
@@ -329,7 +348,7 @@ export default Vue.extend({
     },
     fetchRelatedDocs(id) {
       axios
-        .get(`//togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
+        .get(`https://togotv-api.dbcls.jp/api/recommend/ajacs-training/${id}`)
         .then(data => {
           this.related_docs = data.data
         })

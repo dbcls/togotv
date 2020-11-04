@@ -42,7 +42,7 @@ export default Vue.extend({
       title: this.$t("new_videos"),
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$t("new_videos") },
-        { hid: 'og:url', property: 'og:url', content: location.href },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_new.svg'},
       ]
     }
@@ -63,9 +63,9 @@ export default Vue.extend({
     fetchData(page, is_initial) {
       let url = ''
       if(this.$i18n.locale === 'ja') {
-        url = `//togotv-api.dbcls.jp/api/entries?from=${page}&rows=21`
+        url = `https://togotv-api.dbcls.jp/api/entries?from=${page}&rows=21`
       } else if (this.$i18n.locale === 'en') {
-        url = `//togotv-api.dbcls.jp/api/bool_search?lang=en&from=${page}&rows=21`
+        url = `https://togotv-api.dbcls.jp/api/bool_search?lang=en&from=${page}&rows=21`
       }
 
       axios.get(url).then(data => {
