@@ -179,10 +179,7 @@ export default Vue.extend({
     filters: {
       handler: function(val) {
         setTimeout(() => {
-          if (!this.is_filter_on) {
-            this.$router.push(this.localePath({ name: 'result', query: { query: this.$route.query.query, page: 1 } }))
-            this.$refs.pagination.changeCurrentPage(1)
-          } else {
+          if (this.is_filter_on) {
             let param = Object.assign({}, this.filters);
             // 空のプロパティは削除
             Object.keys(param).forEach(key => {
@@ -213,17 +210,6 @@ export default Vue.extend({
                       })
                     }
                   }
-
-                  // param[key] = param[key].map(data => {
-                  //   data = Number(data) - 4
-                  //   if (data < 0) {
-                  //     data = -data
-                  //   }
-                  //   return data
-                  // })
-                  // if(param[key][0] === 4) {
-                  //   param[key][0] = 0
-                  // }
                 }
               } else {
                 param[key] = param[key].filter(data => data !== "");
@@ -237,10 +223,15 @@ export default Vue.extend({
             Object.keys(param).forEach(key => {
               param[key] = param[key].join(",");
             });
-            param["page"] =  1;
+            param["page"] = this.$route.query.page
+            this.$refs.pagination.changeCurrentPage(this.$route.query.page)
             param["query"] = this.$route.query.query;
-            this.$refs.pagination.changeCurrentPage(1)
-            this.$router.push(this.localePath({ name: 'result', query: param }))
+            let param_text = ''
+            Object.keys(param).forEach((key, index) => {
+              if(index !== 0) param_text += '&'
+              param_text += `${key}=${param[key]}`
+            })
+            this.$router.push(this.localePath(`/result.html?${param_text}`))
             this.fetchDataWithFilter(param)
           }
         }, 0);

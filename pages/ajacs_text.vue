@@ -100,9 +100,9 @@ export default Vue.extend({
     Pagination
   },
   mounted() {
-    if(this.$route.query.page === undefined) {
-      this.$router.push(this.localePath('/ajacs_text.html?page=1'))
-    }
+    // if(this.$route.query.page === undefined) {
+    //   this.$router.push(this.localePath('/ajacs_text.html?page=1'))
+    // }
     if (
         this.$route.query.uploadDate !== undefined ||
         this.$route.query.keywords !== undefined ||
@@ -165,6 +165,7 @@ export default Vue.extend({
     };
   },
   watchQuery(newQuery) {
+    console.log(newQuery)
     if(newQuery["uploadDate"] !== undefined || newQuery["keywords"] !== undefined || newQuery["text"] !== undefined) {
       Object.keys(this.filters).forEach(key => {
         if (newQuery[key] !== undefined) {
@@ -185,10 +186,7 @@ export default Vue.extend({
     filters: {
       handler: function(val) {
         setTimeout(() => {
-          if (!this.is_filter_on) {
-            this.$router.push(this.localePath('/ajacs_text.html?page=1'))
-            this.$refs.pagination.changeCurrentPage(1)
-          } else {
+          if (this.is_filter_on) {
             let param = Object.assign({}, this.filters);
             // 空のプロパティは削除
             Object.keys(param).forEach(key => {
@@ -222,8 +220,8 @@ export default Vue.extend({
                 param[key] = param[key].join(",");
               }
             });
-            param["page"] =  1;
-            this.$refs.pagination.changeCurrentPage(1)
+            param["page"] = this.$route.query.page
+            this.$refs.pagination.changeCurrentPage(this.$route.query.page)
             let param_text = ''
             Object.keys(param).forEach((key, index) => {
               if(index !== 0) param_text += '&'
@@ -272,6 +270,9 @@ export default Vue.extend({
             this.ajacs_list = data.data.data
             this.lastpage = data.data.last_page
             this.is_loading = false
+          })
+          .then(() => {
+            this.$refs.pagination.changeCurrentPageRange()
           })
           .catch(error => {
             console.log("error", error);
