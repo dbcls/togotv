@@ -11,15 +11,15 @@
         @click="fetchData(currentpage - 1)"
         class="single_arrow left"
       ></span>
-      <ul v-if="props.lastpage <= 5 && typeof props.lastpage === 'number'">
+      <ul v-if="lastpage <= 5 && typeof lastpage === 'number'">
         <li
-          v-for="index in props.lastpage"
+          v-for="index in lastpage"
           :key="index"
           :class="['pagination', 'mont', isCurrentPage(index)]"
           @click="fetchData(index)"
         >{{ index }}</li>
       </ul>
-      <ul v-if="props.lastpage > 5 && typeof props.lastpage === 'number'">
+      <ul v-if="lastpage > 5 && typeof lastpage === 'number'">
         <li
           v-for="index in 5"
           :key="index"
@@ -28,13 +28,13 @@
         >{{ currentpageRange[0] - 1 + index }}</li>
       </ul>
       <span
-        v-if="currentpage !== Number(props.lastpage)"
+        v-if="currentpage !== Number(lastpage)"
         @click="fetchData(currentpage + 1)"
         class="single_arrow right"
       ></span>
       <span
-        v-if="currentpage !== Number(props.lastpage)"
-        @click="fetchData(props.lastpage)"
+        v-if="currentpage !== Number(lastpage)"
+        @click="fetchData(lastpage)"
         class="arrow right"
       ></span>
     </div>
@@ -50,6 +50,11 @@ export default Vue.extend({
     props: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    lastpage :function() {
+      return this.props.lastpage
     }
   },
   data() {
@@ -72,15 +77,15 @@ export default Vue.extend({
       }
     },
     changeCurrentPageRange() {
-      if (this.props.lastpage <= 5) {
-        this.currentpageRange = [1, this.props.lastpage];
+      if (this.lastpage <= 5) {
+        this.currentpageRange = [1, this.lastpage];
       } else if (this.currentpage === 1 || this.currentpage === 2) {
         this.currentpageRange = [1, 5];
       } else if (
-        this.currentpage === this.props.lastpage ||
-        this.currentpage === this.props.lastpage - 1
+        this.currentpage === this.lastpage ||
+        this.currentpage === this.lastpage - 1
       ) {
-        this.currentpageRange = [this.props.lastpage - 4, this.props.lastpage];
+        this.currentpageRange = [this.lastpage - 4, this.lastpage];
       } else {
         this.currentpageRange = [this.currentpage - 2, this.currentpage + 2];
       }
@@ -91,12 +96,23 @@ export default Vue.extend({
       this.changeCurrentPageRange();
     },
     fetchData(page) {
+      let query_object = JSON.parse(JSON.stringify(this.$route.query))
+      query_object.page = page
+      let query_text = ''
+      Object.keys(query_object).forEach((key, index) => {
+        if(index === 0) {
+          query_text += '?'
+        } else {
+          query_text += '&'
+        }
+        query_text += `${key}=${query_object[key]}`
+      })
       if (this.$route.path.indexOf('result') !== -1) {
         this.changeCurrentPage(page);
-        this.$router.push(this.localePath({ name: 'result', query: {...this.$route.query, page: page }}))
+        this.$router.push(this.localePath(`/result.html${query_text}`))
       } else if (this.$route.path.indexOf('ajacs') !== -1) {
         this.changeCurrentPage(page);
-        this.$router.push(this.localePath({ name: 'ajacs_text', query: {...this.$route.query, page: page }}))
+        this.$router.push(this.localePath(`/ajacs_text.html${query_text}`))
       } else {
         this.$emit("fetchData", page, false);
       }
