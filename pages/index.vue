@@ -65,11 +65,6 @@ export default Vue.extend({
     ]);
     return { course_list: course_list.data.cources, new_video_list, realtime_video_list: realtime_video_list.data };
   },
-  created() {
-    if(location.pathname.indexOf('html') === -1) {
-      this.$router.push('/index.html')
-    }
-  },
   head() {
     return {
       title: 'トップ'
