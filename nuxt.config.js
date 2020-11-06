@@ -151,7 +151,6 @@ export default {
       /*
        ** You can extend webpack config here
        */
-      standalone: true,
       extend(config, { isClient }) {
         if (isClient) {
           config.devtool = "source-map";
