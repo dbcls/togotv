@@ -202,7 +202,7 @@
       <ul v-if="$store.state.display === 'card' && !is_loading" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
-            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage({name: 'picture', params: {picture: picture.id.split('/').pop()}})"
+            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage(`/${picture.id.split('/').pop()}.html`)"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
             <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
@@ -429,7 +429,7 @@ export default Vue.extend({
                   children_list += `<li>
                     <a href="../${
                       tag.id.split('/').pop()
-                    }" onClick="event.stopPropagation()">
+                    }.html" onClick="event.stopPropagation()">
                       <div class="title">
                         <img src="https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${
                           tag.png

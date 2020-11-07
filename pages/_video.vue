@@ -117,7 +117,6 @@
 import Vue from 'vue'
 import VueYoutube from 'vue-youtube'
 import CourseList from '~/components/CourseList.vue'
-import SingleVideoCard from '~/components/SingleVideoCard.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
 import DownloadModal from "~/components/DownloadModal.vue";
 import axios from 'axios'
@@ -127,23 +126,24 @@ Vue.use(VueYoutube)
 export default Vue.extend({
   watchQuery: ['course'],
   key: route => route.fullPath,
+  async asyncData ({ params, error, payload }) {
+    if (payload) {
+      return { videoData: payload }
+    } else {
+      let upload_date = params.video
+      upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
+      upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
+      let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
+      return {
+        videoData: data.data.data[0]
+      }
+    }
+  },
   created() {
-    let upload_date = this.$route.params.video
-    upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
-    upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
-
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
-      .then(data => {
-        this.videoData = data.data.data[0]
-        this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
-        if(this.videoData.TogoTV_Handson_ID !== null) {
-          this.fetchAjacs(this.videoData.TogoTV_Handson_ID)
-        }
-      })
-      .catch(error => {
-        console.log('error', error)
-      })
+    this.fetchRelatedVideos(this.videoData.TogoTV_Video_ID)
+    if(this.videoData.TogoTV_Handson_ID !== null) {
+      this.fetchAjacs(this.videoData.TogoTV_Handson_ID)
+    }
 
     axios
       .get(`https://togotv-api.dbcls.jp/api/skillset`)
@@ -224,7 +224,6 @@ export default Vue.extend({
   components:  {
     CourseList,
     VideoListHorizontalScroll,
-    SingleVideoCard,
     DownloadModal
   },
   mounted() {

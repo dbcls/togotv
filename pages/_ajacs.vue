@@ -36,18 +36,19 @@ import axios from 'axios'
 import AsideParts from '~/components/AsideParts.vue'
 export default Vue.extend({
   key: route => route.fullPath,
-  created() {
-    let id = this.$route.params.ajacs
-    id = `${id.slice(0,5)}.${id.slice(5)}`
-    id = `${id.slice(0,10)}.${id.slice(10)}`
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
-      .then(data => {
-        this.ajacs_data = data.data.data[0]
-      })
-      .catch(error => {
-        console.log('error', error)
-      })
+  async asyncData ({ params, error, payload }) {
+    if (payload) {
+      return { ajacs_data: payload }
+    } else {
+      let id = params.ajacs
+      id = `${id.slice(0,5)}.${id.slice(5)}`
+      id = `${id.slice(0,10)}.${id.slice(10)}`
+
+      let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+      return {
+        ajacs_data: data.data.data[0]
+      }
+    }
   },
   data () {
     return {

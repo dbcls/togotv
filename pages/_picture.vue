@@ -46,16 +46,18 @@ import DownloadModal from "~/components/DownloadModal.vue";
 
 export default Vue.extend({
   key: route => route.fullPath,
+  async asyncData ({ params, error, payload }) {
+    if (payload) {
+      return { videoData: payload }
+    } else {
+      let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${params.picture}`)
+      return {
+        picture: data.data.data[0]
+      }
+    }
+  },
   created() {
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${this.$route.params.picture}`)
-      .then(data => {
-        this.picture = data.data.data[0]
-        this.fetchRelatedPics(this.picture.other_tag1)
-      })
-      .catch(error => {
-        console.log('error', error)
-      })
+    this.fetchRelatedPics(this.picture.other_tag1)
   },
   head() {
     return {
