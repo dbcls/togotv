@@ -7,7 +7,7 @@
           <h3 class="course_name">
             <nuxt-link
               class="tsukushi bold"
-              :to="localePath({ name: 'course', query: { id: course.id } })"
+              :to="localePath(`/course.html?id=${course.id}`)"
             >
               {{ course.title }}
             </nuxt-link>
