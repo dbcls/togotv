@@ -6,11 +6,6 @@ export const state = () => ({
   }
 })
 
-export const getters = {
-  get (state) {
-    return  state.display
-  }
-}
 
 export const mutations = {
   toggleDisplay(state) {
