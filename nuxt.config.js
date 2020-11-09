@@ -84,6 +84,10 @@ export default {
             generates.push({
               route: entry.uploadDate.replace(/-/g, ""),
               payload: entry,
+            },
+            {
+              route: `en/${entry.uploadDate.replace(/-/g, "")}`,
+              payload: entry,
             });
           });
         })
@@ -98,7 +102,12 @@ export default {
             generates.push({
               route: pic.id.split("/").pop(),
               payload: pic,
-            });
+            },
+            {
+              route: `en/${pic.id.split("/").pop()}`,
+              payload: pic,
+            }
+            );
           });
         })
         .catch((error) => {
@@ -117,12 +126,19 @@ export default {
                 .pop()
                 .replace(/\./g, ""),
               payload: ajacs,
-            });
+            },
+            {
+              route: `en/${ajacs.id.split("/").pop().replace(/\./g, "")}`,
+              payload: ajacs,
+            }
+            );
           });
         })
         .catch((error) => {
           console.log("error", error);
         });
+        
+      generates.push({route: `en/index`})
       return generates;
     },
     subFolders: false,
