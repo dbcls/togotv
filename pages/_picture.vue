@@ -48,7 +48,7 @@ export default Vue.extend({
   key: route => route.fullPath,
   async asyncData ({ params, error, payload }) {
     if (payload) {
-      return { videoData: payload }
+      return { picture: payload }
     } else {
       let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${params.picture}`)
       return {
