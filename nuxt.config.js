@@ -1,6 +1,6 @@
 import axios from "axios";
-import ja from "./static/json/ja.json"
-import en from "./static/json/en.json"
+import ja from "./static/json/ja.json";
+import en from "./static/json/en.json";
 
 export default {
   mode: "universal",
@@ -9,17 +9,19 @@ export default {
    */
   head: {
     htmlAttrs: {
-      lang: 'ja',
-      prefix: 'og: http://ogp.me/ns#'
+      lang: "ja",
+      prefix: "og: http://ogp.me/ns#",
     },
     titleTemplate: "%s | 統合TV",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        hid: "description", name: "description", content: process.env.npm_package_description || "",
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || "",
       },
-      { name: 'twitter:card', content: 'summary' }
+      { name: "twitter:card", content: "summary" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "favicon.ico" }],
   },
@@ -36,7 +38,7 @@ export default {
    */
   plugins: [
     { src: "~/plugins/infiniteloading", ssr: false },
-    { src: "~/plugins/vue-slider-component.js", ssr: false }
+    { src: "~/plugins/vue-slider-component.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -54,21 +56,21 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    '@nuxtjs/pwa',
+    "@nuxtjs/pwa",
     [
-      'nuxt-i18n',
+      "nuxt-i18n",
       {
-        locales: ['en', 'ja'],
-        defaultLocale: 'ja',
+        locales: ["en", "ja"],
+        defaultLocale: "ja",
         vueI18n: {
-          fallbackLocale: 'ja',
+          fallbackLocale: "ja",
           messages: {
             en: en,
-            ja: ja
-          }
-        }
-      }
-    ]
+            ja: ja,
+          },
+        },
+      },
+    ],
   ],
   /*
    ** Build configuration
@@ -137,8 +139,11 @@ export default {
         .catch((error) => {
           console.log("error", error);
         });
-        
-      generates.push({route: `en/index`})
+      generates.push(
+        {
+          route: `/en/index`,
+        }
+      )
       return generates;
     },
     subFolders: false,
@@ -156,12 +161,26 @@ export default {
           route.path = "/:ajacs(ajacs\\d+)";
         }
       });
-      const aliases = routes.map(route => ({
-        path     : /\/$/.test(route.path) ? `${route.path}index.html` : `${route.path}.html`,
-        alias    : route.path,
-        component: route.component
-      }))
-      routes.push(...aliases)
+      const aliases = routes.map((route) => ({
+        path: /\/$/.test(route.path)
+          ? `${route.path}index.html`
+          : `${route.path}.html`,
+        alias: route.path,
+        component: route.component,
+      }));
+      routes.push(...aliases);
+      let index_component = "";
+      routes.some((route) => {
+        if (route.path === "/index.html") {
+          index_component = route.component;
+          return true;
+        }
+      });
+      routes.push({
+        path: "/",
+        component: index_component,
+        alias: "/en/index"
+      })
     },
     build: {
       /*
@@ -177,9 +196,9 @@ export default {
   hooks: {
     generate: {
       async extendRoutes(routes) {
-        const filtered = routes.filter(page => !/\.html$/.test(page.route))
-        routes.splice(0, routes.length, ...filtered)
-      }
-    }
-  }
+        const filtered = routes.filter((page) => !/\.html$/.test(page.route));
+        routes.splice(0, routes.length, ...filtered);
+      },
+    },
+  },
 };
