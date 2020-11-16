@@ -90,6 +90,10 @@
           <a :href="videoData.license" target="_blank">{{ $t('creativecommons') }}</a>
           <nuxt-link :to="localePath(`/faq.html#copyrights`)" class="add_faq_icon"></nuxt-link>
         </div>
+        <div class="DOI">
+          <h3 class="tsukushi bold">DOI</h3>
+          <a :href="videoData.id" target="_blank">{{ videoData.id }}</a>
+        </div>
       </div>
     </section>
     <section class="course_section bg_blue">
@@ -134,6 +138,7 @@ export default Vue.extend({
       upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
       upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
       let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
+      console.log('data.data.data[0]', data.data.data[0])
       return {
         videoData: data.data.data[0]
       }
@@ -690,6 +695,12 @@ export default Vue.extend({
           // word-break: break-all
           &.add_faq_icon
             margin-left: 3px
+      > div.DOI
+        margin-top: 30px
+        > h3
+          margin-bottom: 6px
+          &:before
+            @include icon('doi')
   .course_section
     margin-top: 80px
     padding-top: 30px
