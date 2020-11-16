@@ -85,14 +85,14 @@
           <h3 class="tsukushi bold">{{ $t('download_video_data') }}</h3>
           <p @click="is_modal_on = true">{{ videoData.contentUrl ? videoData.contentUrl.split('/').pop() : ''}}</p>
         </div>
+        <div class="DOI">
+          <h3 class="tsukushi bold">DOI</h3>
+          <a :href="videoData.id" target="_blank">{{ videoData.id }}</a>
+        </div>
         <div class="license">
           <h3 class="tsukushi bold">{{ $t('license') }}</h3>
           <a :href="videoData.license" target="_blank">{{ $t('creativecommons') }}</a>
           <nuxt-link :to="localePath(`/faq.html#copyrights`)" class="add_faq_icon"></nuxt-link>
-        </div>
-        <div class="DOI">
-          <h3 class="tsukushi bold">DOI</h3>
-          <a :href="videoData.id" target="_blank">{{ videoData.id }}</a>
         </div>
       </div>
     </section>
