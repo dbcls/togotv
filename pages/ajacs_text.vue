@@ -165,7 +165,6 @@ export default Vue.extend({
     };
   },
   watchQuery(newQuery) {
-    console.log(newQuery)
     if(newQuery["uploadDate"] !== undefined || newQuery["keywords"] !== undefined || newQuery["text"] !== undefined) {
       Object.keys(this.filters).forEach(key => {
         if (newQuery[key] !== undefined) {

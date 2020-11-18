@@ -138,7 +138,6 @@ export default Vue.extend({
       upload_date = `${upload_date.slice(0,4)}-${upload_date.slice(4)}`
       upload_date = `${upload_date.slice(0,7)}-${upload_date.slice(7)}`
       let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`)
-      console.log('data.data.data[0]', data.data.data[0])
       return {
         videoData: data.data.data[0]
       }
