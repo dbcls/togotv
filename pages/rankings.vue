@@ -34,42 +34,42 @@ import AsideParts from '~/components/AsideParts.vue'
 import axios from 'axios'
 
 export default Vue.extend({
-  async asyncData() {
-    const [year_data, month_data, weekly_data] = await Promise.all([
-      axios.get(`https://togotv-api.dbcls.jp/api/yt_view/year`),
-      axios.get(`https://togotv-api.dbcls.jp/api/yt_view/month`),
-      axios.get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
-    ]);
-    return { year_data: year_data.data, month_data: month_data.data, weekly_data: weekly_data.data };
-  },
-  // created() {
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/yt_view/year`)
-  //     .then(data => {
-  //       this.year_data = data.data
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
-
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/yt_view/month`)
-  //     .then(data => {
-  //       this.month_data = data.data
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
-
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
-  //     .then(data => {
-  //       this.weekly_data = data.data
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
+  // async asyncData() {
+  //   const [year_data, month_data, weekly_data] = await Promise.all([
+  //     axios.get(`https://togotv-api.dbcls.jp/api/yt_view/year`),
+  //     axios.get(`https://togotv-api.dbcls.jp/api/yt_view/month`),
+  //     axios.get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+  //   ]);
+  //   return { year_data: year_data.data, month_data: month_data.data, weekly_data: weekly_data.data };
   // },
+  created() {
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/year`)
+      .then(data => {
+        this.year_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/month`)
+      .then(data => {
+        this.month_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
+      .then(data => {
+        this.weekly_data = data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
+  },
   head() {
     return {
       title: this.$t('ranking'),

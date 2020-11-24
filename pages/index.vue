@@ -15,30 +15,30 @@
         <TextSearch props="index"/>
         <div class="search_example">
           <p class="search_example_title">{{ `${$t('example_query')}:&nbsp;` }}</p>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'PubMed', type: '動画マニュアル', page: '1' } }))">PubMed</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'PubMed', type: '動画マニュアル', page: '1' } }))">PubMed</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(this.localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
     <section class="course_section" v-if="course_list">
       <h2 class="tsukushi bold">
-        <nuxt-link to="courses">{{ $t("search_for_courses") }}</nuxt-link>
+        <nuxt-link :to="localePath('/courses.html')">{{ $t("search_for_courses") }}</nuxt-link>
       </h2>
       <CourseList :props="{bg: 'white', courses: course_list}"/>
     </section>
     <section class="newvideo_section bg_blue" v-if="new_video_list">
       <h2 class="tsukushi bold">
-        <nuxt-link to="newvideo">{{ $t("new_videos") }}</nuxt-link>
+        <nuxt-link :to="localePath('/newvideo.html')">{{ $t("new_videos") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue" v-if="realtime_video_list">
       <h2 class="tsukushi bold">
-        <nuxt-link to="rankings">{{ $t("ranking") }}</nuxt-link>
+        <nuxt-link :to="localePath('/rankings.html')">{{ $t("ranking") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
