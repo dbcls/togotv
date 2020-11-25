@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'スキル別コース'
+      title: this.course.title
     }
   },
   components: {

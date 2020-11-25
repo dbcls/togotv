@@ -12,7 +12,7 @@ export default {
       lang: "ja",
       prefix: "og: http://ogp.me/ns#",
     },
-    titleTemplate: "%s | 統合TV",
+    titleTemplate: "%s | TogoTV",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },

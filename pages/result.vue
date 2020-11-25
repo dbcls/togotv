@@ -81,9 +81,18 @@
         </ul>
       </div>
       <ul class="span_tab_wrapper">
-        <li @click="switchTypeTab('動画マニュアル')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '動画マニュアル' ? 'active' : '']">{{ $t('video_manual') }}</li>
-        <li @click="switchTypeTab('講演')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '講演' ? 'active' : '']">{{ $t('ajacs_lecture') }}</li>
-        <li @click="switchTypeTab('実習')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '実習' ? 'active' : '']">{{ $t('hands_on') }}</li>
+        <li @click="switchTypeTab('動画マニュアル')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '動画マニュアル' ? 'active' : '']">
+          {{ `${$t('video_manual')}` }}
+          <span class="found_num" v-if="video_num_by_type['動画マニュアル']">{{ `${video_num_by_type['動画マニュアル']}` }}</span>
+        </li>
+        <li @click="switchTypeTab('講演')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '講演' ? 'active' : '']">
+          {{ `${$t('ajacs_lecture')}` }}
+          <span class="found_num" v-if="video_num_by_type['講演']">{{ `${video_num_by_type['講演']}` }}</span>
+        </li>
+        <li @click="switchTypeTab('実習')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '実習' ? 'active' : '']">
+          {{ `${$t('hands_on')}` }}
+          <span class="found_num" v-if="video_num_by_type['実習']">{{ `${video_num_by_type['実習']}` }}</span>
+        </li>
       </ul>
       <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
       <VideoList v-if="$store.state.display === 'list' && !is_loading" :video_info_array="result_list"/>
@@ -103,7 +112,7 @@ import axios from 'axios'
 export default Vue.extend({
   head() {
     return {
-      title: `「${this.$route.query.query}」の検索結果`,
+    title: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」`,
       meta: [
         { hid: 'og:title', property: 'og:title', content: `「${this.$route.query.query}」の検索結果` },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
@@ -140,7 +149,8 @@ export default Vue.extend({
         '4': '20分~',
       },
       tag_list: [],
-      is_loading: false
+      is_loading: false,
+      video_num_by_type: {}
     }
   },
   watchQuery(newQuery) {
@@ -264,6 +274,30 @@ export default Vue.extend({
     } else {
       this.fetchData()
     }
+    // let type_array = ["動画マニュアル", "講演", "実習"]
+    // type_array.forEach(type => {
+      // let query = JSON.parse(JSON.stringify(this.$route.query))
+      // query.text = query.query
+      // delete query.query
+      // delete query.page
+      // query.rows = "20"
+      // query.from = "1"
+      // query.target = "movies"
+      // delete query.type
+      
+      // axios
+      //   .get("https://togotv-api.dbcls.jp/api/bool_search", {
+      //     params: query
+      //   })
+      //   .then(data => {
+      //     console.log('DATA', data)
+      //     // this.video_num_by_type[type] = data.data.numfound
+      //   })
+      //   .catch(error => {
+      //     console.log("error", error);
+      //   });
+    // })
+
 
     axios
       .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
@@ -503,6 +537,11 @@ export default Vue.extend({
         &.active
           @include blue_underline
           background-position: 10px 26px
+        > .found_num
+          @include numfound
+          font-size: 14px
+          padding: 2px 6px
+          margin-left: 0px
     > .loader
       @include loader
 

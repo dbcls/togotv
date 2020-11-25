@@ -57,7 +57,7 @@
           <h3 class="tsukushi bold">{{ $t('this_video_tags') }}</h3>
           <ul>
             <li v-for="(tag, index) in videoData.keywords" :key="index">
-              <nuxt-link :to="localePath({path: 'tag', query: {name: tag}})">{{ tag }}</nuxt-link>
+              <nuxt-link :to="localePath(`/tag.html?name=${tag}`)">{{ tag }}</nuxt-link>
             </li>
           </ul>
         </div>

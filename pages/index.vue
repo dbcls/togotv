@@ -98,7 +98,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'トップ'
+      title: this.$t('top')
     }
   },
   components: {
