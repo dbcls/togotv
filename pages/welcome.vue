@@ -92,7 +92,7 @@ import axios from "axios"
 export default Vue.extend({
   head() {
     return {
-      title: "TogoTVへようこそ！",
+      title: this.$i18n && this.$i18n.locale === "ja" ? `TogoTV ${this.$t('welcome_to')}` : `${this.$t('welcome_to')} TogoTV`,
       meta: [
         { hid: 'og:title', property: 'og:title', content: "TogoTVへようこそ！"},
         { hid: 'og:description', property: 'og:description', content: '統合TVは、DBCLSが運用するサービスの一つで、生命科学分野の有用なデータベース(DB)やウェブツールの動画マニュアルや講演・講義動画、イラスト、講習資料などを紹介するポータルサイトです。生命科学研究の規模拡大や多様化に伴って、データベースやウェブツールの利用方法も複雑化・専門化しています。いまや研究の効率的な進展にデータベースやウェブツールの利用は不可欠であり、その活用術は研究者として必要な素養のひとつとなっています。統合TVでは、研究者や技術者、それらを志す初学者が研究に役立つリソースに到達し、さらにそれらを使いこなすためのさまざまな情報を作成し、整理しています。' },

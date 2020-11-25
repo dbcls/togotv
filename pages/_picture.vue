@@ -61,7 +61,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: this.picture.name,
+      title: this.$i18n && this.$i18n.locale === 'ja' ? this.picture.name : this.picture.name_en,
       script: [{
         type: 'application/ld+json',
         innerHTML: JSON.stringify(this.jsonld, null, 2)

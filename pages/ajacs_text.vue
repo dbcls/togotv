@@ -88,7 +88,7 @@ import Pagination from '~/components/Pagination.vue'
 export default Vue.extend({
   head() {
     return {
-      title: this.$t('text_search'),
+      title: this.$t('search_ajacs_text'),
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$t('text_search') },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
@@ -261,9 +261,13 @@ export default Vue.extend({
     fetchData() {
       setTimeout(() => {
         this.is_loading = true
+        let page = 1
+        if(this.$route.query.page) {
+          page = this.$route.query.page
+        }
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${this.$route.query.page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=ajacs-training&from=${page}&rows=40`
           )
           .then(data => {
             this.ajacs_list = data.data.data

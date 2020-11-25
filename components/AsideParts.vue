@@ -14,7 +14,7 @@
       <p class="section_title tsukushi bold">{{ $t("search_for_tags") }}</p>
       <ul>
         <li v-for="(tag, index) in tag_list" :key="index">
-          <nuxt-link :to="localePath({name: 'tag', query: {name: tag.key}})">{{ tag.key }}</nuxt-link>
+          <nuxt-link :to="localePath(`/tag.html?name=${tag.key}`)">{{ tag.key }}</nuxt-link>
         </li>
       </ul>
     </section>

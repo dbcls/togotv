@@ -820,18 +820,10 @@ export default Vue.extend({
                 margin-left: 27px
                 padding-top: 1px
               > .count
-                font-size: 10px
-                min-width: 16px
-                height: 16px
-                border-radius: 100px
-                background-color: $MAIN_COLOR
-                color: #ffffff
-                padding: 0 4px
-                box-sizing: border-box
+                @include numfound
                 display: flex
                 align-items: center
                 justify-content: center
-                margin-left: 4.4px
               > .toggle_btn
                 @include toggle_arrow
             > input[type=checkbox]
