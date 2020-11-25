@@ -112,7 +112,7 @@ import axios from 'axios'
 export default Vue.extend({
   head() {
     return {
-    title: this.$route.query.query && this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」`,
+      title: this.getTitle(),
       meta: [
         { hid: 'og:title', property: 'og:title', content: `「${this.$route.query.query}」の検索結果` },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
@@ -309,6 +309,15 @@ export default Vue.extend({
       })
   },
   methods: {
+    getTitle () {
+      if(this.$route.query.query) {
+        if(this.$i18n && this.$i18n.locale === "ja") {
+          return `「${this.$route.query.query}」${this.$t('results_of')}`
+        } else {
+          return `${this.$t('results_of')}「${this.$route.query.query}」`
+        }
+      }
+    },
     switchTypeTab(type) {
       this.filters.type = []
       this.filters.type.push(type)
