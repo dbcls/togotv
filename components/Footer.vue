@@ -85,7 +85,7 @@ export default Vue.extend({
       if(lang === 'ja') {
         location.href = location.origin + location.pathname.replace('/en', '')
       } else if (lang === 'en') {
-        location.href = location.origin + '/en' + location.pathname
+        location.href = location.origin + '/en' + location.pathname.replace('/en', '')
       }
     }
   }
@@ -139,6 +139,7 @@ footer
               > a.active
                 color: $MAIN_COLOR
                 font-weight: bold
+                pointer-events: none
               > span
                 margin: 0 5px
   > ul.sns
