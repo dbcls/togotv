@@ -18,6 +18,8 @@
             <nuxt-link :to="localePath(`/ajacs_text.html?keywords=${tag}&page=1`)">{{ tag }}</nuxt-link>
           </li>
         </ul>
+        <h3 class="tsukushi bold doi">DOI</h3>
+        <a :href="ajacs_data.id">{{ ajacs_data.id }}</a>
         <h3 class="tsukushi bold download">{{ $t('ajacs_text') }}</h3>
         <a :href="ajacs_data.contentUrl" target="_blank">{{ ajacs_data.contentUrl }}</a>
         <h3 class="tsukushi bold pdf">{{ $t('ajacs_pdf') }}<span>（{{ $t('you_can_download_data_by_clicking_download_button') }}）</span></h3>
@@ -45,6 +47,7 @@ export default Vue.extend({
       id = `${id.slice(0,10)}.${id.slice(10)}`
 
       let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
+      console.log(data.data.data[0])
       return {
         ajacs_data: data.data.data[0]
       }
@@ -156,6 +159,9 @@ export default Vue.extend({
         &.circlevideo
           &::before
             @include icon('circlevideo')
+        &.doi
+          &::before
+            @include icon('doi')
         > span
           font-size: 16px
           font-weight: normal

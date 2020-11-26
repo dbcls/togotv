@@ -85,9 +85,9 @@
           <h3 class="tsukushi bold">{{ $t('download_video_data') }}</h3>
           <p @click="is_modal_on = true">{{ videoData.contentUrl ? videoData.contentUrl.split('/').pop() : ''}}</p>
         </div>
-        <div class="DOI">
+        <div class="doi">
           <h3 class="tsukushi bold">DOI</h3>
-          <a :href="videoData.id" target="_blank">{{ videoData.id }}</a>
+          <a :href="videoData.id">{{ videoData.id }}</a>
         </div>
         <div class="license">
           <h3 class="tsukushi bold">{{ $t('license') }}</h3>
@@ -694,7 +694,7 @@ export default Vue.extend({
           // word-break: break-all
           &.add_faq_icon
             margin-left: 3px
-      > div.DOI
+      > div.doi
         margin-top: 30px
         > h3
           margin-bottom: 6px
