@@ -112,9 +112,9 @@ import axios from 'axios'
 export default Vue.extend({
   head() {
     return {
-      title: this.getTitle(),
+      title: "",
       meta: [
-        { hid: 'og:title', property: 'og:title', content: `「${this.$route.query.query}」の検索結果` },
+        { hid: 'og:title', property: 'og:title', content: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」` },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_search_color.svg'},
       ]
@@ -307,13 +307,17 @@ export default Vue.extend({
       .catch(error => {
         console.log('error', error)
       })
+
+    this.getTitle()
   },
   methods: {
     getTitle () {
       if(this.$route.query.query) {
         if(this.$i18n && this.$i18n.locale === "ja") {
+          document.title = `「${this.$route.query.query}」${this.$t('results_of')} | TogoTV`
           return `「${this.$route.query.query}」${this.$t('results_of')}`
         } else {
+          document.title = `${this.$t('results_of')}「${this.$route.query.query}」 | TogoTV`
           return `${this.$t('results_of')}「${this.$route.query.query}」`
         }
       }
