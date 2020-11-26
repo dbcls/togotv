@@ -9,6 +9,7 @@
         <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
+        <a :href="picture.id" class="doi mont">{{picture.id}}</a>
         <a :href="`https://commons.wikimedia.org/wiki/File:${picture.svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
         <div class="download_btns">
           <a @click="setDonwnloadLink(picture)" v-if="picture.png !== undefined && picture.png !== '-'" class="mont bold" download>png</a>
@@ -191,7 +192,8 @@ export default Vue.extend({
         > a
           color: #fff
       > a.taxonomy,
-      > a.wiki
+      > a.wiki,
+      > a.doi
         color: #fff
         font-size: 12px
         display: block
@@ -199,10 +201,13 @@ export default Vue.extend({
         display: flex
         align-items: center
         &:before
-          width: 18px
-          height: 18px
+          width: 22px
+          height: 22px
           margin-right: 3px
           @include icon('externallink')
+      > a.doi
+        &:before
+          @include icon('doi')
       > div.download_btns
         margin-top: 15px
         margin-left: -3px
