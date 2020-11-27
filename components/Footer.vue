@@ -8,36 +8,36 @@
             <nuxt-link to="/">{{ $t('top') }}</nuxt-link>
           </li>
           <li>
-            <nuxt-link to="welcome">{{ $t('about') }}</nuxt-link>
+            <nuxt-link :to="localePath('/welcome.html')">{{ $t('about') }}</nuxt-link>
           </li>
           <li>
             {{ $t('search_videos') }}
             <ul class="child_nav">
               <li>
-                <nuxt-link to="courses">{{ $t('courses') }}</nuxt-link>
+                <nuxt-link :to="localePath('/courses.html')">{{ $t('courses') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="newvideo">{{ $t('new_videos') }}</nuxt-link>
+                <nuxt-link :to="localePath('/newvideo.html')">{{ $t('new_videos') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="rankings">{{ $t('ranking') }}</nuxt-link>
+                <nuxt-link :to="localePath('/rankings.html')">{{ $t('ranking') }}</nuxt-link>
               </li>
             </ul>
           </li>
           <li>
-            <nuxt-link to="pics">{{ $t('search_pictures') }}</nuxt-link>
+            <nuxt-link :to="localePath('/pics.html')">{{ $t('search_pictures') }}</nuxt-link>
           </li>
           <li>
             {{ $t('contact') }}
             <ul class="child_nav">
               <li>
-                <nuxt-link to="faq">{{ $t('faq') }}</nuxt-link>
+                <nuxt-link :to="localePath('/faq.html')">{{ $t('faq') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="request">{{ $t('request') }}</nuxt-link>
+                <nuxt-link :to="localePath('/request.html')">{{ $t('request') }}</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="staff">{{ $t('staff') }}</nuxt-link>
+                <nuxt-link :to="localePath('/staff.html')">{{ $t('staff') }}</nuxt-link>
               </li>
             </ul>
           </li>
