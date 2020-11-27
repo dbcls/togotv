@@ -112,7 +112,7 @@ import axios from 'axios'
 export default Vue.extend({
   head() {
     return {
-      title: "",
+      title: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」`,
       meta: [
         { hid: 'og:title', property: 'og:title', content: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」` },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
