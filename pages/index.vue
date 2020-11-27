@@ -51,6 +51,7 @@ import CourseList from '~/components/CourseList.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
 import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
+import ogImage from '~/assets/img/top_screen_captcha.png'
 
 export default Vue.extend({
   async asyncData() {
@@ -98,7 +99,14 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: this.$t('top')
+      title: this.$t('top'),
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: "TogoTV"},
+        { hid: 'og:description', property: 'og:description', content: this.$t('about_description') },
+        { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
+        { hid: 'og:image', property: 'og:image', content: process.client ? location.origin + ogImage : ''},
+      ]
+
     }
   },
   components: {
