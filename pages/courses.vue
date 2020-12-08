@@ -37,15 +37,15 @@ import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vu
 import axios from "axios";
 
 export default Vue.extend({
-  async asyncData ( params ) {
-    const { data } = await axios.get(`https://togotv-api.dbcls.jp/api/skillset`)
-    return { courses: data.cources}
-  },
-  // created() {
-  //   axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
-  //     this.courses = data.data.cources;
-  //   });
+  // async asyncData ( params ) {
+  //   const { data } = await axios.get(`https://togotv-api.dbcls.jp/api/skillset`)
+  //   return { courses: data.cources}
   // },
+  created() {
+    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
+      this.courses = data.data.cources;
+    });
+  },
   data() {
     return {
       courses: []
