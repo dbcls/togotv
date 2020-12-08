@@ -402,6 +402,7 @@ export default Vue.extend({
           this.lastpage = data.data.last_page
           this.result_list = data.data.data
           this.is_loading = false
+          console.log(data)
         })
         .catch(error => {
           console.log("error", error);

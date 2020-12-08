@@ -2,24 +2,24 @@
   <div class="pagination_wrapper">
     <div v-if="!props.is_null" class="pagination_inner">
       <span
-        v-if="currentpage !== 1"
+        v-if="Number(currentpage) !== 1"
         @click="fetchData(1)"
         class="arrow left"
       ></span>
       <span
-        v-if="currentpage !== 1"
-        @click="fetchData(currentpage - 1)"
+        v-if="Number(currentpage) !== 1"
+        @click="fetchData(Number(currentpage) - 1)"
         class="single_arrow left"
       ></span>
-      <ul v-if="lastpage <= 5 && typeof lastpage === 'number'">
+      <ul v-if="Number(lastpage) <= 5">
         <li
-          v-for="index in lastpage"
+          v-for="index in Number(lastpage)"
           :key="index"
           :class="['pagination', 'mont', isCurrentPage(index)]"
           @click="fetchData(index)"
         >{{ index }}</li>
       </ul>
-      <ul v-if="lastpage > 5 && typeof lastpage === 'number'">
+      <ul v-if="Number(lastpage) > 5">
         <li
           v-for="index in 5"
           :key="index"
@@ -28,12 +28,12 @@
         >{{ currentpageRange[0] - 1 + index }}</li>
       </ul>
       <span
-        v-if="currentpage !== Number(lastpage)"
-        @click="fetchData(currentpage + 1)"
+        v-if="Number(currentpage) !== Number(lastpage)"
+        @click="fetchData(Number(currentpage) + 1)"
         class="single_arrow right"
       ></span>
       <span
-        v-if="currentpage !== Number(lastpage)"
+        v-if="Number(currentpage) !== Number(lastpage)"
         @click="fetchData(lastpage)"
         class="arrow right"
       ></span>
@@ -77,17 +77,18 @@ export default Vue.extend({
       }
     },
     changeCurrentPageRange() {
+      let currentpage = Number(this.currentpage)
       if (this.lastpage <= 5) {
-        this.currentpageRange = [1, this.lastpage];
-      } else if (this.currentpage === 1 || this.currentpage === 2) {
+        this.currentpageRange = [1, Number(this.lastpage)];
+      } else if (currentpage === 1 || currentpage === 2) {
         this.currentpageRange = [1, 5];
       } else if (
-        this.currentpage === this.lastpage ||
-        this.currentpage === this.lastpage - 1
+        currentpage === this.lastpage ||
+        currentpage === this.lastpage - 1
       ) {
-        this.currentpageRange = [this.lastpage - 4, this.lastpage];
+        this.currentpageRange = [Number(this.lastpage) - 4, Number(this.lastpage)];
       } else {
-        this.currentpageRange = [this.currentpage - 2, this.currentpage + 2];
+        this.currentpageRange = [currentpage - 2, currentpage + 2];
       }
     },
     changeCurrentPage(page) {
