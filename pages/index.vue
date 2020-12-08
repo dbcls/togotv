@@ -61,34 +61,6 @@ export default Vue.extend({
     ]);
     return { course_list: course_list.data.cources, new_video_list: new_video_list.data.data, realtime_video_list: realtime_video_list.data };
   },
-  // created() {
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/skillset`)
-  //     .then(data => {
-  //       this.course_list = data.data.cources
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
-
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
-  //     .then(data => {
-  //       this.new_video_list = data.data.data
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
-
-  //   axios
-  //     .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
-  //     .then(data => {
-  //       this.realtime_video_list = data.data
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //     })
-  // },
   data() {
     return {
       course_list: [],

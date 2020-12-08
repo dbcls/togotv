@@ -143,7 +143,7 @@ export default Vue.extend({
     display: flex
     > .img_wrapper
       width: 70%
-      height: 310px
+      height: 350px
       background-color: #EDFCFC
       display: flex
       align-items: center
@@ -159,7 +159,7 @@ export default Vue.extend({
       min-width: 380px
       padding: 39px 0 0 30px
       box-sizing: border-box
-      height: 310px
+      height: 350px
       color: #fff
       background-color: $MAIN_COLOR
       position: relative
@@ -169,9 +169,9 @@ export default Vue.extend({
         top: 0
         left: -100px
         border-left: 50px solid transparent
-        border-top: 155px solid transparent
+        border-top: 175px solid transparent
         border-right: 50px solid $MAIN_COLOR
-        border-bottom: 155px solid $MAIN_COLOR
+        border-bottom: 175px solid $MAIN_COLOR
       > p
         margin: 0
       > p.name_en
