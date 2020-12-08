@@ -64,10 +64,13 @@
     </div>
     <div class="video_section">
       <div class="video_section_header">
-        <h2 class="page_title tsukushi bold">
+        <h2 v-if="$route.query.query" class="page_title tsukushi bold">
           <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
           <span>「{{ $route ? $route.query.query : "" }}」</span>
           <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
+        </h2>
+        <h2 v-else class="page_title tsukushi bold">
+          <span>{{ $t('all_results') }}</span>
         </h2>
         <ul class="display_icon_wrapper">
           <li>
@@ -83,15 +86,15 @@
       <ul class="span_tab_wrapper">
         <li @click="switchTypeTab('動画マニュアル')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '動画マニュアル' ? 'active' : '']">
           {{ `${$t('video_manual')}` }}
-          <span class="found_num" v-if="video_num_by_type['動画マニュアル']">{{ `${video_num_by_type['動画マニュアル']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['動画マニュアル'] !== null">{{ `${video_num_by_type['動画マニュアル']}` }}</span>
         </li>
         <li @click="switchTypeTab('講演')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '講演' ? 'active' : '']">
           {{ `${$t('ajacs_lecture')}` }}
-          <span class="found_num" v-if="video_num_by_type['講演']">{{ `${video_num_by_type['講演']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['講演'] !== null">{{ `${video_num_by_type['講演']}` }}</span>
         </li>
         <li @click="switchTypeTab('実習')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '実習' ? 'active' : '']">
           {{ `${$t('hands_on')}` }}
-          <span class="found_num" v-if="video_num_by_type['実習']">{{ `${video_num_by_type['実習']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['実習'] !== null">{{ `${video_num_by_type['実習']}` }}</span>
         </li>
       </ul>
       <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
@@ -112,9 +115,9 @@ import axios from 'axios'
 export default Vue.extend({
   head() {
     return {
-      title: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」`,
+      title: this.getTitle(),
       meta: [
-        { hid: 'og:title', property: 'og:title', content: this.$i18n && this.$i18n.locale === "ja" ? `「${this.$route.query.query}」${this.$t('results_of')}` : `${this.$t('results_of')}「${this.$route.query.query}」` },
+        { hid: 'og:title', property: 'og:title', content: this.getTitle() },
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: 'https://raw.githubusercontent.com/dbcls/togotv/master/assets/img/icon/icon_search_color.svg'},
       ]
@@ -150,7 +153,11 @@ export default Vue.extend({
       },
       tag_list: [],
       is_loading: false,
-      video_num_by_type: {}
+      video_num_by_type: {
+        '動画マニュアル': null,
+        '講演': null,
+        '実習': null
+      }
     }
   },
   watchQuery(newQuery) {
@@ -235,7 +242,9 @@ export default Vue.extend({
             });
             param["page"] = this.$route.query.page
             this.$refs.pagination.changeCurrentPage(this.$route.query.page)
-            param["query"] = this.$route.query.query;
+            if(this.$route.query.query) {
+              param["query"] = this.$route.query.query;
+            }
             let param_text = ''
             Object.keys(param).forEach((key, index) => {
               if(index !== 0) param_text += '&'
@@ -274,30 +283,38 @@ export default Vue.extend({
     } else {
       this.fetchData()
     }
-    // let type_array = ["動画マニュアル", "講演", "実習"]
-    // type_array.forEach(type => {
-      // let query = JSON.parse(JSON.stringify(this.$route.query))
-      // query.text = query.query
-      // delete query.query
-      // delete query.page
-      // query.rows = "20"
-      // query.from = "1"
-      // query.target = "movies"
-      // delete query.type
-      
-      // axios
-      //   .get("https://togotv-api.dbcls.jp/api/bool_search", {
-      //     params: query
-      //   })
-      //   .then(data => {
-      //     console.log('DATA', data)
-      //     // this.video_num_by_type[type] = data.data.numfound
-      //   })
-      //   .catch(error => {
-      //     console.log("error", error);
-      //   });
-    // })
 
+    let query = {}
+    if(this.$route.query.query !== undefined) {
+      query = { text: this.$route.query.query }
+    }
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/facets/movies`, {
+        params: query
+      })
+      .then(data => {
+        let is_exists = false;
+        Object.keys(this.video_num_by_type).forEach(key => {
+          is_exists = false
+          data.data.facets.forEach((facet => {
+            if(key === facet.key) {
+              this.video_num_by_type[facet.key] = facet.doc_count
+              is_exists = true
+            }
+          }))
+          if(!is_exists) {
+            this.video_num_by_type[key] = 0
+          }
+        })
+        if(this.video_num_by_type['動画マニュアル'] === 0 && this.video_num_by_type['講演'] === 0) {
+          this.switchTypeTab('実習')
+        } else if (this.video_num_by_type['動画マニュアル'] === 0) {
+          this.switchTypeTab('講演')
+        }
+      })
+      .catch(error => {
+        console.log("error", error);
+      });
 
     axios
       .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
@@ -308,10 +325,19 @@ export default Vue.extend({
         console.log('error', error)
       })
 
-    this.getTitle()
+    this.changeTitle()
   },
   methods: {
-    getTitle () {
+    getTitle() {
+      if (!this.$route.query.query) {
+        return `${this.$t('all_results')}`
+      } else if(this.$i18n && this.$i18n.locale === "ja") {
+        return `「${this.$route.query.query}」${this.$t('results_of')}`
+      } else {
+        return `${this.$t('results_of')}「${this.$route.query.query}」`
+      }
+    },
+    changeTitle () {
       if(this.$route.query.query) {
         if(this.$i18n && this.$i18n.locale === "ja") {
           document.title = `「${this.$route.query.query}」${this.$t('results_of')} | TogoTV`
@@ -320,6 +346,8 @@ export default Vue.extend({
           document.title = `${this.$t('results_of')}「${this.$route.query.query}」 | TogoTV`
           return `${this.$t('results_of')}「${this.$route.query.query}」`
         }
+      } else {
+        document.title = `${this.$t('all_results')} | TogoTV`
       }
     },
     switchTypeTab(type) {
@@ -333,7 +361,16 @@ export default Vue.extend({
       setTimeout(() => {
         this.is_loading = true
         if ( !this.is_filter_on ) {
-          axios.get(`https://togotv-api.dbcls.jp/api/bool_search?from=${this.$route.query.page}&text=${this.$route.query.query}&rows=20`).then(data => {
+          let query = {
+            from: this.$route.query.page,
+            rows: 20
+          }
+          if(this.$route.query.query) {
+            query.text = this.$route.query.query
+          }
+          axios.get(`https://togotv-api.dbcls.jp/api/bool_search`, {
+            params: query
+          }).then(data => {
             this.lastpage = data.data.last_page
             this.result_list = data.data.data
             this.is_loading = false
@@ -352,7 +389,7 @@ export default Vue.extend({
       this.is_loading = true
       let query = Object.assign({}, param)
       query['rows'] = 20
-      query["target"] = "movies";
+      query['target'] = 'movies'
       query['text'] = param.query
       query['from'] = param.page
       delete query['query']
@@ -365,6 +402,34 @@ export default Vue.extend({
           this.lastpage = data.data.last_page
           this.result_list = data.data.data
           this.is_loading = false
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
+      let query_for_num = Object.assign({}, query)
+      delete query_for_num['from']
+      delete query_for_num['rows']
+      delete query_for_num['target']
+      delete query_for_num['type']
+      delete query_for_num['field']
+      axios
+        .get(`https://togotv-api.dbcls.jp/api/facets/movies`, {
+          params: query_for_num
+        })
+        .then(data => {
+          let is_exists = false;
+          Object.keys(this.video_num_by_type).forEach(key => {
+            is_exists = false
+            data.data.facets.forEach((facet => {
+              if(key === facet.key) {
+                this.video_num_by_type[facet.key] = facet.doc_count
+                is_exists = true
+              }
+            }))
+            if(!is_exists) {
+              this.video_num_by_type[key] = 0
+            }
+          })
         })
         .catch(error => {
           console.log("error", error);
