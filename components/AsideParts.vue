@@ -34,7 +34,7 @@ export default Vue.extend({
   },
   mounted() {
     axios
-      .get(`https://togotv-api.dbcls.jp/api/skillset`)
+      .get(`https://togotv-api.dbcls.jp/api/skillset_s`)
       .then(data => {
         this.course_list = data.data.cources
       })
