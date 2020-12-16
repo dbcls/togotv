@@ -35,7 +35,7 @@ export default Vue.extend({
         if (!this.canMessageSubmit) {
           return;
         }
-        let query = { name: 'result', query: { query: this.keyword, type: '動画マニュアル', page: "1" } }
+        let query = { name: 'result', query: { query: this.keyword, type: 'manual', page: "1" } }
         if(this.keyword === '') {
           delete query.query.query
         }

@@ -84,17 +84,17 @@
         </ul>
       </div>
       <ul class="span_tab_wrapper">
-        <li @click="switchTypeTab('動画マニュアル')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '動画マニュアル' ? 'active' : '']">
+        <li @click="switchTypeTab('manual')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === 'manual' ? 'active' : '']">
           {{ `${$t('video_manual')}` }}
-          <span class="found_num" v-if="video_num_by_type['動画マニュアル'] !== null">{{ `${video_num_by_type['動画マニュアル']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['manual'] !== null">{{ `${video_num_by_type['manual']}` }}</span>
         </li>
-        <li @click="switchTypeTab('講演')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '講演' ? 'active' : '']">
+        <li @click="switchTypeTab('lecture')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === 'lecture' ? 'active' : '']">
           {{ `${$t('ajacs_lecture')}` }}
-          <span class="found_num" v-if="video_num_by_type['講演'] !== null">{{ `${video_num_by_type['講演']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['lecture'] !== null">{{ `${video_num_by_type['lecture']}` }}</span>
         </li>
-        <li @click="switchTypeTab('実習')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === '実習' ? 'active' : '']">
+        <li @click="switchTypeTab('handson')" :class="['span_tab', 'tsukushi', 'bold', $route.query.type === 'handson' ? 'active' : '']">
           {{ `${$t('hands_on')}` }}
-          <span class="found_num" v-if="video_num_by_type['実習'] !== null">{{ `${video_num_by_type['実習']}` }}</span>
+          <span class="found_num" v-if="video_num_by_type['handson'] !== null">{{ `${video_num_by_type['handson']}` }}</span>
         </li>
       </ul>
       <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
@@ -154,9 +154,9 @@ export default Vue.extend({
       tag_list: [],
       is_loading: false,
       video_num_by_type: {
-        '動画マニュアル': null,
-        '講演': null,
-        '実習': null
+        'manual': null,
+        'lecture': null,
+        'handson': null
       }
     }
   },
@@ -306,10 +306,10 @@ export default Vue.extend({
             this.video_num_by_type[key] = 0
           }
         })
-        if(this.video_num_by_type['動画マニュアル'] === 0 && this.video_num_by_type['講演'] === 0) {
-          this.switchTypeTab('実習')
-        } else if (this.video_num_by_type['動画マニュアル'] === 0) {
-          this.switchTypeTab('講演')
+        if(this.video_num_by_type['manual'] === 0 && this.video_num_by_type['lecture'] === 0) {
+          this.switchTypeTab('handson')
+        } else if (this.video_num_by_type['manual'] === 0) {
+          this.switchTypeTab('lecture')
         }
       })
       .catch(error => {
@@ -379,7 +379,7 @@ export default Vue.extend({
       }, 0)
     },
     clearFilter() {
-      this.filters.type = ['動画マニュアル']
+      this.filters.type = ['manual']
       this.filters.uploadDate = [0, 4]
       this.filters.tags = []
       this.filters.lang = []
