@@ -15,11 +15,11 @@
         <TextSearch props="index"/>
         <div class="search_example">
           <p class="search_example_title">{{ `${$t('example_query')}:&nbsp;` }}</p>
-          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'PubMed', type: '動画マニュアル', page: '1' } }))">PubMed</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'PubMed', type: 'manual', page: '1' } }))">PubMed</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'BLAST', type: '動画マニュアル', page: '1' } }))">BLAST</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'BLAST', type: 'manual', page: '1' } }))">BLAST</nuxt-link>
           <span class="comma">,</span>
-          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'NGS', type: '実習', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
+          <nuxt-link :to="(localePath({ name: 'result', query: { query: 'NGS', type: 'handson', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
