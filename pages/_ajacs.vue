@@ -47,7 +47,6 @@ export default Vue.extend({
       id = `${id.slice(0,10)}.${id.slice(10)}`
 
       let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=ajacs-training&id=https://doi.org/10.7875/${id}`)
-      console.log(data.data.data[0])
       return {
         ajacs_data: data.data.data[0]
       }

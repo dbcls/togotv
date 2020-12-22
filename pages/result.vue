@@ -68,6 +68,7 @@
           <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
           <span>「{{ $route ? $route.query.query : "" }}」</span>
           <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
+          <span class="found_num"><span class="num mont">{{video_num_by_type['manual'] + video_num_by_type['lecture'] + video_num_by_type['handson']}}</span>{{ $t('results') }}</span>
         </h2>
         <h2 v-else class="page_title tsukushi bold">
           <span>{{ $t('all_results') }}</span>
@@ -402,7 +403,6 @@ export default Vue.extend({
           this.lastpage = data.data.last_page
           this.result_list = data.data.data
           this.is_loading = false
-          console.log(data)
         })
         .catch(error => {
           console.log("error", error);
@@ -595,6 +595,13 @@ export default Vue.extend({
         @include page_title('search_color')
         &:before
           margin-right: -8px
+        > span.found_num
+          margin-left: 10px
+          font-size: 20px
+          margin-bottom: -2px
+          > .num
+            font-size: 28px
+            margin-right: 1px
       > ul.display_icon_wrapper
         display: flex
         margin-top: 55px
@@ -611,15 +618,17 @@ export default Vue.extend({
         font-size: 18px
         margin-right: 40px
         padding: 0 10px 22px
+        opacity: .6
         &:hover
           cursor: pointer
         &.active
           @include blue_underline
           background-position: 10px 26px
+          opacity: 1
         > .found_num
           @include numfound
           font-size: 14px
-          padding: 2px 6px
+          padding: 0px 6px
           margin-left: 0px
     > .loader
       @include loader
@@ -636,5 +645,16 @@ export default Vue.extend({
           margin: 0 0 10px auto
         > .page_title
           margin-bottom: 5px
-
+          flex-wrap: wrap
+          > span.found_num
+            font-size: 12px
+            padding: 2px 4px
+            > .num
+              font-size: 22px
+      > .span_tab_wrapper
+        > .span_tab
+          font-size: 14px
+          margin-right: 0px
+          white-space: nowrap
+          padding: 0 5px
 </style>
