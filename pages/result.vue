@@ -72,6 +72,7 @@
         </h2>
         <h2 v-else class="page_title tsukushi bold">
           <span>{{ $t('all_results') }}</span>
+          <span class="found_num"><span class="num mont">{{video_num_by_type['manual'] + video_num_by_type['lecture'] + video_num_by_type['handson']}}</span>{{ $t('results') }}</span>
         </h2>
         <ul class="display_icon_wrapper">
           <li>
