@@ -31,11 +31,11 @@ export default Vue.extend({
       this.canMessageSubmit = true;
     },
     submit(type) {
+      let query = { name: 'result', query: { query: this.keyword, type: 'manual', page: "1" } }
       if (type === "enter") {
         if (!this.canMessageSubmit) {
           return;
         }
-        let query = { name: 'result', query: { query: this.keyword, type: 'manual', page: "1" } }
         if(this.keyword === '') {
           delete query.query.query
         }
@@ -68,6 +68,8 @@ div.input_wrapper
   > button
     width: 25px
     height: 25px
+    &:hover
+      cursor: pointer
   &.index
     margin-top: 15px
     width: 334px
@@ -77,8 +79,6 @@ div.input_wrapper
     > button
       top: 49%
       right: 15px
-      &:hover
-        cursor: pointer
 
 @media screen and (max-width: 896px)
   div.input_wrapper
