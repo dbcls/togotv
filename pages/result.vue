@@ -290,6 +290,9 @@ export default Vue.extend({
     if(this.$route.query.query !== undefined) {
       query = { text: this.$route.query.query }
     }
+    if(this.$route.query.lang === "en") {
+      query.lang = "en"
+    }
     axios
       .get(`https://togotv-api.dbcls.jp/api/facets/movies`, {
         params: query
@@ -414,6 +417,7 @@ export default Vue.extend({
       delete query_for_num['target']
       delete query_for_num['type']
       delete query_for_num['field']
+
       axios
         .get(`https://togotv-api.dbcls.jp/api/facets/movies`, {
           params: query_for_num
