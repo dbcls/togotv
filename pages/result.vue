@@ -324,7 +324,7 @@ export default Vue.extend({
     axios
       .get(`https://togotv-api.dbcls.jp/api/facets/keywords`)
       .then(data => {
-        this.tag_list = data.data.facets
+        this.tag_list = data.data.facets.filter(facet => facet.key !== "English")
       })
       .catch(error => {
         console.log('error', error)
