@@ -7,6 +7,7 @@
       <div class="pic_detail">
         <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
         <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
+        <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.scientific_name }}</p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
         <a :href="picture.id" class="doi mont">{{picture.id}}</a>
@@ -174,6 +175,8 @@ export default Vue.extend({
         border-bottom: 175px solid $MAIN_COLOR
       > p
         margin: 0
+        &.scientific_name
+          margin-top: 2px
       > p.name_en
         font-size: 18px
         margin-top: 1px

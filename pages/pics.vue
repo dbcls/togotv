@@ -199,7 +199,10 @@
           </ul>
         </div>
       </div>
-      <ul v-if="$store.state.display === 'card' && !is_loading" class="picture_list_card">
+      <p v-if="$store.state.display === 'card' && pictures.length === 0">
+        該当なし
+      </p>
+      <ul v-if="$store.state.display === 'card' && !is_loading && pictures.length !== 0" class="picture_list_card">
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
             @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage(`/${picture.id.split('/').pop()}.html`)"
