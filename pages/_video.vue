@@ -289,8 +289,8 @@ export default Vue.extend({
 
       if (html) {
         if(hour === 0) {
-          return `<span class="time mont bold">${min}</span><span class="unit">分</span><span class="time mont bold">${sec}</span><span class="unit">秒</span>`
-        }　else {        return `<span class="time mont bold">${hour}</span><span class="unit">時間</span><span class="time mont bold">${min}</span><span lass="unit">分</span><span class="time mont bold">${sec}</span><span clas="unit">秒</span>`
+          return `<span class="time mont bold">${min}</span>:<span class="time mont bold">${sec}</span>`
+        }　else {        return `<span class="time mont bold">${hour}</span>:<span class="time mont bold">${min}</span>:<span class="time mont bold">${sec}</span>`
         }
       } else {
         return totalsec
@@ -567,33 +567,8 @@ export default Vue.extend({
               font-size: 14px
               max-width: 169px
               text-decoration: underline
-              // overflow: hidden
-              // white-space: nowrap
-              // text-overflow: ellipsis
               &:hover
                 cursor: pointer
-            // > .full_title
-            //   display: none
-            //   position: absolute
-            //   top: 24px
-            //   left: 74px
-            //   background-color: $MAIN_COLOR
-            //   color: #fff
-            //   font-size: 12px
-            //   padding: 4px 8px
-            //   border-radius: 2px
-            //   z-index: $LAYER_1
-            //   &:before
-            //     content: ""
-            //     position: absolute
-            //     top: -15px
-            //     left: 7px
-            //     border: 8px solid transparent
-            //     border-bottom: 8px solid $MAIN_COLOR
-            //   &:hover
-            //     cursor: pointer
-            //   &.active
-            //     display: block
             span.unit
               font-size: 10px
       > div.tag_list
