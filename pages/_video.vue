@@ -288,9 +288,14 @@ export default Vue.extend({
       }
 
       if (html) {
+        min = ("00" + min).slice(-2)
+        sec = ("00" + sec).slice(-2)
+
         if(hour === 0) {
           return `<span class="time mont bold">${min}</span>:<span class="time mont bold">${sec}</span>`
-        }　else {        return `<span class="time mont bold">${hour}</span>:<span class="time mont bold">${min}</span>:<span class="time mont bold">${sec}</span>`
+        } else {
+          hour = ("00" + hour).slice(-2)
+          return `<span class="time mont bold">${hour}</span>:<span class="time mont bold">${min}</span>:<span class="time mont bold">${sec}</span>`
         }
       } else {
         return totalsec
