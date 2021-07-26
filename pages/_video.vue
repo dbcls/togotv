@@ -20,7 +20,7 @@
           <div v-if="videoData.skillset_1 !== undefined" :class="['list_emphasize', is_first_time ? 'on' : '']">
             <p class="list_description tsukushi">{{ $t('you_can_see_playlist') }}</p>
           </div>
-          <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : '', autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
+          <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : null, autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
         </div>
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate ? videoData.uploadDate.replace(/-/g, '.') : '' }}</p>
