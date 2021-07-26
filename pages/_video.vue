@@ -22,6 +22,7 @@
           </div>
           <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : null, autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
         </div>
+        <p class="original_link">この動画が再生されない場合は、YouTubeでご覧ください。<a :href="`https://youtu.be/${videoData.embedUrl}`" target="_blank">{{ `https://youtu.be/${videoData.embedUrl}` }}</a></p>
         <div class="meta_data">
           <p class="update mont bold">{{ videoData.uploadDate ? videoData.uploadDate.replace(/-/g, '.') : '' }}</p>
           <p class="total_time mont bold" v-html="converSecToHour(videoData['duration'], true, true)"><span class="unit">{{ $t('minutes') }}</span></p>
@@ -461,8 +462,12 @@ export default Vue.extend({
           left: 0
           width: 100%
           height: 100%
+      > p.original_link
+        margin: 4px 0 0
+        font-size: 12px
+        color: #6b6b6b
       > .meta_data
-        margin-top: 12px
+        margin-top: 10px
         margin-bottom: 10px
         display: flex
         align-items: center
