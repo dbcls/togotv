@@ -1,11 +1,11 @@
 <template>
   <div class="video_wrapper">
-    <section v-if="videoData.skillset_1 !== undefined" class="course_info">
+    <section v-if="videoData.skillset_1" class="course_info">
       <p class="course_title tsukushi">{{ videoData.skillset_1.title }}</p>
     </section>
     <section class="video_description_wrapper">
       <div class="left_section">
-        <div v-if="videoData.skillset_1 !== undefined" class="video_control">
+        <div v-if="videoData.skillset_1" class="video_control">
           <div class="control" @click="player.previousVideo()">
             <img class="prev" src="~/assets/img/icon/icon_prev_video.svg"/>
             <p class="control_text prev">{{ $t('prev') }}</p>
@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="iframe_wrapper">
-          <div v-if="videoData.skillset_1 !== undefined" :class="['list_emphasize', is_first_time ? 'on' : '']">
+          <div v-if="videoData.skillset_1" :class="['list_emphasize', is_first_time ? 'on' : '']">
             <p class="list_description tsukushi">{{ $t('you_can_see_playlist') }}</p>
           </div>
           <youtube ref="youtube" :video-id="videoData.embedUrl" :player-vars="{rel: 0, listType: 'playlist', list: videoData.skillset_1 !== undefined ? videoData.skillset_1.id : null, autoplay: 0, controls: 1}" @stateChange="stateChange" @ready="ready()" :resize="true"></youtube>
@@ -36,14 +36,13 @@
           </p>
         </div>
         <h2 class="title tsukushi bold">{{ videoData.name }}</h2>
-        <div class="description" v-html="videoData.description">
-        </div>
+        <div class="description" v-html="videoData.description"></div>
         <div class="related_videos related_videos_section">
           <h3 class="tsukushi bold">{{ $t('related_videos') }}</h3>
           <VideoListHorizontalScroll :props="{id: 'related_videos', playList: related_videos, bg: 'white'}"/>
         </div>
       </div>
-      <div :class="['right_section', videoData.skillset_1 !== undefined ? 'is_in_course' : '']">
+      <div :class="['right_section', videoData.skillset_1 ? 'is_in_course' : '']">
         <div class="digest" v-if="videoData.headline && videoData.headline.length !== 0">
           <h3 class="tsukushi bold">{{ $t('digest') }}</h3>
           <ul :class="videoData.headline.length >= 5 ? 'over5' : ''">
@@ -389,12 +388,10 @@ export default Vue.extend({
         @include icon('course-white')
   > .video_description_wrapper
     display: flex
-    max-width: 1200px
     width: calc(100% - #{$VIEW_PADDING} * 2)
     margin: 34px auto 0
     > .left_section
-      margin-right: 27px
-      width: calc(100% - 264px)
+      width: calc(100% - 280px)
       > .video_control
         display: flex
         justify-content: center
@@ -494,6 +491,7 @@ export default Vue.extend({
               transform: none
           > span.label
             font-size: 14px
+            white-space: nowrap
       > h2.title
         font-size: 27px
         line-height: 39px
@@ -517,9 +515,9 @@ export default Vue.extend({
         margin-left: -$VIEW_PADDING
     > .right_section
       padding-top: 4px
-      width: 300px
-      width: 264px
-      min-width: 264px
+      width: 280px
+      padding-left: 10px
+      box-sizing: border-box
       z-index: $LAYER_2
       &.is_in_course
         padding-top: 58px
@@ -733,21 +731,32 @@ export default Vue.extend({
   100%
     transform: rotate(0deg)
 
-@media screen and (max-width:1000px)
+@media screen and (max-width: 896px)
   .video_wrapper
     > .course_info
-      > course_title
-        padding-left: $VIEW_PADDING_SP
+      > p.course_title
+        padding: 2px 0 2px $VIEW_PADDING_SP
     > .video_description_wrapper
       width: calc(100% - #{$VIEW_PADDING_SP} * 2)
       flex-direction: column
+      .related_videos_section
+        margin-top: 30px
+        .related_videos
+          margin-top: 10px
+        .video_list_wrapper
+          margin-left: -$VIEW_PADDING_SP
       > .left_section
-        margin-right: 0
         width: 100%
+        > .meta_data
+          flex-wrap: wrap
+          line-height: 24px
+        > .related_videos_section
+          display: none
       > .right_section
         max-width: 100%
         width: 100%
         padding-top: 35px
+        padding-left: 0
         &.is_in_course
           padding-top: 35px
         > div.digest
@@ -756,27 +765,6 @@ export default Vue.extend({
             > li
               > .title
                 max-width: 100%
-
-@media screen and (max-width: 896px)
-  .video_wrapper
-    > .course_info
-      > p.course_title
-        padding: 2px 0 2px $VIEW_PADDING_SP
-    > .video_description_wrapper
-      width: calc(100% - #{$VIEW_PADDING_SP} * 2)
-      .related_videos_section
-        margin-top: 30px
-        .related_videos
-          margin-top: 10px
-        .video_list_wrapper
-          margin-left: -$VIEW_PADDING_SP
-      > .left_section
-        > .meta_data
-          flex-wrap: wrap
-          line-height: 24px
-        > .related_videos_section
-          display: none
-      > .right_section
         > .related_videos_section
           display: block
     .course_section

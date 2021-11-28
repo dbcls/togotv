@@ -20,7 +20,13 @@
         <li @click="active_tab = 'month'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'month' ? 'active' : '']">{{ $t('last_month') }}</li>
         <li @click="active_tab = 'weekly'" :class="['span_tab', 'tsukushi', 'bold', active_tab === 'weekly' ? 'active' : '']">{{ $t('last_week') }}</li>
       </ul>
-      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="getActiveData()"/>
+      <VideoListCard
+        v-if="$store.state.display === 'card'"
+        v-bind="{
+          video_info_array: getActiveData(),
+          has_aside: true,
+        }"
+      />
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="getActiveData()"/>
       </div>
   </div>

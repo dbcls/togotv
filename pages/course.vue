@@ -74,11 +74,11 @@ export default Vue.extend({
     padding: 0 $VIEW_PADDING
     > .video_section
       > ul
-        margin-left: -14px
+        margin-left: -10px
         display: flex
         flex-wrap: wrap
         > li
-          margin-left: 14px
+          margin-left: 10px
           margin-bottom: 28px
 
 @media screen and (max-width: 896px)

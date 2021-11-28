@@ -2,7 +2,17 @@
   <div class="video_list_wrapper">
     <ul>
       <li v-for="video in video_info_array" :key="video.embedUrl">
-        <SingleVideoCard :props="{id: video.embedUrl, thumbnail: video.thumbnailUrl, title: video.name, description: video.description, uploadDate: video.uploadDate, duration: video['duration(ISO 8601)'] ? video['duration(ISO 8601)'] : video.duration}"/>
+        <SingleVideoCard
+          :props="{
+            id: video.embedUrl,
+            thumbnail: video.thumbnailUrl,
+            title: video.name,
+            description: video.description,
+            uploadDate: video.uploadDate,
+            duration: video['duration(ISO 8601)'] ? video['duration(ISO 8601)'] : video.duration,
+            has_aside: has_aside,
+          }"
+        />
       </li>
     </ul>
   </div>
@@ -16,11 +26,9 @@ export default Vue.extend({
   props: {
     video_info_array: {
       required: true
-    }
-  },
-  data () {
-    return {
-
+    },
+    has_aside: {
+      required: false
     }
   },
   components: {
@@ -36,16 +44,11 @@ export default Vue.extend({
   > ul
     display: flex
     flex-wrap: wrap
-    margin-left: -18px
+    margin-left: -10px
     > li
-      margin: 0 0 21px 18px
+      margin: 0 0 21px 10px
 
 @media screen and (max-width: 896px)
   .video_list_wrapper
     min-width: auto
-    > ul
-      margin-left: -18px
-      > li
-        margin: 0 0 21px 18px
-        width: calc((100vw - #{$VIEW_PADDING_SP} * 2 - 18px) / 2)
 </style>

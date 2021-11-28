@@ -87,7 +87,7 @@ export default Vue.extend({
     content: ''
     display: inline-block
     width: calc(#{$VIEW_PADDING} + 83px)
-    height: 246px
+    height: 300px
     position: absolute
     top: 0
     right: 0
@@ -146,10 +146,11 @@ export default Vue.extend({
         top: 0
         left: 0
         content: ''
-        border-top: 103px solid rgba(255, 255, 255, .15)
-        border-right: 103px solid rgba(255, 255, 255, 0)
-        border-bottom: 103px solid rgba(255, 255, 255, 0)
-        border-left: 103px solid rgba(255, 255, 255, .15)
+        border-top-color: rgba(255, 255, 255, 0.15)
+        border-right-color: rgba(255, 255, 255, 0)
+        border-bottom-color: rgba(255, 255, 255, 0)
+        border-left-color: rgba(255, 255, 255, 0.15)
+        border-style: solid
       &.short
         &:after
           display: none
@@ -175,7 +176,7 @@ export default Vue.extend({
         color: $POINT_COLOR
         margin: 0
         font-size: 17px
-        width: 192px
+        // width: 192px
         text-align: right
         &:before
           width: 22px
@@ -190,7 +191,6 @@ export default Vue.extend({
           background-color: $MAIN_COLOR
           border-radius: 5px
           top: -20px
-          left: 205px
           color: #fff
           text-decoration: none
           width: 330px
@@ -287,22 +287,66 @@ export default Vue.extend({
         &:last-of-type
           &:after
             width: $VIEW_PADDING_SP
-        //     display: none
-        &:before
-          border-top: 78px solid rgba(255, 255, 255, 0.15)
-          border-right: 78px solid rgba(255, 255, 255, 0)
-          border-bottom: 78px solid rgba(255, 255, 255, 0)
-          border-left: 78px solid rgba(255, 255, 255, 0.15)
-        > a.title
-          font-size: 16px
-          line-height: 24px
-          width: 126px
-          height: 126px
-          padding: 15px
-          box-sizing: content-box
         > .total_time
           display: none
         &:hover
           > .detail
             display: none
+
+@media screen and (min-width: 1800px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 7)
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 7)
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 7 * .5)
+  .course_wrapper .course_list > .course_box > .detail
+    left: calc((100vw - #{$VIEW_PADDING} * 2) / 7 - 1px)
+  .course_wrapper .course_list > .course_box > .total_time
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 7 - 12px)
+@media screen and (min-width: 1500px) and (max-width: 1800px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 6)
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 6)
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 6 * .5)
+  .course_wrapper .course_list > .course_box > .detail
+    left: calc((100vw - #{$VIEW_PADDING} * 2) / 6 - 1px)
+  .course_wrapper .course_list > .course_box > .total_time
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 6 - 12px)
+@media screen and (min-width: 1200px) and (max-width: 1500px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 5)
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 5)
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 5 * .5)
+  .course_wrapper .course_list > .course_box > .detail
+    left: calc((100vw - #{$VIEW_PADDING} * 2) / 5 - 1px)
+  .course_wrapper .course_list > .course_box > .total_time
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 5 - 12px)
+@media screen and (max-width: 1200px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 4)
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 4)
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 4 * .5)
+  .course_wrapper .course_list > .course_box > .detail
+    left: calc((100vw - #{$VIEW_PADDING} * 2) / 4 - 1px)
+  .course_wrapper .course_list > .course_box > .total_time
+    width: calc((100vw - #{$VIEW_PADDING} * 2) / 4 - 12px)
+@media screen and (max-width: 896px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 4)
+    height: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 4)
+    font-size: 16px
+    line-height: 24px
+    padding: 15px
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 4 * .5)
+@media screen and (max-width: 480px)
+  .course_wrapper .course_list > .course_box > a.title
+    width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2)
+    height: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2)
+  .course_wrapper .course_list > .course_box:before
+    border-width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2 * .5)
+
 </style>

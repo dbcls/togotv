@@ -15,7 +15,7 @@
           </li>
         </ul>
       </div>
-      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="new_video_list"/>
+      <VideoListCard v-if="$store.state.display === 'card'" :video_info_array="new_video_list" :has_aside="true" />
       <VideoList v-if="$store.state.display === 'list'" :video_info_array="new_video_list"/>
       <Pagination ref="pagination" :props="{lastpage: lastpage}" @fetchData="fetchData" />
       </div>
