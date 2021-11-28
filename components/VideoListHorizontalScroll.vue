@@ -3,7 +3,18 @@
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-right`, direction: 'left'}"/>
     <ul class="video_list scroll-horizontal">
       <li class="video_list_box" v-for="video in props.playList" :key="video.id">
-        <SingleVideoCard :props="{id: getVideoId(video), thumbnail: getVideoThumbnail(video), title: video.name, description: video.description, duration: video.duration, courseId: props.courseId, uploadDate: video.uploadDate !== undefined ? video.uploadDate : video.date}"/>
+        <SingleVideoCard
+          :props="{
+            id: getVideoId(video),
+            thumbnail: getVideoThumbnail(video),
+            title: video.name,
+            description: video.description,
+            duration: video.duration,
+            courseId: props.courseId,
+            uploadDate: video.uploadDate !== undefined ? video.uploadDate : video.date,
+            has_aside: props.id === 'related_videos',
+          }"
+        />
       </li>
     </ul>
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-left`, direction: 'right'}"/>
@@ -96,9 +107,9 @@ export default Vue.extend({
     &:after
       width: $VIEW_PADDING
       background-color: rgba(235, 247, 249, .67)
-  &.related_videos,
-  &.related_videos_sp
+  &.related_videos
     width: calc(100% + #{$VIEW_PADDING} * 2)
+    z-index: 10
   .video_list
     overflow: hidden
     overflow-x: scroll
@@ -118,7 +129,8 @@ export default Vue.extend({
       &:last-of-type
         padding-right: $VIEW_PADDING
   button
-    top: 38px
+    top: 50%
+    transform: translateY(calc(-50% - 15px))
     z-index: $LAYER_3
 
 @media screen and (max-width: 896px)
@@ -138,7 +150,6 @@ export default Vue.extend({
     &.right_hide
       &:after
         width: $VIEW_PADDING_SP
-    &.related_videos,
     &.related_videos_sp
       width: calc(100% + #{$VIEW_PADDING_SP} * 2)
     .video_list

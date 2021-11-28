@@ -1,5 +1,5 @@
 <template>
-  <button @click="scrollHorizontally" :id="props.id" :class="['btn_scroll_next', props.direction, checkXScroll()]"></button>
+  <button @click="scrollHorizontally" :id="props.id" :class="['btn_scroll_next', props.direction, props.id, checkXScroll()]"></button>
 </template>
 
 <script lang="ts">
@@ -62,17 +62,35 @@ export default Vue.extend({
       let target_section: HTMLElement = parent.getElementsByClassName('scroll-horizontal')[0]
       let target_section_width: number = target_section.clientWidth
       let x_distance: number
+      const scroll_distance = target_section_width - this.bodyPadding() + 10;
       if(this.props.direction === "right") {
-        x_distance = target_section_width
+        x_distance = scroll_distance;
       } else {
-        x_distance = -target_section_width
+        x_distance = -scroll_distance;
       }
-
       target_section.scrollBy({
         behavior: "smooth",
         left: x_distance,
         top: 0
       })
+    },
+    bodyPadding() {
+      if(document.body.clientWidth > 896) {
+        return 160;
+      } else {
+        return 40;
+      }
+    },
+    childElementNum(): number {
+      const clientWidth = document.body.clientWidth;
+      const isShort = this.props.id.includes('related_videos')
+      let num: number = 0
+      if (clientWidth > 1800) num = isShort ? 5 : 6;
+      if (clientWidth > 1500 && clientWidth <= 1800) num = isShort ? 4 : 5;
+      if (clientWidth > 1200 && clientWidth <= 1500) num = isShort ? 3 : 4;
+      if (clientWidth > 896 && clientWidth <= 1200) num = isShort ? 2 : 3;
+      if (clientWidth <= 896) num = 2;
+      return num;
     },
     toggleBtn () {
       let doc: any = document
@@ -82,20 +100,14 @@ export default Vue.extend({
       const child_width = target_section.children[1].getBoundingClientRect().width//子要素の幅
       const num_of_element = target_section.childElementCount//要素数
       let substraction: number = 0
-      if(document.body.clientWidth > 897) {
-        substraction = document.body.clientWidth - 160
-      } else {
-        substraction = document.body.clientWidth - 40
-      }
-      if (this.props.id.indexOf('video') !== -1) {
-        substraction += 10
-      }
-      // console.log('current_position_x', current_position_x)
-      // console.log(Math.ceil(child_width * num_of_element - substraction))
+      substraction =
+        this.props.id.includes('video')
+          ? child_width * this.childElementNum()
+          : document.body.clientWidth - this.bodyPadding();
       if(current_position_x === 0) {
         this.btn_state.left = false
         this.$emit('toggleBtn', 'hide_left')
-      } else if (current_position_x === Math.ceil(child_width * num_of_element - substraction)) {
+      } else if (Math.floor(current_position_x) >= Math.floor(child_width * num_of_element - substraction)) {
         this.btn_state.right = false
         this.$emit('toggleBtn', 'hide_right')
       } else {
@@ -134,8 +146,10 @@ export default Vue.extend({
   &.right
     right: 65px
   &.left
-    transform: rotate(180deg)
     left: 65px
+    transform: translateY(calc(-50% - 15px)) rotate(180deg)
+    &.course-left
+      transform: rotate(180deg)
 
 @media screen and (max-width: 896px)
   .btn_scroll_next

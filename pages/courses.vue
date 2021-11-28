@@ -107,11 +107,11 @@ export default Vue.extend({
           z-index: $LAYER_2
           display: flex
           align-items: center
-          margin-bottom: 15px
+          margin-bottom: 8px
           > a
             font-size: 18px
             display: flex
-            align-items: flex-start
+            align-items: center
             text-decoration: none
             color: $BLACK
             transition: .2s

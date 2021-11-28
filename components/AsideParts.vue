@@ -60,7 +60,8 @@ export default Vue.extend({
 .aside_wrapper
   width: 280px
   min-width: 280px
-  margin-right: 40px
+  padding-right: 10px
+  box-sizing: border-box
   margin-top: 36px
   .section_title
     font-size: 18px

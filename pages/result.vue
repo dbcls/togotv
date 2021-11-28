@@ -99,7 +99,13 @@
           <span class="found_num" v-if="video_num_by_type['handson'] !== null">{{ `${video_num_by_type['handson']}` }}</span>
         </li>
       </ul>
-      <VideoListCard v-if="$store.state.display === 'card' && !is_loading" :video_info_array="result_list"/>
+      <VideoListCard
+        v-if="$store.state.display === 'card' && !is_loading"
+        v-bind="{
+          video_info_array: result_list,
+          has_aside: true,
+        }"
+      />
       <VideoList v-if="$store.state.display === 'list' && !is_loading" :video_info_array="result_list"/>
       <div v-if="is_loading" class="loader">Loading...</div>
       <Pagination ref="pagination" :props="{lastpage: lastpage, is_null: result_list.length === 0}" @fetchData="fetchData" />
@@ -621,7 +627,7 @@ export default Vue.extend({
       margin-bottom: 8px
       > .span_tab
         font-size: 18px
-        margin-right: 40px
+        margin-right: 10px
         padding: 0 10px 22px
         opacity: .6
         &:hover

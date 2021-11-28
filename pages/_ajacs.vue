@@ -116,7 +116,7 @@ export default Vue.extend({
   align-items: flex-start
   justify-content: flex-start
   > .ajacs_section
-    width: calc(100% - 264px)
+    width: calc(100% - 280px)
     > .ajacs_section_header
       display: flex
       justify-content: space-between
