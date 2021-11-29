@@ -87,7 +87,6 @@ export default Vue.extend({
     content: ''
     display: inline-block
     width: calc(#{$VIEW_PADDING} + 83px)
-    height: 300px
     position: absolute
     top: 0
     right: 0
@@ -260,6 +259,8 @@ export default Vue.extend({
   &:hover
     padding-top: 40px
     margin-top: -40px
+    &:before,&:after
+      top: 40px
     button
       top: 122px
 
@@ -299,6 +300,8 @@ export default Vue.extend({
     height: calc((100vw - #{$VIEW_PADDING} * 2) / 7)
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 7 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 7)
   .course_wrapper .course_list > .course_box > .detail
     left: calc((100vw - #{$VIEW_PADDING} * 2) / 7 - 1px)
   .course_wrapper .course_list > .course_box > .total_time
@@ -309,6 +312,8 @@ export default Vue.extend({
     height: calc((100vw - #{$VIEW_PADDING} * 2) / 6)
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 6 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 6)
   .course_wrapper .course_list > .course_box > .detail
     left: calc((100vw - #{$VIEW_PADDING} * 2) / 6 - 1px)
   .course_wrapper .course_list > .course_box > .total_time
@@ -319,6 +324,8 @@ export default Vue.extend({
     height: calc((100vw - #{$VIEW_PADDING} * 2) / 5)
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 5 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 5)
   .course_wrapper .course_list > .course_box > .detail
     left: calc((100vw - #{$VIEW_PADDING} * 2) / 5 - 1px)
   .course_wrapper .course_list > .course_box > .total_time
@@ -329,6 +336,8 @@ export default Vue.extend({
     height: calc((100vw - #{$VIEW_PADDING} * 2) / 4)
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING} * 2) / 4 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING} * 2) / 4)
   .course_wrapper .course_list > .course_box > .detail
     left: calc((100vw - #{$VIEW_PADDING} * 2) / 4 - 1px)
   .course_wrapper .course_list > .course_box > .total_time
@@ -342,11 +351,15 @@ export default Vue.extend({
     padding: 15px
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 4 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 4)
 @media screen and (max-width: 480px)
   .course_wrapper .course_list > .course_box > a.title
     width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2)
     height: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2)
   .course_wrapper .course_list > .course_box:before
     border-width: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2 * .5)
+  .course_wrapper:before, .course_wrapper:after
+    height: calc((100vw - #{$VIEW_PADDING_SP} * 2) / 2)
 
 </style>
