@@ -82,7 +82,7 @@ export default Vue.extend({
     content: ''
     display: inline-block
     width: calc(#{$VIEW_PADDING} + 83px)
-    height: 300px
+    height: 100%
     position: absolute
     top: 0
     right: 0
