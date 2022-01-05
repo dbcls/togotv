@@ -42,6 +42,12 @@
       </h2>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
+    <section class="illustation_section">
+      <h2 class="tsukushi bold">
+        <nuxt-link :to="localePath('/pics.html')">Togo picture gallery</nuxt-link>
+      </h2>
+      <IllustrationList :illustration_list="illustration_list" />
+    </section>
   </div>
 </template>
 
@@ -49,6 +55,7 @@
 import Vue from 'vue'
 import CourseList from '~/components/CourseList.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
+import IllustrationList from '~/components/IllustrationList.vue'
 import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
 
@@ -86,12 +93,21 @@ export default Vue.extend({
       .catch(error => {
         console.log('error', error)
       })
+    axios
+      .get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=11`)
+      .then(data => {
+        this.illustration_list = data.data.data
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   },
   data() {
     return {
       course_list: [],
       new_video_list: [],
-      realtime_video_list: []
+      realtime_video_list: [],
+      illustration_list: [],
     }
   },
   head() {
@@ -109,6 +125,7 @@ export default Vue.extend({
   components: {
     CourseList,
     VideoListHorizontalScroll,
+    IllustrationList,
     TextSearch
   }
 })
@@ -168,9 +185,7 @@ export default Vue.extend({
       text-align: center
       > .comma
         margin: 0 3px
-.course_section,
-.newvideo_section,
-.realtime_view_video_section
+section
   > h2
     margin-left: $VIEW_PADDING
     > a
@@ -193,6 +208,9 @@ export default Vue.extend({
   padding-bottom: 52px
   > h2
     @include section_title('barchart')
+.illustation_section
+  > h2
+    @include section_title('img')
 
 @media screen and (max-width: 896px)
   .main
@@ -229,7 +247,8 @@ export default Vue.extend({
           margin: 20px auto 0
   .course_section,
   .newvideo_section,
-  .realtime_view_video_section
+  .realtime_view_video_section,
+  .illustation_section,
     > h2
       margin-left: $VIEW_PADDING_SP
 
