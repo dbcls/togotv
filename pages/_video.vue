@@ -114,9 +114,9 @@
       </h3>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
-    <section class="illustation_section">
+    <section class="illustation_section bg_blue">
       <h3 class="tsukushi bold">
-        <nuxt-link :to="localePath('/pics.html')">Togo picture gallery</nuxt-link>
+        <nuxt-link :to="localePath('/pics.html')">{{ $t('new_illustrations') }}</nuxt-link>
       </h3>
       <IllustrationList :illustration_list="illustration_list" />
     </section>
@@ -708,30 +708,26 @@ export default Vue.extend({
           &:before
             @include icon('doi')
   section
+    padding: 15px 0
+    &:nth-of-type(2)
+      margin-top: 30px
+      padding-top: 30px
     > h3
       margin-left: $VIEW_PADDING
+      margin-top: 0
       > a
         text-decoration: none
         color: $BLACK
         transition: .2s
         &:hover
           color: $MAIN_COLOR
-  .course_section
-    margin-top: 80px
-    padding-top: 30px
-    > h3
+    &.course_section > h3
       @include section_title('course')
-  .newvideo_section
-    padding-top: 28px
-    > h3
+    &.newvideo_section > h3
       @include section_title('new')
-  .realtime_view_video_section
-    padding-top: 28px
-    padding-bottom: 52px
-    > h3
+    &.realtime_view_video_section > h3
       @include section_title('barchart')
-  .illustation_section
-    > h3
+    &.illustation_section > h3
       @include section_title('img')
   > .modal_back
     @include modal_back
