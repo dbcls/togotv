@@ -542,7 +542,7 @@ export default Vue.extend({
       width: 280px
       padding-left: 10px
       box-sizing: border-box
-      z-index: $LAYER_2
+      z-index: $LAYER_UNDER_HEADER
       &.is_in_course
         padding-top: 58px
       > .related_videos

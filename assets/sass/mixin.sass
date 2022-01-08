@@ -60,6 +60,12 @@ $VIEW_PADDING_SP: 20px
     height: 35px
     @include icon($code)
 
+@mixin active_underline
+  background: linear-gradient(rgba(255, 255, 255, 0) 70%, rgba(253, 211, 101, .8) 0%)
+  display: inline
+  padding: 0 10px 22px
+  background-position: 10px 34px
+
 @mixin blue_underline
   background: linear-gradient(rgba(255, 255, 255, 0) 70%, rgba(59, 180, 193, .15) 0%)
   display: inline

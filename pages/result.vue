@@ -633,7 +633,7 @@ export default Vue.extend({
         &:hover
           cursor: pointer
         &.active
-          @include blue_underline
+          @include active_underline
           background-position: 10px 26px
           opacity: 1
         > .found_num
