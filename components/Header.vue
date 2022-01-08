@@ -12,16 +12,65 @@
           <ul class="links">
             <li class="link home"><nuxt-link :to="localePath('/')">{{ $t('top') }}</nuxt-link></li>
             <li class="link about"><nuxt-link :to="localePath('/welcome.html')">{{ $t('about') }}</nuxt-link></li>
-            <li :class="['link', 'circlevideo', 'has_child_nav', $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '']" @click="toggleChildMenu('search_videos')">{{ $t('search_videos') }}<span class="arrow"></span>
+            <li
+              :class="[
+                'link',
+                'circlevideo',
+                'has_child_nav',
+                $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '',
+              ]"
+              @click="toggleChildMenu('search_videos')"
+            >
+              <span :class="{
+                'nuxt-link-exact-active':
+                  $route.path === '/courses.html'
+                  || $route.path === '/newvideo.html'
+                  || $route.path === '/rankings.html'
+                  || $route.path === '/course.html'
+                  || $route.path === '/tag.html'
+                  || $route.path.match(/\/[\d]+\.html/)
+                }">{{ $t('search_videos') }}</span>
+              <span class="arrow"></span>
               <ul :class="['child_nav', $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '']">
-                <li @click="$event.stopPropagation()" class="link course"><nuxt-link :to="localePath('/courses.html')">{{ $t('courses') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link course">
+                  <nuxt-link
+                    :class="{'nuxt-link-exact-active': $route.path === '/course.html'}"
+                    :to="localePath('/courses.html')"
+                  >
+                    {{ $t('courses') }}
+                  </nuxt-link>
+                </li>
                 <li @click="$event.stopPropagation()" class="link new"><nuxt-link :to="localePath('/newvideo.html')">{{ $t('new_videos') }}</nuxt-link></li>
                 <li @click="$event.stopPropagation()" class="link barchart"><nuxt-link :to="localePath('/rankings.html')">{{ $t('ranking') }}</nuxt-link></li>
               </ul>
             </li>
-            <li class="link picture"><nuxt-link :to="localePath('/pics.html')">{{ $t('search_pictures') }}</nuxt-link></li>
-            <li class="link ajacs"><nuxt-link :to="localePath('/ajacs_text.html?page=1')">{{ $t('search_ajacs_text') }}</nuxt-link></li>
-            <li :class="['link', 'contact', 'has_child_nav', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']" @click="toggleChildMenu('contact')">{{ $t('contact') }}<span class="arrow"></span>
+            <li class="link picture">
+              <nuxt-link
+                :class="{'nuxt-link-exact-active': $route.path.includes('/togopic')}"
+                :to="localePath('/pics.html')"
+              >
+                {{ $t('search_pictures') }}
+              </nuxt-link>
+            </li>
+            <li class="link ajacs">
+              <nuxt-link
+                :class="{'nuxt-link-exact-active': $route.path.includes('/ajacs')}"
+                :to="localePath('/ajacs_text.html?page=1')"
+              >
+                {{ $t('search_ajacs_text') }}
+              </nuxt-link>
+            </li>
+            <li
+              :class="[
+                'link',
+                'contact',
+                'has_child_nav',
+                $store.state.sp_menu_toggle_state['contact'] ? 'open' : '',
+              ]"
+              @click="toggleChildMenu('contact')"
+            >
+              <span :class="{ 'nuxt-link-exact-active': $route.path === '/faq.html' || $route.path === '/request.html' || $route.path === '/staff.html' }">{{ $t('contact') }}</span>
+              <span class="arrow"></span>
               <ul :class="['child_nav', 'contact', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']">
                 <li @click="$event.stopPropagation()" class="link question"><nuxt-link :to="localePath('/faq.html')">{{ $t('faq') }}</nuxt-link></li>
                 <li @click="$event.stopPropagation()" class="link video">
@@ -128,6 +177,12 @@ header
             display: flex
             align-items: center
             margin-right: 12px
+            .nuxt-link-exact-active
+              @include active_underline
+              background-position: 10px 50px
+              padding: 0 0 10px 25px
+              margin-bottom: -10px
+              margin-left: -25px
             > a
               text-decoration: none
               color: $BLACK
@@ -150,6 +205,10 @@ header
                 font-size: 16px
                 padding: 12px 18px 10px 13px
                 line-height: 32px
+                > li
+                  .nuxt-link-exact-active
+                    background-position: 10px 29px
+                    background-size: 100% 72%
               &.contact
                 > ul.child_nav
                   right: 0
@@ -162,6 +221,7 @@ header
               display: inline-block
               width: 25px
               height: 25px
+              z-index: $LAYER_1
             &.home
               &:before
                 @include icon('home')
@@ -210,7 +270,8 @@ header
   &.newvideo,
   &.rankings,
   &.video,
-  &.result
+  &.result,
+  &.tag,
     > .header_contents
       > .right_area
         > nav
@@ -290,7 +351,7 @@ header
               background: #ffffff
               z-index: 1
               > a.active
-                @include blue_underline()
+                @include active_underline()
                 padding: 0
                 background-position: center 8px
                 background-size: 100% 43px
@@ -330,7 +391,7 @@ header
                   overflow: hidden
                   > li
                     > a.nuxt-link-exact-active
-                      @include blue_underline()
+                      @include active_underline()
                       padding: 0
                       background-position: center -6px
                       background-size: auto 43px

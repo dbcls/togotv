@@ -149,7 +149,7 @@ export default Vue.extend({
         &:hover
           cursor: pointer
         &.active
-          @include blue_underline
+          @include active_underline
           background-position: 10px 26px
 @media screen and (max-width: 896px)
   .realtime_rank_wrapper
