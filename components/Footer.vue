@@ -134,12 +134,13 @@ footer
               font-size: 12px
               font-weight: normal
               white-space: nowrap
-              &:hover
-                cursor: pointer
               > a.active
+                pointer-events: none
+              > a:not(.active)
                 color: $MAIN_COLOR
                 font-weight: bold
-                pointer-events: none
+                &:hover
+                  cursor: pointer
               > span
                 margin: 0 5px
   > ul.sns
