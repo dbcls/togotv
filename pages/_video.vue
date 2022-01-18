@@ -707,9 +707,9 @@ export default Vue.extend({
           margin-bottom: 6px
           &:before
             @include icon('doi')
-  section
+  section.bg_blue
     padding: 15px 0
-    &:nth-of-type(2)
+    &.course_section
       margin-top: 30px
       padding-top: 30px
     > h3
