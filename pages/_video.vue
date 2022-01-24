@@ -496,6 +496,7 @@ export default Vue.extend({
           margin: 0 11px 0 0
           display: flex
           align-items: center
+          white-space: nowrap
           &:before
             width: 20px
             height: 20px
@@ -515,7 +516,6 @@ export default Vue.extend({
               transform: none
           > span.label
             font-size: 14px
-            white-space: nowrap
       > h2.title
         font-size: 27px
         line-height: 39px
