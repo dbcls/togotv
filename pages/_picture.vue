@@ -9,6 +9,7 @@
         <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
         <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.scientific_name }}</p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
+        <p class="editor mont" v-html="`Edited by&nbsp;${picture.editor}`"></p>
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
         <a :href="picture.id" class="doi mont">{{picture.id}}</a>
         <a :href="`https://commons.wikimedia.org/wiki/File:${picture.svg}`" target="_blank" class="wiki mont">Wikimedia Commons</a>
@@ -182,24 +183,13 @@ export default Vue.extend({
         margin-top: 1px
       > p.name
         font-size: 30px
-      > p.author
-        margin: 26px 0 7px
-        font-size: 12px
-        display: flex
-        align-items: center
-        &:before
-          width: 18px
-          height: 18px
-          margin-right: 3px
-          @include icon('brush')
-        > a
-          color: #fff
+      > p.author,
+      > p.editor,
       > a.taxonomy,
       > a.wiki,
       > a.doi
         color: #fff
         font-size: 12px
-        display: block
         line-height: 26px
         display: flex
         align-items: center
@@ -208,6 +198,17 @@ export default Vue.extend({
           height: 22px
           margin-right: 3px
           @include icon('externallink')
+      > p.author
+        &:before
+          width: 18px
+          height: 18px
+          margin-right: 3px
+          @include icon('brush')
+        > a
+          color: #fff
+      > p.editor
+        &:before
+          @include icon('editor')
       > a.doi
         &:before
           @include icon('doi')
@@ -273,8 +274,11 @@ export default Vue.extend({
         background-color: transparent
         &:before
           display: none
+        > p.author,
+        > p.editor,
         > a.taxonomy,
-        > a.wiki
+        > a.wiki,
+        > a.doi
           color: $BLACK
         > div.download_btns
           > a
