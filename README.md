@@ -20,3 +20,6 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## API
+[https://github.com/dogrunjp/togotv2020-api](https://github.com/dogrunjp/togotv2020-api)
