@@ -12,58 +12,61 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default Vue.extend({
   props: {
     props: {
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      keyword: '',
-      canMessageSubmit: false
-    }
+      keyword: "",
+      canMessageSubmit: false,
+    };
   },
   methods: {
     setCanMessageSubmit() {
       this.canMessageSubmit = true;
     },
     submit(type) {
-      let query = { name: 'result', query: { query: this.keyword, type: 'manual', page: "1" } }
+      let query = {
+        name: "result",
+        query: { query: this.keyword, type: "manual", page: "1" },
+      };
       if (type === "enter") {
         if (!this.canMessageSubmit) {
           return;
         }
-        if(this.keyword === '') {
-          delete query.query.query
+        if (this.keyword === "") {
+          delete query.query.query;
         }
-        if(this.$i18n.locale === 'ja') {
-          this.$router.push(this.localePath(query))
-        } else if (this.$i18n.locale === 'en') {
-          query.query.lang = "en"
-          this.$router.push(this.localePath(query))
+        if (this.$i18n.locale === "ja") {
+          this.$router.push(this.localePath(query));
+        } else if (this.$i18n.locale === "en") {
+          query.query.lang = "en";
+          this.$router.push(this.localePath(query));
         }
       } else if (type === "click") {
-        this.$router.push(this.localePath(query))
-        if(this.$i18n.locale === 'ja') {
-          this.$router.push(this.localePath(query))
-        } else if (this.$i18n.locale === 'en') {
-          query.query.lang = "en"
-          this.$router.push(this.localePath(query))
+        this.$router.push(this.localePath(query));
+        if (this.$i18n.locale === "ja") {
+          this.$router.push(this.localePath(query));
+        } else if (this.$i18n.locale === "en") {
+          query.query.lang = "en";
+          this.$router.push(this.localePath(query));
         }
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style lang="sass" scoped>
 div.input_wrapper
   @include text_input
   > input
-    width: 281px
+    width: 250px
     height: 33px
   > button
     width: 25px
@@ -83,7 +86,7 @@ div.input_wrapper
 @media screen and (max-width: 896px)
   div.input_wrapper
     > input
-      width:  80vw
+      width: 80vw
     &.index
       > input
         width: 80%

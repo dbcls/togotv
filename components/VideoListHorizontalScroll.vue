@@ -1,8 +1,23 @@
 <template>
-  <div :class="['video_list_wrapper', props.bg, props.id, btn_state.left ? '' : 'left_hide', btn_state.right ? '' : 'right_hide']">
-    <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-right`, direction: 'left'}"/>
+  <div
+    :class="[
+      'video_list_wrapper',
+      props.bg,
+      props.id,
+      btn_state.left ? '' : 'left_hide',
+      btn_state.right ? '' : 'right_hide',
+    ]"
+  >
+    <ScrollBtn
+      @toggleBtn="toggleBtn"
+      :props="{ id: `${props.id}-right`, direction: 'left' }"
+    />
     <ul class="video_list scroll-horizontal">
-      <li class="video_list_box" v-for="video in props.playList" :key="video.id">
+      <li
+        class="video_list_box"
+        v-for="video in props.playList"
+        :key="video.id"
+      >
         <SingleVideoCard
           :props="{
             id: getVideoId(video),
@@ -11,66 +26,70 @@
             description: video.description,
             duration: video.duration,
             courseId: props.courseId,
-            uploadDate: video.uploadDate !== undefined ? video.uploadDate : video.date,
+            uploadDate:
+              video.uploadDate !== undefined ? video.uploadDate : video.date,
             has_aside: props.id === 'related_videos',
           }"
         />
       </li>
     </ul>
-    <ScrollBtn @toggleBtn="toggleBtn" :props="{id: `${props.id}-left`, direction: 'right'}"/>
+    <ScrollBtn
+      @toggleBtn="toggleBtn"
+      :props="{ id: `${props.id}-left`, direction: 'right' }"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import ScrollBtn from '~/components/ScrollBtn.vue'
-import SingleVideoCard from '~/components/SingleVideoCard.vue'
+import Vue from "vue";
+import ScrollBtn from "~/components/ScrollBtn.vue";
+import SingleVideoCard from "~/components/SingleVideoCard.vue";
 
 export default Vue.extend({
   props: {
     props: {
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
       btn_state: {
         left: false,
-        right: true
-      }
-    }
+        right: true,
+      },
+    };
   },
   components: {
     ScrollBtn,
-    SingleVideoCard
+    SingleVideoCard,
   },
   methods: {
     toggleBtn(command: string) {
-      if(command === 'hide_left') {
-        this.btn_state.left = false
-      } else if (command === 'hide_right') {
-        this.btn_state.right = false
-      } else if (command === 'open_both') {
-        this.btn_state.right = true
-        this.btn_state.left = true
+      if (command === "hide_left") {
+        this.btn_state.left = false;
+      } else if (command === "hide_right") {
+        this.btn_state.right = false;
+      } else if (command === "open_both") {
+        this.btn_state.right = true;
+        this.btn_state.left = true;
       }
     },
     getVideoId(video: any) {
-      if(video['embedUrl'] !== undefined) {
-        return video['embedUrl']
+      if (video["embedUrl"] !== undefined) {
+        return video["embedUrl"];
       } else {
-        return video['videoid']
+        return video["videoid"];
       }
     },
     getVideoThumbnail(video: any) {
-      if(video['thumbnailUrl'] !== undefined) {
-        return video['thumbnailUrl']
+      if (video["thumbnailUrl"] !== undefined) {
+        return video["thumbnailUrl"];
       } else {
-        return video['thumbnail']
+        return video["thumbnail"];
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style lang="sass" scoped>

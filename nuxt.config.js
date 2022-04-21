@@ -1,12 +1,20 @@
 import axios from "axios";
 import ja from "./static/json/ja.json";
 import en from "./static/json/en.json";
+import dotenv from "dotenv";
+dotenv.config();
 
 export default {
   mode: "universal",
   /*
    ** Headers of the page
    */
+  vue: {
+    config: {
+      productionTip: true,
+      devtools: true,
+    },
+  },
   head: {
     htmlAttrs: {
       lang: "ja",
@@ -39,6 +47,7 @@ export default {
   plugins: [
     { src: "~/plugins/infiniteloading", ssr: false },
     { src: "~/plugins/vue-slider-component.js", ssr: false },
+    { src: "~/plugins/helper.js", ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules
@@ -71,7 +80,42 @@ export default {
         },
       },
     ],
+    "@nuxtjs/dotenv",
+    "@nuxtjs/axios",
+    "@nuxtjs/auth-next",
   ],
+  auth: {
+    redirect: {
+      login: "/",
+      logout: "/",
+      callback: "/oauth2_callback.html",
+      home: "/mypage.html",
+    },
+    strategies: {
+      google: {
+        scheme: "oauth2",
+        endpoints: {
+          authorization: "https://accounts.google.com/o/oauth2/auth",
+          userInfo: "https://www.googleapis.com/oauth2/v3/userinfo",
+          token: "https://oauth2.googleapis.com/token",
+        },
+        token: {
+          property: "access_token",
+          type: "Bearer",
+        },
+        user: {
+          property: false, // here should be `false`, as you defined in user endpoint `propertyName`
+          autoFetch: false,
+        },
+        scope: ["https://www.googleapis.com/auth/youtube"],
+        responseType: "token id_token",
+        accessType: undefined,
+        codeChallengeMethod: "",
+        clientId: process.env.GOOGLE_CLIENT_ID,
+      },
+      cookie: true,
+    },
+  },
   /*
    ** Build configuration
    */
@@ -83,14 +127,16 @@ export default {
         .get(`https://togotv-api.dbcls.jp/api/entries?rows=10000`)
         .then((data) => {
           data.data.data.forEach((entry) => {
-            generates.push({
-              route: entry.uploadDate.replace(/-/g, ""),
-              payload: entry,
-            },
-            {
-              route: `en/${entry.uploadDate.replace(/-/g, "")}`,
-              payload: entry,
-            });
+            generates.push(
+              {
+                route: entry.uploadDate.replace(/-/g, ""),
+                payload: entry,
+              },
+              {
+                route: `en/${entry.uploadDate.replace(/-/g, "")}`,
+                payload: entry,
+              }
+            );
           });
         })
         .catch((error) => {
@@ -98,17 +144,20 @@ export default {
         });
 
       await axios
-        .get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`)
+        .get(
+          `https://togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`
+        )
         .then((data) => {
           data.data.data.forEach((pic) => {
-            generates.push({
-              route: pic.id.split("/").pop(),
-              payload: pic,
-            },
-            {
-              route: `en/${pic.id.split("/").pop()}`,
-              payload: pic,
-            }
+            generates.push(
+              {
+                route: pic.id.split("/").pop(),
+                payload: pic,
+              },
+              {
+                route: `en/${pic.id.split("/").pop()}`,
+                payload: pic,
+              }
             );
           });
         })
@@ -122,28 +171,30 @@ export default {
         )
         .then((data) => {
           data.data.data.forEach((ajacs) => {
-            generates.push({
-              route: ajacs.id
-                .split("/")
-                .pop()
-                .replace(/\./g, ""),
-              payload: ajacs,
-            },
-            {
-              route: `en/${ajacs.id.split("/").pop().replace(/\./g, "")}`,
-              payload: ajacs,
-            }
+            generates.push(
+              {
+                route: ajacs.id
+                  .split("/")
+                  .pop()
+                  .replace(/\./g, ""),
+                payload: ajacs,
+              },
+              {
+                route: `en/${ajacs.id
+                  .split("/")
+                  .pop()
+                  .replace(/\./g, "")}`,
+                payload: ajacs,
+              }
             );
           });
         })
         .catch((error) => {
           console.log("error", error);
         });
-      generates.push(
-        {
-          route: `/en/index`,
-        }
-      )
+      generates.push({
+        route: `/en/index`,
+      });
       return generates;
     },
     subFolders: false,
@@ -179,8 +230,8 @@ export default {
       routes.push({
         path: "/",
         component: index_component,
-        alias: "/en/index"
-      })
+        alias: "/en/index",
+      });
     },
     build: {
       /*

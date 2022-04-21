@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15.468" height="14.71" viewBox="0 0 15.468 14.71">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="長方形_827" data-name="長方形 827" width="15.368" height="14.71" fill="#fff"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="長方形_822" data-name="長方形 822" width="13.183" height="2.633" fill="#fff"/>
+    </clipPath>
+    <clipPath id="clip-path-4">
+      <rect id="長方形_826" data-name="長方形 826" width="8.327" height="2.633" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="グループ_1991" data-name="グループ 1991" transform="translate(0 0)">
+    <g id="グループ_1989" data-name="グループ 1989" transform="translate(0 0)">
+      <g id="グループ_1988" data-name="グループ 1988" clip-path="url(#clip-path)">
+        <g id="グループ_1981" data-name="グループ 1981" transform="translate(0 5.125)" style="isolation: isolate">
+          <g id="グループ_1980" data-name="グループ 1980">
+            <g id="グループ_1979" data-name="グループ 1979" clip-path="url(#clip-path-2)">
+              <rect id="長方形_821" data-name="長方形 821" width="13.182" height="2.633" transform="translate(0 0)" fill="#fff"/>
+            </g>
+          </g>
+        </g>
+        <g id="グループ_1984" data-name="グループ 1984" transform="translate(0 0)" style="isolation: isolate">
+          <g id="グループ_1983" data-name="グループ 1983">
+            <g id="グループ_1982" data-name="グループ 1982" clip-path="url(#clip-path-2)">
+              <rect id="長方形_823" data-name="長方形 823" width="13.182" height="2.633" transform="translate(0 0)" fill="#fff"/>
+            </g>
+          </g>
+        </g>
+        <g id="グループ_1987" data-name="グループ 1987" transform="translate(0 10.252)" style="isolation: isolate">
+          <g id="グループ_1986" data-name="グループ 1986">
+            <g id="グループ_1985" data-name="グループ 1985" clip-path="url(#clip-path-4)">
+              <rect id="長方形_825" data-name="長方形 825" width="8.327" height="2.633" transform="translate(0 0)" fill="#fff"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <rect id="長方形_828" data-name="長方形 828" width="6.015" height="1.679" transform="translate(9.453 10.863)" fill="#fcc73f"/>
+    <rect id="長方形_829" data-name="長方形 829" width="1.678" height="6.015" transform="translate(11.621 8.695)" fill="#fcc73f"/>
+  </g>
+</svg>

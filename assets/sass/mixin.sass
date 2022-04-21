@@ -346,3 +346,15 @@ $VIEW_PADDING_SP: 20px
   padding: 0 4px
   box-sizing: border-box
   font-family: montserrat, sans-serif
+
+@mixin public-status
+  font-size: 14px
+  &.public
+    &:before
+      +icon('public')
+  &.unlisted
+    &:before
+      +icon('unlisted')
+  &.private
+    &:before
+      +icon('private')
