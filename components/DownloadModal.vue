@@ -1,75 +1,123 @@
 <template>
   <div class="download_modal_wrapper">
-    <p class="modal_title tsukushi bold">{{ $t('specify_credits') }}</p>
+    <p class="modal_title tsukushi bold">{{ $t("specify_credits") }}</p>
     <div class="content_wrapper">
       <p v-html="$t('picture_liscense_text')"></p>
     </div>
     <div v-if="props.selected_video" class="btn_wrapper">
-      <a class="button mont bold" :href="props.selected_video" download>{{ props.selected_video.split('/').pop() }}</a>
+      <a class="button mont bold" :href="props.selected_video" download>{{
+        props.selected_video.split("/").pop()
+      }}</a>
     </div>
     <div v-else class="btn_wrapper">
-      <a class="button mont bold" target="_blank" @click="controlDownload('all')">All</a>
-      <a class="button mont bold" v-if="extension_exist.png" target="_blank" @click="controlDownload('png')">png</a>
-      <a class="button mont bold" v-if="extension_exist.svg" target="_blank" @click="controlDownload('svg')">svg</a>
-      <a class="button mont bold" v-if="extension_exist.ai" target="_blank" @click="controlDownload('ai')">AI<span>(Adobe Illustrator)</span></a>
-      <a class="button mont bold" v-if="extension_exist.obj_mtl_zip" target="_blank" @click="controlDownload('obj_mtl_zip')">obj_mtl_zip</a>
-      <a class="button mont bold" v-if="extension_exist.apng" target="_blank" @click="controlDownload('apng')">apng</a>
-      <a class="button mont bold" v-if="extension_exist.rotation" target="_blank" @click="controlDownload('rotation')">rotation</a>
+      <a
+        class="button mont bold"
+        target="_blank"
+        @click="controlDownload('all')"
+        >All</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.png"
+        target="_blank"
+        @click="controlDownload('png')"
+        >png</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.svg"
+        target="_blank"
+        @click="controlDownload('svg')"
+        >svg</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.ai"
+        target="_blank"
+        @click="controlDownload('ai')"
+        >AI<span>(Adobe Illustrator)</span></a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.obj_mtl_zip"
+        target="_blank"
+        @click="controlDownload('obj_mtl_zip')"
+        >obj_mtl_zip</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.apng"
+        target="_blank"
+        @click="controlDownload('apng')"
+        >apng</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.rotation"
+        target="_blank"
+        @click="controlDownload('rotation')"
+        >rotation</a
+      >
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default Vue.extend({
   props: {
     props: {
-      required: true
-    }
+      required: true,
+    },
   },
   mounted() {
-    if(this.props.is_single_download) {
-      Object.keys(this.extension_exist).forEach(extension => {
-        if(this.props.selected_pic[extension] !== undefined &&
-        this.props.selected_pic[extension] !== "-") {
-          this.extension_exist[extension] = true
+    if (this.props.is_single_download) {
+      Object.keys(this.extension_exist).forEach((extension) => {
+        if (
+          this.props.selected_pic[extension] !== undefined &&
+          this.props.selected_pic[extension] !== "-"
+        ) {
+          this.extension_exist[extension] = true;
         }
-      })
+      });
     } else if (!this.props.selected_video) {
-      this.props.selected_pics.forEach(selected_pic => {
-        Object.keys(this.extension_exist).forEach(extension => {
-          if(selected_pic[extension] !== undefined && selected_pic[extension] !== "-") {
-            this.extension_exist[extension] = true
+      this.props.selected_pics.forEach((selected_pic) => {
+        Object.keys(this.extension_exist).forEach((extension) => {
+          if (
+            selected_pic[extension] !== undefined &&
+            selected_pic[extension] !== "-"
+          ) {
+            this.extension_exist[extension] = true;
           }
-        })
-      })
+        });
+      });
     }
   },
   data() {
     return {
       extension_exist: {
-        'png': false,
-        'svg': false,
-        'ai': false,
-        'obj_mtl_zip': false,
-        'apng': false,
-        'rotation': false,
-      }
-    }
+        png: false,
+        svg: false,
+        ai: false,
+        obj_mtl_zip: false,
+        apng: false,
+        rotation: false,
+      },
+    };
   },
   methods: {
     controlDownload(extension) {
-      if(extension === 'all') {
-        let all_extensions = Object.keys(this.extension_exist)
-        if(this.props.is_single_download){
+      if (extension === "all") {
+        let all_extensions = Object.keys(this.extension_exist);
+        if (this.props.is_single_download) {
           all_extensions.forEach((extension, i) => {
-            if(this.extension_exist[extension]) {
+            if (this.extension_exist[extension]) {
               setTimeout(() => {
-                this.download(this.props.selected_pic[extension])
-              }, 500 * i)
+                this.download(this.props.selected_pic[extension]);
+              }, 500 * i);
             }
-          })
+          });
         } else {
           all_extensions.forEach((extension, i) => {
             // setTimeout(() => {
@@ -77,45 +125,45 @@ export default Vue.extend({
             // }, 500 * i)
             this.props.selected_pics.forEach((pic, t) => {
               setTimeout(() => {
-                this.download(pic[extension])
-              }, 500 * (i + t))
-            })
-          })
+                this.download(pic[extension]);
+              }, 500 * (i + t));
+            });
+          });
         }
-      } else if(this.props.is_single_download){
+      } else if (this.props.is_single_download) {
         // シングルダウンロード
-        this.download(this.props.selected_pic[extension])
+        this.download(this.props.selected_pic[extension]);
       } else {
         // 複数ダウンロード
         this.props.selected_pics.forEach((pic, i) => {
           setTimeout(() => {
-            this.download(pic[extension])
-          }, 500 * i)
-        })
+            this.download(pic[extension]);
+          }, 500 * i);
+        });
       }
     },
     download(name) {
-      if(!name) {
+      if (!name) {
         return;
       }
 
       if (process.client) {
-        let link = document.createElement('a')
-        link.target = "_blank"
-        link.download = name
-        if(name.slice(-3) === 'png') {
-          link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}`
+        let link = document.createElement("a");
+        link.target = "_blank";
+        link.download = name;
+        if (name.slice(-3) === "png") {
+          link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}`;
         } else {
-          link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}`
+          link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}`;
         }
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        this.$emit('closeModal')
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        this.$emit("closeModal");
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style lang="sass" scoped>
