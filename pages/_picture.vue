@@ -209,6 +209,8 @@ export default Vue.extend({
       > p.editor
         &:before
           @include icon('editor')
+        > a
+          color: #fff
       > a.doi
         &:before
           @include icon('doi')
@@ -276,6 +278,8 @@ export default Vue.extend({
           display: none
         > p.author,
         > p.editor,
+        > p.author a,
+        > p.editor a,
         > a.taxonomy,
         > a.wiki,
         > a.doi
