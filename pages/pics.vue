@@ -1,8 +1,18 @@
 <template>
   <div class="pictures_wrapper">
     <div class="facet_wrapper" v-if="$store.state.display === 'card'">
-      <p class="facet_title search tsukushi bold">{{ $t("text_search") }}</p>
-      <div class="input_wrapper">
+      <p class="facet_title search tsukushi bold">
+        {{ $t("text_search") }}
+        <span
+          class="toggle_btn"
+          :class="{ close: !facets.text_search.is_open }"
+          @click="facets.text_search.is_open = !facets.text_search.is_open"
+        ></span>
+      </p>
+      <div
+        v-show="facets.text_search.is_open"
+        class="input_wrapper"
+      >
         <input
           type="text"
           :placeholder="$t('search_pictures')"
@@ -12,145 +22,157 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">{{ $t("filter_search") }}</p>
-      <p class="clear_btn" @click="clearFilter">{{ $t("clear_filter") }}</p>
-      <div class="facet_small_section">
-        <p class="facet_small_title brush tsukushi bold">
-          {{ $t("author") }}
-          <span
-            :class="['toggle_btn', facets.author.is_open ? '' : 'close']"
-            @click="facets.author.is_open = !facets.author.is_open"
-          ></span>
-        </p>
-        <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
-          <ul>
-            <li v-for="(author, index) in facets.author.data" :key="index">
-              <input
-                type="checkbox"
-                :id="removeTag(author.key)"
-                :value="removeTag(author.key)"
-                v-model="filters.author_str"
-              />
-              <label :for="removeTag(author.key)">
-                <span class="label">{{ removeTag(author.key) }}</span>
-                <span class="count mont">{{ author.doc_count }}</span>
-              </label>
-            </li>
-          </ul>
+      <p class="facet_title filter tsukushi bold">
+        {{ $t("filter_search") }}
+        <span
+          class="toggle_btn"
+          :class="{ close: !facets.filter.is_open }"
+          @click="facets.filter.is_open = !facets.filter.is_open"
+        ></span>
+      </p>
+      <div
+        v-show="facets.filter.is_open"
+        class="facet_inner"
+      >
+        <p class="clear_btn" @click="clearFilter">{{ $t("clear_filter") }}</p>
+        <div class="facet_small_section">
+          <p class="facet_small_title brush tsukushi bold">
+            {{ $t("author") }}
+            <span
+              :class="['toggle_btn', facets.author.is_open ? '' : 'close']"
+              @click="facets.author.is_open = !facets.author.is_open"
+            ></span>
+          </p>
+          <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
+            <ul>
+              <li v-for="(author, index) in facets.author.data" :key="index">
+                <input
+                  type="checkbox"
+                  :id="removeTag(author.key)"
+                  :value="removeTag(author.key)"
+                  v-model="filters.author_str"
+                />
+                <label :for="removeTag(author.key)">
+                  <span class="label">{{ removeTag(author.key) }}</span>
+                  <span class="count mont">{{ author.doc_count }}</span>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="facet_small_section">
-        <p class="facet_small_title taxonomy tsukushi bold">
-          {{ $t('taxonomy') }}
-          <span
-            :class="['toggle_btn', facets.taxon.is_open ? '' : 'close']"
-            @click="facets.taxon.is_open = !facets.taxon.is_open"
-          ></span>
-        </p>
-        <div :class="['checkbox_wrapper', 'taxon', facets.taxon.is_open ? '' : 'close']">
-          <ul class="taxon_1">
-            <li v-for="(taxon, index) in facets.taxon.data" :key="index">
-              <!-- taxon1 -->
-              <input
-                type="checkbox"
-                :id="taxon.key"
-                :value="taxon.key"
-                v-model="filters.taxon1"
-                @click="checkTaxon('taxon1', null, null, null, taxon.taxonomy_2.buckets)"
-              />
-              <label :for="taxon.key">
-                <span class="label" v-html="taxon.key"></span>
-                <span class="count mont">{{ taxon.doc_count }}</span>
-                <span
-                  class="toggle_btn close"
-                  @click="toggleTaxon($event)"
-                  v-if="hasChildren(taxon.taxonomy_2.buckets)"
-                ></span>
-              </label>
-              <ul class="taxon_2 close" v-if="hasChildren(taxon.taxonomy_2.buckets)">
-                <li v-for="(taxon_2, index_2) in taxon.taxonomy_2.buckets" :key="index_2">
-                  <!-- taxon2 -->
-                  <input
-                    type="checkbox"
-                    :id="taxon_2.key"
-                    :value="taxon_2.key"
-                    v-model="filters.taxon2"
-                    @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"
-                  />
-                  <label :for="taxon_2.key">
-                    <span class="label" v-html="taxon_2.key"></span>
-                    <span class="count mont">{{ taxon_2.doc_count }}</span>
-                    <span
-                      class="toggle_btn close"
-                      @click="toggleTaxon($event)"
-                      v-if="hasChildren(taxon_2.taxonomy_3.buckets)"
-                    ></span>
-                  </label>
-                  <ul class="taxon_3 close" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
-                    <li v-for="(taxon_3, index_3) in taxon_2.taxonomy_3.buckets" :key="index_3">
-                      <!-- taxon2 -->
-                      <input
-                        type="checkbox"
-                        :id="taxon_3.key"
-                        :value="taxon_3.key"
-                        v-model="filters.taxon3"
-                        @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"
-                      />
-                      <label :for="taxon_3.key">
-                        <span class="label" v-html="taxon_3.key"></span>
-                        <span class="count mont">{{ taxon_3.doc_count }}</span>
-                      </label>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <div class="facet_small_section">
+          <p class="facet_small_title taxonomy tsukushi bold">
+            {{ $t('taxonomy') }}
+            <span
+              :class="['toggle_btn', facets.taxon.is_open ? '' : 'close']"
+              @click="facets.taxon.is_open = !facets.taxon.is_open"
+            ></span>
+          </p>
+          <div :class="['checkbox_wrapper', 'taxon', facets.taxon.is_open ? '' : 'close']">
+            <ul class="taxon_1">
+              <li v-for="(taxon, index) in facets.taxon.data" :key="index">
+                <!-- taxon1 -->
+                <input
+                  type="checkbox"
+                  :id="taxon.key"
+                  :value="taxon.key"
+                  v-model="filters.taxon1"
+                  @click="checkTaxon('taxon1', null, null, null, taxon.taxonomy_2.buckets)"
+                />
+                <label :for="taxon.key">
+                  <span class="label" v-html="taxon.key"></span>
+                  <span class="count mont">{{ taxon.doc_count }}</span>
+                  <span
+                    class="toggle_btn close"
+                    @click="toggleTaxon($event)"
+                    v-if="hasChildren(taxon.taxonomy_2.buckets)"
+                  ></span>
+                </label>
+                <ul class="taxon_2 close" v-if="hasChildren(taxon.taxonomy_2.buckets)">
+                  <li v-for="(taxon_2, index_2) in taxon.taxonomy_2.buckets" :key="index_2">
+                    <!-- taxon2 -->
+                    <input
+                      type="checkbox"
+                      :id="taxon_2.key"
+                      :value="taxon_2.key"
+                      v-model="filters.taxon2"
+                      @click="checkTaxon('taxon2', null, taxon.key, taxon.taxonomy_2.buckets, taxon_2.taxonomy_3.buckets)"
+                    />
+                    <label :for="taxon_2.key">
+                      <span class="label" v-html="taxon_2.key"></span>
+                      <span class="count mont">{{ taxon_2.doc_count }}</span>
+                      <span
+                        class="toggle_btn close"
+                        @click="toggleTaxon($event)"
+                        v-if="hasChildren(taxon_2.taxonomy_3.buckets)"
+                      ></span>
+                    </label>
+                    <ul class="taxon_3 close" v-if="hasChildren(taxon_2.taxonomy_3.buckets)">
+                      <li v-for="(taxon_3, index_3) in taxon_2.taxonomy_3.buckets" :key="index_3">
+                        <!-- taxon2 -->
+                        <input
+                          type="checkbox"
+                          :id="taxon_3.key"
+                          :value="taxon_3.key"
+                          v-model="filters.taxon3"
+                          @click="checkTaxon('taxon3', taxon.key, taxon_2.key, taxon_2.taxonomy_3.buckets, null, taxon_2.taxonomy_3.buckets)"
+                        />
+                        <label :for="taxon_3.key">
+                          <span class="label" v-html="taxon_3.key"></span>
+                          <span class="count mont">{{ taxon_3.doc_count }}</span>
+                        </label>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">
-          {{ $t('tags') }}
-          <span
-            :class="['toggle_btn', facets.other_tags.is_open ? '' : 'close']"
-            @click="facets.other_tags.is_open = !facets.other_tags.is_open"
-          ></span>
-        </p>
-        <div :class="['checkbox_wrapper', facets.other_tags.is_open ? '' : 'close']">
-          <ul>
-            <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
-              <input
-                type="checkbox"
-                :id="other_tag.key"
-                :value="other_tag.key"
-                v-model="filters.other_tags"
-              />
-              <label :for="other_tag.key">
-                <span class="label" v-html="other_tag.key"></span>
-                <span class="count mont">{{ other_tag.doc_count }}</span>
-              </label>
-            </li>
-          </ul>
+        <div class="facet_small_section">
+          <p class="facet_small_title tag tsukushi bold">
+            {{ $t('tags') }}
+            <span
+              :class="['toggle_btn', facets.other_tags.is_open ? '' : 'close']"
+              @click="facets.other_tags.is_open = !facets.other_tags.is_open"
+            ></span>
+          </p>
+          <div :class="['checkbox_wrapper', facets.other_tags.is_open ? '' : 'close']">
+            <ul>
+              <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
+                <input
+                  type="checkbox"
+                  :id="other_tag.key"
+                  :value="other_tag.key"
+                  v-model="filters.other_tags"
+                />
+                <label :for="other_tag.key">
+                  <span class="label" v-html="other_tag.key"></span>
+                  <span class="count mont">{{ other_tag.doc_count }}</span>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="facet_small_section">
-        <p class="facet_small_title format tsukushi bold">
-          {{ $t("format") }}
-          <span
-            :class="['toggle_btn', facets.pics.is_open ? '' : 'close']"
-            @click="facets.pics.is_open = !facets.pics.is_open"
-          ></span>
-        </p>
-        <div :class="['checkbox_wrapper', facets.pics.is_open ? '' : 'close']">
-          <ul>
-            <li v-for="(pic, index) in facets.pics.data" :key="index">
-              <input type="checkbox" :id="pic.key" :value="pic.key" v-model="filters.pics" />
-              <label :for="pic.key">
-                <span class="label" v-html="pic.key"></span>
-                <span class="count mont">{{ pic.doc_count }}</span>
-              </label>
-            </li>
-          </ul>
+        <div class="facet_small_section">
+          <p class="facet_small_title format tsukushi bold">
+            {{ $t("format") }}
+            <span
+              :class="['toggle_btn', facets.pics.is_open ? '' : 'close']"
+              @click="facets.pics.is_open = !facets.pics.is_open"
+            ></span>
+          </p>
+          <div :class="['checkbox_wrapper', facets.pics.is_open ? '' : 'close']">
+            <ul>
+              <li v-for="(pic, index) in facets.pics.data" :key="index">
+                <input type="checkbox" :id="pic.key" :value="pic.key" v-model="filters.pics" />
+                <label :for="pic.key">
+                  <span class="label" v-html="pic.key"></span>
+                  <span class="count mont">{{ pic.doc_count }}</span>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -273,6 +295,14 @@ export default Vue.extend({
     };
   },
   created() {
+    // PC時はfacetをすべて開ける
+    if(!this.is_sp) {
+      for( let key in this.facets ) {
+        if( this.facets.hasOwnProperty(key) ) {
+          this.facets[key].is_open = true
+        }
+      }
+    }
     Object.keys(this.facets).forEach(key => {
       axios
         .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
@@ -313,21 +343,27 @@ export default Vue.extend({
       loaded_pictures: [],
       tags: [],
       facets: {
+        text_search: {
+          is_open: false
+        },
+        filter: {
+          is_open: false
+        },
         author: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         taxon: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         other_tags: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         pics: {
           checked: [],
-          is_open: true
+          is_open: false
         }
       },
       filters: {
@@ -337,7 +373,7 @@ export default Vue.extend({
         taxon3: [],
         other_tags: [],
         pics: []
-      }
+      },
     };
   },
   watch: {
@@ -392,6 +428,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    is_sp() {
+      return process.client && document.body.clientWidth < 480
+    },
     is_filter_on() {
       let frag = false;
       Object.keys(this.filters).forEach(key => {
@@ -746,6 +785,8 @@ export default Vue.extend({
   align-items: flex-start
   > .facet_wrapper
     @include facet
+    .toggle_btn
+      @include toggle_arrow
     > p.facet_title
       font-size: 18px
       display: flex
@@ -760,105 +801,104 @@ export default Vue.extend({
       &.filter
         &:before
           @include icon('filter')
-    > p.clear_btn
-      text-decoration: underline
-      font-size: 12px
-      display: flex
-      align-items: center
-      &:before
-        width: 18px
-        height: 18px
-        margin-right: 2px
-        margin-left: 3px
-        @include icon('clear')
-      &:hover
-        cursor: pointer
     > .input_wrapper
       @include text_input
       > input
-        width: 240px
+        width: 100%
         height: 28px
       > button
         width: 18px
         height: 18px
-    > .facet_small_section
-      border-bottom: 1px solid $MAIN_COLOR
-      padding-bottom: 14px
-      &:last-of-type
-        border-bottom: none
-      > .facet_small_title
-        font-size: 14px
+    > .facet_inner
+      > p.clear_btn
+        text-decoration: underline
+        font-size: 12px
         display: flex
         align-items: center
         &:before
-          width: 23px
-          height: 23px
-        &.brush
+          width: 18px
+          height: 18px
+          margin-right: 2px
+          margin-left: 3px
+          @include icon('clear')
+        &:hover
+          cursor: pointer
+      > .facet_small_section
+        border-bottom: 1px solid $MAIN_COLOR
+        padding-bottom: 14px
+        &:last-of-type
+          border-bottom: none
+        > .facet_small_title
+          font-size: 14px
+          display: flex
+          align-items: center
           &:before
-            @include icon('brush')
-        &.taxonomy
-          &:before
-            @include icon('mouse')
-        &.tag
-          &:before
-            @include icon('tag')
-        &.format
-          &:before
-            @include icon('img')
-        > .toggle_btn
-          @include toggle_arrow
-      > .checkbox_wrapper
-        transition: .5s
-        max-height: 100vh
-        &.taxon
-          max-height: 400vh
-        &.close
-          max-height: 0
-          overflow: hidden
-        ul
-          li
-            position: relative
-            > label
-              > .label
-                margin-left: 27px
-                padding-top: 1px
-              > .count
-                @include numfound
-                display: flex
-                align-items: center
-                justify-content: center
-              > .toggle_btn
-                @include toggle_arrow
-            > input[type=checkbox]
-              @include checkbox
-              margin-left: 3px
-          &.taxon_2,
-          &.taxon_3
-            margin-left: 28px
-            position: relative
-            max-height: auto
-            transition: max-height .3s
+            width: 23px
+            height: 23px
+          &.brush
             &:before
-              content: ""
-              width: 1px
-              height: 100%
-              background-color: $SUB_COLOR
-              position: absolute
-              top: -8px
-              left: -20px
-            > li
+              @include icon('brush')
+          &.taxonomy
+            &:before
+              @include icon('mouse')
+          &.tag
+            &:before
+              @include icon('tag')
+          &.format
+            &:before
+              @include icon('img')
+        > .checkbox_wrapper
+          transition: .5s
+          max-height: 100vh
+          &.taxon
+            max-height: 400vh
+          &.close
+            max-height: 0
+            overflow: hidden
+          ul
+            li
               position: relative
+              > label
+                > .label
+                  margin-left: 27px
+                  padding-top: 1px
+                > .count
+                  @include numfound
+                  display: flex
+                  align-items: center
+                  justify-content: center
+                > .toggle_btn
+                  @include toggle_arrow
+              > input[type=checkbox]
+                @include checkbox
+                margin-left: 3px
+            &.taxon_2,
+            &.taxon_3
+              margin-left: 28px
+              position: relative
+              max-height: auto
+              transition: max-height .3s
               &:before
-                content: ''
-                width: 15px
-                height: 1px
+                content: ""
+                width: 1px
+                height: 100%
                 background-color: $SUB_COLOR
                 position: absolute
-                top: 7px
+                top: -8px
                 left: -20px
-            &.close
-              max-height: 0
-              overflow: hidden
+              > li
+                position: relative
+                &:before
+                  content: ''
+                  width: 15px
+                  height: 1px
+                  background-color: $SUB_COLOR
+                  position: absolute
+                  top: 7px
+                  left: -20px
+              &.close
+                max-height: 0
+                overflow: hidden
   > .gallery_wrapper
     width: 100%
     > .gallery_section_header
@@ -1055,12 +1095,18 @@ export default Vue.extend({
 @media screen and (max-width: 896px)
   .pictures_wrapper
     > .facet_wrapper
-      display: none
-
+      margin-bottom: 20px
+      > .facet_small_section
+        > .checkbox_wrapper
+          max-height: 300vh
 @media screen and (max-width: 480px)
   .pictures_wrapper
     padding: 0 $VIEW_PADDING_SP
     flex-direction: column
+    > .facet_wrapper
+      margin-top: 0px
+      > p.facet_title
+        margin: 8px 0
     > .gallery_wrapper
       > ul.picture_list_card
         > li.single_picture
