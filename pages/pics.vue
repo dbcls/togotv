@@ -686,22 +686,20 @@ export default Vue.extend({
       if (this.keyword === "") {
         return;
       }
-      if (type === "enter") {
-        if (!this.canMessageSubmit) {
-          return;
-        }
-        this.clearFilter();
-        axios
-          .get(
-            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
-          )
-          .then(data => {
-            this.pictures = data.data.data;
-          })
-          .catch(error => {
-            console.log("error", error);
-          });
+      if (type === "enter" && !this.canMessageSubmit) {
+        return;
       }
+      this.clearFilter();
+      axios
+        .get(
+          `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}`
+        )
+        .then(data => {
+          this.pictures = data.data.data;
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
     },
     toggleDisplay() {
       this.$store.commit("toggleDisplay");
