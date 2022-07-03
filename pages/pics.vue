@@ -1,12 +1,14 @@
 <template>
   <div class="pictures_wrapper">
     <div class="facet_wrapper" v-if="$store.state.display === 'card'">
-      <p class="facet_title search tsukushi bold">
+      <p
+        class="facet_title search tsukushi bold"
+        @click="facets.text_search.is_open = !facets.text_search.is_open"
+      >
         {{ $t("text_search") }}
         <span
           class="toggle_btn"
           :class="{ close: !facets.text_search.is_open }"
-          @click="facets.text_search.is_open = !facets.text_search.is_open"
         ></span>
       </p>
       <div
@@ -22,12 +24,14 @@
         />
         <button @click="searchByText('click')"></button>
       </div>
-      <p class="facet_title filter tsukushi bold">
+      <p
+        class="facet_title filter tsukushi bold"
+        @click="facets.filter.is_open = !facets.filter.is_open"
+      >
         {{ $t("filter_search") }}
         <span
           class="toggle_btn"
           :class="{ close: !facets.filter.is_open }"
-          @click="facets.filter.is_open = !facets.filter.is_open"
         ></span>
       </p>
       <div
