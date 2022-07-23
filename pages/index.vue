@@ -144,7 +144,7 @@ export default Vue.extend({
   > .main_visual_1
     width: 32.6%
     min-width: 404px
-    transform: translateY(-26px)
+    transform: translateY(-6px)
     z-index: 20
   > .main_visual_2
     width: 19.8%
