@@ -148,13 +148,17 @@
             <li class="link mypage">
               <a
                 v-if="!$auth.loggedIn"
-                @click.stop="$auth.loginWith('google')"
+                @click="login()"
                 >{{ $t("mypage") }}</a
               >
               <nuxt-link v-else :to="localePath('/mypage.html')">
                 <img class="user_icon" :src="$auth.user.picture" />
                 {{ $t("mypage") }}
               </nuxt-link>
+              <RequestAgreementModal
+                v-if="is_agree_modal_on"
+                @closeModal="is_agree_modal_on = false" 
+              />
             </li>
             <li class="list_text_search">
               <TextSearch props="header" />
@@ -163,11 +167,13 @@
         </nav>
       </div>
     </div>
+    <div v-if="is_agree_modal_on" @click="is_agree_modal_on = false" class="modal_back"></div>
   </header>
 </template>
 
 <script>
 import TextSearch from "~/components/TextSearch.vue";
+import RequestAgreementModal from "~/components/RequestAgreementModal.vue";
 import Vue from "vue";
 export default Vue.extend({
   props: {
@@ -186,10 +192,12 @@ export default Vue.extend({
         contact: false,
       },
       is_sp_menu_on: false,
+      is_agree_modal_on: false,
     };
   },
   components: {
     TextSearch,
+    RequestAgreementModal,
   },
   methods: {
     checkIfTop(path) {
@@ -209,6 +217,15 @@ export default Vue.extend({
         this.$emit("toggleMenu", this.is_sp_menu_on);
       }
     },
+    login() {
+      // クッキーの確認
+      if (localStorage.getItem("isAgreed") === 'true') {
+        this.$auth.loginWith('google')
+      } else {
+        // モーダル表示
+        this.is_agree_modal_on = true
+      }
+    }
   },
 });
 </script>
@@ -369,6 +386,8 @@ header
         > ul.links
           .input_wrapper
             display: block
+  > .modal_back
+    @include modal_back
 @media screen and (max-width: 896px)
   header
     height: 60px

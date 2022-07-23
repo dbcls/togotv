@@ -122,5 +122,9 @@
   "complemete_new_list_creation": "プレイリストの作成が完了しました。",
   "share": "共有",
   "copy": "コピー",
-  "complete_copy": "コピー完了"
+  "complete_copy": "コピー完了",
+  "request_agreement_modal_title": "「マイページ」機能を利用するためにはGoogleアカウントでのログインが必要です。",
+  "request_agreement_modal_text": "本ウェブサイトの｢マイページ｣機能を利用するためにはGoogleアカウントでのログインが必要であり、利便性向上を目的にCookieを使用しています。詳しくは、<a href='https://dbcls.rois.ac.jp/policy.html' target='_blank' rel='noreferrer'>DBCLSのサイトポリシー</a>をご参照ください。<br>Cookieの利用にご同意いただける場合は、「同意」ボタンを押してください。",
+  "agree": "同意",
+  "disagree": "拒否"
 }
