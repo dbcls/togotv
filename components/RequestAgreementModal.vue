@@ -52,6 +52,7 @@ export default Vue.extend({
     line-height: 1.3
     &:before
       width: 48px
+      min-width: 48px
       height: 48px
       @include icon('caution')
       background-position: top center
@@ -81,9 +82,32 @@ export default Vue.extend({
       margin-right: 10px
       margin-top: 8px
       font-size: 16px
+      line-height: 1
       &:last-of-type
         margin-right: 0px
       > span
         font-weight: 400
         margin-left: 3px
+
+@media screen and (max-width: 600px)
+  .request_agreement_modal_wrapper
+    padding: 20px
+    width: 92vw
+    border-radius: 20px
+    > .modal_title
+      font-size: 18px
+      &:before
+        width: 24px
+        min-width: 24px
+        margin-right: 6px
+    > .content_wrapper
+      padding: 10px 20px
+      > p
+        font-size: 14px
+        line-height: 22px
+    > .btn_wrapper
+      margin-top: 6px
+      > a.button
+        padding: 2px 16px
+        line-height: 2
 </style>
