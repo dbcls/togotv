@@ -154,7 +154,7 @@ export default Vue.extend({
             @include total_time
 
 @media screen and (max-width: 896px)
-  .courses_wrapper
+  .mypage_wrapper
     > .upper
       padding-right: $VIEW_PADDING_SP
       > .page_title
@@ -166,8 +166,5 @@ export default Vue.extend({
         > li
           > h3.course_name
             padding-left: $VIEW_PADDING_SP
-            flex-direction: column
-            align-items: flex-start
-            > .total_time
-              margin: 0
+            margin: 4px 0
 </style>
