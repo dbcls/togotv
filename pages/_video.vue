@@ -78,7 +78,7 @@
             </p>
           </div>
           <client-only>
-            <div v-if="$auth.loggedIn" class="save">
+            <div class="save">
               <button @click="popup.save = true">
                 {{ $t("save_to_playlist") }}
               </button>
@@ -87,10 +87,10 @@
                 <p class="description">
                   <template v-if="$i18n.locale === 'ja'">
                     YouTubeアカウントと連携し、再生リストを作成・編集することができます。作成した再生リストは、
-                    <nuxt-link :to="localePath('/mypage.html')">{{
+                    <nuxt-link v-if="$auth.loggedIn" :to="localePath('/mypage.html')">{{
                       $t("mypage")
                     }}</nuxt-link>
-                    で確認できます。
+                    <template v-else>{{ $t("mypage") }}</template>で確認できます。
                   </template>
                   <template v-else-if="$i18n.locale === 'en'">
                     You can create and edit playlists by linking them to your
@@ -103,85 +103,97 @@
                   </template>
                 </p>
                 <div class="contents">
-                  <ul :class="['playlists', { loading: is_fetching_mylist }]">
-                    <li
-                      v-for="playlist in playlists"
-                      :key="`playlist-${playlist.info.id}`"
+                  <template v-if="$auth.loggedIn">
+                    <ul :class="['playlists', { loading: is_fetching_mylist }]">
+                      <li
+                        v-for="playlist in playlists"
+                        :key="`playlist-${playlist.info.id}`"
+                      >
+                        <label :for="`checkbox-${playlist.info.id}`">
+                          <input
+                            type="checkbox"
+                            :name="`checkbox-${playlist.info.id}`"
+                            :id="`checkbox-${playlist.info.id}`"
+                            :checked="
+                              playlist.items.some(
+                                (item) =>
+                                  item.youtubeVideoId === videoData.embedUrl
+                              )
+                            "
+                            @change="
+                              toggleVideoWithPlaylist(
+                                playlist,
+                                $event.target.checked
+                              )
+                            "
+                          />
+                          {{ playlist.info.snippet.title }}
+                        </label>
+                      </li>
+                    </ul>
+                    <a
+                      v-if="!playlist_to_create.is_active"
+                      @click="playlist_to_create.is_active = true"
+                      :class="['create_new', { loading: is_fetching_mylist }]"
+                      >{{ $t("create_new_list") }}</a
                     >
-                      <label :for="`checkbox-${playlist.info.id}`">
-                        <input
-                          type="checkbox"
-                          :name="`checkbox-${playlist.info.id}`"
-                          :id="`checkbox-${playlist.info.id}`"
-                          :checked="
-                            playlist.items.some(
-                              (item) =>
-                                item.youtubeVideoId === videoData.embedUrl
-                            )
-                          "
-                          @change="
-                            toggleVideoWithPlaylist(
-                              playlist,
-                              $event.target.checked
-                            )
-                          "
-                        />
-                        {{ playlist.info.snippet.title }}
-                      </label>
-                    </li>
-                  </ul>
-                  <a
-                    v-if="!playlist_to_create.is_active"
-                    @click="playlist_to_create.is_active = true"
-                    :class="['create_new', { loading: is_fetching_mylist }]"
-                    >{{ $t("create_new_list") }}</a
-                  >
-                  <div v-else-if="!is_fetching_mylist" class="new_list_setting">
-                    <label for="playlist_title">{{ $t("name") }}</label>
-                    <input
-                      type="text"
-                      id="playlist_title"
-                      v-model="playlist_to_create.title"
-                    />
-                    <label for="playlist_description">{{
-                      $t("description")
-                    }}</label>
-                    <textarea
-                      id="playlist_description"
-                      v-model="playlist_to_create.description"
-                      rows="4"
-                    ></textarea>
-                    <label for="playlist_privacy">{{
-                      $t("privacy_setting")
-                    }}</label>
-                    <select
-                      id="playlist_privacy"
-                      v-model="playlist_to_create.privacy"
-                    >
-                      <option value="public">
-                        {{ $t("public") }}
-                        ({{ $t("public_description") }})
-                      </option>
-                      <option value="unlisted">
-                        {{ $t("unlisted") }}
-                        ({{ $t("unlisted_description") }})
-                      </option>
-                      <option value="private">
-                        {{ $t("private") }}
-                        ({{ $t("private_description") }})
-                      </option>
-                    </select>
-                    <button
-                      @click="createPlaylist"
-                      :class="{ disable: playlist_to_create.title === '' }"
-                    >
-                      {{ $t("confirm") }}
-                    </button>
-                  </div>
-                  <div v-if="is_fetching_mylist" class="loader">Loading...</div>
-                  <p v-if="complemete_new_list_creation">
-                    {{ $t("complemete_new_list_creation") }}
-                  </p>
+                    <div v-else-if="!is_fetching_mylist" class="new_list_setting">
+                      <label for="playlist_title">{{ $t("name") }}</label>
+                      <input
+                        type="text"
+                        id="playlist_title"
+                        v-model="playlist_to_create.title"
+                      />
+                      <label for="playlist_description">{{
+                        $t("description")
+                      }}</label>
+                      <textarea
+                        id="playlist_description"
+                        v-model="playlist_to_create.description"
+                        rows="4"
+                      ></textarea>
+                      <label for="playlist_privacy">{{
+                        $t("privacy_setting")
+                      }}</label>
+                      <select
+                        id="playlist_privacy"
+                        v-model="playlist_to_create.privacy"
+                      >
+                        <option value="public">
+                          {{ $t("public") }}
+                          ({{ $t("public_description") }})
+                        </option>
+                        <option value="unlisted">
+                          {{ $t("unlisted") }}
+                          ({{ $t("unlisted_description") }})
+                        </option>
+                        <option value="private">
+                          {{ $t("private") }}
+                          ({{ $t("private_description") }})
+                        </option>
+                      </select>
+                      <button
+                        @click="createPlaylist"
+                        :class="{ disable: playlist_to_create.title === '' }"
+                      >
+                        {{ $t("confirm") }}
+                      </button>
+                    </div>
+                    <div v-if="is_fetching_mylist" class="loader">Loading...</div>
+                    <p v-if="complemete_new_list_creation">
+                      {{ $t("complemete_new_list_creation") }}
+                    </p>
+                  </template>
+                  <template v-else>
+                    <div class="contents">
+                      <template v-if="$i18n.locale === 'ja'">
+                        「マイページ」機能を利用するためにはGoogleアカウントでの<a href="javascript:;" @click="login">ログイン</a>が必要です。
+                      </template>
+                      <template v-else-if="$i18n.locale === 'en'">
+                        To use the \"My Page\" function, you are required to <a href="javascript:;" @click="login">sign in</a> with your Google account.
+                      </template>
+                    </div>
+                  </template>
                 </div>
               </div>
             </div>
@@ -337,6 +349,10 @@
       @click="Object.keys(popup).forEach((k) => (popup[k] = false))"
       class="modal_back"
     ></div>
+    <RequestAgreementModal
+      v-if="is_agree_modal_on"
+      @closeModal="is_agree_modal_on = false" 
+    />
   </div>
 </template>
 
@@ -347,6 +363,7 @@ import CourseList from "~/components/CourseList.vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
 import IllustrationList from "~/components/IllustrationList.vue";
 import DownloadModal from "~/components/DownloadModal.vue";
+import RequestAgreementModal from "~/components/RequestAgreementModal.vue";
 import axios from "axios";
 import {
   fetchMyLists,
@@ -505,6 +522,7 @@ export default Vue.extend({
     VideoListHorizontalScroll,
     IllustrationList,
     DownloadModal,
+    RequestAgreementModal
   },
   mounted() {
     if (!localStorage.getItem("is_first_time")) {
@@ -555,6 +573,7 @@ export default Vue.extend({
         privacy: "public", //private:本人のみ視聴可能 unlisted:限定公開（リンクを知っている人のみ） public:公開（誰でも検索と視聴が可能）
       },
       complemete_new_list_creation: false,
+      is_agree_modal_on: false
     };
   },
   methods: {
@@ -710,6 +729,15 @@ export default Vue.extend({
       setTimeout(() => {
         this.complemete_new_list_creation = false;
       }, 1500);
+    },
+    login() {
+      // クッキーの確認
+      if (localStorage.getItem("isAgreed") === 'true') {
+        this.$auth.loginWith('google')
+      } else {
+        // モーダル表示
+        this.is_agree_modal_on = true
+      }
     },
   },
 });
