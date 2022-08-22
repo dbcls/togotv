@@ -2,7 +2,12 @@
   <div class="single_video_wrapper">
     <nuxt-link
       class="thumbnail_wrapper"
-      :to="localePath(`/${props.uploadDate.replace(/-/g, '')}.html`)">
+      :to="
+        props.uploadDate
+          ? localePath(`/${props.uploadDate.replace(/-/g, '')}.html`)
+          : ''
+      "
+    >
       <Thumbnail
         :props="{
           size: props.size,
@@ -15,25 +20,28 @@
       />
     </nuxt-link>
     <div :class="['description_wrapper', { has_aside: props.has_aside }]">
-      <p :class="['description', props.size]"><span class="upload_date mont bold">{{ props.uploadDate }}</span><span v-html="props.description"></span></p>
+      <p :class="['description', props.size]">
+        <span class="upload_date mont bold">{{ props.uploadDate }}</span
+        ><span v-html="props.description"></span>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import Thumbnail from '~/components/Thumbnail.vue'
+import Vue from "vue";
+import Thumbnail from "~/components/Thumbnail.vue";
 
 export default Vue.extend({
   props: {
     props: {
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    Thumbnail
-  }
-})
+    Thumbnail,
+  },
+});
 </script>
 
 <style lang="sass" scoped>
@@ -60,6 +68,7 @@ export default Vue.extend({
         width: 166px
       > .upload_date
         margin-right: 5px
+        white-space: nowrap
         &:before
           width: 18px
           height: 16px

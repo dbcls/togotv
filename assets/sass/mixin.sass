@@ -13,7 +13,7 @@ $LAYER_4: 4
 $LAYER_MODAL_BACK: 15
 $LAYER_MODAL: 16
 $LAYER_UNDER_HEADER: 10
-$LAYER_HEADER: 20
+$LAYER_HEADER: 25
 
 /* RESPONSIVE */
 $VIEW_PADDING: 80px
@@ -346,3 +346,15 @@ $VIEW_PADDING_SP: 20px
   padding: 0 4px
   box-sizing: border-box
   font-family: montserrat, sans-serif
+
+@mixin public-status
+  font-size: 14px
+  &.public
+    &:before
+      +icon('public')
+  &.unlisted
+    &:before
+      +icon('unlisted')
+  &.private
+    &:before
+      +icon('private')

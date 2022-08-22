@@ -1,25 +1,35 @@
 <template>
   <div class="thumbnail_wrapper">
-    <img :class="['thumbnail', props.size, { has_aside: props.has_aside }]" :src="props.thumbnail" :alt="props.title">
+    <img
+      :class="['thumbnail', props.size, { has_aside: props.has_aside }]"
+      :src="props.thumbnail"
+      :alt="props.title"
+    />
     <div class="meta_wrappper">
-      <span v-if="props.duration !== ''" class="duration" v-html="converSecToHour(props.duration)"></span>
+      <span
+        v-if="props.duration && props.duration !== ''"
+        class="duration"
+        v-html="converSecToHour(props.duration)"
+      ></span>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
 export default Vue.extend({
   props: {
     props: {
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
-    converSecToHour(time){
-      let hour = 0, min = 0, sec = 0;
-      if(String(time).indexOf('PT') !== -1) {
+    converSecToHour(time) {
+      let hour = 0,
+        min = 0,
+        sec = 0;
+      if (String(time).indexOf("PT") !== -1) {
         const reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
         if (reptms.test(time)) {
           const matches = reptms.exec(time);
@@ -32,27 +42,27 @@ export default Vue.extend({
         min = Math.floor(time / 60) % 60;
         hour = Math.floor(time / 3600);
       }
-      let hour_unit = ''
-      let min_unit = ''
-      let sec_unit = ''
-      if(this.$i18n.locale === 'ja') {
-        hour_unit = '時間'
-        min_unit = '分'
-        sec_unit = '秒'
-      } else if (this.$i18n.locale === 'en') {
-        hour_unit = 'h'
-        min_unit = 'min'
-        sec_unit = 'sec'
+      let hour_unit = "";
+      let min_unit = "";
+      let sec_unit = "";
+      if (this.$i18n.locale === "ja") {
+        hour_unit = "時間";
+        min_unit = "分";
+        sec_unit = "秒";
+      } else if (this.$i18n.locale === "en") {
+        hour_unit = "h";
+        min_unit = "min";
+        sec_unit = "sec";
       }
-      
-      if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span class="unit">${sec_unit}</span>`
-      }　else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">${hour_unit}</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span clas="unit">${sec_unit}</span>`
+
+      if (hour === 0) {
+        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span class="unit">${sec_unit}</span>`;
+      } else {
+        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">${hour_unit}</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${min_unit}</span><span class="time mont bold">${sec}</span><span clas="unit">${sec_unit}</span>`;
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style lang="sass" scoped>
@@ -84,9 +94,9 @@ export default Vue.extend({
       width: 176px
       max-width: 176px
       min-width: 176px
-      height:  99px
-      max-height:  99px
-      min-height:  99px
+      height: 99px
+      max-height: 99px
+      min-height: 99px
 @media screen and (min-width: 1800px)
   .thumbnail_wrapper
     > .thumbnail

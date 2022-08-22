@@ -1,63 +1,105 @@
 <template>
-  <header :class="[this.$route.path.split('/').pop().replace('/', '').replace('\.html', ''), is_sp_menu_on ? '' : 'close', this.$route.path.match(/\/\d+/) ? 'video' : '', checkIfTop($route.path)]">
-    <span :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']" @click="toggleMenu()"></span>
+  <header
+    :class="[
+      this.$route.path.split('/').pop().replace('/', '').replace('\.html', ''),
+      is_sp_menu_on ? '' : 'close',
+      this.$route.path.match(/\/\d+/) ? 'video' : '',
+      checkIfTop($route.path),
+    ]"
+  >
+    <span
+      :class="['sp_toggle_menu', is_sp_menu_on ? '' : 'close']"
+      @click="toggleMenu()"
+    ></span>
     <div class="header_contents">
       <h1>
         <nuxt-link :to="localePath('/')">
-          <img class="logo" src="~/assets/img/logo.svg" alt="togo tv">
+          <img class="logo" src="~/assets/img/logo.svg" alt="togo tv" />
         </nuxt-link>
       </h1>
       <div class="right_area">
         <nav>
           <ul class="links">
-            <li class="link home"><nuxt-link :to="localePath('/')">{{ $t('top') }}</nuxt-link></li>
-            <li class="link about"><nuxt-link :to="localePath('/welcome.html')">{{ $t('about') }}</nuxt-link></li>
+            <li class="link home">
+              <nuxt-link :to="localePath('/')">{{ $t("top") }}</nuxt-link>
+            </li>
+            <li class="link about">
+              <nuxt-link :to="localePath('/welcome.html')">{{
+                $t("about")
+              }}</nuxt-link>
+            </li>
             <li
               :class="[
                 'link',
                 'circlevideo',
                 'has_child_nav',
-                $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '',
+                $store.state.sp_menu_toggle_state['search_videos']
+                  ? 'open'
+                  : '',
               ]"
               @click="toggleChildMenu('search_videos')"
             >
-              <span :class="{
-                'nuxt-link-exact-active':
-                  $route.path === '/courses.html'
-                  || $route.path === '/newvideo.html'
-                  || $route.path === '/rankings.html'
-                  || $route.path === '/course.html'
-                  || $route.path === '/tag.html'
-                  || $route.path.match(/\/[\d]+\.html/)
-                }">{{ $t('search_videos') }}</span>
+              <span
+                :class="{
+                  'nuxt-link-exact-active':
+                    $route.path === '/courses.html' ||
+                    $route.path === '/newvideo.html' ||
+                    $route.path === '/rankings.html' ||
+                    $route.path === '/course.html' ||
+                    $route.path === '/tag.html' ||
+                    $route.path.match(/\/[\d]+\.html/),
+                }"
+                >{{ $t("search_videos") }}</span
+              >
               <span class="arrow"></span>
-              <ul :class="['child_nav', $store.state.sp_menu_toggle_state['search_videos'] ? 'open' : '']">
+              <ul
+                :class="[
+                  'child_nav',
+                  $store.state.sp_menu_toggle_state['search_videos']
+                    ? 'open'
+                    : '',
+                ]"
+              >
                 <li @click="$event.stopPropagation()" class="link course">
                   <nuxt-link
-                    :class="{'nuxt-link-exact-active': $route.path === '/course.html'}"
+                    :class="{
+                      'nuxt-link-exact-active': $route.path === '/course.html',
+                    }"
                     :to="localePath('/courses.html')"
                   >
-                    {{ $t('courses') }}
+                    {{ $t("courses") }}
                   </nuxt-link>
                 </li>
-                <li @click="$event.stopPropagation()" class="link new"><nuxt-link :to="localePath('/newvideo.html')">{{ $t('new_videos') }}</nuxt-link></li>
-                <li @click="$event.stopPropagation()" class="link barchart"><nuxt-link :to="localePath('/rankings.html')">{{ $t('ranking') }}</nuxt-link></li>
+                <li @click="$event.stopPropagation()" class="link new">
+                  <nuxt-link :to="localePath('/newvideo.html')">{{
+                    $t("new_videos")
+                  }}</nuxt-link>
+                </li>
+                <li @click="$event.stopPropagation()" class="link barchart">
+                  <nuxt-link :to="localePath('/rankings.html')">{{
+                    $t("ranking")
+                  }}</nuxt-link>
+                </li>
               </ul>
             </li>
             <li class="link picture">
               <nuxt-link
-                :class="{'nuxt-link-exact-active': $route.path.includes('/togopic')}"
+                :class="{
+                  'nuxt-link-exact-active': $route.path.includes('/togopic'),
+                }"
                 :to="localePath('/pics.html')"
               >
-                {{ $t('search_pictures') }}
+                {{ $t("search_pictures") }}
               </nuxt-link>
             </li>
             <li class="link ajacs">
               <nuxt-link
-                :class="{'nuxt-link-exact-active': $route.path.includes('/ajacs')}"
+                :class="{
+                  'nuxt-link-exact-active': $route.path.includes('/ajacs'),
+                }"
                 :to="localePath('/ajacs_text.html?page=1')"
               >
-                {{ $t('search_ajacs_text') }}
+                {{ $t("search_ajacs_text") }}
               </nuxt-link>
             </li>
             <li
@@ -69,73 +111,123 @@
               ]"
               @click="toggleChildMenu('contact')"
             >
-              <span :class="{ 'nuxt-link-exact-active': $route.path === '/faq.html' || $route.path === '/request.html' || $route.path === '/staff.html' }">{{ $t('contact') }}</span>
+              <span
+                :class="{
+                  'nuxt-link-exact-active':
+                    $route.path === '/faq.html' ||
+                    $route.path === '/request.html' ||
+                    $route.path === '/staff.html',
+                }"
+                >{{ $t("contact") }}</span
+              >
               <span class="arrow"></span>
-              <ul :class="['child_nav', 'contact', $store.state.sp_menu_toggle_state['contact'] ? 'open' : '']">
-                <li @click="$event.stopPropagation()" class="link question"><nuxt-link :to="localePath('/faq.html')">{{ $t('faq') }}</nuxt-link></li>
+              <ul
+                :class="[
+                  'child_nav',
+                  'contact',
+                  $store.state.sp_menu_toggle_state['contact'] ? 'open' : '',
+                ]"
+              >
+                <li @click="$event.stopPropagation()" class="link question">
+                  <nuxt-link :to="localePath('/faq.html')">{{
+                    $t("faq")
+                  }}</nuxt-link>
+                </li>
                 <li @click="$event.stopPropagation()" class="link video">
-                  <nuxt-link :to="localePath('/request.html')">{{ $t('request') }}</nuxt-link>
+                  <nuxt-link :to="localePath('/request.html')">{{
+                    $t("request")
+                  }}</nuxt-link>
                 </li>
                 <li @click="$event.stopPropagation()" class="link people">
-                  <nuxt-link :to="localePath('/staff.html')">{{ $t('staff') }}</nuxt-link>
+                  <nuxt-link :to="localePath('/staff.html')">{{
+                    $t("staff")
+                  }}</nuxt-link>
                 </li>
               </ul>
             </li>
+            <li class="link mypage">
+              <a
+                v-if="!$auth.loggedIn"
+                @click="login()"
+                >{{ $t("mypage") }}</a
+              >
+              <nuxt-link v-else :to="localePath('/mypage.html')">
+                <img class="user_icon" :src="$auth.user.picture" />
+                {{ $t("mypage") }}
+              </nuxt-link>
+              <RequestAgreementModal
+                v-if="is_agree_modal_on"
+                @closeModal="is_agree_modal_on = false" 
+              />
+            </li>
             <li class="list_text_search">
-              <TextSearch props="header"/>
+              <TextSearch props="header" />
             </li>
           </ul>
         </nav>
       </div>
     </div>
+    <div v-if="is_agree_modal_on" @click="is_agree_modal_on = false" class="modal_back"></div>
   </header>
 </template>
 
 <script>
-import TextSearch from '~/components/TextSearch.vue'
-import Vue from 'vue'
+import TextSearch from "~/components/TextSearch.vue";
+import RequestAgreementModal from "~/components/RequestAgreementModal.vue";
+import Vue from "vue";
 export default Vue.extend({
   props: {
-    data: ""
+    data: "",
   },
   watch: {
-    '$route': function(to, from) {
-      this.is_sp_menu_on = false
-      this.$emit('toggleMenu', false)
-    }
+    $route: function (to, from) {
+      this.is_sp_menu_on = false;
+      this.$emit("toggleMenu", false);
+    },
   },
-  data () {
+  data() {
     return {
       is_childnav_on: {
         video: false,
-        contact: false
+        contact: false,
       },
-      is_sp_menu_on: false
-    }
+      is_sp_menu_on: false,
+      is_agree_modal_on: false,
+    };
   },
   components: {
-    TextSearch
+    TextSearch,
+    RequestAgreementModal,
   },
   methods: {
     checkIfTop(path) {
-      if(path === "/" || path.indexOf("index.html") !== -1) {
-        return "index"
+      if (path === "/" || path.indexOf("index.html") !== -1) {
+        return "index";
       }
     },
     toggleChildMenu(type) {
-      if(document.body.clientWidth < 896) {
+      if (document.body.clientWidth < 896) {
         // this.has_child_nav_elements[type] = !this.has_child_nav_elements[type]
-        this.$store.commit("toggleSPMenu", type)
+        this.$store.commit("toggleSPMenu", type);
       }
     },
     toggleMenu() {
-      this.is_sp_menu_on = !this.is_sp_menu_on
-      if(document.body.clientWidth < 896) {
-        this.$emit('toggleMenu', this.is_sp_menu_on)
+      this.is_sp_menu_on = !this.is_sp_menu_on;
+      if (document.body.clientWidth < 896) {
+        this.$emit("toggleMenu", this.is_sp_menu_on);
+      }
+    },
+    login() {
+      // クッキーの確認
+      if (localStorage.getItem("isAgreed") === 'true') {
+        this.$auth.loginWith('google')
+      } else {
+        // モーダル表示
+        this.is_agree_modal_on = true
       }
     }
-  }
-})
+  },
+});
 </script>
 
 <style lang="sass" scoped>
@@ -177,7 +269,10 @@ header
             display: flex
             align-items: center
             margin-right: 12px
-            .nuxt-link-exact-active
+            &:hover
+              cursor: pointer
+            .nuxt-link-exact-active,
+            .mypage .nuxt-link-active
               @include active_underline
               background-position: 10px 50px
               padding: 0 0 10px 25px
@@ -258,6 +353,19 @@ header
             &.people
               &:before
                 @include icon('people')
+            &.mypage
+              &:before
+                display: none
+              > a
+                display: flex
+                align-items: centerq
+                padding-left: 0px
+                margin-left: 0px
+                > img.user_icon
+                  width: 20px
+                  height: 20px
+                  border-radius: 20px
+                  object-fit: cover
   &.index
     box-shadow: none
     > .header_contents
@@ -272,12 +380,14 @@ header
   &.video,
   &.result,
   &.tag,
-    > .header_contents
-      > .right_area
-        > nav
-          > ul.links
-            .input_wrapper
-              display: block
+  > .header_contents
+    > .right_area
+      > nav
+        > ul.links
+          .input_wrapper
+            display: block
+  > .modal_back
+    @include modal_back
 @media screen and (max-width: 896px)
   header
     height: 60px

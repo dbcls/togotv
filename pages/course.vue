@@ -2,14 +2,28 @@
   <div class="courses_wrapper">
     <h2 class="page_title tsukushi bold">
       <span class="course_title">{{ course.title }}</span>
-      <span class="total_time" v-if="course.total_time" v-html="converSecToHour(course.total_time)"></span>
+      <span
+        class="total_time"
+        v-if="course.total_time"
+        v-html="$converSecToHour(course.total_time)"
+      ></span>
     </h2>
     <div class="content_wrapper">
       <p>{{ course.description }}</p>
       <section class="video_section">
         <ul>
           <li v-for="video in course.playlist" :key="video.id">
-            <SingleVideoCard :props="{id: video.videoid, thumbnail: video.thumbnailUrl, title: video.title, description: video.description, duration: video.duration, courseId: course.id, uploadDate: video.uploadDate}" />
+            <SingleVideoCard
+              :props="{
+                id: video.videoid,
+                thumbnail: video.thumbnailUrl,
+                title: video.title,
+                description: video.description,
+                duration: video.duration,
+                courseId: course.id,
+                uploadDate: video.uploadDate,
+              }"
+            />
           </li>
         </ul>
       </section>
@@ -18,49 +32,36 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import SingleVideoCard from '~/components/SingleVideoCard.vue'
-import axios from 'axios'
+import Vue from "vue";
+import SingleVideoCard from "~/components/SingleVideoCard.vue";
+import axios from "axios";
 
 export default Vue.extend({
   created() {
-    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then(data => {
-      let return_course = []
-      data.data.cources.forEach(course => {
-        if(course.id === this.$route.query.id) {
-          return_course = course
+    axios.get(`https://togotv-api.dbcls.jp/api/skillset`).then((data) => {
+      let return_course = [];
+      data.data.cources.forEach((course) => {
+        if (course.id === this.$route.query.id) {
+          return_course = course;
         }
-      })
-      this.course = return_course
-    })
+      });
+      this.course = return_course;
+    });
   },
   data() {
     return {
-      course: {}
-    }
+      course: {},
+    };
   },
   head() {
     return {
-      title: this.course.title
-    }
+      title: this.course.title,
+    };
   },
   components: {
-    SingleVideoCard
+    SingleVideoCard,
   },
-  methods: {
-    converSecToHour(time){
-      // const sec = (time % 60) % 60;
-      const min = Math.floor(time / 60) % 60;
-      const hour = Math.floor(time / 3600);
-
-      if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
-      }　else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
-      }
-    }
-  }
-})
+});
 </script>
 
 <style lang="sass" scoped>
