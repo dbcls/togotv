@@ -48,7 +48,7 @@ export default Vue.extend({
     display: flex
     align-items: flex-start
     white-space: break-spaces
-    text-indent: -12px
+    text-indent: -4px
     line-height: 1.3
     &:before
       width: 48px

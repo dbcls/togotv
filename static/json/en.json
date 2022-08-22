@@ -1,7 +1,7 @@
 {
   "top_description_1": "This is a website that provides useful information in the life sciences.",
   "top_description_2": "Anyone is free to browse and reuse it.",
-  "manual_of_database_and_tool": "Video manual for databases and tools",
+  "manual_of_database_and_tool": " Video manual for databases and tools",
   "ajacs_videos_and_documents": " Lectures, training videos and documents",
   "illustration": " Illustrations",
   "search_for_courses": "Search by skill-based courses (in Japanese only)",
@@ -116,8 +116,8 @@
   "share": "Share",
   "copy": "Copy",
   "complete_copy": "Complete copy",
-  "request_agreement_modal_title": "「マイページ」機能を利用するためにはGoogleアカウントでのログインが必要です。",
-  "request_agreement_modal_text": "本ウェブサイトの｢マイページ｣機能を利用するためにはGoogleアカウントでのログインが必要であり、利便性向上を目的にCookieを使用しています。詳しくは、<a href='https://dbcls.rois.ac.jp/policy.html' target='_blank' rel='noreferrer'>DBCLSのサイトポリシー</a>をご参照ください。<br>Cookieの利用にご同意いただける場合は、「同意」ボタンを押してください。",
-  "agree": "同意",
-  "disagree": "拒否"
+  "request_agreement_modal_title": "To use the \"My Page\" function, you are required to sign in with your Google account.",
+  "request_agreement_modal_text": "In order to use the \"My Page\" function (which means that you can create and edit your playlists in connection with your YouTube account) of this website, you are required to sign in with your Google account. Cookies are also used to improve the usability of these functions. For more information, please see <a href='https://dbcls.rois.ac.jp/policy-en.html' target='_blank' rel='noreferrer'>the DBCLS Site Policy</a>.<br>If you agree to the use of cookies, please click the \"Agree\" button.",
+  "agree": "Agree",
+  "disagree": "Disagree"
 }
