@@ -28,7 +28,31 @@
             <a @click="$router.push(`/mypage/course?id=${list.info.id}`)">
               {{ list.info.snippet.title }}
             </a>
-            <p :class="['status', list.info.status.privacyStatus]">{{ $t(list.info.status.privacyStatus) }}</p>
+            <div
+              class="controller status"
+              :class="[
+                privacy_status_by_playlist[list.info.id],
+                { loading: is_updating_privacy_settings }
+              ]"
+            >
+              <select
+                class="privacy_status_selector"
+                v-model="privacy_status_by_playlist[list.info.id]"
+                @change="updatePrvacyStatus($event, list.info.id, list.info.snippet.title)"
+              >
+                <option
+                  v-for="status in PRIVACY_STATUS"
+                  :key="status"
+                  :value="status"
+                  :selected="status === list.info.status.privacyStatus"
+                >
+                  {{ $t(status) }}
+                </option>
+              </select>
+            </div>
+            <div class="controller trash">削除</div>
+            <div class="controller edit">編集</div>
+            <div class="controller share">共有</div>
           </h3>
           <VideoListHorizontalScroll
             :props="{
@@ -47,7 +71,13 @@
 <script>
 import Vue from "vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
-import { fetchMyLists } from "~/assets/js/youtube.js";
+import { fetchMyLists, updatePrvacyStatus } from "~/assets/js/youtube.js";
+
+const PRIVACY_STATUS = {
+  PUBLIC: 'public',
+  UNLISTED: 'unlisted',
+  PRIVATE: 'private'
+}
 
 export default Vue.extend({
   components: {
@@ -61,18 +91,30 @@ export default Vue.extend({
     this.playlists = await fetchMyLists(access_token).catch((err) => {
       console.error(err);
     });
+    this.playlists.forEach(playlist => this.privacy_status_by_playlist[playlist.info.id] = playlist.info.status.privacyStatus)
     this.is_fetching_mylist = await false;
   },
   data() {
     return {
       playlists: [],
       is_fetching_mylist: false,
+      privacy_status_by_playlist: {},
+      PRIVACY_STATUS,
+      is_updating_privacy_settings: false
     };
   },
   head() {
     return {
       title: this.$t("mypage"),
     };
+  },
+  computed: {
+    access_token() {
+      if (!process.client || !this.$auth.loggedIn) return null;
+      return this.$auth.strategies.google.token.$storage._state[
+        "_token.google"
+      ];
+    }
   },
   methods: {
     formatDate(time) {
@@ -82,6 +124,16 @@ export default Vue.extend({
       const date = uploadDate.getDate();
       return `${year}-${("0" + month).slice(-2)}-${("0" + date).slice(-2)}`;
     },
+    updatePrvacyStatus(e, id, title) {
+      this.is_updating_privacy_settings = true
+      updatePrvacyStatus(
+        this.access_token,
+        id,
+        title,
+        e.target.value,
+        () => this.is_updating_privacy_settings = false
+      )
+    }
   },
 });
 </script>
@@ -143,15 +195,40 @@ export default Vue.extend({
             &:hover
               color: $MAIN_COLOR
               cursor: pointer
-          > .status
-            @include public-status
+          > .controller
+            font-size: 14px
+            margin-right: 10px
+            transition: opacity .2s
+            display: flex
+            align-items: center
+            position: relative
+            &:hover
+              cursor: pointer
+              opacity: .8
             &:before
               width: 16px
               height: 16px
               margin-right: 2px
               margin-bottom: -2px
-          > .total_time
-            @include total_time
+            &.trash:before
+              @include icon('trash')
+            &.edit:before
+              @include icon('editor')
+            &.share:before
+              @include icon('share')
+            &.status
+              transition: opacity .3s
+              &.loading
+                opacity: .3
+                pointer-events: none
+              @include public-status
+              > .privacy_status_selector
+                border: none
+                border-bottom: 1px solid $BLACK
+                &:hover
+                  cursor: pointer
+                &:focus
+                  outline: 0
 
 @media screen and (max-width: 896px)
   .mypage_wrapper

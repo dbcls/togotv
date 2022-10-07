@@ -121,3 +121,28 @@ export const createPlaylist = async (
   });
   await addVideoToPlaylist(access_token, new_list.data.id, video_id);
 };
+
+
+export const updatePrvacyStatus = async (
+  access_token,
+  playlist_id,
+  title,
+  privacy_status,
+  callback
+) => {
+  await axios({
+    method: "put",
+    url: `https://www.googleapis.com/youtube/v3/playlists?part=snippet&part=status`,
+    headers: { Authorization: access_token },
+    data: {
+      id: playlist_id,
+      snippet: {
+        title,
+      },
+      status: {
+        privacyStatus: privacy_status,
+      },
+    },
+  });
+  callback();
+};
