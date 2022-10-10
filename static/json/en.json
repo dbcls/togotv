@@ -119,5 +119,9 @@
   "request_agreement_modal_title": "To use the \"My Page\" function, you are required to sign in with your Google account.",
   "request_agreement_modal_text": "In order to use the \"My Page\" function (which means that you can create and edit your playlists in connection with your YouTube account) of this website, you are required to sign in with your Google account. Cookies are also used to improve the usability of these functions. For more information, please see <a href='https://dbcls.rois.ac.jp/policy-en.html' target='_blank' rel='noreferrer'>the DBCLS Site Policy</a>.<br>If you agree to the use of cookies, please click the \"Agree\" button.",
   "agree": "Agree",
-  "disagree": "Disagree"
+  "disagree": "Disagree",
+  "confirm_delete_playlist": "Do you want to delete this playlist?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "delete_the_playlist": "Do you want to delete the following playlists?"
 }

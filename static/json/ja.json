@@ -108,7 +108,6 @@
   "save_to_playlist": "再生リストに保存",
   "destination": "保存先",
   "create_new_list": "新しい再生リストを作成",
-  "cancel": "キャンセル",
   "confirm": "確定",
   "name": "名前",
   "description": "説明文",
@@ -126,5 +125,9 @@
   "request_agreement_modal_title": "「マイページ」機能を利用するためにはGoogleアカウントでのログインが必要です。",
   "request_agreement_modal_text": "本ウェブサイトの｢マイページ｣機能を利用するためにはGoogleアカウントでのログインが必要であり、利便性向上を目的にCookieを使用しています。詳しくは、<a href='https://dbcls.rois.ac.jp/policy.html' target='_blank' rel='noreferrer'>DBCLSのサイトポリシー</a>をご参照ください。<br>Cookieの利用にご同意いただける場合は、「同意」ボタンを押してください。",
   "agree": "同意",
-  "disagree": "拒否"
+  "disagree": "拒否",
+  "confirm_delete_playlist": "確認",
+  "cancel": "キャンセル",
+  "delete": "削除する",
+  "delete_the_playlist": "以下のプレイリストを削除しますか？"
 }

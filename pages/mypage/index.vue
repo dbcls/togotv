@@ -50,7 +50,10 @@
                 </option>
               </select>
             </div>
-            <div class="controller trash">削除</div>
+            <div
+              class="controller trash"
+              @click="setPlaylistDataToDelete(list.info.id, list.info.snippet.title)"
+            >削除</div>
             <div class="controller edit">編集</div>
             <div class="controller share">共有</div>
           </h3>
@@ -65,13 +68,21 @@
         </li>
       </ul>
     </section>
+    <ConfirmModal 
+      v-if="is_delete_modal_on"
+      :id="playlist_to_delete.id"
+      :playlist_name="playlist_to_delete.name"
+      @cancel="is_delete_modal_on = false"
+      @deletePlaylist="deletePlaylist"
+    />
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
-import { fetchMyLists, updatePrvacyStatus } from "~/assets/js/youtube.js";
+import ConfirmModal from "~/components/ConfirmModal.vue";
+import { fetchMyLists, updatePrvacyStatus, deletePlaylist } from "~/assets/js/youtube.js";
 
 const PRIVACY_STATUS = {
   PUBLIC: 'public',
@@ -82,17 +93,11 @@ const PRIVACY_STATUS = {
 export default Vue.extend({
   components: {
     VideoListHorizontalScroll,
+    ConfirmModal
   },
   middleware: "auth",
   async created() {
-    this.is_fetching_mylist = true;
-    const access_token =
-      this.$auth.strategies.google.token.$storage._state["_token.google"];
-    this.playlists = await fetchMyLists(access_token).catch((err) => {
-      console.error(err);
-    });
-    this.playlists.forEach(playlist => this.privacy_status_by_playlist[playlist.info.id] = playlist.info.status.privacyStatus)
-    this.is_fetching_mylist = await false;
+    this.fetchPlayList()
   },
   data() {
     return {
@@ -100,7 +105,12 @@ export default Vue.extend({
       is_fetching_mylist: false,
       privacy_status_by_playlist: {},
       PRIVACY_STATUS,
-      is_updating_privacy_settings: false
+      is_updating_privacy_settings: false,
+      is_delete_modal_on: false,
+      playlist_to_delete: {
+        id: '',
+        name: ''
+      }
     };
   },
   head() {
@@ -117,6 +127,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    async fetchPlayList() {
+      this.is_fetching_mylist = true;
+      this.playlists = await fetchMyLists(this.access_token).catch((err) => {
+        console.error(err);
+      });
+      this.playlists.forEach(playlist => this.privacy_status_by_playlist[playlist.info.id] = playlist.info.status.privacyStatus)
+      this.is_fetching_mylist = await false;
+    },
     formatDate(time) {
       const uploadDate = new Date(time);
       const year = uploadDate.getFullYear();
@@ -133,6 +151,16 @@ export default Vue.extend({
         e.target.value,
         () => this.is_updating_privacy_settings = false
       )
+    },
+    setPlaylistDataToDelete(id, name,) {
+      this.playlist_to_delete.id = id;
+      this.playlist_to_delete.name = name;
+      this.is_delete_modal_on = true
+    },
+    deletePlaylist(id) {
+      this.is_delete_modal_on = false
+      this.is_fetching_mylist = true
+      deletePlaylist(this.access_token, id, this.fetchPlayList)
     }
   },
 });
