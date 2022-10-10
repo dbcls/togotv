@@ -123,5 +123,6 @@
   "confirm_delete_playlist": "Do you want to delete this playlist?",
   "cancel": "Cancel",
   "delete": "Delete",
-  "delete_the_playlist": "Do you want to delete the following playlists?"
+  "delete_the_playlist": "Do you want to delete the following playlists?",
+  "edit_playlist": "Edit Playlist"
 }
