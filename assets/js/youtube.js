@@ -143,7 +143,9 @@ export const updatePrvacyStatus = async (
         privacyStatus: privacy_status,
       },
     },
-  }).then(() => callback());
+  })
+    .then(() => callback())
+    .catch(() => alert("プライバシー設定に失敗しました。"));
 };
 
 export const deletePlaylist = async (access_token, video_id, callback) => {
@@ -155,4 +157,21 @@ export const deletePlaylist = async (access_token, video_id, callback) => {
       },
     })
     .then(() => callback());
+};
+
+export const updatePlaylistData = async (access_token, playlist, callback) => {
+  await axios({
+    method: "put",
+    url: `https://www.googleapis.com/youtube/v3/playlists?part=snippet`,
+    headers: { Authorization: access_token },
+    data: {
+      id: playlist.id,
+      snippet: {
+        title: playlist.name,
+        description: playlist.description,
+      },
+    },
+  })
+    .then((res) => callback(res))
+    .catch(() => alert("プレイリストのデータ更新に失敗しました。"));
 };

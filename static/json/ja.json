@@ -129,5 +129,6 @@
   "confirm_delete_playlist": "確認",
   "cancel": "キャンセル",
   "delete": "削除する",
-  "delete_the_playlist": "以下のプレイリストを削除しますか？"
+  "delete_the_playlist": "以下のプレイリストを削除しますか？",
+  "edit_playlist": "プレイリストの編集"
 }

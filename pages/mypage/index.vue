@@ -54,7 +54,10 @@
               class="controller trash"
               @click="setPlaylistDataToDelete(list.info.id, list.info.snippet.title)"
             >削除</div>
-            <div class="controller edit">編集</div>
+            <div
+              class="controller edit"
+              @click="setPlaylistDataToEdit(list.info.id, list.info.snippet.title, list.info.snippet.description)"
+            >編集</div>
             <div class="controller share">共有</div>
           </h3>
           <VideoListHorizontalScroll
@@ -75,6 +78,17 @@
       @cancel="is_delete_modal_on = false"
       @deletePlaylist="deletePlaylist"
     />
+    <EditPlaylist 
+      v-if="is_edit_modal_on"
+      :playlist="playlist_to_edit"
+      @cancel="is_edit_modal_on = false"
+      @updatePlaylistData="updatePlaylistData"
+    />
+    <div
+      v-if="is_delete_modal_on || is_edit_modal_on"
+      @click="closeModal"
+      class="modal_back"
+    ></div>
   </div>
 </template>
 
@@ -82,7 +96,8 @@
 import Vue from "vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
 import ConfirmModal from "~/components/ConfirmModal.vue";
-import { fetchMyLists, updatePrvacyStatus, deletePlaylist } from "~/assets/js/youtube.js";
+import EditPlaylist from "~/components/EditPlaylist.vue";
+import { fetchMyLists, updatePrvacyStatus, deletePlaylist, updatePlaylistData } from "~/assets/js/youtube.js";
 
 const PRIVACY_STATUS = {
   PUBLIC: 'public',
@@ -93,7 +108,8 @@ const PRIVACY_STATUS = {
 export default Vue.extend({
   components: {
     VideoListHorizontalScroll,
-    ConfirmModal
+    ConfirmModal,
+    EditPlaylist
   },
   middleware: "auth",
   async created() {
@@ -110,6 +126,12 @@ export default Vue.extend({
       playlist_to_delete: {
         id: '',
         name: ''
+      },
+      is_edit_modal_on: false,
+      playlist_to_edit: {
+        id: '',
+        name: '',
+        description: ''
       }
     };
   },
@@ -133,7 +155,7 @@ export default Vue.extend({
         console.error(err);
       });
       this.playlists.forEach(playlist => this.privacy_status_by_playlist[playlist.info.id] = playlist.info.status.privacyStatus)
-      this.is_fetching_mylist = await false;
+      this.is_fetching_mylist = false;
     },
     formatDate(time) {
       const uploadDate = new Date(time);
@@ -152,7 +174,7 @@ export default Vue.extend({
         () => this.is_updating_privacy_settings = false
       )
     },
-    setPlaylistDataToDelete(id, name,) {
+    setPlaylistDataToDelete(id, name) {
       this.playlist_to_delete.id = id;
       this.playlist_to_delete.name = name;
       this.is_delete_modal_on = true
@@ -161,6 +183,30 @@ export default Vue.extend({
       this.is_delete_modal_on = false
       this.is_fetching_mylist = true
       deletePlaylist(this.access_token, id, this.fetchPlayList)
+    },
+    setPlaylistDataToEdit(id, name, description) {
+      this.playlist_to_edit.id = id;
+      this.playlist_to_edit.name = name;
+      this.playlist_to_edit.description = description;
+      this.is_edit_modal_on = true
+    },
+    updatePlaylistData() {
+      this.is_edit_modal_on = false
+      this.is_fetching_mylist = true
+      updatePlaylistData(this.access_token, this.playlist_to_edit, (res) => {
+        this.playlists = this.playlists.map(playlist => {
+          if(playlist.info.id === res.data.id) {
+            playlist.info.snippet.title = res.data.snippet.title
+            playlist.info.snippet.description = res.data.snippet.description
+          }
+          return playlist
+        })
+        this.is_fetching_mylist = false;
+      })
+    },
+    closeModal() {
+      this.is_delete_modal_on = false
+      this.is_edit_modal_on = false
     }
   },
 });
@@ -257,7 +303,8 @@ export default Vue.extend({
                   cursor: pointer
                 &:focus
                   outline: 0
-
+  .modal_back
+    @include modal_back
 @media screen and (max-width: 896px)
   .mypage_wrapper
     > .upper
