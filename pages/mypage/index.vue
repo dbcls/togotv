@@ -58,7 +58,10 @@
               class="controller edit"
               @click="setPlaylistDataToEdit(list.info.id, list.info.snippet.title, list.info.snippet.description)"
             >編集</div>
-            <div class="controller share">共有</div>
+            <div
+              class="controller share"
+              @click="sharePlaylist(list)"
+            >共有</div>
           </h3>
           <VideoListHorizontalScroll
             :props="{
@@ -84,8 +87,12 @@
       @cancel="is_edit_modal_on = false"
       @updatePlaylistData="updatePlaylistData"
     />
+    <ShareCourceModal
+      v-if="is_share_modal_on"
+      :course="playlist_to_share"
+    />
     <div
-      v-if="is_delete_modal_on || is_edit_modal_on"
+      v-if="is_delete_modal_on || is_edit_modal_on || is_share_modal_on"
       @click="closeModal"
       class="modal_back"
     ></div>
@@ -97,6 +104,7 @@ import Vue from "vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
 import ConfirmModal from "~/components/ConfirmModal.vue";
 import EditPlaylist from "~/components/EditPlaylist.vue";
+import ShareCourceModal from "~/components/ShareCourceModal.vue";
 import { fetchMyLists, updatePrvacyStatus, deletePlaylist, updatePlaylistData } from "~/assets/js/youtube.js";
 
 const PRIVACY_STATUS = {
@@ -109,7 +117,8 @@ export default Vue.extend({
   components: {
     VideoListHorizontalScroll,
     ConfirmModal,
-    EditPlaylist
+    EditPlaylist,
+    ShareCourceModal
   },
   middleware: "auth",
   async created() {
@@ -132,7 +141,9 @@ export default Vue.extend({
         id: '',
         name: '',
         description: ''
-      }
+      },
+      is_share_modal_on: false,
+      playlist_to_share: null
     };
   },
   head() {
@@ -207,6 +218,11 @@ export default Vue.extend({
     closeModal() {
       this.is_delete_modal_on = false
       this.is_edit_modal_on = false
+      this.is_share_modal_on = false
+    },
+    sharePlaylist(course) {
+      this.playlist_to_share = course
+      this.is_share_modal_on = true
     }
   },
 });
