@@ -143,6 +143,16 @@ export const updatePrvacyStatus = async (
         privacyStatus: privacy_status,
       },
     },
-  });
-  callback();
+  }).then(() => callback());
+};
+
+export const deletePlaylist = async (access_token, video_id, callback) => {
+  await axios
+    .delete(`https://www.googleapis.com/youtube/v3/playlists`, {
+      headers: { Authorization: access_token },
+      params: {
+        id: video_id,
+      },
+    })
+    .then(() => callback());
 };
