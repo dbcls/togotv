@@ -128,6 +128,8 @@
   "disagree": "拒否",
   "confirm_delete_playlist": "確認",
   "cancel": "キャンセル",
+  "edit": "編集",
+  "deletion": "削除",
   "delete": "削除する",
   "delete_the_playlist": "以下のプレイリストを削除しますか？",
   "edit_playlist": "プレイリストの編集"
