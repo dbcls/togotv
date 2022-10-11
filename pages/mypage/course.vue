@@ -4,11 +4,15 @@
       <h2 class="page_title tsukushi bold">
         <span class="course_title">{{ course.info.snippet.title }}</span>
       </h2>
-      <button class="share" @click="is_popup_on = true">
-        {{ $t("share") }}
-      </button>
+      <PlaylistController
+        :playlist="course"
+        :privacy_status_by_playlist="{[course.info.id]: course.info.status.privacyStatus}"
+        @setFetchStatus="setFetchStatus"
+        @setPlaylist="setPlaylist"
+        @callbackAfterDelete="$router.push('/mypage.html')"
+      />
     </div>
-    <div class="content_wrapper">
+    <div class="content_wrapper" :class="{ loading: is_updating }">
       <p>{{ course.info.snippet.description }}</p>
       <section class="video_section">
         <ul>
@@ -28,23 +32,26 @@
         </ul>
       </section>
     </div>
-    <template v-if="is_popup_on">
-      <ShareCourceModal :course="course" />
-      <div
-        @click="is_popup_on = false"
-        class="modal_back"
-      ></div>
-    </template>
+    <div v-if="is_updating" class="loader">Loading...</div>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import SingleVideoCard from "~/components/SingleVideoCard.vue";
-import ShareCourceModal from "~/components/ShareCourceModal.vue";
+import PlaylistController from "~/components/PlaylistController.vue";
 import { fetchMyList, fetchPlayListItems } from "~/assets/js/youtube.js";
 
 export default Vue.extend({
+  head() {
+    return {
+      title: this.course.title,
+    };
+  },
+  components: {
+    SingleVideoCard,
+    PlaylistController
+  },
   async created() {
     if (!this.$auth.loggedIn) this.$auth.loginWith("google");
     const access_token =
@@ -83,36 +90,37 @@ export default Vue.extend({
         playlist: [],
       },
       is_popup_on: false,
+      is_updating: false
     };
   },
-  head() {
-    return {
-      title: this.course.title,
-    };
-  },
-  components: {
-    SingleVideoCard,
-    ShareCourceModal
+  methods: {
+    setFetchStatus(status) {
+      this.is_updating = status
+    },
+    setPlaylist(playlist) {
+      this.course.info.snippet.title = playlist.data.snippet.title
+      this.course.info.snippet.description = playlist.data.snippet.description
+    }
   }
 });
 </script>
 
 <style lang="sass">
 .courses_wrapper
+  position: relative
   > .upper
     display: flex
     align-items: center
-    justify-content: space-between
-    padding-right: $VIEW_PADDING
+    margin-top: 36px
     > .page_title
       @include page_title('course')
       padding-left: $VIEW_PADDING
-      margin-left: -10px
-    > button.share
-      @include download_btn
-      background-color: $MAIN_COLOR
+      margin: 0 10px 0 -10px
   > .content_wrapper
     padding: 0 $VIEW_PADDING
+    &.loading
+      opacity: .3
+      pointer-events: none
     > .video_section
       > ul
         margin-left: -10px
@@ -121,9 +129,12 @@ export default Vue.extend({
         > li
           margin-left: 10px
           margin-bottom: 28px
-  > .modal_back
-    @include modal_back
-
+  > .loader
+    @include loader
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
 @media screen and (max-width: 896px)
   .courses_wrapper
     > .page_title

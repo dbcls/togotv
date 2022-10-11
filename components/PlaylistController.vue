@@ -79,10 +79,6 @@ export default Vue.extend({
     ShareCourceModal
   },
   props: {
-    playlists: {
-      type: Array,
-      required: true,
-    },
     playlist: {
       type: Object,
       required: true,
@@ -90,10 +86,6 @@ export default Vue.extend({
     privacy_status_by_playlist: {
       type: Object,
       required: true,
-    },
-    is_fetching_mylist: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -175,6 +167,7 @@ export default Vue.extend({
 .controllers
   display: flex
   align-items: center
+  font-weight: bold
   > .controller
     font-size: 14px
     margin-right: 10px
