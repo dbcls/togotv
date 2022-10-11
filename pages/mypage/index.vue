@@ -29,10 +29,8 @@
               {{ list.info.snippet.title }}
             </a>
             <PlaylistController
-              :playlists="playlists"
               :playlist="list"
               :privacy_status_by_playlist="privacy_status_by_playlist"
-              :is_fetching_mylist="is_fetching_mylist"
               @setFetchStatus="setFetchStatus"
               @setPlaylist="setPlaylist"
               @callbackAfterDelete="fetchPlayList"

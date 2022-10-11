@@ -61,7 +61,7 @@ export const fetchMyLists = async (access_token) => {
 
 export const fetchMyList = async (access_token, playlist_id) => {
   return await fetchPlayLists(access_token, {
-    part: "id,snippet",
+    part: "id,snippet,status",
     id: playlist_id,
     maxResults: 50,
   });
