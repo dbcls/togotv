@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetchPlayLists = async (access_token, params) => {
+export const fetchPlayLists = async (access_token, params) => {
   return await axios
     .get(`https://www.googleapis.com/youtube/v3/playlists`, {
       headers: { Authorization: access_token },
@@ -18,7 +18,7 @@ export const fetchPlayListItems = async (access_token, params) => {
     .then((data) => data.data.items);
 };
 
-export const fetchMyLists = async (access_token, callback) => {
+export const fetchMyLists = async (access_token) => {
   if (!access_token) return null;
   const myPlaylists = await fetchPlayLists(access_token, {
     part: "id,snippet,status",
@@ -53,10 +53,12 @@ export const fetchMyLists = async (access_token, callback) => {
           has_aside: false,
         });
       }
-      await playlists.push({ info: mylist, items });
+      await playlists.push({
+        info: mylist,
+        items,
+      });
     }
   }
-  if (callback) callback();
   return await playlists;
 };
 
@@ -119,9 +121,11 @@ export const createPlaylist = async (
         privacyStatus: privacy_status,
       },
     },
-  }).then(() => addVideoToPlaylist(access_token, new_list.data.id, video_id));
+  }).catch((e) => {
+    if (e.message.includes("401")) alert("このアカウントはYouTube未連携です。");
+  });
+  addVideoToPlaylist(access_token, new_list.data.id, video_id);
 };
-
 
 export const updatePrvacyStatus = async (
   access_token,
