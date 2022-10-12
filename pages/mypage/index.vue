@@ -29,6 +29,7 @@
               {{ list.info.snippet.title }}
             </a>
             <PlaylistController
+              class="playlist_controller"
               :playlist="list"
               :privacy_status_by_playlist="privacy_status_by_playlist"
               @setFetchStatus="setFetchStatus"
@@ -189,4 +190,7 @@ export default Vue.extend({
           > h3.course_name
             padding-left: $VIEW_PADDING_SP
             margin: 4px 0
+            flex-wrap: wrap
+            > .playlist_controller
+              margin: 10px 0
 </style>
