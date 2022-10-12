@@ -436,7 +436,7 @@ export default Vue.extend({
         console.log("error", error);
       });
 
-    if (process.client && this.$auth.loggedIn) this.fetchPlayLists(() => this.is_fetching_mylist = false)
+    if (process.client && this.$auth.loggedIn) this.getPlayLists()
   },
   head() {
     return {
@@ -553,11 +553,10 @@ export default Vue.extend({
     };
   },
   methods: {
-    async fetchPlayLists(callback) {
+    async getPlayLists() {
       this.is_fetching_mylist = true;
-      this.playlists = await fetchMyLists(this.access_token, callback).catch((err) =>
-        console.error(err)
-      );
+      this.playlists = await fetchMyLists(this.access_token).catch(() => this.is_fetching_mylist = false)
+      this.is_fetching_mylist = false;
     },
     converSecToHour(time, is_ISO, html) {
       if (time === "") {
@@ -688,10 +687,7 @@ export default Vue.extend({
           this.videoData.embedUrl
         ).catch((err) => console.error(err));
       }
-      this.playlists = await fetchMyLists(this.access_token).catch((err) =>
-        console.error(err)
-      );
-      this.is_fetching_mylist = false;
+      await this.getPlayLists()
     },
     async createPlaylist() {
       this.is_fetching_mylist = true;
@@ -703,16 +699,16 @@ export default Vue.extend({
         this.videoData.embedUrl
       )
       .then(() => {
-        this.fetchPlayLists(() => {
-          this.is_fetching_mylist = false;
+        setTimeout(async () => {
+          await this.getPlayLists();
           this.playlist_to_create.is_active = false;
           this.complemete_new_list_creation = true;
           setTimeout(() => {
             this.complemete_new_list_creation = false;
           }, 1500);
-        });
+        }, 1000)
       })
-      .catch(() => {
+      .catch(e => {
         this.is_fetching_mylist = false;
         alert("新規プレイリストの作成に失敗しました。")
       });
