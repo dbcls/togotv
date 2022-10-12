@@ -2,10 +2,15 @@
   <div :class="['course_wrapper', props.bg, btn_state.left ? '' : 'left_hide', btn_state.right ? '' : 'right_hide']">
     <ScrollBtn @toggleBtn="toggleBtn" :props="{id: 'course-left', direction: 'left'}"/>
     <ul class="course_list scroll-horizontal">
-      <li :class="['course_box', is_shorter_than_vw ? 'short' : '']" v-for="course in props.courses" :key="course.id">
+      <li
+        :class="['course_box', is_shorter_than_vw ? 'short' : '']"
+        v-for="course in props.courses"
+        :key="course.id"
+        @mouseover="getPointerPosition"
+      >
         <nuxt-link class="title tsukushi bold" :to="localePath(`/course.html?id=${course.id}`)">{{ course.title }}</nuxt-link>
         <p class="total_time" v-html="converSecToHour(course.total_time)"></p>
-        <div class="detail">
+        <div class="detail" :class="{ left: show_detail_left }">
           <nuxt-link class="detail_title tsukushi bold" :to="localePath(`/course.html?id=${course.id}`)">{{ course.title }}</nuxt-link>
           <p class="detail_description">{{ course.description }}</p>
           <span class="tsukushi">再生リスト一覧</span>
@@ -36,7 +41,8 @@ export default Vue.extend({
       btn_state: {
         left: false,
         right: true
-      }
+      },
+      show_detail_left: false
     }
   },
   computed: {
@@ -54,6 +60,9 @@ export default Vue.extend({
     ScrollBtn
   },
   methods: {
+    getPointerPosition(e) {
+      this.show_detail_left = e.x > window.innerWidth / 2
+    },
     toggleBtn(command) {
       if(command === 'hide_left') {
         this.btn_state.left = false
@@ -203,6 +212,13 @@ export default Vue.extend({
             left: -26px
             border: 15px solid rgba(255, 255, 255, 0)
             border-right: 15px solid $MAIN_COLOR
+          &.left
+            left: -330px
+            &:before
+              left: auto
+              right: -26px
+              border: 15px solid rgba(255, 255, 255, 0)
+              border-left: 15px solid $MAIN_COLOR
           > .detail_title
             font-size: 20px
             line-height: 25px
