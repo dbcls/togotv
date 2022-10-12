@@ -119,8 +119,7 @@ export const createPlaylist = async (
         privacyStatus: privacy_status,
       },
     },
-  });
-  await addVideoToPlaylist(access_token, new_list.data.id, video_id);
+  }).then(() => addVideoToPlaylist(access_token, new_list.data.id, video_id));
 };
 
 

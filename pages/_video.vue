@@ -701,14 +701,20 @@ export default Vue.extend({
         this.playlist_to_create.description,
         this.playlist_to_create.privacy,
         this.videoData.embedUrl
-      ).catch((err) => console.error(err));
-      this.fetchPlayLists(() => {
+      )
+      .then(() => {
+        this.fetchPlayLists(() => {
+          this.is_fetching_mylist = false;
+          this.playlist_to_create.is_active = false;
+          this.complemete_new_list_creation = true;
+          setTimeout(() => {
+            this.complemete_new_list_creation = false;
+          }, 1500);
+        });
+      })
+      .catch(() => {
         this.is_fetching_mylist = false;
-        this.playlist_to_create.is_active = false;
-        this.complemete_new_list_creation = true;
-        setTimeout(() => {
-          this.complemete_new_list_creation = false;
-        }, 1500);
+        alert("新規プレイリストの作成に失敗しました。")
       });
     },
     login() {
