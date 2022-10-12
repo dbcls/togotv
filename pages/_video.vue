@@ -436,17 +436,7 @@ export default Vue.extend({
         console.log("error", error);
       });
 
-    if (process.client && this.$auth.loggedIn) {
-      this.is_fetching_mylist = true;
-      const access_token =
-        this.$auth?.strategies?.google?.token?.$storage?._state[
-          "_token.google"
-        ];
-      this.playlists = await fetchMyLists(access_token).catch((err) =>
-        console.error(err)
-      );
-      this.is_fetching_mylist = false;
-    }
+    if (process.client && this.$auth.loggedIn) this.fetchPlayLists(() => this.is_fetching_mylist = false)
   },
   head() {
     return {
@@ -529,20 +519,6 @@ export default Vue.extend({
       this.is_first_time = true;
       localStorage.setItem("is_first_time", true);
     }
-
-    function onPlayerStateChange() {
-      this.player.getPlaylist().then((data) => {
-        this.playlist_array = data;
-      });
-
-      this.player.getPlaylistIndex().then((data) => {
-        if (this.current_video_index !== data) {
-          this.finish_loading = false;
-          this.current_video_index = data;
-          this.fetchVideoData();
-        }
-      });
-    }
   },
   data() {
     return {
@@ -577,6 +553,12 @@ export default Vue.extend({
     };
   },
   methods: {
+    async fetchPlayLists(callback) {
+      this.is_fetching_mylist = true;
+      this.playlists = await fetchMyLists(this.access_token, callback).catch((err) =>
+        console.error(err)
+      );
+    },
     converSecToHour(time, is_ISO, html) {
       if (time === "") {
         return;
@@ -720,15 +702,14 @@ export default Vue.extend({
         this.playlist_to_create.privacy,
         this.videoData.embedUrl
       ).catch((err) => console.error(err));
-      // this.playlists = await fetchMyLists(this.access_token).catch((err) =>
-      //   console.error(err)
-      // );
-      this.is_fetching_mylist = false;
-      this.playlist_to_create.is_active = false;
-      this.complemete_new_list_creation = true;
-      setTimeout(() => {
-        this.complemete_new_list_creation = false;
-      }, 1500);
+      this.fetchPlayLists(() => {
+        this.is_fetching_mylist = false;
+        this.playlist_to_create.is_active = false;
+        this.complemete_new_list_creation = true;
+        setTimeout(() => {
+          this.complemete_new_list_creation = false;
+        }, 1500);
+      });
     },
     login() {
       // クッキーの確認

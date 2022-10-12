@@ -18,7 +18,7 @@ export const fetchPlayListItems = async (access_token, params) => {
     .then((data) => data.data.items);
 };
 
-export const fetchMyLists = async (access_token) => {
+export const fetchMyLists = async (access_token, callback) => {
   if (!access_token) return null;
   const myPlaylists = await fetchPlayLists(access_token, {
     part: "id,snippet,status",
@@ -56,6 +56,7 @@ export const fetchMyLists = async (access_token) => {
       await playlists.push({ info: mylist, items });
     }
   }
+  if (callback) callback();
   return await playlists;
 };
 
