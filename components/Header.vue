@@ -358,7 +358,7 @@ header
                 display: none
               > a
                 display: flex
-                align-items: centerq
+                align-items: center
                 padding-left: 0px
                 margin-left: 0px
                 > img.user_icon

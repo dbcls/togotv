@@ -1225,8 +1225,17 @@ export default Vue.extend({
       > .left_section
         width: 100%
         > .meta_data_and_save
+          flex-wrap: wrap
           > .meta_data
             line-height: 24px
+          > .save
+            margin: 10px 0 12px
+            > .window
+              right: auto
+              left: 0
+              &:before
+                right: auto
+                left: 20px
         > .related_videos_section
           display: none
       > .right_section
