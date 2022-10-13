@@ -137,23 +137,23 @@ export default Vue.extend({
     transform: translate(-50%, -50%)
 @media screen and (max-width: 896px)
   .courses_wrapper
-    > .page_title
+    > .upper
+      flex-wrap: wrap
       padding-left: $VIEW_PADDING_SP
-      align-items: flex-start
-      position: relative
-      margin-bottom: 30px
-      > .course_title
-        margin-top: 9px
-      > .total_time
-        position: absolute
-        bottom: -18px
+      > .page_title
+        padding-left:  0
+        margin-bottom: 10px
+        align-items: flex-start
+        position: relative
+        > .course_title
+          margin-top: 9px
     > .content_wrapper
       padding: 0 $VIEW_PADDING_SP
       overflow: hidden
-      > .video_section
-        width: 100%
-        overflow: hidden
-        > ul
-          > li
-            width: calc((100% - 28px) / 2)
+    > .video_section
+      width: 100%
+      overflow: hidden
+      > ul
+        > li
+          width: calc((100% - 28px) / 2)
 </style>
