@@ -253,12 +253,7 @@ export default Vue.extend({
             if(this.$route.query.query) {
               param["query"] = this.$route.query.query;
             }
-            let param_text = ''
-            Object.keys(param).forEach((key, index) => {
-              if(index !== 0) param_text += '&'
-              param_text += `${key}=${param[key]}`
-            })
-            this.$router.push(this.localePath(`/result.html?${param_text}`))
+            this.$router.replace({ query: param })
             this.fetchDataWithFilter(param)
           }
         }, 0);
