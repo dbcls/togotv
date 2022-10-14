@@ -12,6 +12,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "10.x"
+      - name: Create .env file
+        run: |
+          touch .env
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID}} > .env
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET}} >> .env
+        working-directory: /
       - name: Install dependencies
         run: npm i
       - name: Nuxt generate
