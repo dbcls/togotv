@@ -8,11 +8,7 @@
     {
       "id": "Howtocite_copyrights",
       "question": "統合TVのコンテンツを利用したいのですが、著作権の扱いはどうなっていますか?",
-      "answer": "統合TVのコンテンツは、[クリエイティブコモンズ・ライセンス(CC)表示 4.0(CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/deed.ja) のもとでライセンスされています。各コンテンツの著作権は「DBCLS TogoTV」が保持しますが、サイエンスコミュニティの共有物として、｢適切なクレジット(出典)を表示し、ライセンスへのリンクを提供し（web上であればハイパーリンクでも可)、変更があったらその旨を示すこと｣を条件に、転載・改変・再利用(営利目的での二次利用も含め)を許可なく自由に行えます。(例: “The image of XX is from TogoTV (© 2016 DBCLS TogoTV, CC-BY-4.0 https://creativecommons.org/licenses/by/4.0/deed.ja).“)
-      <p>イラストのご利用箇所については、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問いません。
-      クレジットの記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。クレジット表示用のイラストも用意しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等では、Acknowledgementsや図のlegend 等にご記載いただいています。</p>
-      <p>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。</p>
-      <p論文で利用される場合は、統合TVの論文もありますので、合わせてご記載ください。<br>[Tutorial videos of bioinformatics resources: online distribution trial in Japan named TogoTV.](http://bib.oxfordjournals.org/content/13/2/258.full)<br>Kawano S, Ono H, Takagi T, Bono H.<br>Brief Bioinform. 2012 Mar;13(2):258-68. doi: 10.1093/bib/bbr039.</p>"
+      "answer": "統合TVのコンテンツは、[クリエイティブコモンズ・ライセンス(CC)表示 4.0(CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/deed.ja) のもとでライセンスされています。各コンテンツの著作権は「DBCLS TogoTV」が保持しますが、サイエンスコミュニティの共有物として、｢適切なクレジット(出典)を表示し、ライセンスへのリンクを提供し（web上であればハイパーリンクでも可)、変更があったらその旨を示すこと｣を条件に、転載・改変・再利用(営利目的での二次利用も含め)を許可なく自由に行えます。(例: “The image of XX is from TogoTV (© 2016 DBCLS TogoTV, CC-BY-4.0 https://creativecommons.org/licenses/by/4.0/deed.ja).“)<p>イラストのご利用箇所については、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問いません。クレジットの記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。クレジット表示用のイラストも用意しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等では、Acknowledgementsや図のlegend 等にご記載いただいています。</p><p>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。</p><p論文で利用される場合は、統合TVの論文もありますので、合わせてご記載ください。<br>[Tutorial videos of bioinformatics resources: online distribution trial in Japan named TogoTV.](http://bib.oxfordjournals.org/content/13/2/258.full)<br>Kawano S, Ono H, Takagi T, Bono H.<br>Brief Bioinform. 2012 Mar;13(2):258-68. doi: 10.1093/bib/bbr039.</p>"
     },
     {
       "id": "whymovie",
