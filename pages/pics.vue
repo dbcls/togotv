@@ -15,25 +15,25 @@
       <p class="facet_title filter tsukushi bold">{{ $t("filter_search") }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t("clear_filter") }}</p>
       <div class="facet_small_section">
-        <p class="facet_small_title brush tsukushi bold">
-          {{ $t("author") }}
+        <p class="facet_small_title tag tsukushi bold">
+          {{ $t('tags') }}
           <span
-            :class="['toggle_btn', facets.author.is_open ? '' : 'close']"
-            @click="facets.author.is_open = !facets.author.is_open"
+            :class="['toggle_btn', facets.other_tags.is_open ? '' : 'close']"
+            @click="facets.other_tags.is_open = !facets.other_tags.is_open"
           ></span>
         </p>
-        <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
+        <div :class="['checkbox_wrapper', facets.other_tags.is_open ? '' : 'close']">
           <ul>
-            <li v-for="(author, index) in facets.author.data" :key="index">
+            <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
               <input
                 type="checkbox"
-                :id="removeTag(author.key)"
-                :value="removeTag(author.key)"
-                v-model="filters.author_str"
+                :id="other_tag.key"
+                :value="other_tag.key"
+                v-model="filters.other_tags"
               />
-              <label :for="removeTag(author.key)">
-                <span class="label">{{ removeTag(author.key) }}</span>
-                <span class="count mont">{{ author.doc_count }}</span>
+              <label :for="other_tag.key">
+                <span class="label" v-html="other_tag.key"></span>
+                <span class="count mont">{{ other_tag.doc_count }}</span>
               </label>
             </li>
           </ul>
@@ -109,25 +109,25 @@
         </div>
       </div>
       <div class="facet_small_section">
-        <p class="facet_small_title tag tsukushi bold">
-          {{ $t('tags') }}
+        <p class="facet_small_title brush tsukushi bold">
+          {{ $t("author") }}
           <span
-            :class="['toggle_btn', facets.other_tags.is_open ? '' : 'close']"
-            @click="facets.other_tags.is_open = !facets.other_tags.is_open"
+            :class="['toggle_btn', facets.author.is_open ? '' : 'close']"
+            @click="facets.author.is_open = !facets.author.is_open"
           ></span>
         </p>
-        <div :class="['checkbox_wrapper', facets.other_tags.is_open ? '' : 'close']">
+        <div :class="['checkbox_wrapper', facets.author.is_open ? '' : 'close']">
           <ul>
-            <li v-for="(other_tag, index) in facets.other_tags.data" :key="index">
+            <li v-for="(author, index) in facets.author.data" :key="index">
               <input
                 type="checkbox"
-                :id="other_tag.key"
-                :value="other_tag.key"
-                v-model="filters.other_tags"
+                :id="removeTag(author.key)"
+                :value="removeTag(author.key)"
+                v-model="filters.author_str"
               />
-              <label :for="other_tag.key">
-                <span class="label" v-html="other_tag.key"></span>
-                <span class="count mont">{{ other_tag.doc_count }}</span>
+              <label :for="removeTag(author.key)">
+                <span class="label">{{ removeTag(author.key) }}</span>
+                <span class="count mont">{{ author.doc_count }}</span>
               </label>
             </li>
           </ul>
@@ -313,7 +313,7 @@ export default Vue.extend({
       loaded_pictures: [],
       tags: [],
       facets: {
-        author: {
+        other_tags: {
           checked: [],
           is_open: true
         },
@@ -321,7 +321,7 @@ export default Vue.extend({
           checked: [],
           is_open: true
         },
-        other_tags: {
+        author: {
           checked: [],
           is_open: true
         },
