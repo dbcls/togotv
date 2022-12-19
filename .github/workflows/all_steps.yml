@@ -11,13 +11,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Update database
         run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.UPDATE_ENDPOINT }}
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: "10.x"
+          node-version: "16.x"
       - name: Install dependencies
         run: npm i
       - name: Nuxt generate
