@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const fetchPlayLists = async (access_token, params) => {
+  if (!access_token) return;
   return await axios
     .get(`https://www.googleapis.com/youtube/v3/playlists`, {
       headers: { Authorization: access_token },
@@ -10,6 +11,7 @@ export const fetchPlayLists = async (access_token, params) => {
 };
 
 export const fetchPlayListItems = async (access_token, params) => {
+  if (!access_token) return;
   return await axios
     .get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
       headers: { Authorization: access_token },
@@ -19,6 +21,7 @@ export const fetchPlayListItems = async (access_token, params) => {
 };
 
 export const fetchMyLists = async (access_token) => {
+  if (!access_token) return;
   if (!access_token) return null;
   const myPlaylists = await fetchPlayLists(access_token, {
     part: "id,snippet,status",
@@ -63,6 +66,7 @@ export const fetchMyLists = async (access_token) => {
 };
 
 export const fetchMyList = async (access_token, playlist_id) => {
+  if (!access_token) return;
   return await fetchPlayLists(access_token, {
     part: "id,snippet,status",
     id: playlist_id,
@@ -93,6 +97,7 @@ export const addVideoToPlaylist = async (
 };
 
 export const removeVideoFromPlaylist = async (access_token, video_id) => {
+  if (!access_token) return;
   await axios.delete(`https://www.googleapis.com/youtube/v3/playlistItems`, {
     headers: { Authorization: access_token },
     params: {
@@ -134,6 +139,7 @@ export const updatePrvacyStatus = async (
   privacy_status,
   callback
 ) => {
+  if (!access_token) return;
   await axios({
     method: "put",
     url: `https://www.googleapis.com/youtube/v3/playlists?part=snippet&part=status`,
@@ -153,6 +159,7 @@ export const updatePrvacyStatus = async (
 };
 
 export const deletePlaylist = async (access_token, video_id, callback) => {
+  if (!access_token) return;
   await axios
     .delete(`https://www.googleapis.com/youtube/v3/playlists`, {
       headers: { Authorization: access_token },
@@ -164,6 +171,7 @@ export const deletePlaylist = async (access_token, video_id, callback) => {
 };
 
 export const updatePlaylistData = async (access_token, playlist, callback) => {
+  if (!access_token) return;
   await axios({
     method: "put",
     url: `https://www.googleapis.com/youtube/v3/playlists?part=snippet`,

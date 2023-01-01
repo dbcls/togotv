@@ -57,7 +57,7 @@ export default Vue.extend({
     const access_token =
       this.$auth.strategies.google.token.$storage._state["_token.google"];
     const course = await fetchMyList(access_token, this.$route.query.id);
-    this.course.info = course[0];
+    this.course.info = course ?? course[0];
     const playlist = await fetchPlayListItems(access_token, {
       part: "id,snippet,contentDetails,status",
       playlistId: this.$route.query.id,

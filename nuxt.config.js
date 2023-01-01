@@ -242,6 +242,9 @@ export default {
           config.devtool = "source-map";
         }
       },
+      parallel: true,
+      cache: true,
+      hardSource: true,
     },
   },
   hooks: {

@@ -219,7 +219,7 @@ export default Vue.extend({
     },
     login() {
       // クッキーの確認
-      if (localStorage.getItem("isAgreed") === 'true') {
+      if (process.client && localStorage.getItem("isAgreed") === 'true') {
         this.$auth.loginWith('google')
       } else {
         // モーダル表示
