@@ -37,16 +37,18 @@ export default Vue.extend({
     }
   },
   mounted() {
-    const language = (window.navigator.languages && window.navigator.languages[0]) ||
-            window.navigator.language ||
-            window.navigator.userLanguage ||
-            window.navigator.browserLanguage;
-    if(language === 'en-US') {
-      this.$router.push(this.switchLocalePath('en'))
+    if(process.client) {
+      const language = (window.navigator.languages.length > 0 && window.navigator.languages[0]) ||
+              window.navigator.language ||
+              window.navigator.userLanguage ||
+              window.navigator.browserLanguage;
+      if(language === 'en-US') {
+        this.$router.push(this.switchLocalePath('en'))
+      }
     }
   },
   methods: {
-    toggleMenu(menu_state) { 
+    toggleMenu(menu_state) {
       if(menu_state) {
         document.getElementsByTagName('body')[0].style.overflow = "hidden";
       } else {
