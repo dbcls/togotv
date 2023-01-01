@@ -25,25 +25,25 @@
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
     <section class="course_section" v-if="course_list">
-      <h2 class="tsukushi bold">
+      <h2 class="sections_title tsukushi bold">
         <nuxt-link :to="localePath('/courses.html')">{{ $t("search_for_courses") }}</nuxt-link>
       </h2>
       <CourseList :props="{bg: 'white', courses: course_list}"/>
     </section>
     <section class="newvideo_section bg_blue" v-if="new_video_list">
-      <h2 class="tsukushi bold">
+      <h2 class="sections_title tsukushi bold">
         <nuxt-link :to="localePath('/newvideo.html')">{{ $t("new_videos") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'newvideo', playList: new_video_list, bg: 'blue'}"/>
     </section>
     <section class="realtime_view_video_section bg_blue" v-if="realtime_video_list">
-      <h2 class="tsukushi bold">
+      <h2 class="sections_title tsukushi bold">
         <nuxt-link :to="localePath('/rankings.html')">{{ $t("ranking") }}</nuxt-link>
       </h2>
       <VideoListHorizontalScroll :props="{id: 'realtime_view_video', playList: realtime_video_list, bg: 'blue'}"/>
     </section>
     <section class="illustation_section bg_blue">
-      <h2 class="tsukushi bold">
+      <h2 class="sections_title tsukushi bold">
         <nuxt-link :to="localePath('/pics.html')">{{ $t('new_illustrations') }}</nuxt-link>
       </h2>
       <IllustrationList :illustration_list="illustration_list" />
@@ -243,7 +243,7 @@ section
   .course_section,
   .newvideo_section,
   .realtime_view_video_section,
-  .illustation_section,
+  .illustation_section
     > h2
       margin-left: $VIEW_PADDING_SP
 
