@@ -32,7 +32,7 @@ export default Vue.extend({
     },
     submit(type) {
       let query = {
-        name: "result",
+        path: "/result.html",
         query: { query: this.keyword, type: "manual", page: "1" },
       };
       if (type === "enter") {
