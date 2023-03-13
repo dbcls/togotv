@@ -151,11 +151,7 @@ export default Vue.extend({
         let link = document.createElement("a");
         link.target = "_blank";
         link.download = name;
-        if (name.slice(-3) === "png") {
-          link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}`;
-        } else {
-          link.href = `ftp://ftp.biosciencedbc.jp/archive/togo-pic/image/${name}`;
-        }
+        link.href = `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${name}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
