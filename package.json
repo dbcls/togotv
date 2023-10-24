@@ -22,7 +22,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/pwa": "^3.0.2",
     "normalize.css": "^8.0.1",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.15.8",
     "vue": "^2.6.12",
     "vue-infinite-loading": "^2.4.5",
     "vue-slider-component": "^3.2.2",
