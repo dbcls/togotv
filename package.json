@@ -22,7 +22,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/pwa": "^3.0.2",
     "normalize.css": "^8.0.1",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.12.2",
     "vue": "^2.6.12",
     "vue-infinite-loading": "^2.4.5",
     "vue-slider-component": "^3.2.2",
@@ -30,9 +30,9 @@
     "vue-youtube": "git+https://github.com/reika0717/vue-youtube.git"
   },
   "devDependencies": {
-    "@nuxt/typescript-build": "^0.6.0",
+    "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
-    "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/eslint-module": "^1.2.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/stylelint-module": "^3.1.0",
     "axios": "^0.19.2",
