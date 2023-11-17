@@ -11,6 +11,11 @@
       "answer": "統合TVのコンテンツは、[クリエイティブコモンズ・ライセンス(CC)表示 4.0(CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/deed.ja) のもとでライセンスされています。各コンテンツの著作権は「DBCLS TogoTV」が保持しますが、サイエンスコミュニティの共有物として、｢適切なクレジット(出典)を表示し、ライセンスへのリンクを提供し（web上であればハイパーリンクでも可)、変更があったらその旨を示すこと｣を条件に、転載・改変・再利用(営利目的での二次利用も含め)を許可なく自由に行えます。(例: “The image of XX is from TogoTV (© 2016 DBCLS TogoTV, CC-BY-4.0 [https://creativecommons.org/licenses/by/4.0/deed.ja](https://creativecommons.org/licenses/by/4.0/deed.ja) ).“) <p>イラストのご利用箇所については、論文の図表や発表スライド、ポスター、プレスリリース、販促資料など内容を問いません。クレジットの記載箇所については、デザインの体裁を損なわない箇所・表現で構いません。クレジット表示用のイラストも用意しておりますので、 目的に応じて適宜ご自由にご利用ください。論文等では、Acknowledgementsや図のlegend 等にご記載いただいています。</p><p>統合TVおよびTogoPictureGalleryをはじめとするDBCLSの活動は、どのくらい活用されたかについて主にアクセス数や引用数などで評価されており、 利用者の方の積極的なサポートに支えられています。</p><p>論文で利用される場合は、統合TVの論文もありますので、合わせてご記載ください。<br>[Tutorial videos of bioinformatics resources: online distribution trial in Japan named TogoTV.](https://doi.org/10.1093/bib/bbr039)<br> Kawano S, Ono H, Takagi T, Bono H.<br>Brief Bioinform. 2012 Mar;13(2):258-68. doi: 10.1093/bib/bbr039.</p>" 
     },
     {
+      "id": "howtosubmit",
+      "question": "統合TVに、動画・イラストを寄託したいのですが可能ですか?",
+      "answer": "統合TVへの動画・イラストの寄託は歓迎しています。ご自身で作成されたツールの動画マニュアルやイラストのほか、研究会・勉強会、セミナーなどの各種講義・講演についてもご寄託いただくことができます。寄託動画、イラストの公開にあたっては、[クリエイティブコモンズ・ライセンス(CC)表示 4.0(CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/deed.ja) のもとで内容をWebに一般公開することへのご承諾とステークホルダーの許諾取得が必要です。動画については、必要に応じてタイトルやロゴなどの統合TVのフォーマットを付加する場合があります。詳細については、[DBCLSのお問い合わせフォーム](https://dbcls.rois.ac.jp/contact)からご連絡ください。"
+    },
+    {
       "id": "whymovie",
       "question": "統合TVでは、なぜ動画マニュアルを作り始めたのですか?",
       "answer": "サービス開始当初に、スクリーンキャプチャ+解説文という書籍のようなスタイルだと、初学者にとってはその操作の「行間」が分からないことが多いのではないかという仮説を立てました。 そこで、事の始終を収録してその都度、解説文を加えていくスタイルであれば、初学者もわかりやすいだろうということで動画マニュアルを作成し始めました。"
