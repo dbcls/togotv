@@ -13,11 +13,6 @@
             <img src="~/assets/img/member/kawano.png" class="main_member_photo" alt="">
             <p class="main_member_name">{{ $t('kono') }}</p>
           </div>
-        </div>
-      </div>
-      <div class="single_role_wrapper">
-        <h3 class="role tsukushi bold">{{ $t('main_editor') }}</h3>
-        <div class="main_members_info">
           <div class="main_member">
             <img src="~/assets/img/member/ono.png" class="main_member_photo" alt="">
             <p class="main_member_name">{{ $t('ono') }}</p>
@@ -25,11 +20,23 @@
         </div>
       </div>
       <div class="single_role_wrapper">
-        <h3 class="role tsukushi bold">{{ $t('editor') }}</h3>
+        <h3 class="role tsukushi bold">{{ $t('main_editor') }}</h3>
         <div class="main_members_info">
           <div class="main_member">
-            <img src="~/assets/img/member/ikeda.png" class="main_member_photo" alt="">
-            <p class="main_member_name">{{ $t('ikeda') }}</p>
+            <img src="~/assets/img/member/suimye.png" class="main_member_photo" alt="">
+            <p class="main_member_name">{{ $t('morioka') }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="single_role_wrapper">
+        <!-- <h3 class="role tsukushi bold">{{ $t('editor') }}</h3> -->
+        <h3 class="role tsukushi bold">{{ $t('togotv_team') }}</h3>
+        <div class="main_members_info">
+          <div class="main_member">
+            <!-- <img src="~/assets/img/member/ikeda.png" class="main_member_photo" alt=""> -->
+            <!-- <p class="main_member_name">{{ $t('ikeda') }}</p> -->
+            <p class="main_member_name">{{ $t('sakuma') }}</p>
+            <p class="main_member_name">{{ $t('minowa') }}</p>
           </div>
         </div>
       </div>
@@ -38,11 +45,11 @@
     <p class="staff_name">{{ $t('staff_member_list') }}</p>
     <h3 class="tsukushi bold">{{ $t('develop_site') }}</h3>
     <p class="staff_name">{{ $t('develop_site_member_list') }}</p>
-    <div class="recruit_wrapper">
-      <h3 class="tsukushi bold" v-html="$t('recruit_title')"></h3>
-      <p v-if="$i18n.locale === 'ja'">オンラインで完結するリモートワーク体制で作業できます。作業内容は相談の上で決定し、その内容・難易度等に応じて謝金をお支払いします。<br>納期はご自身のスケジュールに合わせて自由に設定できます。作業開始時点でDB・ウェブツールについて詳しくなくても、勉強しながらでOKです。「本業優先」がポリシーです。<br>動画・イラストの作成が未経験の方でもサポートします。<br>動画制作の実際は、<nuxt-link :to="localePath(`/20200129.html`)" >「画面録画/編集ソフトウェア Camtasia 2019 を使って統合TVの動画を作成する」</nuxt-link>をご覧ください。<br>イラスト制作の実際は、<nuxt-link :to="localePath(`/20110322.html`)" >「ライフサイエンス分野のイラスト集を作る仕事@AJACS本郷8」</nuxt-link>をご覧ください。<br>詳細についてご興味ある方は、 togotvyoutube@dbcls.rois.ac.jp まで ご連絡いただくか、<a href="https://dbcls.rois.ac.jp/contact" target="_blank">DBCLSのお問い合わせフォーム</a> からご連絡ください。</p>
-      <p v-else>We are looking for content creators in Japan only.</p>
-    </div>
+   <!-- <div class="recruit_wrapper"> -->
+      <!-- <h3 class="tsukushi bold" v-html="$t('recruit_title')"></h3> -->
+      <!-- <p v-if="$i18n.locale === 'ja'">オンラインで完結するリモートワーク体制で作業できます。作業内容は相談の上で決定し、その内容・難易度等に応じて謝金をお支払いします。<br>納期はご自身のスケジュールに合わせて自由に設定できます。作業開始時点でDB・ウェブツールについて詳しくなくても、勉強しながらでOKです。「本業優先」がポリシーです。<br>動画・イラストの作成が未経験の方でもサポートします。<br>動画制作の実際は、<nuxt-link :to="localePath(`/20200129.html`)" >「画面録画/編集ソフトウェア Camtasia 2019 を使って統合TVの動画を作成する」</nuxt-link>をご覧ください。<br>イラスト制作の実際は、<nuxt-link :to="localePath(`/20110322.html`)" >「ライフサイエンス分野のイラスト集を作る仕事@AJACS本郷8」</nuxt-link>をご覧ください。<br>詳細についてご興味ある方は、 togotvyoutube@dbcls.rois.ac.jp まで ご連絡いただくか、<a href="https://dbcls.rois.ac.jp/contact" target="_blank">DBCLSのお問い合わせフォーム</a> からご連絡ください。</p> -->
+    <!--  <p v-else>We are looking for content creators in Japan only.</p> -->
+   <!-- </div> -->
   </div>
 </template>
 
