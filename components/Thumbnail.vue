@@ -4,6 +4,7 @@
       :class="['thumbnail', props.size, { has_aside: props.has_aside }]"
       :src="props.thumbnail"
       :alt="props.title"
+      loading="lazy"
     />
     <div class="meta_wrappper">
       <span

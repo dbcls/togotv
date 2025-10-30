@@ -616,7 +616,7 @@ export default Vue.extend({
       if (!this.is_filter_on) {
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=20`
           )
           .then(data => {
             this.pictures = this.pictures.concat(data.data.data);
