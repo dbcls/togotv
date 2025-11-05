@@ -212,6 +212,7 @@
             <img
               :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`"
               :alt="picture.name"
+              loading="lazy"
             />
           </a>
           <div :class="['description_wrapper', $i18n.locale]">
