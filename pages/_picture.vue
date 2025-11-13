@@ -1,5 +1,10 @@
 <template>
   <div class="picture_wrapper">
+    <div v-if="hasSearchState" class="back_to_search_wrapper">
+      <button @click="backToSearchResults" class="back_to_search_btn tsukushi">
+        ← {{ $t('back_to_search_results') }}
+      </button>
+    </div>
     <div class="pic_section">
       <div class="img_wrapper">
         <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`" :alt="picture.name">
@@ -104,6 +109,9 @@ export default Vue.extend({
           }
         ]
       };
+    },
+    hasSearchState() {
+      return this.$route.query.from_search === 'true';
     }
   },
   components: {
@@ -131,6 +139,19 @@ export default Vue.extend({
         .catch(error => {
           console.log('error', error)
         })
+    },
+    backToSearchResults() {
+      // クエリパラメータから検索状態を取得
+      const query = Object.assign({}, this.$route.query);
+
+      // from_searchフラグを削除（picsページでは不要）
+      delete query.from_search;
+
+      // picsページに戻る
+      this.$router.push({
+        path: this.localePath('/pics'),
+        query: query
+      });
     }
   }
 })
@@ -140,6 +161,21 @@ export default Vue.extend({
 .picture_wrapper
   // min-width: 1130px
   padding: 106px 0
+  > .back_to_search_wrapper
+    margin-bottom: 20px
+    > .back_to_search_btn
+      background-color: $MAIN_COLOR
+      color: #fff
+      border: none
+      padding: 10px 20px
+      font-size: 14px
+      border-radius: 4px
+      cursor: pointer
+      transition: .3s
+      &:hover
+        background-color: darken($MAIN_COLOR, 10%)
+      &:focus
+        outline: none
   > .pic_section
     width: 100%
     display: flex
