@@ -44,10 +44,7 @@
           <li>
             <ul class="lang_switch">
               <li>
-                <a :class="$route.path.indexOf('/en') === -1 ? 'active' : ''" @click="switchLocalePath('ja')">日本語</a><span>/</span>
-              </li>
-              <li>
-                <a :class="$route.path.indexOf('/en') !== -1 ? 'active' : ''" @click="switchLocalePath('en')">English</a>
+                <span>日本語</span>
               </li>
             </ul>
           </li>
