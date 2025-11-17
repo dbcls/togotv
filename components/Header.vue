@@ -160,9 +160,11 @@
                 @closeModal="is_agree_modal_on = false" 
               />
             </li>
+            <!--
             <li class="list_text_search">
               <TextSearch props="header" />
             </li>
+            -->
           </ul>
         </nav>
       </div>
