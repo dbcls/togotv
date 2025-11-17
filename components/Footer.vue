@@ -42,11 +42,7 @@
             </ul>
           </li>
           <li>
-            <ul class="lang_switch">
-              <li>
-                <span>日本語</span>
-              </li>
-            </ul>
+
           </li>
         </ul>
       </div>
