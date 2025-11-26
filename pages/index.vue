@@ -21,6 +21,10 @@
           <span class="comma">,</span>
           <nuxt-link :to="(localePath({ path: '/result.html', query: { query: 'NGS', type: 'handson', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
+        <!-- お知らせ -->
+        <div class="announcement" v-if="$t('top_announcement')">
+          <p>{{ $t('top_announcement') }}</p>
+        </div> 
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
@@ -185,6 +189,18 @@ export default Vue.extend({
       text-align: center
       > .comma
         margin: 0 3px
+    > .announcement
+      margin-top: 20px
+      width: 334px
+      padding: 15px 20px
+      border: 2px solid #d32f2f
+      border-radius: 4px
+      text-align: center
+      > p
+        color: #d32f2f
+        font-weight: bold
+        margin: 0
+        line-height: 1.6
 section
   padding: 15px 0
   &:nth-of-type(2)
@@ -237,6 +253,11 @@ section
         margin-top: 12px
       > .search_example
         justify-content: center
+      > .announcement
+        margin: 20px 15px 0
+        padding: 12px 15px
+        font-size: 13px
+        max-width: none
       > .input_wrapper
         &.index
           margin: 20px auto 0
@@ -246,5 +267,4 @@ section
   .illustation_section
     > h2
       margin-left: $VIEW_PADDING_SP
-
-</style>
+  </style>
