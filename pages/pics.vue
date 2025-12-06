@@ -199,7 +199,7 @@
           </ul>
         </div>
       </div>
-      <p v-if="$store.state.display === 'card' && pictures.length === 0">
+      <p v-if="$store.state.display === 'card' && !is_loading && pictures.length === 0">
         該当なし
       </p>
       <ul v-if="$store.state.display === 'card' && !is_loading && pictures.length !== 0" class="picture_list_card">
