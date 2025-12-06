@@ -21,10 +21,10 @@
           <span class="comma">,</span>
           <nuxt-link :to="(localePath({ path: '/result.html', query: { query: 'NGS', type: 'handson', page: '1' } }))">{{ $t('NGS_Hands-on_training') }}</nuxt-link>
         </div>
-        <!-- お知らせ -->
+        <!-- お知らせ 普段はコメントアウト
         <div class="announcement" v-if="$t('top_announcement')">
           <p>{{ $t('top_announcement') }}</p>
-        </div> 
+        </div> -->
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
