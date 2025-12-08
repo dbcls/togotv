@@ -48,6 +48,7 @@ export default {
     { src: "~/plugins/infiniteloading", ssr: false },
     { src: "~/plugins/vue-slider-component.js", ssr: false },
     { src: "~/plugins/helper.js", ssr: false },
+    { src: "~/plugins/navigationMixin.js", ssr: true },
   ],
   /*
    ** Nuxt.js dev-modules

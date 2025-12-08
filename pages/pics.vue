@@ -202,10 +202,20 @@
       <p v-if="$store.state.display === 'card' && !is_loading && pictures.length === 0">
         該当なし
       </p>
-      <ul v-if="$store.state.display === 'card' && !is_loading && pictures.length !== 0" class="picture_list_card">
+      <ul
+        v-if="$store.state.display === 'card' && !is_loading && pictures.length !== 0"
+        class="picture_list_card"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+        @mousedown="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseEnd"
+      >
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
-            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage(`/${picture.id.split('/').pop()}.html`)"
+            :href="is_edit_on ? '#' : localePath(`/${picture.id.split('/').pop()}.html`)"
+            @click="is_edit_on ? selectPic(picture, $event) : handlePictureClick($event, picture)"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
             <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
@@ -222,17 +232,16 @@
         </li>
       </ul>
       <div v-if="is_loading" class="loader">Loading...</div>
-      <client-only>
-        <infinite-loading
-          v-if="$store.state.display === 'card'"
-          ref="infiniteLoading"
-          spinner="spiral"
-          @infinite="infiniteHandler"
-        >
-          <div slot="no-more"></div>
-          <div slot="no-results"></div>
-        </infinite-loading>
-      </client-only>
+      <!-- ページネーション -->
+      <div v-if="$store.state.display === 'card' && !is_loading && pictures.length > 0" class="pagination">
+        <button @click="goToPrevPage" :disabled="current_page === 1" class="pagination_btn prev">
+          ← 前へ
+        </button>
+        <span class="page_info">{{ current_page }} / {{ last_page }}</span>
+        <button @click="goToNextPage" :disabled="current_page >= last_page" class="pagination_btn next">
+          次へ →
+        </button>
+      </div>
       <ul v-if="$store.state.display === 'list'" class="picture_list">
         <li
           v-for="(other_tag, index) in tags"
@@ -296,8 +305,9 @@ export default Vue.extend({
     // クエリパラメータから検索状態を復元
     const query = Object.assign({}, this.$route.query);
 
-    // 復元するクエリがない場合は何もしない
+    // 復元するクエリがない場合は通常のページ表示
     if (!query.keyword && !Object.keys(this.filters).some(key => query[key])) {
+      this.fetchPage(1);
       return;
     }
 
@@ -313,13 +323,11 @@ export default Vue.extend({
       // URLからクエリパラメータを削除（これ以上のループを防ぐ）
       this.$router.replace({ path: this.localePath('/pics'), query: {} });
 
-      // 復元フラグを下ろしてからinfinite-loadingをリセット
+      // 復元フラグを下ろしてからfetchPage
       this.$nextTick(() => {
         this._is_restoring = false;
         this.$nextTick(() => {
-          if (this.$refs.infiniteLoading) {
-            this.$refs.infiniteLoading.stateChanger.reset();
-          }
+          this.fetchPage(1);
         });
       });
       return;
@@ -354,9 +362,7 @@ export default Vue.extend({
         this._is_restoring = false;
 
         this.$nextTick(() => {
-          if (this.$refs.infiniteLoading) {
-            this.$refs.infiniteLoading.stateChanger.reset();
-          }
+          this.fetchPage(1);
         });
       });
     }
@@ -395,15 +401,15 @@ export default Vue.extend({
         },
         taxon: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         author: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         pics: {
           checked: [],
-          is_open: true
+          is_open: false
         }
       },
       filters: {
@@ -413,7 +419,10 @@ export default Vue.extend({
         taxon3: [],
         other_tags: [],
         pics: []
-      }
+      },
+      swipe_start_x: null,
+      swipe_current_x: null,
+      is_mouse_down: false
     };
   },
   watch: {
@@ -444,22 +453,17 @@ export default Vue.extend({
             this.filter_last_page = 0;
             this.filter_total_hits = 0;
             this._current_filter_params = null;
-            if (this.$refs.infiniteLoading) {
-              this.$refs.infiniteLoading.stateChanger.reset();
-            }
+            this.fetchPage(1);
           } else if (has_filter) {
             // フィルタON（テキスト検索はクリア）
             this._is_text_search = false;
             this.pictures = [];
             this.filter_current_page = 1;
             this.filter_last_page = 0;
-            // フィルタパラメータを一時保存（infiniteHandlerで使用）
-            // 配列の状態で保存（文字列変換はinfiniteHandlerで実施）
+            // フィルタパラメータを一時保存（fetchPageで使用）
+            // 配列の状態で保存（文字列変換はfetchPageで実施）
             this._current_filter_params = JSON.parse(JSON.stringify(param));
-            // infinite-loadingをリセットして初回データ取得を任せる
-            if (this.$refs.infiniteLoading) {
-              this.$refs.infiniteLoading.stateChanger.reset();
-            }
+            this.fetchPage(1);
           }
         }, 0);
       },
@@ -701,77 +705,54 @@ export default Vue.extend({
         return text
       }
     },
-    infiniteHandler($state) {
+    fetchPage(page) {
+      this.is_loading = true;
+      this.current_page = page;
+
       if (!this.is_filter_on) {
         // 通常のページング（フィルタなし）
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${this.current_page}&rows=20`
+            `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=${page}&rows=40`
           )
           .then(data => {
-            this.pictures = this.pictures.concat(data.data.data);
-            this.loaded_pictures = this.loaded_pictures.concat(data.data.data);
-            if (this.current_page === 1) {
-              this.last_page = data.data.last_page;
-            }
-            if (this.current_page === this.last_page) {
-              $state.complete();
-            } else {
-              this.current_page += 1;
-              $state.loaded();
-            }
+            this.pictures = data.data.data;
+            this.last_page = data.data.last_page;
+            this.is_loading = false;
+            window.scrollTo(0, 0);
           })
           .catch(error => {
             console.log("error", error);
+            this.is_loading = false;
           });
       } else if (this._is_text_search) {
         // テキスト検索時のページング
-        if (this.filter_current_page > this.filter_last_page && this.filter_last_page > 0) {
-          $state.complete();
-          return;
-        }
-
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}&from=${this.filter_current_page}&rows=20`
+            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}&from=${page}&rows=40`
           )
           .then(data => {
             if (data.data.data && data.data.data.length > 0) {
-              this.pictures = this.pictures.concat(data.data.data);
-              // 初回取得時にlast_pageを設定
-              if (this.filter_current_page === 1) {
-                this.filter_last_page = data.data.last_page || 1;
-                this.filter_total_hits = data.data.total_hits || 0;
-              }
-              if (this.filter_current_page >= this.filter_last_page) {
-                $state.complete();
-              } else {
-                this.filter_current_page += 1;
-                $state.loaded();
-              }
+              this.pictures = data.data.data;
+              this.last_page = data.data.last_page || 1;
+              this.filter_total_hits = data.data.total_hits || 0;
             } else {
-              $state.complete();
+              this.pictures = [];
             }
+            this.is_loading = false;
+            window.scrollTo(0, 0);
           })
           .catch(error => {
             console.log("error", error);
-            $state.complete();
+            this.is_loading = false;
           });
       } else {
         // フィルタ時のページング
-        if (this.filter_current_page > this.filter_last_page && this.filter_last_page > 0) {
-          $state.complete();
-          return;
-        }
-
         let param;
         if (this._current_filter_params) {
-          // watcherで保存されたパラメータを使用
           param = Object.assign({}, this._current_filter_params);
         } else {
-          // 保存されていない場合は現在のfiltersから生成
           param = Object.assign({}, this.filters);
-          // 空のプロパティは削除
           Object.keys(param).forEach(key => {
             param[key] = param[key].filter(data => data !== "");
             if (param[key].length === 0) {
@@ -780,7 +761,6 @@ export default Vue.extend({
           });
         }
 
-        // 配列を文字列に変換
         Object.keys(param).forEach(key => {
           if (key === "pics") {
             param["exist"] = param["pics"];
@@ -792,8 +772,8 @@ export default Vue.extend({
         });
 
         param["target"] = "pictures";
-        param["rows"] = 20;
-        param["from"] = this.filter_current_page;
+        param["rows"] = 40;
+        param["from"] = page;
 
         axios
           .get("https://togotv-api.dbcls.jp/api/bool_search", {
@@ -801,27 +781,70 @@ export default Vue.extend({
           })
           .then(data => {
             if (data.data.data && data.data.data.length > 0) {
-              this.pictures = this.pictures.concat(data.data.data);
-              // 初回取得時にlast_pageを設定
-              if (this.filter_current_page === 1) {
-                this.filter_last_page = data.data.last_page || 1;
-                this.filter_total_hits = data.data.total_hits || 0;
-              }
-              if (this.filter_current_page >= this.filter_last_page) {
-                $state.complete();
-              } else {
-                this.filter_current_page += 1;
-                $state.loaded();
-              }
+              this.pictures = data.data.data;
+              this.last_page = data.data.last_page || 1;
+              this.filter_total_hits = data.data.total_hits || 0;
             } else {
-              $state.complete();
+              this.pictures = [];
             }
+            this.is_loading = false;
+            window.scrollTo(0, 0);
           })
           .catch(error => {
             console.log("error", error);
-            $state.complete();
+            this.is_loading = false;
           });
       }
+    },
+    goToNextPage() {
+      if (this.current_page < this.last_page) {
+        this.fetchPage(this.current_page + 1);
+      }
+    },
+    goToPrevPage() {
+      if (this.current_page > 1) {
+        this.fetchPage(this.current_page - 1);
+      }
+    },
+    // スワイプ処理
+    handleTouchStart(e) {
+      this.swipe_start_x = e.touches[0].clientX;
+    },
+    handleTouchMove(e) {
+      if (!this.swipe_start_x) return;
+      this.swipe_current_x = e.touches[0].clientX;
+    },
+    handleTouchEnd() {
+      if (!this.swipe_start_x || !this.swipe_current_x) return;
+
+      const diff = this.swipe_start_x - this.swipe_current_x;
+      const threshold = 50; // スワイプと認識する最小距離
+
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          // 左スワイプ = 次へ
+          this.goToNextPage();
+        } else {
+          // 右スワイプ = 前へ
+          this.goToPrevPage();
+        }
+      }
+
+      this.swipe_start_x = null;
+      this.swipe_current_x = null;
+    },
+    handleMouseDown(e) {
+      this.swipe_start_x = e.clientX;
+      this.is_mouse_down = true;
+    },
+    handleMouseMove(e) {
+      if (!this.is_mouse_down) return;
+      this.swipe_current_x = e.clientX;
+    },
+    handleMouseEnd() {
+      if (!this.is_mouse_down) return;
+      this.handleTouchEnd();
+      this.is_mouse_down = false;
     },
     setCanMessageSubmit() {
       this.canMessageSubmit = true;
@@ -843,10 +866,8 @@ export default Vue.extend({
         });
         // テキスト検索時は特殊なフィルタ状態にする
         this._is_text_search = true;
-        // infinite-loadingをリセットして初回データ取得を任せる
-        if (this.$refs.infiniteLoading) {
-          this.$refs.infiniteLoading.stateChanger.reset();
-        }
+        // fetchPageで初回データ取得
+        this.fetchPage(1);
       }
     },
     toggleDisplay() {
@@ -856,6 +877,22 @@ export default Vue.extend({
       this.selected_pic = pic;
       this.is_single_download = true;
       this.is_modal_on = true;
+    },
+    handlePictureClick(event, picture) {
+      // Command+Click (Mac) または Ctrl+Click (Windows/Linux) の場合は
+      // デフォルトの動作（新しいタブで開く）を許可
+      if (event.metaKey || event.ctrlKey) {
+        return;
+      }
+
+      // 中クリック（マウスホイールクリック）も新しいタブで開く
+      if (event.button === 1) {
+        return;
+      }
+
+      // 通常のクリックの場合はSPAナビゲーション
+      event.preventDefault();
+      this.moveDetailPage(`/${picture.id.split('/').pop()}.html`);
     },
     moveDetailPage(next_page) {
       // 検索状態を保存
@@ -1266,6 +1303,33 @@ export default Vue.extend({
             display: block
   > .modal_back
     @include modal_back
+
+.pagination
+  display: flex
+  justify-content: center
+  align-items: center
+  gap: 20px
+  margin: 40px 0
+  padding: 20px
+  .pagination_btn
+    padding: 10px 20px
+    background-color: $MAIN_COLOR
+    color: #fff
+    border: none
+    border-radius: 4px
+    font-size: 16px
+    cursor: pointer
+    transition: opacity 0.3s
+    &:hover:not(:disabled)
+      opacity: 0.8
+    &:disabled
+      background-color: #ccc
+      cursor: not-allowed
+  .page_info
+    font-size: 16px
+    font-weight: bold
+    min-width: 80px
+    text-align: center
 
 @media screen and (max-width: 896px)
   .pictures_wrapper

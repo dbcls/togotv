@@ -25,7 +25,7 @@
       <ul v-show="!is_fetching_mylist && this.playlists">
         <li v-for="list in playlists" :key="list.info.id">
           <h3 class="course_name">
-            <a @click="$router.push(`/mypage/course?id=${list.info.id}`)">
+            <a :href="`/mypage/course?id=${list.info.id}`" @click="handleNavigation($event, `/mypage/course?id=${list.info.id}`)">
               {{ list.info.snippet.title }}
             </a>
             <PlaylistController
