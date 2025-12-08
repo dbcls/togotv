@@ -1,7 +1,7 @@
 <template>
   <ul v-if="illustration_list.length !== 0" class="illustration_list_wrapper">
     <li class="single_picture" v-for="picture in illustration_list" :key="picture.TOGOTV_Image_ID">
-      <a @click="moveDetailPage(`/${picture.id.split('/').pop()}.html`)">
+      <a :href="localePath(`/${picture.id.split('/').pop()}.html`)" @click="handleNavigation($event, `/${picture.id.split('/').pop()}.html`)">
         <img
           :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`"
           :alt="picture.name"
@@ -33,9 +33,6 @@ export default Vue.extend({
     selectPic(pic, e) {
       e.stopPropagation();
       this.$emit('selectPic', pic);
-    },
-    moveDetailPage(next_page) {
-      this.$router.push(this.localePath((next_page)));
     },
   },
 })

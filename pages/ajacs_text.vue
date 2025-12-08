@@ -63,7 +63,9 @@
               v-for="(ajacs, index) in ajacs_list"
               :key="index"
             >
-              <td class="title" @click="moveDetailPage(`/${ajacs.id.split('/').pop().replace(/\./g, '')}.html`)">{{ ajacs.name }}</td>
+              <td class="title" @click="moveDetailPage($event, `/${ajacs.id.split('/').pop().replace(/\./g, '')}.html`)">
+                <a :href="localePath(`/${ajacs.id.split('/').pop().replace(/\./g, '')}.html`)" @click.prevent="">{{ ajacs.name }}</a>
+              </td>
               <td class="author">{{ ajacs.author }}</td>
               <td class="date">{{ ajacs.uploadDate }}</td>
               <td class="AJACS_jp">{{ ajacs.AJACS_jp }}</td>
@@ -332,7 +334,28 @@ export default Vue.extend({
         //   });
       }
     },
-    moveDetailPage(next_page) {
+    moveDetailPage(event, next_page) {
+      // Command+Click (Mac) または Ctrl+Click (Windows/Linux) の場合は
+      // デフォルトの動作（新しいタブで開く）を許可
+      if (event.metaKey || event.ctrlKey) {
+        // リンク要素をクリック
+        const link = event.currentTarget.querySelector('a');
+        if (link) {
+          window.open(link.href, '_blank');
+        }
+        return;
+      }
+
+      // 中クリック（マウスホイールクリック）も新しいタブで開く
+      if (event.button === 1) {
+        const link = event.currentTarget.querySelector('a');
+        if (link) {
+          window.open(link.href, '_blank');
+        }
+        return;
+      }
+
+      // 通常のクリックの場合はSPAナビゲーション
       this.$router.push(this.localePath(next_page));
     }
   }
