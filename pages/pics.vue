@@ -214,7 +214,8 @@
       >
         <li class="single_picture" v-for="picture in pictures" :key="picture.TOGOTV_Image_ID">
           <a
-            @click="is_edit_on ? selectPic(picture, $event) : moveDetailPage(`/${picture.id.split('/').pop()}.html`)"
+            :href="is_edit_on ? '#' : localePath(`/${picture.id.split('/').pop()}.html`)"
+            @click="is_edit_on ? selectPic(picture, $event) : handlePictureClick($event, picture)"
             :class="checkIfSelected(picture.TogoTV_Image_ID)"
           >
             <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
@@ -876,6 +877,22 @@ export default Vue.extend({
       this.selected_pic = pic;
       this.is_single_download = true;
       this.is_modal_on = true;
+    },
+    handlePictureClick(event, picture) {
+      // Command+Click (Mac) または Ctrl+Click (Windows/Linux) の場合は
+      // デフォルトの動作（新しいタブで開く）を許可
+      if (event.metaKey || event.ctrlKey) {
+        return;
+      }
+
+      // 中クリック（マウスホイールクリック）も新しいタブで開く
+      if (event.button === 1) {
+        return;
+      }
+
+      // 通常のクリックの場合はSPAナビゲーション
+      event.preventDefault();
+      this.moveDetailPage(`/${picture.id.split('/').pop()}.html`);
     },
     moveDetailPage(next_page) {
       // 検索状態を保存
