@@ -401,15 +401,15 @@ export default Vue.extend({
         },
         taxon: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         author: {
           checked: [],
-          is_open: true
+          is_open: false
         },
         pics: {
           checked: [],
-          is_open: true
+          is_open: false
         }
       },
       filters: {
