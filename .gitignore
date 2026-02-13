@@ -165,3 +165,6 @@ coverage
 # Editors
 .vscode
 .idea
+
+# DBCLS page specification
+DBCLS_page_specification.md

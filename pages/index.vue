@@ -52,6 +52,12 @@
       </h2>
       <IllustrationList :illustration_list="illustration_list" />
     </section>
+    <section class="citation_section bg_blue" v-if="citation_list.length > 0">
+      <h2 class="sections_title tsukushi bold">
+        <nuxt-link :to="localePath('/citations')">{{ $t("citing_papers") }}</nuxt-link>
+      </h2>
+      <CitationCarousel :citations="citation_list" />
+    </section>
   </div>
 </template>
 
@@ -60,6 +66,7 @@ import Vue from 'vue'
 import CourseList from '~/components/CourseList.vue'
 import VideoListHorizontalScroll from '~/components/VideoListHorizontalScroll.vue'
 import IllustrationList from '~/components/IllustrationList.vue'
+import CitationCarousel from '~/components/CitationCarousel.vue'
 import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
 
@@ -112,6 +119,7 @@ export default Vue.extend({
       new_video_list: [],
       realtime_video_list: [],
       illustration_list: [],
+      citation_list: [],
     }
   },
   head() {
@@ -126,10 +134,156 @@ export default Vue.extend({
 
     }
   },
+  mounted() {
+    this.fetchCitations()
+  },
+  methods: {
+    async fetchCitations() {
+      // Check localStorage cache (7-day expiry)
+      try {
+        const cached = localStorage.getItem('togotv_citations')
+        if (cached) {
+          const parsed = JSON.parse(cached)
+          const ONE_WEEK = 7 * 24 * 60 * 60 * 1000
+          if (Date.now() - parsed.timestamp < ONE_WEEK && parsed.data && parsed.data.length > 0) {
+            this.citation_list = parsed.data
+            return
+          }
+        }
+      } catch (e) {
+        // localStorage unavailable or corrupt, proceed to fetch
+      }
+
+      try {
+        const EPMC_BASE = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search'
+        const OC_BASE = 'https://api.opencitations.net/index/v1'
+
+        // Fetch from Europe PMC (3 queries) + OpenCitations in parallel
+        const [epmcRes1, epmcRes2, epmcRes3, ocRes] = await Promise.all([
+          axios.get(`${EPMC_BASE}?query=%22TogoTV%22&format=json&pageSize=100`).catch(() => null),
+          axios.get(`${EPMC_BASE}?query=%22Togo+picture+gallery%22&format=json&pageSize=100`).catch(() => null),
+          axios.get(`${EPMC_BASE}?query=%22togo+picture+gallery%22&format=json&pageSize=100`).catch(() => null),
+          axios.get(`${OC_BASE}/citations/10.1093/bib/bbr039`).catch(() => null),
+        ])
+
+        // Collect Europe PMC results
+        const paperMap = new Map()
+        const epmcResults = [epmcRes1, epmcRes2, epmcRes3]
+        epmcResults.forEach(res => {
+          if (!res || !res.data || !res.data.resultList || !res.data.resultList.result) return
+          res.data.resultList.result.forEach(item => {
+            if (!item.doi) return
+            if (paperMap.has(item.doi)) return
+            paperMap.set(item.doi, {
+              doi: item.doi,
+              title: item.title || 'No title',
+              authors: item.authorString || '',
+              journal: item.journalTitle || '',
+              year: item.pubYear || '',
+              citedByCount: item.citedByCount || 0,
+            })
+          })
+        })
+
+        // Collect OpenCitations results and enrich via Europe PMC
+        if (ocRes && ocRes.data && Array.isArray(ocRes.data)) {
+          const ocDois = ocRes.data
+            .map(c => c.citing)
+            .filter(doi => doi && !paperMap.has(doi))
+
+          const ocMetadata = await Promise.all(
+            ocDois.map(doi =>
+              axios
+                .get(`${EPMC_BASE}?query=DOI:${encodeURIComponent(doi)}&format=json&pageSize=1`)
+                .then(res => {
+                  const items = res.data && res.data.resultList && res.data.resultList.result
+                  if (!items || items.length === 0) return null
+                  const item = items[0]
+                  return {
+                    doi: item.doi || doi,
+                    title: item.title || 'No title',
+                    authors: item.authorString || '',
+                    journal: item.journalTitle || '',
+                    year: item.pubYear || '',
+                    citedByCount: item.citedByCount || 0,
+                  }
+                })
+                .catch(() => null)
+            )
+          )
+
+          ocMetadata.forEach(paper => {
+            if (paper && paper.doi && !paperMap.has(paper.doi)) {
+              paperMap.set(paper.doi, paper)
+            }
+          })
+        }
+
+        // Fetch manually curated DOIs from static/citations/manualcurated.txt
+        try {
+          const curatedRes = await axios.get('/citations/manualcurated.txt').catch(() => null)
+          if (curatedRes && curatedRes.data) {
+            const curatedDois = curatedRes.data
+              .split('\n')
+              .map(line => line.replace(/^https?:\/\/(dx\.)?doi\.org\//, '').trim())
+              .filter(doi => doi && !paperMap.has(doi))
+
+            const curatedMetadata = await Promise.all(
+              curatedDois.map(doi =>
+                axios
+                  .get(`${EPMC_BASE}?query=DOI:${encodeURIComponent(doi)}&format=json&pageSize=1`)
+                  .then(res => {
+                    const items = res.data && res.data.resultList && res.data.resultList.result
+                    if (!items || items.length === 0) return null
+                    const item = items[0]
+                    return {
+                      doi: item.doi || doi,
+                      title: item.title || 'No title',
+                      authors: item.authorString || '',
+                      journal: item.journalTitle || '',
+                      year: item.pubYear || '',
+                      citedByCount: item.citedByCount || 0,
+                    }
+                  })
+                  .catch(() => null)
+              )
+            )
+
+            curatedMetadata.forEach(paper => {
+              if (paper && paper.doi && !paperMap.has(paper.doi)) {
+                paperMap.set(paper.doi, paper)
+              }
+            })
+          }
+        } catch (e) {
+          // manualcurated.txt not found or parse error, skip
+        }
+
+        // Sort by year descending
+        const results = Array.from(paperMap.values())
+          .sort((a, b) => Number(b.year) - Number(a.year))
+
+        this.citation_list = results
+
+        // Cache in localStorage
+        try {
+          localStorage.setItem(
+            'togotv_citations',
+            JSON.stringify({ timestamp: Date.now(), data: results })
+          )
+        } catch (e) {
+          // localStorage full or unavailable
+        }
+      } catch (error) {
+        console.log('citation fetch error', error)
+      }
+    },
+  },
   components: {
     CourseList,
     VideoListHorizontalScroll,
     IllustrationList,
+    CitationCarousel,
     TextSearch
   }
 })
@@ -222,6 +376,8 @@ section
     @include section_title('barchart')
   &.illustation_section > h2
     @include section_title('img')
+  &.citation_section > h2
+    @include section_title('doi')
 
 @media screen and (max-width: 896px)
   .main
@@ -264,7 +420,8 @@ section
   .course_section,
   .newvideo_section,
   .realtime_view_video_section,
-  .illustation_section
+  .illustation_section,
+  .citation_section
     > h2
       margin-left: $VIEW_PADDING_SP
   </style>
