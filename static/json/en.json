@@ -127,5 +127,6 @@
   "delete": "Delete",
   "delete_the_playlist": "Do you want to delete the following playlists?",
   "edit_playlist": "Edit Playlist",
-  "back_to_search_results": "Back to Search Results"
+  "back_to_search_results": "Back to Search Results",
+  "citing_papers": "Citing Papers"
 }

@@ -43,6 +43,7 @@
                 :class="{
                   'nuxt-link-exact-active':
                     $route.path === '/courses.html' ||
+                    $route.path === '/dbcls.html' ||
                     $route.path === '/newvideo.html' ||
                     $route.path === '/rankings.html' ||
                     $route.path === '/course.html' ||
@@ -70,6 +71,11 @@
                     {{ $t("courses") }}
                   </nuxt-link>
                 </li>
+                <li @click="$event.stopPropagation()" class="link video">
+                  <nuxt-link :to="localePath('/dbcls.html')">
+                    DBCLS動画
+                  </nuxt-link>
+                </li>
                 <li @click="$event.stopPropagation()" class="link new">
                   <nuxt-link :to="localePath('/newvideo.html')">{{
                     $t("new_videos")
@@ -82,15 +88,47 @@
                 </li>
               </ul>
             </li>
-            <li class="link picture">
-              <nuxt-link
+            <li
+              :class="[
+                'link',
+                'picture',
+                'has_child_nav',
+                $store.state.sp_menu_toggle_state['search_pictures']
+                  ? 'open'
+                  : '',
+              ]"
+              @click="toggleChildMenu('search_pictures')"
+            >
+              <span
                 :class="{
-                  'nuxt-link-exact-active': $route.path.includes('/togopic'),
+                  'nuxt-link-exact-active':
+                    $route.path === '/pics.html' ||
+                    $route.path.includes('/togopic'),
                 }"
-                :to="localePath('/pics.html')"
+                >{{ $t("search_pictures") }}</span
               >
-                {{ $t("search_pictures") }}
-              </nuxt-link>
+              <span class="arrow"></span>
+              <ul
+                :class="[
+                  'child_nav',
+                  $store.state.sp_menu_toggle_state['search_pictures']
+                    ? 'open'
+                    : '',
+                ]"
+              >
+                <li @click="$event.stopPropagation()" class="link img">
+                  <nuxt-link :to="localePath('/pics.html')">
+                    全ての画像
+                  </nuxt-link>
+                </li>
+                <!-- Heritage Trees: イラスト製作中のため一時的に非表示
+                <li @click="$event.stopPropagation()" class="link img">
+                  <nuxt-link :to="localePath('/heritage-trees.html')">
+                    Heritage Trees
+                  </nuxt-link>
+                </li>
+                -->
+              </ul>
             </li>
             <li class="link ajacs">
               <nuxt-link
