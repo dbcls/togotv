@@ -24,6 +24,7 @@
           rel="noopener noreferrer"
           class="card_link"
         >
+          <span class="new_badge" v-if="paper.isNew">New citation this week!</span>
           <p class="paper_title">{{ paper.title }}</p>
           <p class="paper_authors">{{ truncateAuthors(paper.authors) }}</p>
           <div class="paper_meta">
@@ -217,6 +218,15 @@ export default Vue.extend({
         &:hover
           box-shadow: 0 4px 16px rgba(0, 0, 0, .15)
           transform: translateY(-2px)
+        > .new_badge
+          display: inline-block
+          background-color: $DEEP_MAIN_COLOR
+          color: #fff
+          font-size: 10px
+          font-weight: bold
+          padding: 2px 8px
+          border-radius: 3px
+          margin-bottom: 6px
         > .paper_title
           font-size: 13px
           font-weight: bold
