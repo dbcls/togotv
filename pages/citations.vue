@@ -134,6 +134,14 @@ export default Vue.extend({
       }
 
       try {
+        const stripHtml = str => str
+          ? str
+            .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"')
+            .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+            .replace(/<[^>]+>/g, '')
+            .trim()
+          : ''
+
         const EPMC_BASE = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search'
         const OC_BASE = 'https://api.opencitations.net/index/v1'
 
@@ -153,6 +161,9 @@ export default Vue.extend({
             if (paperMap.has(item.doi)) return
             paperMap.set(item.doi, {
               doi: item.doi,
+              title: stripHtml(item.title) || 'No title',
+              authors: stripHtml(item.authorString) || '',
+              journal: stripHtml(item.journalTitle) || '',
               title: item.title || 'No title',
               authors: item.authorString || '',
               journal: item.journalTitle || '',
@@ -177,6 +188,9 @@ export default Vue.extend({
                   const item = items[0]
                   return {
                     doi: item.doi || doi,
+                    title: stripHtml(item.title) || 'No title',
+                    authors: stripHtml(item.authorString) || '',
+                    journal: stripHtml(item.journalTitle) || '',
                     title: item.title || 'No title',
                     authors: item.authorString || '',
                     journal: item.journalTitle || '',
@@ -205,6 +219,49 @@ export default Vue.extend({
               .filter(doi => doi && !paperMap.has(doi))
 
             const curatedMetadata = await Promise.all(
+              curatedDois.map(async doi => {
+                // Try EPMC first
+                const epmcRes = await axios
+                  .get(`${EPMC_BASE}?query=DOI:${encodeURIComponent(doi)}&format=json&pageSize=1`)
+                  .catch(() => null)
+                const items = epmcRes && epmcRes.data && epmcRes.data.resultList && epmcRes.data.resultList.result
+                if (items && items.length > 0) {
+                  const item = items[0]
+                  return {
+                    doi: item.doi || doi,
+                    title: stripHtml(item.title) || 'No title',
+                    authors: stripHtml(item.authorString) || '',
+                    journal: stripHtml(item.journalTitle) || '',
+                    year: item.pubYear || '',
+                    citedByCount: item.citedByCount || 0,
+                    isNew: false,
+                  }
+                }
+                // Fallback: CrossRef API (for papers not indexed in EPMC)
+                return axios
+                  .get(`https://api.crossref.org/works/${encodeURIComponent(doi)}`)
+                  .then(res => {
+                    const msg = res.data && res.data.message
+                    if (!msg) return null
+                    const authors = (msg.author || [])
+                      .map(a => [a.family, a.given].filter(Boolean).join(' '))
+                      .join(', ')
+                    const pubParts = msg.published && msg.published['date-parts'] && msg.published['date-parts'][0]
+                    const isNew = pubParts
+                      ? (Date.now() - new Date(pubParts[0], (pubParts[1] || 1) - 1, pubParts[2] || 1).getTime()) / 86400000 <= 30
+                      : false
+                    return {
+                      doi: (msg.DOI || doi).toLowerCase(),
+                      title: (msg.title && msg.title[0]) || 'No title',
+                      authors,
+                      journal: (msg['container-title'] && msg['container-title'][0]) || '',
+                      year: String((pubParts && pubParts[0]) || ''),
+                      citedByCount: msg['is-referenced-by-count'] || 0,
+                      isNew,
+                    }
+                  })
+                  .catch(() => null)
+              })
               curatedDois.map(doi =>
                 axios
                   .get(`${EPMC_BASE}?query=DOI:${encodeURIComponent(doi)}&format=json&pageSize=1`)
