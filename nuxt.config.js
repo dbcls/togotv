@@ -72,6 +72,12 @@ export default {
       {
         locales: ["en", "ja"],
         defaultLocale: "ja",
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected',
+          fallbackLocale: 'ja',
+          alwaysRedirect: false,
+        },
         vueI18n: {
           fallbackLocale: "ja",
           messages: {
