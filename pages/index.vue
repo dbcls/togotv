@@ -187,6 +187,9 @@ export default Vue.extend({
               title: stripHtml(item.title) || 'No title',
               authors: stripHtml(item.authorString) || '',
               journal: stripHtml(item.journalTitle) || '',
+              title: item.title || 'No title',
+              authors: item.authorString || '',
+              journal: item.journalTitle || '',
               year: item.pubYear || '',
               citedByCount: item.citedByCount || 0,
             })
@@ -280,6 +283,24 @@ export default Vue.extend({
                   })
                   .catch(() => null)
               })
+              curatedDois.map(doi =>
+                axios
+                  .get(`${EPMC_BASE}?query=DOI:${encodeURIComponent(doi)}&format=json&pageSize=1`)
+                  .then(res => {
+                    const items = res.data && res.data.resultList && res.data.resultList.result
+                    if (!items || items.length === 0) return null
+                    const item = items[0]
+                    return {
+                      doi: item.doi || doi,
+                      title: item.title || 'No title',
+                      authors: item.authorString || '',
+                      journal: item.journalTitle || '',
+                      year: item.pubYear || '',
+                      citedByCount: item.citedByCount || 0,
+                    }
+                  })
+                  .catch(() => null)
+              )
             )
 
             curatedMetadata.forEach(paper => {
