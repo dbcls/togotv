@@ -71,11 +71,14 @@
                     {{ $t("courses") }}
                   </nuxt-link>
                 </li>
+                <!-- 変更前 (非表示) -->
+                <!-- DBCLS: イラスト製作中のため一時的に非表示
                 <li @click="$event.stopPropagation()" class="link video">
                   <nuxt-link :to="localePath('/dbcls.html')">
                     DBCLS動画
                   </nuxt-link>
                 </li>
+                -->
                 <li @click="$event.stopPropagation()" class="link new">
                   <nuxt-link :to="localePath('/newvideo.html')">{{
                     $t("new_videos")
