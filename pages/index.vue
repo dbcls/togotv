@@ -187,9 +187,6 @@ export default Vue.extend({
               title: stripHtml(item.title) || 'No title',
               authors: stripHtml(item.authorString) || '',
               journal: stripHtml(item.journalTitle) || '',
-              title: item.title || 'No title',
-              authors: item.authorString || '',
-              journal: item.journalTitle || '',
               year: item.pubYear || '',
               citedByCount: item.citedByCount || 0,
             })

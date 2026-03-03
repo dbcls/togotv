@@ -299,46 +299,6 @@
         </div>
       </div>
     </section>
-    <section class="course_section bg_blue first">
-      <h3 class="tsukushi bold">
-        <nuxt-link :to="localePath('/courses.html')">{{
-          $t("search_for_courses")
-        }}</nuxt-link>
-      </h3>
-      <CourseList :props="{ bg: 'blue', courses: course_list }" />
-    </section>
-    <section class="newvideo_section bg_blue">
-      <h3 class="tsukushi bold">
-        <nuxt-link :to="localePath('/newvideo.html')">{{
-          $t("new_videos")
-        }}</nuxt-link>
-      </h3>
-      <VideoListHorizontalScroll
-        :props="{ id: 'newvideo', playList: new_video_list, bg: 'blue' }"
-      />
-    </section>
-    <section class="realtime_view_video_section bg_blue">
-      <h3 class="tsukushi bold">
-        <nuxt-link :to="localePath('/rankings.html')">{{
-          $t("ranking")
-        }}</nuxt-link>
-      </h3>
-      <VideoListHorizontalScroll
-        :props="{
-          id: 'realtime_view_video',
-          playList: realtime_video_list,
-          bg: 'blue',
-        }"
-      />
-    </section>
-    <section class="illustation_section bg_blue">
-      <h3 class="tsukushi bold">
-        <nuxt-link :to="localePath('/pics.html')">{{
-          $t("new_illustrations")
-        }}</nuxt-link>
-      </h3>
-      <IllustrationList :illustration_list="illustration_list" />
-    </section>
     <DownloadModal
       v-if="popup.download"
       :props="{ selected_video: videoData.contentUrl }"
@@ -359,9 +319,7 @@
 <script>
 import Vue from "vue";
 import VueYoutube from "vue-youtube";
-import CourseList from "~/components/CourseList.vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
-import IllustrationList from "~/components/IllustrationList.vue";
 import DownloadModal from "~/components/DownloadModal.vue";
 import RequestAgreementModal from "~/components/RequestAgreementModal.vue";
 import axios from "axios";
@@ -397,44 +355,6 @@ export default Vue.extend({
     if (this.videoData.TogoTV_Handson_ID !== null) {
       this.fetchAjacs(this.videoData.TogoTV_Handson_ID);
     }
-
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/skillset`)
-      .then((data) => {
-        this.course_list = data.data.cources;
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/entries?rows=20`)
-      .then((data) => {
-        this.new_video_list = data.data.data;
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/yt_view/weekly`)
-      .then((data) => {
-        this.realtime_video_list = data.data;
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-
-    axios
-      .get(
-        `https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=11`
-      )
-      .then((data) => {
-        this.illustration_list = data.data.data;
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
 
     if (process.client && this.$auth.loggedIn) this.getPlayLists()
   },
@@ -508,9 +428,7 @@ export default Vue.extend({
     },
   },
   components: {
-    CourseList,
     VideoListHorizontalScroll,
-    IllustrationList,
     DownloadModal,
     RequestAgreementModal
   },
@@ -535,10 +453,6 @@ export default Vue.extend({
         download: false,
         save: false,
       },
-      course_list: [],
-      new_video_list: [],
-      realtime_video_list: [],
-      illustration_list: [],
       videoData: {},
       playlists: [],
       is_fetching_mylist: false,
@@ -1155,28 +1069,6 @@ export default Vue.extend({
           margin-bottom: 6px
           &:before
             @include icon('doi')
-  section.bg_blue
-    padding: 15px 0
-    &.first
-      margin-top: 30px
-      padding-top: 30px
-    > h3
-      margin-left: $VIEW_PADDING
-      margin-top: 0
-      > a
-        text-decoration: none
-        color: $BLACK
-        transition: .2s
-        &:hover
-          color: $MAIN_COLOR
-    &.course_section > h3
-      @include section_title('course')
-    &.newvideo_section > h3
-      @include section_title('new')
-    &.realtime_view_video_section > h3
-      @include section_title('barchart')
-    &.illustation_section > h3
-      @include section_title('img')
   > .modal_back
     @include modal_back
 
@@ -1253,7 +1145,5 @@ export default Vue.extend({
                 max-width: 100%
         > .related_videos_section
           display: block
-    section.bg_blue
-      > h3
-        margin-left: $VIEW_PADDING_SP
+
 </style>
