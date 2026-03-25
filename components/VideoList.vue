@@ -74,6 +74,9 @@ export default Vue.extend({
         margin-bottom: 8px
         line-height: 20px
         font-weight: 500
+        h1, h2, h3, h4, h5, h6
+          border-left: none
+          padding-left: 0
       > ul
         display: flex
         flex-wrap: wrap

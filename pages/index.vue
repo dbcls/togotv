@@ -346,6 +346,8 @@ export default Vue.extend({
     margin-left: 42px
     margin-right: 15px
     > h1
+      border-left: none !important
+      padding-left: 0 !important
       > img.logo
         width: 327px
     > .description
@@ -424,6 +426,8 @@ section
     > .main_text
       margin: 0
       > h1
+        border-left: none !important
+        padding-left: 0 !important
         > img.logo
           width: 60%
       > .description

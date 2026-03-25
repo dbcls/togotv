@@ -64,6 +64,9 @@ export default Vue.extend({
       display: -webkit-box
       -webkit-box-orient: vertical
       -webkit-line-clamp: 2
+      h1, h2, h3, h4, h5, h6
+        border-left: none
+        padding-left: 0
       &.small
         width: 166px
       > .upload_date

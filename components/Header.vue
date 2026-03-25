@@ -291,10 +291,13 @@ header
     white-space: nowrap
     padding: 0 28px
     > h1
+      border-left: none !important
       > a
+        display: block
         > img.logo
           width: 177px
           visibility: visible
+          display: block
     > .right_area
       display: flex
       align-items: center
@@ -415,7 +418,7 @@ header
       > h1
         > a
           > img.logo
-            visibility: hidden
+            visibility: visible
   &.courses,
   &.course,
   &.newvideo,
