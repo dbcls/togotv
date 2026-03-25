@@ -336,8 +336,21 @@ export default Vue.extend({
   watchQuery: ["course"],
   key: (route) => route.fullPath,
   async asyncData({ params, error, payload }) {
+    // \n という文字列を削除するヘルパー関数
+    const cleanNewlines = (obj) => {
+      if (!obj) return obj;
+      const fieldsToClean = ['description', 'author', 'editor', 'name'];
+      fieldsToClean.forEach(field => {
+        if (obj[field] && typeof obj[field] === 'string') {
+          // \n を空白に置換（文章の読みやすさを保つため）
+          obj[field] = obj[field].replace(/\\n/g, ' ');
+        }
+      });
+      return obj;
+    };
+
     if (payload) {
-      return { videoData: payload };
+      return { videoData: cleanNewlines(payload) };
     } else {
       let upload_date = params.video;
       upload_date = `${upload_date.slice(0, 4)}-${upload_date.slice(4)}`;
@@ -345,8 +358,9 @@ export default Vue.extend({
       let data = await axios.get(
         `https://togotv-api.dbcls.jp/api/search?uploadDate=${upload_date}`
       );
+
       return {
-        videoData: data.data.data[0],
+        videoData: cleanNewlines(data.data.data[0]),
       };
     }
   },
@@ -886,6 +900,9 @@ export default Vue.extend({
         font-size: 16px
         line-height: 27px
         margin-top: 16px
+        h1, h2, h3, h4, h5, h6
+          border-left: none
+          padding-left: 0
     .related_videos
       > h3
         font-size: 18px
