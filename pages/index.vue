@@ -104,14 +104,39 @@ export default Vue.extend({
       .catch(error => {
         console.log('error', error)
       })
-    axios
-      .get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=11`)
-      .then(data => {
-        this.illustration_list = data.data.data
-      })
-      .catch(error => {
-        console.log('error', error)
-      })
+    // Heritage Trees 公開予定日（この日以降は新着に通常表示）
+    // ※ 公開後はこの定数を過去日付に変更するか、フィルタ処理ごと削除してください
+    const HT_PUBLISH_DATE = new Date('2026-07-01T00:00:00+09:00');
+    const isBeforeHTLaunch = new Date() < HT_PUBLISH_DATE;
+
+    if (isBeforeHTLaunch) {
+      // 公開前: Heritage Trees タグ画像を新着から除外
+      Promise.all([
+        axios.get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=30`),
+        axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=Heritage Trees&rows=1000`)
+      ]).then(([entriesRes, htRes]) => {
+        const htIds = new Set((htRes.data.data || []).map(img => img.id));
+        this.illustration_list = (entriesRes.data.data || [])
+          .filter(img => {
+            // IDで除外 + other_tags_commaにHeritage Treesが含まれる場合も除外
+            const hasCsvTag = (img.other_tags_comma || '').includes('Heritage Trees');
+            return !htIds.has(img.id) && !hasCsvTag;
+          })
+          .slice(0, 11);
+      }).catch(error => {
+        console.log('error', error);
+      });
+    } else {
+      // 公開後: 通常どおり取得
+      axios
+        .get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=11`)
+        .then(data => {
+          this.illustration_list = data.data.data;
+        })
+        .catch(error => {
+          console.log('error', error);
+        });
+    }
   },
   data() {
     return {

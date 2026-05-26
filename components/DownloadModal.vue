@@ -58,6 +58,27 @@
         @click="controlDownload('rotation')"
         >rotation</a
       >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.detail_image1"
+        target="_blank"
+        @click="controlDownload('detail_image1')"
+        >image with detail</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.monotone_png"
+        target="_blank"
+        @click="controlDownload('monotone_png')"
+        >monotone png</a
+      >
+      <a
+        class="button mont bold"
+        v-if="extension_exist.monotone_svg"
+        target="_blank"
+        @click="controlDownload('monotone_svg')"
+        >monotone svg</a
+      >
     </div>
   </div>
 </template>
@@ -103,6 +124,9 @@ export default Vue.extend({
         obj_mtl_zip: false,
         apng: false,
         rotation: false,
+        detail_image1: false,
+        monotone_png: false,
+        monotone_svg: false,
       },
     };
   },
