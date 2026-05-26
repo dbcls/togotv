@@ -7,9 +7,27 @@
     </div>
     <div class="pic_section">
       <div class="img_wrapper">
-        <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`" :alt="picture.name">
+        <div v-if="picture.detail_image1 && picture.detail_image1 !== '-'" class="image_toggle_btns">
+          <button
+            :class="['toggle_btn', 'tsukushi', { active: currentImageType === 'main' }]"
+            @click="currentImageType = 'main'"
+          >
+            画像のみ
+          </button>
+          <button
+            :class="['toggle_btn', 'tsukushi', { active: currentImageType === 'detail' }]"
+            @click="currentImageType = 'detail'"
+          >
+            説明付き
+          </button>
+        </div>
+        <img :src="currentImageUrl" :alt="picture.name">
       </div>
-      <div class="pic_detail">
+      <div class="pic_detail" :style="{ backgroundColor: seasonColor }">
+        <div class="triangle_decoration" :style="{
+          borderRightColor: seasonColor,
+          borderBottomColor: seasonColor
+        }"></div>
         <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
         <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
         <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.scientific_name }}</p>
@@ -25,16 +43,28 @@
           <a @click="setDonwnloadLink(picture)" v-if="picture.obj_mtl_zip !== undefined && picture.obj_mtl_zip !== '-'" class="mont bold" download>obj_mtl_zip</a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.apng !== undefined && picture.apng !== '-'" class="mont bold" download>apng</a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.rotation !== undefined && picture.rotation !== '-'" class="mont bold" download>rotation</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.detail_image1 !== undefined && picture.detail_image1 !== '-'" class="mont bold" download>image with detail</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.monotone_png !== undefined && picture.monotone_png !== '-'" class="mont bold" download>monotone png</a>
+          <a @click="setDonwnloadLink(picture)" v-if="picture.monotone_svg !== undefined && picture.monotone_svg !== '-'" class="mont bold" download>monotone svg</a>
         </div>
+        <p v-if="picture.Description_small" class="description mont">{{ picture.Description_small }}</p>
       </div>
     </div>
+    <div v-if="picture.Description_large" class="description_large_wrapper">
+      <div class="description_large_content" v-html="picture.Description_large"></div>
+    </div>
     <div class="related_images_wrapper">
-      <p class="related_title tsukushi bold">{{ $t('related_pictures') }}</p>
+      <p class="related_title tsukushi bold">{{ relatedSectionTitle }}</p>
       <ul class="related_images">
         <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
-          <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
-            <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
-          </nuxt-link>
+          <div class="related_img_wrap">
+            <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
+              <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
+            </nuxt-link>
+            <span v-if="data._matchedTags && data._matchedTags.length" class="related_tag">
+              {{ data._matchedTags.join('・') }}
+            </span>
+          </div>
         </li>
       </ul>
     </div>
@@ -65,7 +95,7 @@ export default Vue.extend({
     }
   },
   created() {
-    this.fetchRelatedPics(this.picture.other_tag1)
+    this.fetchRelatedPics()
   },
   head() {
     return {
@@ -112,6 +142,58 @@ export default Vue.extend({
     },
     hasSearchState() {
       return this.$route.query.from_search === 'true';
+    },
+    isFromHT() {
+      return this.$route.query.from_ht === 'true';
+    },
+    relatedSectionTitle() {
+      return this.isFromHT ? '四季のイラスト' : this.$t('related_pictures');
+    },
+    heritageTreeSeason() {
+      // Heritage Treesの画像かどうかを判定し、季節を返す
+      const getSearchText = () => {
+        const tags = Array.isArray(this.picture.other_tags)
+          ? this.picture.other_tags.join(" ")
+          : (this.picture.other_tags || "");
+        const tagsComma = this.picture.other_tags_comma || "";
+        const keywords = Array.isArray(this.picture.keywords)
+          ? this.picture.keywords.join(" ")
+          : (this.picture.keywords || "");
+        return `${tags} ${tagsComma} ${keywords} ${this.picture.name || ""} ${this.picture.name_en || ""}`.toLowerCase();
+      };
+
+      const searchText = getSearchText();
+
+      // 季節判定
+      if (searchText.includes("春") || searchText.includes("spring")) {
+        return "spring";
+      } else if (searchText.includes("夏") || searchText.includes("summer")) {
+        return "summer";
+      } else if (searchText.includes("秋") || searchText.includes("autumn") || searchText.includes("fall")) {
+        return "autumn";
+      } else if (searchText.includes("冬") || searchText.includes("winter")) {
+        return "winter";
+      }
+
+      return null; // Heritage Treesではない、または季節が不明
+    },
+    seasonColor() {
+      // 季節に応じた背景色を返す
+      const colors = {
+        spring: "#FFB7C5",  // 春：ピンク
+        summer: "#90EE90",  // 夏：緑
+        autumn: "#FFD700",  // 秋：金
+        winter: "#B0E0E6"   // 冬：水色
+      };
+      return colors[this.heritageTreeSeason] || "#009999"; // デフォルトは元の色
+    },
+    currentImageUrl() {
+      // 現在表示する画像のURLを返す
+      const baseUrl = 'https://dbarchive.biosciencedbc.jp/data/togo-pic/image/';
+      if (this.currentImageType === 'detail' && this.picture.detail_image1 && this.picture.detail_image1 !== '-') {
+        return `${baseUrl}${this.picture.detail_image1}`;
+      }
+      return `${baseUrl}${this.picture.png}`;
     }
   },
   components: {
@@ -122,7 +204,8 @@ export default Vue.extend({
       is_modal_on: false,
       selected_pic: {},
       picture: {},
-      tag_data: []
+      tag_data: [],
+      currentImageType: 'main'
     }
   },
   methods: {
@@ -130,15 +213,34 @@ export default Vue.extend({
       this.selected_pic = pic;
       this.is_modal_on = true;
     },
-    fetchRelatedPics(tag) {
-      axios
-        .get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`)
-        .then(data => {
-          this.tag_data = data.data.data
-        })
-        .catch(error => {
-          console.log('error', error)
-        })
+    async fetchRelatedPics() {
+      const tagsStr = this.picture.other_tags_comma || this.picture.other_tag1 || '';
+      const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean).slice(0, 6);
+      if (!tags.length) return;
+
+      const results = await Promise.all(
+        tags.map(tag =>
+          axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${encodeURIComponent(tag)}`)
+            .then(res => ({ tag, data: res.data.data || [] }))
+            .catch(() => ({ tag, data: [] }))
+        )
+      );
+
+      // 画像ごとに一致したタグを集計
+      const imageMap = {};
+      results.forEach(({ tag, data }) => {
+        data.forEach(img => {
+          if (img.id === this.picture.id) return;
+          if (!imageMap[img.id]) imageMap[img.id] = { img, matchedTags: [] };
+          imageMap[img.id].matchedTags.push(tag);
+        });
+      });
+
+      // 一致タグ数の多い順にソートし上位30件
+      this.tag_data = Object.values(imageMap)
+        .sort((a, b) => b.matchedTags.length - a.matchedTags.length)
+        .slice(0, 30)
+        .map(({ img, matchedTags }) => ({ ...img, _matchedTags: matchedTags }));
     },
     backToSearchResults() {
       // クエリパラメータから検索状態を取得
@@ -181,35 +283,60 @@ export default Vue.extend({
     display: flex
     > .img_wrapper
       width: 70%
-      height: 350px
+      height: 455px
       background-color: #EDFCFC
       display: flex
+      flex-direction: column
       align-items: center
       justify-content: center
+      position: relative
+      > .image_toggle_btns
+        position: absolute
+        top: 20px
+        left: 20px
+        display: flex
+        gap: 10px
+        z-index: 10
+        > .toggle_btn
+          padding: 8px 16px
+          background-color: rgba(255, 255, 255, 0.9)
+          border: 2px solid $MAIN_COLOR
+          color: $MAIN_COLOR
+          font-size: 14px
+          font-weight: bold
+          border-radius: 6px
+          cursor: pointer
+          transition: all 0.3s ease
+          &:hover
+            background-color: $MAIN_COLOR
+            color: #fff
+          &.active
+            background-color: $MAIN_COLOR
+            color: #fff
       > img
         min-width: 490px
         max-width: 650px
         width: 60%
-        max-height: 530px
+        max-height: 650px
         object-fit: contain
     > .pic_detail
       width: 30%
       min-width: 380px
       padding: 39px 0 0 30px
       box-sizing: border-box
-      height: 350px
+      height: 455px
       color: #fff
       background-color: $MAIN_COLOR
       position: relative
-      &:before
+      > .triangle_decoration
         content: ""
         position: absolute
         top: 0
         left: -100px
         border-left: 50px solid transparent
-        border-top: 175px solid transparent
+        border-top: 227.5px solid transparent
         border-right: 50px solid $MAIN_COLOR
-        border-bottom: 175px solid $MAIN_COLOR
+        border-bottom: 227.5px solid $MAIN_COLOR
       > p
         margin: 0
         &.scientific_name
@@ -259,6 +386,64 @@ export default Vue.extend({
           line-height: 38px
           &:first-of-type
             margin-left: 0
+      > p.description
+        margin-top: 20px
+        font-size: 16px
+        line-height: 1.6
+        padding-right: 10px
+        max-height: 160px
+        overflow-y: auto
+  > .description_large_wrapper
+    padding: 0 $VIEW_PADDING
+    margin-top: 50px
+    > .description_large_content
+      font-size: 16px
+      line-height: 1.8
+      color: $BLACK
+      max-width: 900px
+      margin: 0 auto
+      // Description_large 内のHTML要素スタイル
+      img
+        display: block        // 必ずブロック表示（テキストが下に来る）
+        max-width: 100%
+        height: auto
+        margin: 1.5em auto    // 上下にスペース、中央寄せ
+        clear: both
+      p
+        margin: 0 0 1em
+      h2
+        font-size: 1.5em
+        font-weight: bold
+        margin: 1.8em 0 0.6em
+        padding-bottom: 0.3em
+        border-bottom: 2px solid $MAIN_COLOR
+      h3
+        font-size: 1.2em
+        font-weight: bold
+        margin: 1.5em 0 0.5em
+      h4
+        font-size: 1.05em
+        font-weight: bold
+        margin: 1.2em 0 0.4em
+      ul, ol
+        margin: 0 0 1em 1.5em
+        > li
+          margin-bottom: 0.3em
+      a
+        color: $MAIN_COLOR
+        text-decoration: underline
+        &:hover
+          text-decoration: none
+      strong, b
+        font-weight: bold
+      em, i
+        font-style: italic
+      blockquote
+        border-left: 4px solid $MAIN_COLOR
+        margin: 1em 0
+        padding: 0.5em 1em
+        color: #555
+        background: #f9f9f9
   > .related_images_wrapper
     padding: 0 $VIEW_PADDING
     margin-top: 102px
@@ -274,22 +459,51 @@ export default Vue.extend({
       display: flex
       flex-wrap: wrap
       > li
-        > a
+        > .related_img_wrap
+          position: relative
           display: inline-block
+          width: 146px
+          height: 146px
           margin-right: 20px
           margin-bottom: 20px
-          > img
-            width: 146px
-            height: 146px
-            object-fit: contain
-            &:hover
-              cursor: pointer
+          > a
+            display: block
+            width: 100%
+            height: 100%
+            > img
+              width: 100%
+              height: 100%
+              object-fit: contain
+              &:hover
+                cursor: pointer
+          > .related_tag
+            position: absolute
+            top: 6px
+            left: 6px
+            background: rgba(0, 0, 0, 0.45)
+            color: #fff
+            font-size: 11px
+            font-weight: 600
+            border-radius: 12px
+            padding: 3px 9px
+            line-height: 1.4
+            pointer-events: none
+            white-space: nowrap
+            letter-spacing: 0.3px
   > .modal_back
     @include modal_back
 
 @media screen and (max-width: 896px)
   .picture_wrapper
     padding: 0
+    > .description_large_wrapper
+      padding: 0 $VIEW_PADDING_SP
+      margin-top: 30px
+      > .description_large_content
+        font-size: 14px
+        line-height: 1.7
+        img
+          margin: 1em auto
     > .related_images_wrapper
       padding: 0 $VIEW_PADDING_SP
     > .pic_section
@@ -299,6 +513,15 @@ export default Vue.extend({
         height: auto
         background: none
         padding: 40px 0px
+        > .image_toggle_btns
+          position: relative
+          top: auto
+          left: auto
+          margin-bottom: 20px
+          justify-content: center
+          > .toggle_btn
+            font-size: 13px
+            padding: 6px 12px
         > img
           min-width: auto
           width: calc(100% - #{$VIEW_PADDING_SP} * 2)
@@ -310,7 +533,7 @@ export default Vue.extend({
         border-radius: 13px
         color: $BLACK
         background-color: transparent
-        &:before
+        > .triangle_decoration
           display: none
         > p.author,
         > p.editor,
@@ -324,4 +547,7 @@ export default Vue.extend({
           > a
             color: $MAIN_COLOR
             border: 1px solid $MAIN_COLOR
+        > p.description
+          color: $BLACK
+          max-height: none
 </style>
