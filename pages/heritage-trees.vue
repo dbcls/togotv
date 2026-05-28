@@ -120,7 +120,7 @@ export default Vue.extend({
       try {
         // Heritage Treesタグを持つ画像を検索
         const response = await axios.get(
-          `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=Heritage Trees&rows=1000`
+          'https://togotv-api.dbcls.jp/api/bool_search', { params: { target: 'pictures', other_tags: 'Heritage Trees', rows: 1000 } }
         );
 
         this.allHeritageImages = response.data.data || [];

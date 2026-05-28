@@ -325,7 +325,7 @@ export default Vue.extend({
       padding: 39px 0 0 30px
       box-sizing: border-box
       height: 455px
-      color: #fff
+      color: #1a4a2e
       background-color: $MAIN_COLOR
       position: relative
       > .triangle_decoration
@@ -351,7 +351,7 @@ export default Vue.extend({
       > a.taxonomy,
       > a.wiki,
       > a.doi
-        color: #fff
+        color: #1a4a2e
         font-size: 12px
         line-height: 26px
         display: flex
@@ -368,12 +368,12 @@ export default Vue.extend({
           margin-right: 3px
           @include icon('brush')
         > a
-          color: #fff
+          color: #1a4a2e
       > p.editor
         &:before
           @include icon('editor')
         > a
-          color: #fff
+          color: #1a4a2e
       > a.doi
         &:before
           @include icon('doi')
@@ -384,6 +384,8 @@ export default Vue.extend({
           @include download_btn
           margin-left: 5px
           line-height: 38px
+          color: #1a4a2e
+          border-color: #1a4a2e
           &:first-of-type
             margin-left: 0
       > p.description

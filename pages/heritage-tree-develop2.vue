@@ -48,14 +48,14 @@
                 :style="cardSlots[i]"
                 @click="handleNavigation($event, `/${item.id.split('/').pop()}.html`)"
               >
-                <span class="specimen_no mont">No.{{ String(i + 1).padStart(2, '0') }}</span>
+                <span class="specimen_no mont">No.{{ item.ht_number ? String(item.ht_number).padStart(2, '0') : String(i + 1).padStart(2, '0') }}</span>
                 <div class="fg_frame">
                   <img :src="imgUrl(item)" :alt="item.name" />
                 </div>
-                <div class="fg_label">
+                <!-- <div class="fg_label">
                   <p class="fg_name_ja tsukushi">{{ item.name }}</p>
                   <p class="fg_name_sci mont">{{ item.scientific_name || item.name_en }}</p>
-                </div>
+                </div> -->
                 <div class="fg_popup">
                   <p class="popup_name tsukushi bold">{{ item.name }}</p>
                   <p class="popup_sci mont">{{ item.scientific_name || item.name_en }}</p>
@@ -178,27 +178,46 @@ export default Vue.extend({
       try {
         // "Heritage Trees" タグを持つ画像をすべて取得
         const res = await axios.get(
-          'https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=Heritage Trees&rows=1000',
-          { timeout: 30000 }
+          'https://togotv-api.dbcls.jp/api/bool_search',
+          {
+            params: { target: 'pictures', other_tags: 'KBG', rows: 1000 },
+            timeout: 30000
+          }
         );
         this.allImages = res.data.data || [];
+        // デバッグ: 取得件数とタグフィールドの確認
+        console.log('[HT2] 取得件数:', this.allImages.length);
+        if (this.allImages.length > 0) {
+          console.log('[HT2] サンプル (先頭3件) のタグフィールド:',
+            this.allImages.slice(0, 3).map(i => ({
+              name: i.name,
+              other_tags_comma: i.other_tags_comma,
+              other_tags: i.other_tags,
+              other_tag1: i.other_tag1,
+            }))
+          );
+        }
         this.categorizeImages();
+        console.log('[HT2] 季節別件数 春/夏/秋/冬:',
+          this.seasons.map(s => `${s.title}:${s.images.length}`).join(', ')
+        );
       } catch (e) {
         this.loadError = '画像の読み込みに失敗しました';
+        console.error('[HT2] 取得エラー:', e);
       } finally {
         this.isLoading = false;
       }
     },
     categorizeImages() {
-      // other_tags_comma（カンマ区切り文字列）から季節タグを確認
+      // other_tags_comma（カンマ区切り文字列）で季節タグを判定
       const hasTag = (img, ...keywords) => {
-        const text = (img.other_tags_comma || '').toLowerCase();
-        return keywords.some(k => text.includes(k.toLowerCase()));
+        const tags = (img.other_tags_comma || '').split(',').map(t => t.trim());
+        return keywords.some(k => tags.includes(k));
       };
-      this.seasons[0].images = this.allImages.filter(img => hasTag(img, '春', 'spring'));
-      this.seasons[1].images = this.allImages.filter(img => hasTag(img, '夏', 'summer'));
-      this.seasons[2].images = this.allImages.filter(img => hasTag(img, '秋', 'autumn', 'fall'));
-      this.seasons[3].images = this.allImages.filter(img => hasTag(img, '冬', 'winter'));
+      this.seasons[0].images = this.allImages.filter(img => hasTag(img, '春', 'Spring'));
+      this.seasons[1].images = this.allImages.filter(img => hasTag(img, '夏', 'Summer'));
+      this.seasons[2].images = this.allImages.filter(img => hasTag(img, '秋', 'Autumn', 'Fall'));
+      this.seasons[3].images = this.allImages.filter(img => hasTag(img, '冬', 'Winter'));
     },
     handleNavigation(event, path) {
       event.preventDefault();
@@ -343,6 +362,14 @@ export default Vue.extend({
     transform: translateY(0px) rotate(var(--rot, 0deg))
     opacity: 1
 
+@keyframes ht2-fadein
+  from
+    opacity: 0
+    transform: translateY(18px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
 @keyframes ht2-mosaic-in
   from
     opacity: 0
@@ -397,6 +424,7 @@ export default Vue.extend({
 
   > .home_image
     flex: 0 0 50%
+    animation: ht2-fadein 1.1s cubic-bezier(0.22, 1, 0.36, 1) both
     height: 100%
     display: flex
     align-items: center
@@ -413,6 +441,7 @@ export default Vue.extend({
     flex: 0 0 50%
     padding: 60px 60px 60px 32px
     box-sizing: border-box
+    animation: ht2-fadein 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both
     > .home_heading
       font-size: 52px
       color: #1a4a2e
@@ -498,7 +527,7 @@ export default Vue.extend({
       padding: 8px 2px 4px
       border-top: 1px solid #d0bb96
       > .fg_name_ja
-        font-size: 15px
+        font-size: 18px
         color: #2a1a0a
         margin: 0 0 3px 0
         line-height: 1.3
@@ -603,6 +632,7 @@ export default Vue.extend({
   z-index: 3
   cursor: pointer
   transition: opacity 0.2s ease
+  animation: ht2-fadein 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both
 
   &:hover
     opacity: 0.8
@@ -633,6 +663,7 @@ export default Vue.extend({
   right: 56px
   z-index: 10
   display: grid
+  animation: ht2-fadein 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both
   grid-template-columns: repeat(2, 88px)
   grid-template-rows: repeat(3, 88px)
   gap: 5px

@@ -113,7 +113,7 @@ export default Vue.extend({
       // 公開前: Heritage Trees タグ画像を新着から除外
       Promise.all([
         axios.get(`https://togotv-api.dbcls.jp/api/entries?target=pictures&from=1&rows=30`),
-        axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=Heritage Trees&rows=1000`)
+        axios.get('https://togotv-api.dbcls.jp/api/bool_search', { params: { target: 'pictures', other_tags: 'Heritage Trees', rows: 1000 } })
       ]).then(([entriesRes, htRes]) => {
         const htIds = new Set((htRes.data.data || []).map(img => img.id));
         this.illustration_list = (entriesRes.data.data || [])
