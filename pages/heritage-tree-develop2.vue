@@ -126,7 +126,7 @@ export default Vue.extend({
         { id: 'winter', title: '冬', subtitle: 'Winter', comingSoon: null, images: [] }
       ],
       allImages: [],
-      isLoading: true,
+      isLoading: false,
       loadError: null
     };
   },
@@ -149,8 +149,19 @@ export default Vue.extend({
       return (this.currentSeason.images || []).slice(0, 12);
     }
   },
+  async asyncData() {
+    try {
+      const res = await axios.get(
+        'https://togotv-api.dbcls.jp/api/bool_search',
+        { params: { target: 'pictures', other_tags: 'KBG', rows: 1000 }, timeout: 30000 }
+      );
+      return { allImages: res.data.data || [] };
+    } catch (e) {
+      return { allImages: [] };
+    }
+  },
   created() {
-    this.fetchImages();
+    this.categorizeImages();
   },
   head() {
     return {
@@ -176,34 +187,14 @@ export default Vue.extend({
     async fetchImages() {
       this.isLoading = true;
       try {
-        // "Heritage Trees" タグを持つ画像をすべて取得
         const res = await axios.get(
           'https://togotv-api.dbcls.jp/api/bool_search',
-          {
-            params: { target: 'pictures', other_tags: 'KBG', rows: 1000 },
-            timeout: 30000
-          }
+          { params: { target: 'pictures', other_tags: 'KBG', rows: 1000 }, timeout: 30000 }
         );
         this.allImages = res.data.data || [];
-        // デバッグ: 取得件数とタグフィールドの確認
-        console.log('[HT2] 取得件数:', this.allImages.length);
-        if (this.allImages.length > 0) {
-          console.log('[HT2] サンプル (先頭3件) のタグフィールド:',
-            this.allImages.slice(0, 3).map(i => ({
-              name: i.name,
-              other_tags_comma: i.other_tags_comma,
-              other_tags: i.other_tags,
-              other_tag1: i.other_tag1,
-            }))
-          );
-        }
         this.categorizeImages();
-        console.log('[HT2] 季節別件数 春/夏/秋/冬:',
-          this.seasons.map(s => `${s.title}:${s.images.length}`).join(', ')
-        );
       } catch (e) {
         this.loadError = '画像の読み込みに失敗しました';
-        console.error('[HT2] 取得エラー:', e);
       } finally {
         this.isLoading = false;
       }
