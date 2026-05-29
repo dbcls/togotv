@@ -5,7 +5,9 @@
     <transition name="ht2-view" mode="out-in">
       <div v-if="activeView === 'home'" key="home" class="home_view">
         <div class="home_image">
-          <img src="~/assets/img/heritage-trees/202605_cedrus_deodara_hp.png" alt="Heritage Trees" />
+          <a href="https://togotv.dbcls.jp/togopic.2026.025.html" target="_blank" rel="noopener noreferrer">
+            <img src="~/assets/img/heritage-trees/202605_cedrus_deodara_hp.png" alt="Heritage Trees" />
+          </a>
         </div>
         <div class="home_description">
           <h2 class="tsukushi bold home_heading">Heritage Trees Project</h2>
