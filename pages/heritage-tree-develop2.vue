@@ -424,11 +424,14 @@ export default Vue.extend({
     justify-content: center
     padding: 80px 20px 80px 60px
     box-sizing: border-box
-    > img
+    > img,
+    > a > img
       max-width: 100%
       max-height: 80vh
       object-fit: contain
       filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.18))
+    > a
+      display: contents  // aタグがレイアウトに影響しないように
 
   > .home_description
     flex: 0 0 50%

@@ -24,10 +24,7 @@
         <img :src="currentImageUrl" :alt="picture.name">
       </div>
       <div class="pic_detail" :style="{ backgroundColor: seasonColor }">
-        <div class="triangle_decoration" :style="{
-          borderRightColor: seasonColor,
-          borderBottomColor: seasonColor
-        }"></div>
+        <div class="triangle_decoration" :style="{ backgroundColor: seasonColor }"></div>
         <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
         <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.name_en }}</p>
         <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']">{{ picture.scientific_name }}</p>
@@ -53,7 +50,7 @@
     <div v-if="picture.Description_large" class="description_large_wrapper">
       <div class="description_large_content" v-html="picture.Description_large"></div>
     </div>
-    <div class="related_images_wrapper">
+    <div :class="['related_images_wrapper', { is_heritage: isHeritageTrees || isFromHT }]">
       <p class="related_title tsukushi bold">{{ relatedSectionTitle }}</p>
       <ul class="related_images">
         <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
@@ -146,8 +143,12 @@ export default Vue.extend({
     isFromHT() {
       return this.$route.query.from_ht === 'true';
     },
+    isHeritageTrees() {
+      const tags = (this.picture.other_tags_comma || '').split(',').map(t => t.trim());
+      return tags.includes('KBG') || tags.some(t => t.includes('Heritage'));
+    },
     relatedSectionTitle() {
-      return this.isFromHT ? '四季のイラスト' : this.$t('related_pictures');
+      return (this.isHeritageTrees || this.isFromHT) ? '四季のイラスト' : this.$t('related_pictures');
     },
     heritageTreeSeason() {
       // Heritage Treesの画像かどうかを判定し、季節を返す
@@ -214,19 +215,43 @@ export default Vue.extend({
       this.is_modal_on = true;
     },
     async fetchRelatedPics() {
-      const tagsStr = this.picture.other_tags_comma || this.picture.other_tag1 || '';
-      const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean).slice(0, 6);
-      if (!tags.length) return;
+      const tagsComma = this.picture.other_tags_comma || '';
+      const tags = tagsComma.split(',').map(t => t.trim()).filter(Boolean);
 
+      // ── Heritage Tree画像の場合 ──────────────────────────
+      if (this.isHeritageTrees) {
+        const SEASON_TAGS = ['春', '夏', '秋', '冬', 'Spring', 'Summer', 'Autumn', 'Fall', 'Winter'];
+        const seasonTag = tags.find(t => SEASON_TAGS.includes(t));
+        try {
+          const res = await axios.get('https://togotv-api.dbcls.jp/api/bool_search', {
+            params: { target: 'pictures', other_tags: 'KBG', rows: 1000 }
+          });
+          const all = res.data.data || [];
+          this.tag_data = all
+            .filter(img => img.id !== this.picture.id)
+            .filter(img => {
+              if (!seasonTag) return true;
+              return (img.other_tags_comma || '').split(',').map(t => t.trim()).includes(seasonTag);
+            })
+            .map(img => ({ ...img, _matchedTags: seasonTag ? [seasonTag] : ['KBG'] }));
+        } catch (e) {
+          console.error('HT related fetch error:', e);
+        }
+        return;
+      }
+
+      // ── 通常イラストの場合: bool_searchで各タグ検索 ──────
+      if (!tags.length) return;
       const results = await Promise.all(
-        tags.map(tag =>
-          axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${encodeURIComponent(tag)}`)
-            .then(res => ({ tag, data: res.data.data || [] }))
-            .catch(() => ({ tag, data: [] }))
+        tags.slice(0, 6).map(tag =>
+          axios.get('https://togotv-api.dbcls.jp/api/bool_search', {
+            params: { target: 'pictures', other_tags: tag, rows: 100 }
+          })
+          .then(res => ({ tag, data: res.data.data || [] }))
+          .catch(() => ({ tag, data: [] }))
         )
       );
 
-      // 画像ごとに一致したタグを集計
       const imageMap = {};
       results.forEach(({ tag, data }) => {
         data.forEach(img => {
@@ -236,7 +261,6 @@ export default Vue.extend({
         });
       });
 
-      // 一致タグ数の多い順にソートし上位30件
       this.tag_data = Object.values(imageMap)
         .sort((a, b) => b.matchedTags.length - a.matchedTags.length)
         .slice(0, 30)
@@ -281,14 +305,17 @@ export default Vue.extend({
   > .pic_section
     width: 100%
     display: flex
+    align-items: stretch   // 両カラムを同じ高さに揃える
     > .img_wrapper
       width: 70%
-      height: 455px
+      min-height: 400px
       background-color: #EDFCFC
       display: flex
       flex-direction: column
       align-items: center
       justify-content: center
+      padding: 40px 20px
+      box-sizing: border-box
       position: relative
       > .image_toggle_btns
         position: absolute
@@ -314,29 +341,27 @@ export default Vue.extend({
             background-color: $MAIN_COLOR
             color: #fff
       > img
-        min-width: 490px
-        max-width: 650px
-        width: 60%
-        max-height: 650px
+        max-width: 500px   // 1辺最大500px
+        max-height: 500px
+        width: 100%
         object-fit: contain
     > .pic_detail
       width: 30%
       min-width: 380px
       padding: 39px 0 0 30px
       box-sizing: border-box
-      height: 455px
+      min-height: 400px
       color: #1a4a2e
       background-color: $MAIN_COLOR
       position: relative
       > .triangle_decoration
-        content: ""
         position: absolute
         top: 0
+        bottom: 0          // 高さに追従して伸びる
         left: -100px
-        border-left: 50px solid transparent
-        border-top: 227.5px solid transparent
-        border-right: 50px solid $MAIN_COLOR
-        border-bottom: 227.5px solid $MAIN_COLOR
+        width: 100px
+        clip-path: polygon(100% 0, 100% 100%, 0 50%)
+        background-color: $MAIN_COLOR  // :styleで上書き
       > p
         margin: 0
         &.scientific_name
@@ -492,6 +517,10 @@ export default Vue.extend({
             pointer-events: none
             white-space: nowrap
             letter-spacing: 0.3px
+    &.is_heritage
+      > .related_images > li > .related_img_wrap
+        width: 220px
+        height: 220px
   > .modal_back
     @include modal_back
 
