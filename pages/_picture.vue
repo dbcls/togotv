@@ -285,10 +285,12 @@ export default Vue.extend({
 
 <style lang="sass">
 .picture_wrapper
-  // min-width: 1130px
-  padding: 106px 0
+  max-width: 1280px
+  margin: 0 auto
+  padding: 60px 0
   > .back_to_search_wrapper
     margin-bottom: 20px
+    padding: 0 $VIEW_PADDING
     > .back_to_search_btn
       background-color: $MAIN_COLOR
       color: #fff
@@ -347,7 +349,8 @@ export default Vue.extend({
         object-fit: contain
     > .pic_detail
       width: 30%
-      min-width: 380px
+      min-width: 300px
+      max-width: 420px
       padding: 39px 0 0 30px
       box-sizing: border-box
       min-height: 400px
@@ -424,7 +427,7 @@ export default Vue.extend({
     padding: 0 $VIEW_PADDING
     margin-top: 50px
     > .description_large_content
-      font-size: 16px
+      font-size: 16.4px
       line-height: 1.8
       color: $BLACK
       max-width: 900px
@@ -473,7 +476,7 @@ export default Vue.extend({
         background: #f9f9f9
   > .related_images_wrapper
     padding: 0 $VIEW_PADDING
-    margin-top: 102px
+    margin-top: 60px
     > .related_title
       font-size: 18px
       display: flex
