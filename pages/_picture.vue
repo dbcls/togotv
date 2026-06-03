@@ -285,8 +285,6 @@ export default Vue.extend({
 
 <style lang="sass">
 .picture_wrapper
-  max-width: 1280px
-  margin: 0 auto
   padding: 60px 0
   > .back_to_search_wrapper
     margin-bottom: 20px
@@ -322,7 +320,7 @@ export default Vue.extend({
       > .image_toggle_btns
         position: absolute
         top: 20px
-        left: 20px
+        right: 20px
         display: flex
         gap: 10px
         z-index: 10
@@ -350,7 +348,6 @@ export default Vue.extend({
     > .pic_detail
       width: 30%
       min-width: 300px
-      max-width: 420px
       padding: 39px 0 0 30px
       box-sizing: border-box
       min-height: 400px
