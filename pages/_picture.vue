@@ -53,17 +53,22 @@
     <div :class="['related_images_wrapper', { is_heritage: isHeritageTrees || isFromHT }]">
       <p class="related_title tsukushi bold">{{ relatedSectionTitle }}</p>
       <ul class="related_images">
-        <li v-for="data in tag_data" :key="data.TogoTV_Image_ID">
+        <li v-for="data in paginatedTagData" :key="data.TogoTV_Image_ID">
           <div class="related_img_wrap">
             <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
               <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
             </nuxt-link>
             <span v-if="data._matchedTags && data._matchedTags.length" class="related_tag">
-              {{ data._matchedTags.join('・') }}
+              {{ data._matchedTags.slice(0, 3).join('・') }}
             </span>
           </div>
         </li>
       </ul>
+      <div v-if="relatedTotalPages > 1" class="related_pagination">
+        <button class="page_btn" :disabled="relatedPage === 1" @click="relatedPage--">‹</button>
+        <span class="page_info mont">{{ relatedPage }} / {{ relatedTotalPages }}</span>
+        <button class="page_btn" :disabled="relatedPage === relatedTotalPages" @click="relatedPage++">›</button>
+      </div>
     </div>
     <DownloadModal
       v-if="is_modal_on"
@@ -195,6 +200,18 @@ export default Vue.extend({
         return `${baseUrl}${this.picture.detail_image1}`;
       }
       return `${baseUrl}${this.picture.png}`;
+    },
+    relatedTotalPages() {
+      return Math.ceil(this.tag_data.length / this.relatedPerPage);
+    },
+    paginatedTagData() {
+      const start = (this.relatedPage - 1) * this.relatedPerPage;
+      return this.tag_data.slice(start, start + this.relatedPerPage);
+    }
+  },
+  watch: {
+    tag_data() {
+      this.relatedPage = 1;
     }
   },
   components: {
@@ -206,7 +223,9 @@ export default Vue.extend({
       selected_pic: {},
       picture: {},
       tag_data: [],
-      currentImageType: 'main'
+      currentImageType: 'main',
+      relatedPage: 1,
+      relatedPerPage: 12
     }
   },
   methods: {
@@ -521,6 +540,37 @@ export default Vue.extend({
       > .related_images > li > .related_img_wrap
         width: 220px
         height: 220px
+    > .related_pagination
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 16px
+      margin-top: 24px
+      > .page_btn
+        width: 36px
+        height: 36px
+        border: 2px solid $MAIN_COLOR
+        background: #fff
+        color: $MAIN_COLOR
+        font-size: 22px
+        line-height: 1
+        border-radius: 50%
+        cursor: pointer
+        transition: .2s
+        display: flex
+        align-items: center
+        justify-content: center
+        &:hover:not(:disabled)
+          background: $MAIN_COLOR
+          color: #fff
+        &:disabled
+          opacity: 0.3
+          cursor: default
+      > .page_info
+        font-size: 15px
+        color: $MAIN_COLOR
+        min-width: 60px
+        text-align: center
   > .modal_back
     @include modal_back
 
