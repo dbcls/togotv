@@ -91,13 +91,16 @@ import DownloadModal from "~/components/DownloadModal.vue";
 export default Vue.extend({
   key: route => route.fullPath,
   async asyncData ({ params, error, payload }) {
-    if (payload) {
-      return { picture: payload }
-    } else {
-      let data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${params.picture}`)
-      return {
-        picture: data.data.data[0]
-      }
+    // payloadはentries APIから来るため detail_image1 等が欠落している場合がある
+    // → 常にsearch APIでフルデータを取得する
+    try {
+      const data = await axios.get(`https://togotv-api.dbcls.jp/api/search?target=pictures&id=${params.picture}`)
+      const picture = data.data.data[0]
+      if (!picture) throw new Error('not found')
+      return { picture }
+    } catch (e) {
+      if (payload) return { picture: payload }
+      error({ statusCode: 404, message: 'Picture not found' })
     }
   },
   created() {

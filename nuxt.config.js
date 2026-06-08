@@ -152,7 +152,7 @@ export default {
 
       await axios
         .get(
-          `https://togotv-api.dbcls.jp/api/search?target=pictures&rows=10000`
+          `https://togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`
         )
         .then((data) => {
           data.data.data.forEach((pic) => {
