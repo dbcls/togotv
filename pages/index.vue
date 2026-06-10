@@ -25,6 +25,16 @@
         <div class="announcement" v-if="$t('top_announcement')">
           <p>{{ $t('top_announcement') }}</p>
         </div> -->
+        <div class="news_section">
+          <h2 class="news_title">TogoTV ニュース</h2>
+          <ul class="news_list">
+            <li>
+              <span class="news_date">2026.6.11</span>
+              <span class="news_badge">New!</span>
+              <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトオープン！</nuxt-link>
+            </li>
+          </ul>
+        </div>
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
     </div>
@@ -415,6 +425,44 @@ export default Vue.extend({
         font-weight: bold
         margin: 0
         line-height: 1.6
+    > .news_section
+      margin-top: 20px
+      width: 334px
+      padding: 12px 16px
+      border: 2px solid #1976d2
+      border-radius: 4px
+      > .news_title
+        font-size: 13px
+        font-weight: bold
+        color: #1976d2
+        margin: 0 0 6px
+      > .news_list
+        list-style: none
+        margin: 0
+        padding: 0
+        > li
+          font-size: 12px
+          line-height: 1.6
+          display: flex
+          flex-wrap: wrap
+          align-items: baseline
+          gap: 4px
+          > .news_date
+            color: #555
+            white-space: nowrap
+          > .news_badge
+            background: #e53935
+            color: #fff
+            font-size: 10px
+            font-weight: bold
+            padding: 1px 5px
+            border-radius: 3px
+            white-space: nowrap
+          > a
+            color: #1976d2
+            text-decoration: none
+            &:hover
+              text-decoration: underline
 section
   padding: 15px 0
   &:nth-of-type(2)
@@ -476,6 +524,9 @@ section
         padding: 12px 15px
         font-size: 13px
         max-width: none
+      > .news_section
+        margin: 20px 15px 0
+        width: auto
       > .input_wrapper
         &.index
           margin: 20px auto 0
