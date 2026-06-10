@@ -124,13 +124,11 @@
                     全ての画像
                   </nuxt-link>
                 </li>
-                <!-- Heritage Trees: イラスト製作中のため一時的に非表示
                 <li @click="$event.stopPropagation()" class="link img">
-                  <nuxt-link :to="localePath('/heritage-trees.html')">
+                  <nuxt-link :to="localePath('/heritage-tree.html')">
                     Heritage Trees
                   </nuxt-link>
                 </li>
-                -->
               </ul>
             </li>
             <li class="link ajacs">

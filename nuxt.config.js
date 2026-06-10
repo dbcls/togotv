@@ -219,6 +219,12 @@ export default {
           route.path = "/:ajacs(ajacs\\d+)";
         }
       });
+      // heritage-trees.vue を /heritage-tree.html としてビルド
+      routes.push({
+        path: "/heritage-tree",
+        component: resolve(__dirname, "pages/heritage-trees.vue"),
+        name: "heritage-tree",
+      });
       const aliases = routes.map((route) => ({
         path: /\/$/.test(route.path)
           ? `${route.path}index.html`
