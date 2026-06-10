@@ -1,5 +1,8 @@
 ### https://raw.github.com/github/gitignore/379476851036fbc638d258f0547d91c2a3765a33/Node.gitignore
 
+# worktrees in .claude
+.claude/worktrees/
+
 # Logs
 logsyarn-error.log*
 lerna-debug.log*
@@ -168,3 +171,7 @@ coverage
 
 # DBCLS page specification
 DBCLS_page_specification.md
+
+# Heritage Tree: 旧開発版（heritage-trees.vue が本番ファイル、/heritage-tree.html としてビルド）
+pages/heritage-tree-develop.vue
+pages/heritage-tree-develop2.vue
