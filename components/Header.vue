@@ -125,7 +125,7 @@
                   </nuxt-link>
                 </li>
                 <li @click="$event.stopPropagation()" class="link img">
-                  <nuxt-link :to="localePath('/heritage-tree.html')">
+                  <nuxt-link :to="localePath('/heritage-trees.html')">
                     Heritage Trees
                   </nuxt-link>
                 </li>
