@@ -1,6 +1,8 @@
 name: Generate and Upload (DBの更新はなし)
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
 
 jobs:
