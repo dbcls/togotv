@@ -432,7 +432,7 @@ export default Vue.extend({
       border: 2px solid #1976d2
       border-radius: 4px
       > .news_title
-        font-size: 13px
+        font-size: 15px
         font-weight: bold
         color: #1976d2
         margin: 0 0 6px
@@ -441,7 +441,7 @@ export default Vue.extend({
         margin: 0
         padding: 0
         > li
-          font-size: 12px
+          font-size: 14px
           line-height: 1.6
           display: flex
           flex-wrap: wrap
@@ -453,7 +453,7 @@ export default Vue.extend({
           > .news_badge
             background: #e53935
             color: #fff
-            font-size: 10px
+            font-size: 12px
             font-weight: bold
             padding: 1px 5px
             border-radius: 3px
