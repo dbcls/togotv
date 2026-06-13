@@ -23,7 +23,7 @@ jobs:
           cat update_result.txt
       - name: Upload DB update result
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: db-update-result-${{ github.run_id }}
           path: update_result.txt
