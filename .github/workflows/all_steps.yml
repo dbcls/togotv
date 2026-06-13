@@ -11,7 +11,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Update database
-        run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.UPDATE_ENDPOINT }}
+        run: |
+          curl -sSL -X POST \
+            -H "Content-type:application/json" \
+            --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' \
+            --max-time 900 \
+            -w "\n---\nHTTP_STATUS: %{http_code}\nTIME_TOTAL: %{time_total}s\n" \
+            ${{ secrets.UPDATE_ENDPOINT }} \
+            > update_result.txt 2>&1 \
+            || echo "curl_exit_code: $?" >> update_result.txt
+          cat update_result.txt
+      - name: Upload DB update result
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: db-update-result-${{ github.run_id }}
+          path: update_result.txt
+          retention-days: 7
       - name: Setup node
         uses: actions/setup-node@v3
         with:
