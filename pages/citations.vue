@@ -268,6 +268,21 @@ export default Vue.extend({
           // manualcurated.txt not found or parse error, skip
         }
 
+        // Load manually entered metadata from manualcurated_data.json
+        // (for papers not retrievable from EuropePMC or CrossRef)
+        try {
+          const manualDataRes = await axios.get('/citations/manualcurated_data.json').catch(() => null)
+          if (manualDataRes && Array.isArray(manualDataRes.data)) {
+            manualDataRes.data.forEach(paper => {
+              if (paper && paper.doi && !paperMap.has(paper.doi)) {
+                paperMap.set(paper.doi, paper)
+              }
+            })
+          }
+        } catch (e) {
+          // manualcurated_data.json not found, skip
+        }
+
         const results = Array.from(paperMap.values())
           .sort((a, b) => Number(b.year) - Number(a.year))
 
