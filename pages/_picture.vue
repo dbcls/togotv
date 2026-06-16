@@ -53,25 +53,27 @@
     <div :class="['related_images_wrapper', { is_heritage: isHeritageTrees || isFromHT }]">
       <div class="related_title_row">
         <p class="related_title tsukushi bold">{{ relatedSectionTitle }}</p>
-        <span class="related_count_label mont">10件ずつ表示</span>
       </div>
-      <div class="related_scroll_container">
-        <ul class="related_images">
-          <li v-for="data in tag_data.slice(0, 10)" :key="data.TogoTV_Image_ID">
-            <div class="related_img_wrap">
-              <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
-                <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
-              </nuxt-link>
-              <div v-if="data._matchedTags && data._matchedTags.length" class="related_tags">
-                <span
-                  v-for="(tag, ti) in data._matchedTags.slice(0, 3)"
-                  :key="ti"
-                  class="related_tag"
-                >{{ tag }}</span>
-              </div>
+      <ul class="related_images">
+        <li v-for="data in paginatedTagData" :key="data.TogoTV_Image_ID">
+          <div class="related_img_wrap">
+            <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
+              <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
+            </nuxt-link>
+            <div v-if="data._matchedTags && data._matchedTags.length" class="related_tags">
+              <span
+                v-for="(tag, ti) in data._matchedTags.slice(0, 3)"
+                :key="ti"
+                class="related_tag"
+              >{{ tag }}</span>
             </div>
-          </li>
-        </ul>
+          </div>
+        </li>
+      </ul>
+      <div v-if="relatedTotalPages > 1" class="related_pagination">
+        <button class="page_btn" :disabled="relatedPage === 1" @click="relatedPage--">‹</button>
+        <span class="page_info mont">{{ relatedPage }} / {{ relatedTotalPages }}</span>
+        <button class="page_btn" :disabled="relatedPage === relatedTotalPages" @click="relatedPage++">›</button>
       </div>
     </div>
     <DownloadModal
@@ -208,6 +210,13 @@ export default Vue.extend({
       }
       return `${baseUrl}${this.picture.png}`;
     },
+    relatedTotalPages() {
+      return Math.ceil(this.tag_data.length / this.relatedPerPage);
+    },
+    paginatedTagData() {
+      const start = (this.relatedPage - 1) * this.relatedPerPage;
+      return this.tag_data.slice(start, start + this.relatedPerPage);
+    },
   },
   components: {
     DownloadModal
@@ -218,7 +227,14 @@ export default Vue.extend({
       selected_pic: {},
       picture: {},
       tag_data: [],
-      currentImageType: 'main'
+      currentImageType: 'main',
+      relatedPage: 1,
+      relatedPerPage: 12
+    }
+  },
+  watch: {
+    tag_data() {
+      this.relatedPage = 1;
     }
   },
   methods: {
@@ -492,9 +508,9 @@ export default Vue.extend({
         color: #555
         background: #f9f9f9
   > .related_images_wrapper
+    padding: 0 $VIEW_PADDING
     margin-top: 60px
     > .related_title_row
-      padding-left: $VIEW_PADDING
       display: flex
       align-items: center
       gap: 12px
@@ -507,65 +523,82 @@ export default Vue.extend({
           width: 25px
           height: 25px
           @include icon('img')
-      > .related_count_label
-        font-size: 12px
-        color: $MAIN_COLOR
-        border: 1px solid $MAIN_COLOR
-        border-radius: 20px
-        padding: 2px 10px
-        line-height: 1.6
-    > .related_scroll_container
-      width: 100%
-      overflow-x: auto
-      scrollbar-width: none
-      &::-webkit-scrollbar
-        display: none
-      > .related_images
-        display: flex
-        flex-wrap: nowrap
-        padding: 0 $VIEW_PADDING
-        > li
-          flex-shrink: 0
-          > .related_img_wrap
-            position: relative
-            display: inline-block
-            width: 146px
-            height: 146px
-            margin-right: 16px
-            > a
-              display: block
+    > .related_images
+      display: flex
+      flex-wrap: wrap
+      > li
+        > .related_img_wrap
+          position: relative
+          display: inline-block
+          width: 146px
+          height: 146px
+          margin-right: 16px
+          margin-bottom: 16px
+          > a
+            display: block
+            width: 100%
+            height: 100%
+            > img
               width: 100%
               height: 100%
-              > img
-                width: 100%
-                height: 100%
-                object-fit: contain
-                transition: .3s
-                &:hover
-                  cursor: pointer
-                  transform: translate(-5px, -2px)
-                  filter: drop-shadow(8px 4px 0px rgba(253, 211, 101, .8))
-            > .related_tags
-              position: absolute
-              top: 6px
-              left: 6px
-              display: flex
-              flex-direction: column
-              align-items: flex-start
-              gap: 3px
-              pointer-events: none
-              > .related_tag
-                background: rgba(0, 0, 0, 0.45)
-                color: #fff
-                font-size: 10px
-                font-weight: 600
-                border-radius: 10px
-                padding: 2px 8px
-                line-height: 1.5
-                white-space: nowrap
-                letter-spacing: 0.3px
+              object-fit: contain
+              transition: .3s
+              &:hover
+                cursor: pointer
+                transform: translate(-5px, -2px)
+                filter: drop-shadow(8px 4px 0px rgba(253, 211, 101, .8))
+          > .related_tags
+            position: absolute
+            top: 6px
+            left: 6px
+            display: flex
+            flex-direction: column
+            align-items: flex-start
+            gap: 3px
+            pointer-events: none
+            > .related_tag
+              background: rgba(0, 0, 0, 0.45)
+              color: #fff
+              font-size: 10px
+              font-weight: 600
+              border-radius: 10px
+              padding: 2px 8px
+              line-height: 1.5
+              white-space: nowrap
+              letter-spacing: 0.3px
+    > .related_pagination
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 16px
+      margin-top: 24px
+      > .page_btn
+        width: 36px
+        height: 36px
+        border: 2px solid $MAIN_COLOR
+        background: #fff
+        color: $MAIN_COLOR
+        font-size: 22px
+        line-height: 1
+        border-radius: 50%
+        cursor: pointer
+        transition: .2s
+        display: flex
+        align-items: center
+        justify-content: center
+        &:hover:not(:disabled)
+          background: $MAIN_COLOR
+          color: #fff
+        &:disabled
+          opacity: 0.3
+          cursor: default
+      > .page_info
+        font-size: 15px
+        color: $MAIN_COLOR
+        min-width: 60px
+        text-align: center
     &.is_heritage
-      > .related_scroll_container > .related_images > li > .related_img_wrap
+      > .related_images > li > .related_img_wrap
         width: 200px
         height: 200px
   > .modal_back
@@ -583,10 +616,8 @@ export default Vue.extend({
         img
           margin: 1em auto
     > .related_images_wrapper
-      > .related_title_row
-        padding-left: $VIEW_PADDING_SP
-      > .related_scroll_container > .related_images
-        padding: 0 $VIEW_PADDING_SP
+      padding: 0 $VIEW_PADDING_SP
+      > .related_images
         > li > .related_img_wrap
           width: 120px
           height: 120px
