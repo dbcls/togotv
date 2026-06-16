@@ -117,13 +117,27 @@ export default Vue.extend({
     async fetchCitations() {
       this.is_loading = true
 
-      // Check localStorage cache (7-day expiry)
+      // Fetch manualcurated_data.json first to get its hash for cache invalidation
+      let manualData = []
+      let manualHash = ''
+      try {
+        const manualDataRes = await axios.get('/citations/manualcurated_data.json').catch(() => null)
+        if (manualDataRes && Array.isArray(manualDataRes.data)) {
+          manualData = manualDataRes.data
+          manualHash = JSON.stringify(manualData)
+        }
+      } catch (e) { /* skip */ }
+
+      // Check localStorage cache (7-day expiry + manualcurated_data hash check)
       try {
         const cached = localStorage.getItem('togotv_citations')
         if (cached) {
           const parsed = JSON.parse(cached)
           const ONE_WEEK = 7 * 24 * 60 * 60 * 1000
-          if (Date.now() - parsed.timestamp < ONE_WEEK && parsed.data && parsed.data.length > 0) {
+          const cacheValid = Date.now() - parsed.timestamp < ONE_WEEK
+            && parsed.data && parsed.data.length > 0
+            && parsed.manualHash === manualHash
+          if (cacheValid) {
             this.citation_list = parsed.data
             this.is_loading = false
             return
@@ -269,19 +283,12 @@ export default Vue.extend({
         }
 
         // Load manually entered metadata from manualcurated_data.json
-        // (for papers not retrievable from EuropePMC or CrossRef)
-        try {
-          const manualDataRes = await axios.get('/citations/manualcurated_data.json').catch(() => null)
-          if (manualDataRes && Array.isArray(manualDataRes.data)) {
-            manualDataRes.data.forEach(paper => {
-              if (paper && paper.doi && !paperMap.has(paper.doi)) {
-                paperMap.set(paper.doi, paper)
-              }
-            })
+        // (fetched at top of fetchCitations for cache invalidation; reuse here)
+        manualData.forEach(paper => {
+          if (paper && paper.doi && !paperMap.has(paper.doi)) {
+            paperMap.set(paper.doi, paper)
           }
-        } catch (e) {
-          // manualcurated_data.json not found, skip
-        }
+        })
 
         const results = Array.from(paperMap.values())
           .sort((a, b) => Number(b.year) - Number(a.year))
@@ -291,7 +298,7 @@ export default Vue.extend({
         try {
           localStorage.setItem(
             'togotv_citations',
-            JSON.stringify({ timestamp: Date.now(), data: results })
+            JSON.stringify({ timestamp: Date.now(), data: results, manualHash })
           )
         } catch (e) {
           // localStorage full or unavailable
