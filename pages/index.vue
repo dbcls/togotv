@@ -29,8 +29,14 @@
           <h2 class="news_title">TogoTV ニュース</h2>
           <ul class="news_list">
             <li>
-              <span class="news_date">2026.6.11</span>
+              <span class="news_date">2026.6.17</span>
               <span class="news_badge">New!</span>
+              Togo pic の画像が
+              <a href="https://doi.org/10.1039/D6NP00011H" target="_blank" rel="noopener noreferrer">Jaczkowski et al. <em>Natural Product Reports</em> 2026</a>
+              に利用されました！
+            </li>
+            <li>
+              <span class="news_date">2026.6.11</span>
               <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトオープン！</nuxt-link>
             </li>
           </ul>
