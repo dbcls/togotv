@@ -29,8 +29,14 @@
           <h2 class="news_title">TogoTV ニュース</h2>
           <ul class="news_list">
             <li>
-              <span class="news_date">2026.6.17</span>
+              <span class="news_date">2026.6.21</span>
               <span class="news_badge">New!</span>
+              Togo pic の画像が
+              <a href="https://doi.org/10.1126/sciadv.aed1407" target="_blank" rel="noopener noreferrer">Qu et al. <em>Science Advances</em> 2026</a>
+              に利用されました！
+            </li>
+            <li>
+              <span class="news_date">2026.6.17</span>
               Togo pic の画像が
               <a href="https://doi.org/10.1039/D6NP00011H" target="_blank" rel="noopener noreferrer">Jaczkowski et al. <em>Natural Product Reports</em> 2026</a>
               に利用されました！
@@ -433,7 +439,7 @@ export default Vue.extend({
         line-height: 1.6
     > .news_section
       margin-top: 20px
-      width: 334px
+      width: 485px
       padding: 12px 16px
       border: 2px solid #1976d2
       border-radius: 4px
@@ -453,6 +459,8 @@ export default Vue.extend({
           flex-wrap: wrap
           align-items: baseline
           gap: 4px
+          & + li
+            margin-top: 5px
           > .news_date
             color: #555
             white-space: nowrap
