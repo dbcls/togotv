@@ -235,6 +235,7 @@ export default Vue.extend({
               authors: stripHtml(item.authorString) || '',
               journal: stripHtml(item.journalTitle) || '',
               year: item.pubYear || '',
+              publishedDate: item.firstPublicationDate || '',
               citedByCount: item.citedByCount || 0,
             })
           })
@@ -260,6 +261,7 @@ export default Vue.extend({
                     authors: item.authorString || '',
                     journal: item.journalTitle || '',
                     year: item.pubYear || '',
+                    publishedDate: item.firstPublicationDate || '',
                     citedByCount: item.citedByCount || 0,
                   }
                 })
@@ -298,6 +300,7 @@ export default Vue.extend({
                     authors: item.authorString || '',
                     journal: item.journalTitle || '',
                     year: item.pubYear || '',
+                    publishedDate: item.firstPublicationDate || '',
                     citedByCount: item.citedByCount || 0,
                     isNew: false,
                   }
@@ -315,12 +318,19 @@ export default Vue.extend({
                     const isNew = pubParts
                       ? (Date.now() - new Date(pubParts[0], (pubParts[1] || 1) - 1, pubParts[2] || 1).getTime()) / 86400000 <= 30
                       : false
+                    const publishedDate = pubParts
+                      ? [pubParts[0], pubParts[1], pubParts[2]]
+                          .filter(Boolean)
+                          .map((v, i) => i === 0 ? String(v) : String(v).padStart(2, '0'))
+                          .join('-')
+                      : ''
                     return {
                       doi: (msg.DOI || doi).toLowerCase(),
                       title: (msg.title && msg.title[0]) || 'No title',
                       authors,
                       journal: (msg['container-title'] && msg['container-title'][0]) || '',
                       year: String((pubParts && pubParts[0]) || ''),
+                      publishedDate,
                       citedByCount: msg['is-referenced-by-count'] || 0,
                       isNew,
                     }
@@ -339,9 +349,13 @@ export default Vue.extend({
           // manualcurated.txt not found or parse error, skip
         }
 
-        // Sort by year descending
+        // Sort by publishedDate descending (fall back to year)
         const results = Array.from(paperMap.values())
-          .sort((a, b) => Number(b.year) - Number(a.year))
+          .sort((a, b) => {
+            const da = a.publishedDate || `${a.year || '0000'}-00`
+            const db = b.publishedDate || `${b.year || '0000'}-00`
+            return db.localeCompare(da)
+          })
 
         this.citation_list = results
 

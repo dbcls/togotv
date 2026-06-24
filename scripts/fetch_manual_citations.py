@@ -15,6 +15,7 @@ import urllib.request
 import urllib.error
 from html.parser import HTMLParser
 from pathlib import Path
+from typing import Optional
 
 ROOT = Path(__file__).parent.parent
 TXT  = ROOT / "static/citations/manualcurated.txt"
@@ -61,7 +62,44 @@ def fetch_html(url: str) -> str:
         return r.read().decode(charset, errors="replace")
 
 
-def scrape_doi(doi: str) -> dict | None:
+def fetch_crossref_date(doi: str) -> str:
+    """CrossRef API から publishedDate を取得する。戻り値例: '2026-06-15', '2026-06', '2026', ''"""
+    url = f"https://api.crossref.org/works/{doi}"
+    req = urllib.request.Request(url, headers={"User-Agent": "TogoTV-citation-bot/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        msg = data.get("message", {})
+        for key in ("published", "published-print", "published-online"):
+            parts = (msg.get(key) or {}).get("date-parts", [[]])[0]
+            if parts:
+                segments = [str(parts[0])]
+                if len(parts) > 1:
+                    segments.append(str(parts[1]).zfill(2))
+                if len(parts) > 2:
+                    segments.append(str(parts[2]).zfill(2))
+                return "-".join(segments)
+        return ""
+    except Exception:
+        return ""
+
+
+def parse_date_str(date_str: str) -> tuple[str, str]:
+    """date_str から (year, publishedDate) を返す。publishedDate は 'YYYY-MM-DD' 等。"""
+    if not date_str:
+        return "", ""
+    m = re.match(r"(\d{4})[/\-](\d{1,2})(?:[/\-](\d{1,2}))?", date_str)
+    if m:
+        y = m.group(1)
+        mo = m.group(2).zfill(2)
+        dy = m.group(3)
+        pub_date = f"{y}-{mo}" + (f"-{dy.zfill(2)}" if dy else "")
+        return y, pub_date
+    m2 = re.search(r"\d{4}", date_str)
+    return (m2.group() if m2 else ""), ""
+
+
+def scrape_doi(doi: str) -> Optional[dict]:
     url = f"https://doi.org/{doi}"
     print(f"  GET {url}", end=" ... ", flush=True)
     try:
@@ -93,15 +131,16 @@ def scrape_doi(doi: str) -> dict | None:
 
     date_str = p.get("citation_publication_date", "citation_online_date",
                       "prism.publicationDate", "dc.date")
-    year = re.search(r"\d{4}", date_str).group() if date_str else ""
+    year, published_date = parse_date_str(date_str)
 
     result = {
-        "doi":          doi,
-        "title":        title,
-        "authors":      authors,
-        "journal":      journal,
-        "year":         year,
-        "citedByCount": 0,
+        "doi":           doi,
+        "title":         title,
+        "authors":       authors,
+        "journal":       journal,
+        "year":          year,
+        "publishedDate": published_date,
+        "citedByCount":  0,
     }
     print("OK")
     return result
@@ -140,8 +179,30 @@ def main():
             existing_dois.add(doi)
             added += 1
 
-    # 年の降順でソート
-    existing.sort(key=lambda x: x.get("year", ""), reverse=True)
+    # publishedDate が未設定のエントリを CrossRef で補完
+    enriched = 0
+    for paper in existing:
+        if not paper.get("publishedDate"):
+            print(f"  CrossRef date: {paper['doi']}", end=" ... ", flush=True)
+            time.sleep(0.5)
+            date = fetch_crossref_date(paper["doi"])
+            if date:
+                paper["publishedDate"] = date
+                # year も未設定なら先頭4桁を使う
+                if not paper.get("year"):
+                    paper["year"] = date[:4]
+                print(date)
+                enriched += 1
+            else:
+                print("not found")
+    if enriched:
+        print(f"{enriched} entry(ies) enriched with publishedDate")
+
+    # publishedDate → year の降順でソート
+    def sort_key(x):
+        return x.get("publishedDate") or x.get("year", "") or ""
+
+    existing.sort(key=sort_key, reverse=True)
 
     JSON.write_text(
         json.dumps(existing, ensure_ascii=False, indent=2) + "\n",

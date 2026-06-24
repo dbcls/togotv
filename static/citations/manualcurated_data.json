@@ -1,11 +1,21 @@
 [
   {
+    "doi": "10.1126/sciadv.aed1407",
+    "title": "Spatial transcriptomics identifies distinct domains regulating yield-component traits of the wheat ear",
+    "authors": "Yue Qu, Cong Tan, Liujing Yang, Yazhou Wang, Anqi Zhan, Shimin Cai, Jianyao Xia, Chulin Sha, Junjie Zou, Xincheng Pei, Tian Ma, Jiangwei Zhu, Qiannan Wang, Ye Deng, Hao Yu, Jun Liu",
+    "journal": "Science Advances",
+    "year": "2026",
+    "citedByCount": 0,
+    "publishedDate": "2026-06-19"
+  },
+  {
     "doi": "10.20517/ss.2025.107",
     "title": "Nanocellulose-based bio-inks for 3D bioprinting: advances and prospects in bone and cartilage tissue engineering",
     "authors": "Yiwei Xu, Hanqing Dai, Qianwang Ye, Wanlu Zhang, Na Wang, Lei Xiong, Ruiqian Guo",
     "journal": "Soft Science",
     "year": "2026",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2026-01-21"
   },
   {
     "doi": "10.1039/D6NP00011H",
@@ -13,15 +23,8 @@
     "authors": "Anne Jaczkowski, Arne Bültemeier, Benedikt Seligmann, Boas Pucker, Jakob Franke",
     "journal": "Natural Product Reports",
     "year": "2026",
-    "citedByCount": 0
-  },
-  {
-    "doi": "10.3390/app14052177",
-    "title": "Antioxidant and Anti-Inflammatory Phytochemicals for the Treatment of Inflammatory Bowel Disease: A Systematic Review",
-    "authors": "Pantalos George, Vaou Natalia, Papachristidou Smaragda, Stavropoulou Elisavet, Tsigalou Christina, Voidarou Chrysa, Bezirtzoglou Eugenia",
-    "journal": "Applied Sciences",
-    "year": "2024",
-    "citedByCount": 11
+    "citedByCount": 0,
+    "publishedDate": "2026"
   },
   {
     "doi": "10.1016/j.carpta.2024.100431",
@@ -29,7 +32,17 @@
     "authors": "Villani S., Kunjalukkal Padmanabhan S., Stoppa M., Nisi R., Calcagnile M., Alifano P., Demitri C., Licciulli A.",
     "journal": "Carbohydrate Polymer Technologies and Applications",
     "year": "2024",
-    "citedByCount": 6
+    "citedByCount": 6,
+    "publishedDate": "2024-06"
+  },
+  {
+    "doi": "10.3390/app14052177",
+    "title": "Antioxidant and Anti-Inflammatory Phytochemicals for the Treatment of Inflammatory Bowel Disease: A Systematic Review",
+    "authors": "Pantalos George, Vaou Natalia, Papachristidou Smaragda, Stavropoulou Elisavet, Tsigalou Christina, Voidarou Chrysa, Bezirtzoglou Eugenia",
+    "journal": "Applied Sciences",
+    "year": "2024",
+    "citedByCount": 11,
+    "publishedDate": "2024-03-05"
   },
   {
     "doi": "10.1016/j.jclepro.2023.140005",
@@ -37,7 +50,8 @@
     "authors": "Yang Yan, Zhao Junxiong, Zhou Ying, Xu Shengchao, Ren Xiulian, Wei Qifeng",
     "journal": "Journal of Cleaner Production",
     "year": "2024",
-    "citedByCount": 19
+    "citedByCount": 19,
+    "publishedDate": "2024-01"
   },
   {
     "doi": "10.1186/s13765-023-00838-7",
@@ -45,7 +59,26 @@
     "authors": "Kim, Sangyun, Choi, Heebak, Yi, Taegyu, Gwak, Dohoon, Ha, Sun-Hwa",
     "journal": "Applied Biological Chemistry",
     "year": "2023",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2023-11-23"
+  },
+  {
+    "doi": "10.3390/fermentation9080703",
+    "title": "Hydrolase Activities of Sourdough Microorganisms",
+    "authors": "Akamine Ingrid Teixeira, Mansoldo Felipe R. P., Cardoso Verônica S., de Souza Dias Edilma Paraguai, Vermelho Alane Beatriz",
+    "journal": "Fermentation",
+    "year": "2023",
+    "citedByCount": 7,
+    "publishedDate": "2023-07-26"
+  },
+  {
+    "doi": "10.3390/fermentation9020090",
+    "title": "Probiotics in the Sourdough Bread Fermentation: Current Status",
+    "authors": "Akamine Ingrid Teixeira, Mansoldo Felipe R. P., Vermelho Alane Beatriz",
+    "journal": "Fermentation",
+    "year": "2023",
+    "citedByCount": 46,
+    "publishedDate": "2023-01-20"
   },
   {
     "doi": "10.11234/jsbibr.2023.2",
@@ -69,7 +102,8 @@
     "authors": "Miura, Chihiro, Pujasatria, Galih Chersy, Kaminaka, Hironori",
     "journal": "SpringerLink",
     "year": "2023",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2023"
   },
   {
     "doi": "10.1007/978-3-031-21820-0_4",
@@ -77,23 +111,8 @@
     "authors": "Paris, Katherine",
     "journal": "SpringerLink",
     "year": "2023",
-    "citedByCount": 0
-  },
-  {
-    "doi": "10.3390/fermentation9080703",
-    "title": "Hydrolase Activities of Sourdough Microorganisms",
-    "authors": "Akamine Ingrid Teixeira, Mansoldo Felipe R. P., Cardoso Verônica S., de Souza Dias Edilma Paraguai, Vermelho Alane Beatriz",
-    "journal": "Fermentation",
-    "year": "2023",
-    "citedByCount": 7
-  },
-  {
-    "doi": "10.3390/fermentation9020090",
-    "title": "Probiotics in the Sourdough Bread Fermentation: Current Status",
-    "authors": "Akamine Ingrid Teixeira, Mansoldo Felipe R. P., Vermelho Alane Beatriz",
-    "journal": "Fermentation",
-    "year": "2023",
-    "citedByCount": 46
+    "citedByCount": 0,
+    "publishedDate": "2022-12-16"
   },
   {
     "doi": "10.11234/jsbibr.2022.primer3",
@@ -109,7 +128,8 @@
     "authors": "Sanicas, Melvin, Wartel, T. Anh, Sanicas, Merlin",
     "journal": "SpringerLink",
     "year": "2022",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2022"
   },
   {
     "doi": "10.18960/hozen.2128",
@@ -125,7 +145,8 @@
     "authors": "KAE KOGANEBUCHI, HIROKI OOTA",
     "journal": "Anthropological Science",
     "year": "2021",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2021"
   },
   {
     "doi": "10.14889/jpdm.2020.0005",
@@ -141,7 +162,8 @@
     "authors": "小澤 達也",
     "journal": "脳神経外科ジャーナル",
     "year": "2018",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2018"
   },
   {
     "doi": "10.1109/ICALT.2016.40",
@@ -149,14 +171,7 @@
     "authors": "Feng Xiang, Wu Linli, Wang Jian, Zhou Hong, Wu Yonghe",
     "journal": "2016 IEEE 16th International Conference on Advanced Learning Technologies (ICALT)",
     "year": "2016",
-    "citedByCount": 0
-  },
-  {
-    "doi": "10.1126/sciadv.aed1407",
-    "title": "Spatial transcriptomics identifies distinct domains regulating yield-component traits of the wheat ear",
-    "authors": "Yue Qu, Cong Tan, Liujing Yang, Yazhou Wang, Anqi Zhan, Shimin Cai, Jianyao Xia, Chulin Sha, Junjie Zou, Xincheng Pei, Tian Ma, Jiangwei Zhu, Qiannan Wang, Ye Deng, Hao Yu, Jun Liu",
-    "journal": "Science Advances",
-    "year": "2026",
-    "citedByCount": 0
+    "citedByCount": 0,
+    "publishedDate": "2016-07"
   }
 ]
