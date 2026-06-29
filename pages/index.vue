@@ -29,8 +29,14 @@
           <h2 class="news_title">TogoTV ニュース</h2>
           <ul class="news_list">
             <li>
-              <span class="news_date">2026.6.21</span>
+              <span class="news_date">2026.6.24</span>
               <span class="news_badge">New!</span>
+              Togo pic の画像が
+              <a href="https://doi.org/10.1038/s41556-026-01982-0" target="_blank" rel="noopener noreferrer">Xie et al. <em>Nature Cell Biology</em> 2026</a>
+              に利用されました！
+            </li>
+            <li>
+              <span class="news_date">2026.6.21</span>
               Togo pic の画像が
               <a href="https://doi.org/10.1126/sciadv.aed1407" target="_blank" rel="noopener noreferrer">Qu et al. <em>Science Advances</em> 2026</a>
               に利用されました！
