@@ -58,9 +58,9 @@ export default Vue.extend({
   data() {
     return {
       slides: [
-        require('~/assets/img/heritage-trees/rounghsketch.png'),
-        require('~/assets/img/heritage-trees/rounghsketch3.png'),
-        require('~/assets/img/heritage-trees/rounghsketch4.png'),
+        '/ht-review/slide-1.png',
+        '/ht-review/slide-2.png',
+        '/ht-review/slide-3.png',
       ],
       currentSlide: 0,
       slideTimer: null,
@@ -101,24 +101,21 @@ export default Vue.extend({
   position: absolute
   inset: 0
   display: flex
-  align-items: center
+  align-items: stretch
   z-index: 1
 
   > .why_image_panel
     flex: 0 0 50%
-    height: 100%
     display: flex
     flex-direction: column
     align-items: center
-    justify-content: center
-    padding: 80px 20px 80px 60px
+    padding: 80px 20px 160px 60px
     box-sizing: border-box
     animation: ht2-fadein 1.1s cubic-bezier(0.22, 1, 0.36, 1) both
-    gap: 20px
+    gap: 16px
 
   > .why_description_panel
     flex: 0 0 50%
-    height: 100%
     overflow-y: auto
     padding: 80px 60px 160px 32px
     box-sizing: border-box
@@ -131,21 +128,21 @@ export default Vue.extend({
       background: rgba(26, 74, 46, 0.3)
       border-radius: 3px
     > .why_heading
-      font-size: 40px
+      font-size: 52px
       color: #1a4a2e
-      margin: 0 0 32px 0
-      line-height: 1.25
+      margin: 0 0 40px 0
+      line-height: 1.2
     > .why_body
-      font-size: 22px
+      font-size: 29px
       line-height: 2.0
       color: #1a4a2e
       > p
-        margin: 0 0 28px 0
+        margin: 0 0 36px 0
         &:last-child
-          margin-bottom: 40px
+          margin-bottom: 48px
     > .back_link
       display: inline-block
-      font-size: 18px
+      font-size: 23px
       color: rgba(26, 74, 46, 0.65)
       text-decoration: none
       border-bottom: 1px solid rgba(26, 74, 46, 0.3)
@@ -159,7 +156,8 @@ export default Vue.extend({
 .why_slideshow
   position: relative
   width: 100%
-  height: 60vh
+  flex: 1
+  min-height: 0
 
   > .why_slide
     position: absolute
@@ -167,6 +165,7 @@ export default Vue.extend({
     width: 100%
     height: 100%
     object-fit: contain
+    object-position: center top
     opacity: 0
     transition: opacity 2s ease
     filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.18))
@@ -207,5 +206,6 @@ export default Vue.extend({
       padding: 20px 24px 200px
 
   .why_slideshow
-    height: 35vh
+    flex: none
+    height: 40vh
 </style>

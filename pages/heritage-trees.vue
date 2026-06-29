@@ -18,9 +18,11 @@
             Heritage Treesについて詳しくは<a href="https://www.kyotobotanicalgardens.jp" target="_blank" rel="noopener noreferrer">京都府立植物園公式サイト</a>をご覧ください。
           </p>
           <p class="home_hint tsukushi">▶ 右下の季節ブロックをクリックして各季節のイラストへ</p>
+          <!-- Why リンク: デザイナー確認後に公開
           <nuxt-link :to="localePath('/heritage-trees-why.html')" class="why_link tsukushi">
-            Why Heritage Trees × TogoTV? →
+            Why Heritage Trees × TogoTV?
           </nuxt-link>
+          -->
         </div>
       </div>
 
