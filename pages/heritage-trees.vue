@@ -18,6 +18,9 @@
             Heritage Treesについて詳しくは<a href="https://www.kyotobotanicalgardens.jp" target="_blank" rel="noopener noreferrer">京都府立植物園公式サイト</a>をご覧ください。
           </p>
           <p class="home_hint tsukushi">▶ 右下の季節ブロックをクリックして各季節のイラストへ</p>
+          <nuxt-link :to="localePath('/heritage-trees-why.html')" class="why_link tsukushi">
+            Why Heritage Trees × TogoTV? →
+          </nuxt-link>
         </div>
       </div>
 
@@ -460,7 +463,19 @@ export default Vue.extend({
     > .home_hint
       font-size: 20px
       color: rgba(26, 74, 46, 0.6)
-      margin: 0
+      margin: 0 0 20px 0
+    > .why_link
+      display: inline-block
+      font-size: 18px
+      font-weight: bold
+      color: #1a4a2e
+      text-decoration: none
+      border-bottom: 2px solid rgba(26, 74, 46, 0.35)
+      padding-bottom: 2px
+      transition: color 0.2s ease, border-color 0.2s ease
+      &:hover
+        color: #2d7a4a
+        border-bottom-color: #2d7a4a
 
 // ─── 季節ビュー ───────────────────────────────────────
 .season_view
