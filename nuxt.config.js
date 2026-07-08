@@ -50,6 +50,9 @@ export default {
     { src: "~/plugins/helper.js", ssr: false },
     { src: "~/plugins/navigationMixin.js", ssr: true },
   ],
+  serverMiddleware: [
+    '~/server-middleware/access-counter.js',
+  ],
   /*
    ** Nuxt.js dev-modules
    */

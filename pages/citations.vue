@@ -3,9 +3,42 @@
     <div class="citations_section">
       <div class="citations_header">
         <h2 class="page_title tsukushi bold">{{ $t("citing_papers") }}</h2>
-        <p class="citations_count mont bold" v-if="filtered_list.length > 0">
-          {{ filtered_list.length }} {{ $t("results") }}
-        </p>
+        <!-- アクセスカウンター実装後に復活予定 → 一時コメントアウト
+        <div class="gauge_container" v-if="!is_loading && citation_list.length > 0">
+          <svg class="gauge_svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- background track -->
+            <path :d="trackPath" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
+            <!-- active arc (heat color) -->
+            <path
+              v-if="yearCount > 0"
+              :d="activePath"
+              fill="none"
+              :stroke="heatColor"
+              stroke-width="14"
+              stroke-linecap="round"
+              :class="['gauge_arc', { hot: yearCount >= 15 }]"
+            />
+            <!-- tick marks at 0, 5, 10, 15, 20 -->
+            <line
+              v-for="(tick, i) in gaugeTicks"
+              :key="i"
+              :x1="tick.x1" :y1="tick.y1"
+              :x2="tick.x2" :y2="tick.y2"
+              stroke="#d1d5db" stroke-width="2" stroke-linecap="round"
+            />
+            <!-- center: total count -->
+            <text x="110" y="88" text-anchor="middle" class="gauge_n mont">{{ citation_list.length }}</text>
+            <text x="110" y="107" text-anchor="middle" class="gauge_label">total papers</text>
+            <line x1="83" y1="115" x2="137" y2="115" stroke="#e9ecef" stroke-width="1"/>
+            <!-- center: this year's count (heat color) -->
+            <text x="110" y="136" text-anchor="middle" class="gauge_year_n mont" :style="{ fill: heatColor }">{{ yearCount }}</text>
+            <text x="110" y="153" text-anchor="middle" class="gauge_label">in {{ currentYear }}</text>
+            <!-- arc range labels -->
+            <text x="64" y="182" text-anchor="middle" class="gauge_end_label">0</text>
+            <text x="156" y="182" text-anchor="middle" class="gauge_end_label">20</text>
+          </svg>
+        </div>
+        アクセスカウンター実装後に復活予定 -->
       </div>
       <div class="citations_controls">
         <div class="search_box">
@@ -24,6 +57,9 @@
           </select>
         </div>
       </div>
+      <p class="search_results mont" v-if="search_query && !is_loading">
+        {{ filtered_list.length }} {{ $t("results") }}
+      </p>
       <div class="loading" v-if="is_loading">
         <div class="loader"></div>
       </div>
@@ -116,6 +152,45 @@ export default Vue.extend({
       }
 
       return sorted
+    },
+    currentYear() {
+      return new Date().getFullYear()
+    },
+    yearCount() {
+      const year = String(new Date().getFullYear())
+      return this.citation_list.filter(p => {
+        const y = p.publishedDate ? String(p.publishedDate).slice(0, 4) : String(p.year || '')
+        return y === year
+      }).length
+    },
+    heatColor() {
+      const pct = Math.min(this.yearCount / 20, 1)
+      const stops = ['#60a5fa', '#34d399', '#fbbf24', '#f97316', '#ef4444']
+      const idx = pct * (stops.length - 1)
+      const lo = Math.floor(idx)
+      const hi = Math.min(lo + 1, stops.length - 1)
+      return this.lerpHex(stops[lo], stops[hi], idx - lo)
+    },
+    trackPath() {
+      return this.describeArc(110, 100, 75, 210, 150)
+    },
+    activePath() {
+      if (this.yearCount <= 0) return ''
+      const endDeg = 210 + (Math.min(this.yearCount, 20) / 20) * 300
+      return this.describeArc(110, 100, 75, 210, endDeg)
+    },
+    gaugeTicks() {
+      const cx = 110, cy = 100, outerR = 75, innerR = 63
+      const toRad = d => (d - 90) * Math.PI / 180
+      return [0, 5, 10, 15, 20].map(val => {
+        const rad = toRad(210 + (val / 20) * 300)
+        return {
+          x1: (cx + innerR * Math.cos(rad)).toFixed(2),
+          y1: (cy + innerR * Math.sin(rad)).toFixed(2),
+          x2: (cx + outerR * Math.cos(rad)).toFixed(2),
+          y2: (cy + outerR * Math.sin(rad)).toFixed(2),
+        }
+      })
     },
   },
   mounted() {
@@ -331,6 +406,23 @@ export default Vue.extend({
         this.is_loading = false
       }
     },
+    describeArc(cx, cy, r, startDeg, endDeg) {
+      const toRad = d => (d - 90) * Math.PI / 180
+      const sx = cx + r * Math.cos(toRad(startDeg))
+      const sy = cy + r * Math.sin(toRad(startDeg))
+      const ex = cx + r * Math.cos(toRad(endDeg))
+      const ey = cy + r * Math.sin(toRad(endDeg))
+      let sweep = endDeg - startDeg
+      if (sweep <= 0) sweep += 360
+      const large = sweep > 180 ? 1 : 0
+      return `M ${sx.toFixed(2)} ${sy.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`
+    },
+    lerpHex(c1, c2, t) {
+      const p = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]
+      const [r1, g1, b1] = p(c1)
+      const [r2, g2, b2] = p(c2)
+      return `rgb(${Math.round(r1 + (r2 - r1) * t)},${Math.round(g1 + (g2 - g1) * t)},${Math.round(b1 + (b2 - b1) * t)})`
+    },
   },
 })
 </script>
@@ -346,9 +438,34 @@ export default Vue.extend({
     justify-content: space-between
     .page_title
       @include page_title('doi')
-    .citations_count
-      font-size: 14px
-      color: $MAIN_COLOR
+    .gauge_container
+      flex-shrink: 0
+      .gauge_svg
+        width: 200px
+        height: 182px
+        display: block
+      .gauge_n
+        font-size: 44px
+        font-weight: 800
+        fill: #1e293b
+      .gauge_year_n
+        font-size: 30px
+        font-weight: 700
+      .gauge_label
+        font-size: 11px
+        fill: #94a3b8
+        letter-spacing: 0.04em
+      .gauge_end_label
+        font-size: 10px
+        fill: #cbd5e1
+      .gauge_arc
+        transition: filter 0.3s ease
+        &.hot
+          animation: gauge-hot 1.8s ease-in-out infinite
+  .search_results
+    font-size: 13px
+    color: $MAIN_COLOR
+    margin: -10px 0 8px
   .citations_controls
     display: flex
     align-items: center
@@ -449,9 +566,20 @@ export default Vue.extend({
     color: #999
     font-size: 14px
 
+@keyframes gauge-hot
+  0%, 100%
+    filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.6))
+  50%
+    filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.9))
+
 @media screen and (max-width: 896px)
   .citations_wrapper
     padding: 0 $VIEW_PADDING_SP
+    .citations_header
+      flex-direction: column
+      align-items: flex-start
+      .gauge_container
+        display: none
     .citations_controls
       flex-direction: column
       .search_box

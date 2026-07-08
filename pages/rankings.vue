@@ -4,6 +4,7 @@
     <div class="video_section">
       <div class="video_section_header">
         <h2 class="page_title tsukushi bold">{{ $t('ranking') }}</h2>
+        <TextSearch props="sub_page" />
         <ul class="display_icon_wrapper">
           <li>
             <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
@@ -37,6 +38,7 @@ import Vue from 'vue'
 import VideoListCard from '~/components/VideoListCard.vue'
 import VideoList from '~/components/VideoList.vue'
 import AsideParts from '~/components/AsideParts.vue'
+import TextSearch from '~/components/TextSearch.vue'
 import axios from 'axios'
 
 export default Vue.extend({
@@ -97,7 +99,8 @@ export default Vue.extend({
   components: {
     VideoListCard,
     AsideParts,
-    VideoList
+    VideoList,
+    TextSearch
   },
   methods: {
     toggleDisplay() {

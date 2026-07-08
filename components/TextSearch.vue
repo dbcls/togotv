@@ -82,6 +82,15 @@ div.input_wrapper
     > button
       top: 49%
       right: 15px
+  &.sub_page
+    margin: 14px 0 4px 14px
+    width: 320px
+    > input
+      width: 320px
+      height: 36px
+    > button
+      top: 49%
+      right: 14px
 
 @media screen and (max-width: 896px)
   div.input_wrapper

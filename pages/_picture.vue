@@ -335,7 +335,7 @@ export default Vue.extend({
     display: flex
     align-items: stretch   // 両カラムを同じ高さに揃える
     > .img_wrapper
-      width: 70%
+      width: 100%
       min-height: 400px
       background-color: #EDFCFC
       display: flex
@@ -369,9 +369,9 @@ export default Vue.extend({
             background-color: $MAIN_COLOR
             color: #fff
       > img
-        max-width: 500px   // 1辺最大500px
-        max-height: 500px
-        width: 100%
+        height: 600px   // 縦サイズを統一
+        width: auto
+        max-width: 100%
         object-fit: contain
     > .pic_detail
       width: 30%

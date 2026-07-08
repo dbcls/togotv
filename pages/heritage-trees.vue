@@ -146,8 +146,7 @@ export default Vue.extend({
     },
     mosaicItems() {
       const imgs = this.currentSeason.images || [];
-      if (!imgs.length) return [];
-      return CARD_SLOTS.map((_, i) => imgs[i % imgs.length]);
+      return imgs.slice(0, CARD_SLOTS.length);
     },
     particleCount() {
       return { winter: 55, spring: 22, autumn: 14 }[this.activeSeason] || 0;

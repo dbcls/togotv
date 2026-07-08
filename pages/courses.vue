@@ -1,6 +1,7 @@
 <template>
   <div class="courses_wrapper">
     <h2 class="page_title tsukushi bold">{{ $t("courses") }}</h2>
+    <TextSearch props="sub_page" />
     <section class="video_section">
       <ul>
         <li v-for="course in courses" :key="course.id">
@@ -34,6 +35,7 @@
 <script>
 import Vue from "vue";
 import VideoListHorizontalScroll from "~/components/VideoListHorizontalScroll.vue";
+import TextSearch from "~/components/TextSearch.vue";
 import axios from "axios";
 
 export default Vue.extend({
@@ -71,7 +73,8 @@ export default Vue.extend({
     };
   },
   components: {
-    VideoListHorizontalScroll
+    VideoListHorizontalScroll,
+    TextSearch
   },
   methods: {
     converSecToHour(time) {

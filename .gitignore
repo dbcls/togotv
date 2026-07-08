@@ -5,6 +5,9 @@
 
 # Logs
 logsyarn-error.log*
+
+# Access counter (dev-only, local data)
+access-log.json
 lerna-debug.log*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)

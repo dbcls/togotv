@@ -55,6 +55,34 @@
         </div>
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
+      <!-- アクセスカウンター タコメーター (dev server only) 右上絶対配置 -->
+      <div class="access_gauge_container" v-if="access_stats !== null">
+        <svg class="access_gauge_svg" viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+          <path :d="trackAccessPath" fill="none" stroke="#e5e7eb" stroke-width="11" stroke-linecap="round"/>
+          <path
+            v-if="access_stats.today > 0"
+            :d="activeAccessPath"
+            fill="none"
+            :stroke="heatColorAccess"
+            stroke-width="11"
+            stroke-linecap="round"
+            :class="['access_gauge_arc', { hot: access_stats.average > 0 && access_stats.today >= access_stats.average }]"
+          />
+          <line v-for="(tick, i) in accessTicks" :key="i" :x1="tick.x1" :y1="tick.y1" :x2="tick.x2" :y2="tick.y2" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"/>
+          <text x="90" y="72" text-anchor="middle" class="ag_today mont">{{ access_stats.today }}</text>
+          <text x="90" y="87" text-anchor="middle" class="ag_label">today</text>
+          <line x1="66" y1="95" x2="114" y2="95" stroke="#e9ecef" stroke-width="1"/>
+          <text x="90" y="112" text-anchor="middle" class="ag_avg mont" :style="{ fill: heatColorAccess }">
+            {{ access_stats.average > 0 ? access_stats.average.toFixed(1) : '—' }}
+          </text>
+          <text x="90" y="125" text-anchor="middle" class="ag_label">avg / day</text>
+          <text x="52" y="147" text-anchor="middle" class="ag_end_label">0</text>
+          <text x="128" y="147" text-anchor="middle" class="ag_end_label">avg</text>
+        </svg>
+        <p class="access_gauge_caption mont" v-if="access_stats.daysTracked > 0">
+          {{ access_stats.total }} visits · {{ access_stats.daysTracked }}日分
+        </p>
+      </div>
     </div>
     <section class="course_section" v-if="course_list">
       <h2 class="sections_title tsukushi bold">
@@ -173,6 +201,7 @@ export default Vue.extend({
       realtime_video_list: [],
       illustration_list: [],
       citation_list: [],
+      access_stats: null,
     }
   },
   head() {
@@ -187,8 +216,46 @@ export default Vue.extend({
 
     }
   },
+  computed: {
+    heatColorAccess() {
+      if (!this.access_stats || this.access_stats.average <= 0) return '#60a5fa'
+      const pct = Math.min(this.access_stats.today / this.access_stats.average, 1)
+      const stops = ['#60a5fa', '#34d399', '#fbbf24', '#f97316', '#ef4444']
+      const idx = pct * (stops.length - 1)
+      const lo = Math.floor(idx)
+      const hi = Math.min(lo + 1, stops.length - 1)
+      return this.lerpHex(stops[lo], stops[hi], idx - lo)
+    },
+    trackAccessPath() {
+      return this.describeArc(90, 84, 60, 210, 150)
+    },
+    activeAccessPath() {
+      if (!this.access_stats || this.access_stats.today <= 0) return ''
+      const avg = this.access_stats.average > 0 ? this.access_stats.average : 50
+      const endDeg = 210 + Math.min(this.access_stats.today / avg, 1) * 300
+      return this.describeArc(90, 84, 60, 210, endDeg)
+    },
+    accessTicks() {
+      const cx = 90, cy = 84, outerR = 60, innerR = 51
+      const toRad = d => (d - 90) * Math.PI / 180
+      return [0, 25, 50, 75, 100].map(pct => {
+        const rad = toRad(210 + (pct / 100) * 300)
+        return {
+          x1: (cx + innerR * Math.cos(rad)).toFixed(2),
+          y1: (cy + innerR * Math.sin(rad)).toFixed(2),
+          x2: (cx + outerR * Math.cos(rad)).toFixed(2),
+          y2: (cy + outerR * Math.sin(rad)).toFixed(2),
+        }
+      })
+    },
+  },
   mounted() {
     this.fetchCitations()
+    if (process.client) {
+      axios.get('/api/access-stats')
+        .then(res => { this.access_stats = res.data })
+        .catch(() => { /* not available in production */ })
+    }
   },
   methods: {
     async fetchCitations() {
@@ -378,6 +445,23 @@ export default Vue.extend({
         console.log('citation fetch error', error)
       }
     },
+    describeArc(cx, cy, r, startDeg, endDeg) {
+      const toRad = d => (d - 90) * Math.PI / 180
+      const sx = cx + r * Math.cos(toRad(startDeg))
+      const sy = cy + r * Math.sin(toRad(startDeg))
+      const ex = cx + r * Math.cos(toRad(endDeg))
+      const ey = cy + r * Math.sin(toRad(endDeg))
+      let sweep = endDeg - startDeg
+      if (sweep <= 0) sweep += 360
+      const large = sweep > 180 ? 1 : 0
+      return `M ${sx.toFixed(2)} ${sy.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`
+    },
+    lerpHex(c1, c2, t) {
+      const p = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]
+      const [r1, g1, b1] = p(c1)
+      const [r2, g2, b2] = p(c2)
+      return `rgb(${Math.round(r1 + (r2 - r1) * t)},${Math.round(g1 + (g2 - g1) * t)},${Math.round(b1 + (b2 - b1) * t)})`
+    },
   },
   components: {
     CourseList,
@@ -391,6 +475,7 @@ export default Vue.extend({
 
 <style lang="sass" scoped>
 .main
+  position: relative
   display: flex
   align-items: center
   justify-content: center
@@ -497,6 +582,47 @@ export default Vue.extend({
             text-decoration: none
             &:hover
               text-decoration: underline
+  > .access_gauge_container
+    position: absolute
+    top: 16px
+    right: 16px
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    .access_gauge_svg
+      width: 165px
+      height: 147px
+      display: block
+    .ag_today
+      font-size: 34px
+      font-weight: 800
+      fill: #1e293b
+    .ag_avg
+      font-size: 22px
+      font-weight: 700
+    .ag_label
+      font-size: 10px
+      fill: #94a3b8
+      letter-spacing: 0.04em
+    .ag_end_label
+      font-size: 9px
+      fill: #cbd5e1
+    .access_gauge_arc
+      transition: filter 0.3s ease
+      &.hot
+        animation: access-hot 1.8s ease-in-out infinite
+    .access_gauge_caption
+      font-size: 11px
+      color: #94a3b8
+      margin: 3px 4px 0 0
+      text-align: right
+
+@keyframes access-hot
+  0%, 100%
+    filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.6))
+  50%
+    filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.9))
+
 section
   padding: 15px 0
   &:nth-of-type(2)
