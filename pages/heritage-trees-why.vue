@@ -6,14 +6,17 @@
 
       <!-- 左: クロスフェードスライドショー（Treeと同じ位置） -->
       <div class="why_image_panel">
-        <div class="why_slideshow">
-          <img
-            v-for="(src, i) in slides"
-            :key="i"
-            :src="src"
-            :class="['why_slide', { active: i === currentSlide }]"
-            alt="Heritage Trees × TogoTV 制作レビュー記録"
-          />
+        <div class="specimen_frame">
+          <div class="why_slideshow">
+            <img
+              v-for="(src, i) in slides"
+              :key="i"
+              :src="src"
+              :class="['why_slide', { active: i === currentSlide }]"
+              alt="Heritage Trees × TogoTV 制作レビュー記録"
+            />
+          </div>
+          <div class="specimen_label tsukushi">{{ captions[currentSlide] }}</div>
         </div>
         <div class="slide_dots">
           <span
@@ -31,7 +34,11 @@
         <div class="why_body tsukushi">
           <p>TogoTVでは、植物学に関するコンテンツをさらに充実させるため、京都府立植物園との連携により、科学的視座に基づいた植物イラストの制作を進めています。</p>
           <p>植物を題材とした科学イラストは、美しさだけでなく、形態や特徴を正確に捉えることが求められるため、専門的な確認が欠かせません。そこでTogoTVでは、植物の専門家によるレビューを受けられる連携先を探していました。</p>
-          <p>京都府立植物園のHeritage Treesには、日本の植物史において重要な樹木に加え、さまざまな研究と関わりのある樹木が含まれています。今回公開するイラストは、京都府立植物園の樹木医によるレビューを受けながら、イラストレーターとの綿密な議論を重ねて制作したものです。</p>
+          <p>京都府立植物園のHeritage Treesには、日本の植物史において重要な樹木に加え、さまざまな研究と関わりのある樹木が含まれています。京都府立植物園の皆様とTogoTVスタッフとの議論の結果、植物学のイラストとして最も相応しくかつ、体系的にまとめられるプロジェクトとして、今回のHeritage Treesコラボレーションが決定しました。</p>
+          <p>今回公開するイラストは、京都府立植物園の樹木医によるレビューを受けながら、イラストレーターとの綿密な議論を重ねて制作したものです。その一例として、左のスライドショーには京都府立植物園からご提供いただいた植物サンプルを撮影、実体顕微鏡による細部の確認、イラスト化、レビューの過程を記録した画像を掲載しています。</p>
+          <p>AIによる画像生成が注目される昨今ですが、科学イラストの制作においては、このように実物を用いた書き起こしや、顕微鏡などの専門的な機材を用いた綿密な確認と、専門家によるレビューを受けながら正確な情報を反映させることが重要です。</p>
+          <p>AIによるイラスト化は、いわゆる模式図やマッシュアップされた画像生成に優れる一方で、個体特徴表現に欠けるという問題があります。</p>
+          <p>TogoTVでは、今後も科学的な視点を大切にしながら、植物学に関するコンテンツの充実を図ってまいります。</p>
         </div>
         <nuxt-link :to="localePath('/heritage-trees.html')" class="back_link tsukushi">
           ← Heritage Trees トップへ
@@ -62,6 +69,11 @@ export default Vue.extend({
         '/ht-review/slide-2.png',
         '/ht-review/slide-3.png',
       ],
+      captions: [
+        'No. 1 ハナミズキ（春）の制作過程',
+        'No. 6 シナマンサク（春）の制作過程',
+        'No. 14 トキワマンサク（春）の制作過程',
+      ],
       currentSlide: 0,
       slideTimer: null,
     }
@@ -76,10 +88,10 @@ export default Vue.extend({
     }
   },
   mounted() {
-    // 6秒間隔でスライド切替（2秒クロスフェード込み）
+    // 10秒間隔でスライド切替（2秒クロスフェード込み）
     this.slideTimer = setInterval(() => {
       this.currentSlide = (this.currentSlide + 1) % this.slides.length
-    }, 6000)
+    }, 12000)
   },
   beforeDestroy() {
     if (this.slideTimer) clearInterval(this.slideTimer)
@@ -96,6 +108,75 @@ export default Vue.extend({
 </script>
 
 <style lang="sass">
+// ─── heritage-trees.vue と共通の土台スタイル ─────────────
+// ページ単位でCSSが分割されるため、ここにも複製が必要
+.ht2_wrapper
+  position: relative
+  height: 100vh
+  overflow: hidden
+
+  &::before
+    content: ''
+    position: fixed
+    inset: 0
+    background-image: url('~@/assets/img/test_wall.jpg')
+    background-size: cover
+    background-position: center
+    opacity: 0.1
+    z-index: 0
+    pointer-events: none
+
+.bottom_gradient
+  position: absolute
+  bottom: 0
+  left: 0
+  right: 0
+  height: 50%
+  z-index: 2
+  pointer-events: none
+  transition: background 0.6s ease
+  &.home
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55))
+
+.site_title
+  position: absolute
+  bottom: 39px
+  left: 60px
+  z-index: 3
+  cursor: pointer
+  transition: opacity 0.2s ease
+  animation: ht2-fadein 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both
+
+  &:hover
+    opacity: 0.8
+
+  &.is_home
+    > .main_title
+      text-shadow: 2px 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.15)
+
+  > .collab_label
+    font-size: 13px
+    color: rgba(255, 255, 255, 0.88)
+    margin: 0 0 8px 0
+    letter-spacing: 0.06em
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55)
+
+  > .main_title
+    font-size: 71px
+    line-height: 1.0
+    color: #fff
+    margin: 0
+    letter-spacing: -0.02em
+    text-shadow: 2px 4px 24px rgba(0, 0, 0, 0.55), 0 0 80px rgba(0, 0, 0, 0.25)
+
+@keyframes ht2-fadein
+  from
+    opacity: 0
+    transform: translateY(18px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
 // ─── Why ページ: 左右レイアウト ──────────────────────────
 .why_view
   position: absolute
@@ -109,7 +190,7 @@ export default Vue.extend({
     display: flex
     flex-direction: column
     align-items: center
-    padding: 80px 20px 160px 60px
+    padding: 80px 20px 165px 60px
     box-sizing: border-box
     animation: ht2-fadein 1.1s cubic-bezier(0.22, 1, 0.36, 1) both
     gap: 16px
@@ -133,11 +214,11 @@ export default Vue.extend({
       margin: 0 0 40px 0
       line-height: 1.2
     > .why_body
-      font-size: 29px
-      line-height: 2.0
+      font-size: 20px
+      line-height: 1.5
       color: #1a4a2e
       > p
-        margin: 0 0 36px 0
+        margin: 0 0 10px 0
         &:last-child
           margin-bottom: 48px
     > .back_link
@@ -152,12 +233,38 @@ export default Vue.extend({
         color: #1a4a2e
         border-bottom-color: #1a4a2e
 
+// ─── 図鑑ふうの標本枠 ────────────────────────────────────
+.specimen_frame
+  width: 100%
+  flex: 1
+  min-height: 0
+  display: flex
+  flex-direction: column
+  background: #f4f9fc
+  border: 1px solid #8aa9c4
+  padding: 12px
+  box-sizing: border-box
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12)
+
+  > .specimen_label
+    flex: 0 0 auto
+    margin-top: 10px
+    padding-top: 10px
+    border-top: 1px solid #a8c4d8
+    font-size: 18px
+    color: #1a3a4a
+    text-align: center
+    letter-spacing: 0.02em
+
 // ─── スライドショー ──────────────────────────────────────
 .why_slideshow
   position: relative
   width: 100%
   flex: 1
   min-height: 0
+  border: 1px solid #a8c4d8
+  background: #e8f0f5
+  overflow: hidden
 
   > .why_slide
     position: absolute
@@ -168,7 +275,6 @@ export default Vue.extend({
     object-position: center top
     opacity: 0
     transition: opacity 2s ease
-    filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.18))
     &.active
       opacity: 1
 

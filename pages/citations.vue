@@ -3,8 +3,8 @@
     <div class="citations_section">
       <div class="citations_header">
         <h2 class="page_title tsukushi bold">{{ $t("citing_papers") }}</h2>
-        <!-- アクセスカウンター実装後に復活予定 → 一時コメントアウト
-        <div class="gauge_container" v-if="!is_loading && citation_list.length > 0">
+        <!-- アクセスカウンター実装後に復活予定 → v-if="false" で一時無効化 -->
+        <div class="gauge_container" v-if="false && !is_loading && citation_list.length > 0">
           <svg class="gauge_svg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
             <!-- background track -->
             <path :d="trackPath" fill="none" stroke="#e5e7eb" stroke-width="14" stroke-linecap="round"/>
@@ -38,7 +38,6 @@
             <text x="156" y="182" text-anchor="middle" class="gauge_end_label">20</text>
           </svg>
         </div>
-        アクセスカウンター実装後に復活予定 -->
       </div>
       <div class="citations_controls">
         <div class="search_box">
