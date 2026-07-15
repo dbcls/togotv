@@ -29,25 +29,25 @@
           <h2 class="news_title">TogoTV ニュース</h2>
           <ul class="news_list">
             <li>
+              <span class="news_badge">New!</span>
               <span class="news_date">2026.7.14</span>
               <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトに春のイラスト２点掲載！</nuxt-link>
             </li>
             <li>
               <span class="news_date">2026.7.14</span>
-              <span class="news_badge">New!</span>
-              Togo pic の画像が
+              Togo picture のイラストが
               <a href="https://doi.org/10.1038/s41417-026-01055-2" target="_blank" rel="noopener noreferrer">Feng et al. <em>Cancer Gene Therapy</em> 2026</a>
               に利用されました！
             </li>
             <li>
               <span class="news_date">2026.6.25</span>
-              Togo pic の画像が
+              Togo picture のイラストが
               <a href="https://doi.org/10.21203/rs.3.rs-9936782/v1" target="_blank" rel="noopener noreferrer">Ikegami et al. <em>Research Square</em>（プレプリント）</a>
-              に利用されています
+              に利用されました！
             </li>
             <li>
               <span class="news_date">2026.6.24</span>
-              Togo pic の画像が
+              Togo picture のイラストが
               <a href="https://doi.org/10.1038/s41556-026-01982-0" target="_blank" rel="noopener noreferrer">Xie et al. <em>Nature Cell Biology</em> 2026</a>
               に利用されました！
             </li>
@@ -548,7 +548,7 @@ export default Vue.extend({
         line-height: 1.6
     > .news_section
       margin-top: 20px
-      width: 485px
+      width: 447px
       padding: 12px 16px
       border: 2px solid #1976d2
       border-radius: 4px
@@ -564,15 +564,12 @@ export default Vue.extend({
         > li
           font-size: 14px
           line-height: 1.6
-          display: flex
-          flex-wrap: wrap
-          align-items: baseline
-          gap: 4px
           & + li
             margin-top: 5px
           > .news_date
             color: #555
             white-space: nowrap
+            margin-right: 4px
           > .news_badge
             background: #e53935
             color: #fff
@@ -581,6 +578,7 @@ export default Vue.extend({
             padding: 1px 5px
             border-radius: 3px
             white-space: nowrap
+            margin-right: 4px
           > a
             color: #1976d2
             text-decoration: none
