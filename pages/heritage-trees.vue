@@ -856,9 +856,17 @@ export default Vue.extend({
       max-height: 40vh
     > .home_description
       flex: 0 0 auto
-      padding: 20px 24px 200px
+      padding: 20px 24px 240px
 
-  .site_title
+  // ホームビューはテキストがスクロールするため、固定オーバーレイの
+  // グラデーション/タイトルは表示せず（本文と重なって読めなくなるため）
+  .bottom_gradient.home
+    display: none
+
+  .site_title.is_home
+    display: none
+
+  .site_title:not(.is_home)
     bottom: 200px
     left: 24px
     > .main_title
