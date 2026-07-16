@@ -65,6 +65,11 @@ html
   color: $BLACK
   box-sizing: border-box
   padding-top: 78.88px
+  overflow-x: hidden
+
+body
+  overflow-x: hidden
+  max-width: 100vw
 
 ul,ol
   list-style: none

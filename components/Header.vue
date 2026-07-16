@@ -279,6 +279,7 @@ header
   background-color: #fff
   position: fixed
   top: 24px
+  left: 0
   z-index: $LAYER_HEADER
   > .sp_toggle_menu
     display: none
@@ -477,6 +478,7 @@ header
       z-index: $LAYER_UNDER_HEADER
       transition: .3s
       width: 100vw
+      box-sizing: border-box
       > .right_area
         opacity: 1
         position: absolute

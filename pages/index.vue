@@ -30,6 +30,10 @@
           <ul class="news_list">
             <li>
               <span class="news_badge">New!</span>
+              <span class="news_date">2026.7.17</span>
+              <nuxt-link :to="localePath('/pics.html')">形態異常プロジェクト（IMA）の新イラスト３点を公開！</nuxt-link>
+            </li>
+            <li>
               <span class="news_date">2026.7.14</span>
               <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトに春のイラスト２点掲載！</nuxt-link>
             </li>
@@ -59,8 +63,8 @@
         </div>
       </div>
       <img class="main_visual_2" src="~/assets/img/main_visual_2.svg" alt="">
-      <!-- アクセスカウンター タコメーター (dev server only) 右上絶対配置 -->
-      <div class="access_gauge_container" v-if="access_stats !== null">
+      <!-- アクセスカウンター タコメーター: 導入見送りのため無効化(デザインはテンプレとして残す) -->
+      <div class="access_gauge_container" v-if="false && access_stats !== null">
         <svg class="access_gauge_svg" viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
           <path :d="trackAccessPath" fill="none" stroke="#e5e7eb" stroke-width="11" stroke-linecap="round"/>
           <path
