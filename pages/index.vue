@@ -30,6 +30,10 @@
           <ul class="news_list">
             <li>
               <span class="news_badge">New!</span>
+              <span class="news_date">2026.8.21</span>
+              <nuxt-link :to="localePath('/heritage-trees.html')">TogoTVのピクチャーギャラリーに Heritage Trees 春編の追加イラスト３点が公開されました！</nuxt-link>
+            </li>
+            <li>
               <span class="news_date">2026.7.17</span>
               <nuxt-link :to="localePath('/pics.html')">形態異常プロジェクト（IMA）の新イラスト３点を公開！</nuxt-link>
             </li>
