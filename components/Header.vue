@@ -329,6 +329,7 @@ header
             &.has_child_nav
               position: relative
               z-index: $LAYER_1
+              cursor: pointer
               > span.arrow
                 width: 13px
                 height: 13px

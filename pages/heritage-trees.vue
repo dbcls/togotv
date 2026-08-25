@@ -111,12 +111,17 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+// 8枠まで配置(現状の最大は冬6枚)。季節の画像がこれを超えたら追加すること。
+// 多少の重なりは許容し、図鑑の切り抜きを散らしたような見た目を優先する。
 const CARD_SLOTS = [
   { top: '7%',  left: '5%',  width: '27vw' },
   { top: '3%',  left: '37%', width: '17vw' },
   { top: '16%', left: '59%', width: '23vw' },
   { top: '44%', left: '22%', width: '14vw' },
   { top: '40%', left: '42%', width: '20vw' },
+  { top: '5%',  left: '80%', width: '16vw' },
+  { top: '58%', left: '63%', width: '18vw' },
+  { top: '62%', left: '4%',  width: '15vw' },
 ];
 
 export default Vue.extend({
@@ -510,6 +515,12 @@ export default Vue.extend({
       transform: rotate(1.2deg)
     &.card-pos-4
       transform: rotate(-0.5deg)
+    &.card-pos-5
+      transform: rotate(1.6deg)
+    &.card-pos-6
+      transform: rotate(-1.1deg)
+    &.card-pos-7
+      transform: rotate(0.9deg)
 
     // 標本番号（右上）
     > .specimen_no
