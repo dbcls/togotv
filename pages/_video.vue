@@ -1137,6 +1137,15 @@ export default Vue.extend({
           flex-wrap: wrap
           > .meta_data
             line-height: 24px
+            > p
+              max-width: 100%
+              align-items: flex-start
+              &:before
+                margin-top: 2px
+                flex-shrink: 0
+              > span
+                white-space: normal
+                word-break: break-word
           > .save
             margin: 10px 0 12px
             > .window

@@ -661,7 +661,7 @@ section
   .main
     flex-direction: column
     text-align: center
-    width: 100vw
+    width: 100%
     overflow: hidden
     > .main_visual_1,
     > .main_visual_2

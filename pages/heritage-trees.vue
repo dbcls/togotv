@@ -1,4 +1,5 @@
 <template>
+<div class="ht2_page">
   <div class="ht2_wrapper">
 
     <!-- ホームビュー（メイン画像＋解説） -->
@@ -85,11 +86,11 @@
     </div>
 
     <!-- テトリスブロック季節セレクター（右下） -->
-    <div class="tetris_selector">
+    <div class="blocks_selector">
       <div
         v-for="(season, i) in seasons"
         :key="season.id"
-        class="tetris_block"
+        class="blocks_block"
         :class="[season.id, `block-pos-${i}`, { active: activeView === 'season' && activeSeason === season.id }]"
         @click="goSeason(season.id)"
       >
@@ -105,6 +106,20 @@
     </transition>
 
   </div>
+
+  <!-- 紹介動画 -->
+  <div class="intro_video_section">
+    <div class="intro_video_wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/nvHTy0tUxL0"
+        title="Heritage Trees Project"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -382,6 +397,29 @@ export default Vue.extend({
   to
     transform: rotate(360deg)
 
+// ─── 紹介動画 ─────────────────────────────────────────
+.intro_video_section
+  display: flex
+  justify-content: center
+  padding: 60px 24px
+  background: #fafaf4
+
+  > .intro_video_wrapper
+    position: relative
+    width: 100%
+    max-width: 900px
+    aspect-ratio: 16 / 9
+    border-radius: 8px
+    overflow: hidden
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18)
+
+    > iframe
+      position: absolute
+      inset: 0
+      width: 100%
+      height: 100%
+      border: 0
+
 // ─── ラッパー ─────────────────────────────────────────
 .ht2_wrapper
   position: relative
@@ -446,16 +484,16 @@ export default Vue.extend({
     box-sizing: border-box
     animation: ht2-fadein 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both
     > .home_heading
-      font-size: 52px
+      font-size: clamp(28px, 8vw, 52px)
       color: #1a4a2e
       margin: 0 0 28px 0
     > .home_body
-      font-size: 28px
+      font-size: clamp(15px, 4.2vw, 28px)
       line-height: 1.8
       color: #1a4a2e
       margin: 0 0 24px 0
     > .home_link
-      font-size: 24px
+      font-size: clamp(13px, 3.6vw, 24px)
       color: #1a4a2e
       margin: 0 0 32px 0
       > a
@@ -465,7 +503,7 @@ export default Vue.extend({
         &:hover
           color: #2d7a4a
     > .home_hint
-      font-size: 20px
+      font-size: clamp(12px, 3vw, 20px)
       color: rgba(26, 74, 46, 0.6)
       margin: 0 0 20px 0
     > .why_link
@@ -678,7 +716,7 @@ export default Vue.extend({
     text-shadow: 2px 4px 24px rgba(0, 0, 0, 0.55), 0 0 80px rgba(0, 0, 0, 0.25)
 
 // ─── テトリスブロック（右下） ─────────────────────────
-.tetris_selector
+.blocks_selector
   position: absolute
   bottom: 44px
   right: 56px
@@ -689,7 +727,7 @@ export default Vue.extend({
   grid-template-rows: repeat(3, 88px)
   gap: 5px
 
-  .tetris_block
+  .blocks_block
     display: flex
     align-items: center
     justify-content: center
@@ -858,6 +896,9 @@ export default Vue.extend({
     animation: ht2-spin 0.75s linear infinite
 
 @media screen and (max-width: 1024px)
+  .intro_video_section
+    padding: 32px 16px
+
   .home_view
     flex-direction: column
     overflow-y: auto
@@ -867,7 +908,7 @@ export default Vue.extend({
       max-height: 40vh
     > .home_description
       flex: 0 0 auto
-      padding: 20px 24px 240px
+      padding: 20px 176px 240px 24px
 
   // ホームビューはテキストがスクロールするため、固定オーバーレイの
   // グラデーション/タイトルは表示せず（本文と重なって読めなくなるため）
@@ -883,12 +924,12 @@ export default Vue.extend({
     > .main_title
       font-size: 44px
 
-  .tetris_selector
+  .blocks_selector
     right: 24px
     bottom: 24px
     grid-template-columns: repeat(2, 64px)
     grid-template-rows: repeat(3, 64px)
     gap: 4px
-    .tetris_block > .block_kanji
+    .blocks_block > .block_kanji
       font-size: 28px
 </style>
