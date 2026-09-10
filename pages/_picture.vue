@@ -12,22 +12,22 @@
             :class="['toggle_btn', 'tsukushi', { active: currentImageType === 'main' }]"
             @click="currentImageType = 'main'"
           >
-            画像のみ
+            {{ $t('image_only') }}
           </button>
           <button
             :class="['toggle_btn', 'tsukushi', { active: currentImageType === 'detail' }]"
             @click="currentImageType = 'detail'"
           >
-            説明付き
+            {{ $t('with_description') }}
           </button>
         </div>
-        <img :src="currentImageUrl" :alt="picture.name">
+        <img :src="currentImageUrl" :alt="$i18n.locale === 'en' && picture.name_en ? picture.name_en : picture.name">
       </div>
       <div class="pic_detail" :style="{ backgroundColor: seasonColor }">
         <div class="triangle_decoration" :style="{ backgroundColor: seasonColor }"></div>
         <p v-if="$i18n.locale === 'ja'" class="name tsukushi bold">{{ picture.name }}</p>
-        <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']"><span class="field_label">英名：</span>{{ picture.name_en }}</p>
-        <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']"><span class="field_label">学名：</span><em>{{ picture.scientific_name }}</em></p>
+        <p :class="['name_en', 'mont', $i18n.locale === 'en' ? 'name' : '']"><span v-if="$i18n.locale === 'ja'" class="field_label">英名：</span>{{ picture.name_en }}</p>
+        <p :class="['scientific_name', 'mont', $i18n.locale === 'en' ? 'name' : '']"><span class="field_label">{{ $t('scientific_name_label') }}</span><em>{{ picture.scientific_name }}</em></p>
         <p class="author mont" v-html="`Designed by&nbsp;${picture.author}`"></p>
         <p class="editor mont" v-html="`Edited by&nbsp;${picture.editor}`"></p>
         <a :href="`http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=${picture.tax_id}`" target="_blank" class="taxonomy mont">{{ `Taxonomy ID: ${picture.tax_id}` }}</a>
@@ -44,11 +44,11 @@
           <a @click="setDonwnloadLink(picture)" v-if="picture.monotone_png !== undefined && picture.monotone_png !== '-'" class="mont bold" download>monotone png</a>
           <a @click="setDonwnloadLink(picture)" v-if="picture.monotone_svg !== undefined && picture.monotone_svg !== '-'" class="mont bold" download>monotone svg</a>
         </div>
-        <p v-if="picture.Description_small" class="description mont">{{ picture.Description_small }}</p>
+        <p v-if="descriptionSmall" class="description mont">{{ descriptionSmall }}</p>
       </div>
     </div>
-    <div v-if="picture.Description_large" class="description_large_wrapper">
-      <div class="description_large_content" v-html="picture.Description_large"></div>
+    <div v-if="descriptionLarge" class="description_large_wrapper">
+      <div class="description_large_content" v-html="descriptionLarge"></div>
     </div>
     <div :class="['related_images_wrapper', { is_heritage: isHeritageTrees || isFromHT }]">
       <div class="related_title_row">
@@ -58,7 +58,7 @@
         <li v-for="data in paginatedTagData" :key="data.TogoTV_Image_ID">
           <div class="related_img_wrap">
             <nuxt-link :to="localePath(`/${data.id.split('/').pop()}.html`)">
-              <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="data.name">
+              <img :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${data.png}`" :alt="$i18n.locale === 'en' && data.name_en ? data.name_en : data.name">
             </nuxt-link>
             <div v-if="data._matchedTags && data._matchedTags.length" class="related_tags">
               <span
@@ -116,13 +116,29 @@ export default Vue.extend({
         innerHTML: JSON.stringify(this.jsonld, null, 2)
       }],
       meta: [
-        { hid: 'og:title', property: 'og:title', content: this.picture.name},
+        { hid: 'og:title', property: 'og:title', content: this.$i18n && this.$i18n.locale === 'en' ? this.picture.name_en : this.picture.name},
         { hid: 'og:url', property: 'og:url', content: process.client ? location.href : '' },
         { hid: 'og:image', property: 'og:image', content: `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${this.picture.png}` },
       ]
     }
   },
   computed: {
+    // 英語ページでは Description_small_en / Description_large_en を使う。
+    // スプレッドシート側に英訳が無い（またはESに未反映の）場合は日本語にフォールバックする。
+    descriptionSmall() {
+      const en = this.picture.Description_small_en
+      if (this.$i18n && this.$i18n.locale === 'en' && en && String(en).trim() !== '' && en !== '-') {
+        return en
+      }
+      return this.picture.Description_small
+    },
+    descriptionLarge() {
+      const en = this.picture.Description_large_en
+      if (this.$i18n && this.$i18n.locale === 'en' && en && String(en).trim() !== '' && en !== '-') {
+        return en
+      }
+      return this.picture.Description_large
+    },
     jsonld() {
       return  {
         "@context": "http://schema.org",
@@ -162,7 +178,7 @@ export default Vue.extend({
       return tags.includes('KBG') || tags.some(t => t.includes('Heritage'));
     },
     relatedSectionTitle() {
-      return (this.isHeritageTrees || this.isFromHT) ? '四季のイラスト' : this.$t('related_pictures');
+      return (this.isHeritageTrees || this.isFromHT) ? this.$t('seasonal_illustrations') : this.$t('related_pictures');
     },
     heritageTreeSeason() {
       // Heritage Treesの画像かどうかを判定し、季節を返す

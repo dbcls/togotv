@@ -121,7 +121,7 @@
               >
                 <li @click="$event.stopPropagation()" class="link img">
                   <nuxt-link :to="localePath('/pics.html')">
-                    全ての画像
+                    {{ $t('all_images') }}
                   </nuxt-link>
                 </li>
                 <li @click="$event.stopPropagation()" class="link img">

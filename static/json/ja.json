@@ -141,5 +141,14 @@
   "edit_playlist": "プレイリストの編集",
   "outcome_report_text": "TogoTVの活用についての報告フォームです。TogoTVの成果は、他の事業よりも可視化され難いため利用者のみなさまからの積極的な情報共有に支えられております。大変お手間をおかけいたしますが、ご活用の際はぜひご報告いただけますと、事業継続のためのアピールにつながります。",
   "back_to_search_results": "検索結果に戻る",
-  "citing_papers": "引用論文"
+  "citing_papers": "引用論文",
+  "image_only": "画像のみ",
+  "with_description": "説明付き",
+  "scientific_name_label": "学名：",
+  "seasonal_illustrations": "四季のイラスト",
+  "all_images": "全ての画像",
+  "prev_page": "前へ",
+  "next_page": "次へ",
+  "list_view": "リスト表示",
+  "card_view": "カード表示"
 }

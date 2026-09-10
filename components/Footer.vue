@@ -42,7 +42,15 @@
             </ul>
           </li>
           <li>
-
+            <ul class="lang_switch">
+              <li>
+                <a :class="{ active: $i18n.locale === 'ja' }" @click="switchLocalePath('ja')">日本語</a>
+              </li>
+              <li><span>|</span></li>
+              <li>
+                <a :class="{ active: $i18n.locale === 'en' }" @click="switchLocalePath('en')">English</a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>

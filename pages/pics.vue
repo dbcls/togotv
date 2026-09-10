@@ -175,12 +175,12 @@
                 v-if="$store.state.display === 'card'"
                 @click="toggleDisplay"
                 src="~/assets/img/icon/icon_list_off.svg"
-                alt="リスト表示"
+                v-bind:alt="$t('list_view')"
               />
               <img
                 v-if="$store.state.display === 'list'"
                 src="~/assets/img/icon/icon_list.svg"
-                alt="リスト表示"
+                v-bind:alt="$t('list_view')"
               />
             </li>
             <li>
@@ -188,12 +188,12 @@
                 v-if="$store.state.display === 'list'"
                 @click="toggleDisplay"
                 src="~/assets/img/icon/icon_card_off.svg"
-                alt="カード表示"
+                v-bind:alt="$t('card_view')"
               />
               <img
                 v-if="$store.state.display === 'card'"
                 src="~/assets/img/icon/icon_card.svg"
-                alt="カード表示"
+                v-bind:alt="$t('card_view')"
               />
             </li>
           </ul>
@@ -221,7 +221,7 @@
             <span @click="selectPic(picture, $event)" v-if="is_edit_on" class="check_btn"></span>
             <img
               :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`"
-              :alt="picture.name"
+              :alt="$i18n.locale === 'en' && picture.name_en ? picture.name_en : picture.name"
               loading="lazy"
             />
           </a>
@@ -235,11 +235,11 @@
       <!-- ページネーション -->
       <div v-if="$store.state.display === 'card' && !is_loading && pictures.length > 0" class="pagination">
         <button @click="goToPrevPage" :disabled="current_page === 1" class="pagination_btn prev">
-          ← 前へ
+          ← {{ $t('prev_page') }}
         </button>
         <span class="page_info">{{ current_page }} / {{ last_page }}</span>
         <button @click="goToNextPage" :disabled="current_page >= last_page" class="pagination_btn next">
-          次へ →
+          {{ $t('next_page') }} →
         </button>
       </div>
       <ul v-if="$store.state.display === 'list'" class="picture_list">

@@ -128,5 +128,22 @@
   "delete_the_playlist": "Do you want to delete the following playlists?",
   "edit_playlist": "Edit Playlist",
   "back_to_search_results": "Back to Search Results",
-  "citing_papers": "Citing Papers"
+  "citing_papers": "Citing Papers",
+  "image_only": "Image only",
+  "with_description": "With description",
+  "scientific_name_label": "Scientific name: ",
+  "seasonal_illustrations": "Seasonal illustrations",
+  "past_main_editor": "Former Editor-in-Chief",
+  "togotv_team": "TogoTV Team",
+  "public": "Public",
+  "public_description": "Anyone can search and watch",
+  "unlisted": "Unlisted",
+  "unlisted_description": "Anyone with the link can watch",
+  "private": "Private",
+  "private_description": "Only you can watch",
+  "all_images": "All illustrations",
+  "prev_page": "Previous",
+  "next_page": "Next",
+  "list_view": "List view",
+  "card_view": "Card view"
 }

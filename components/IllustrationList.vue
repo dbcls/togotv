@@ -4,7 +4,7 @@
       <a :href="localePath(`/${picture.id.split('/').pop()}.html`)" @click="handleNavigation($event, `/${picture.id.split('/').pop()}.html`)">
         <img
           :src="`https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${picture.png}`"
-          :alt="picture.name"
+          :alt="$i18n.locale === 'en' && picture.name_en ? picture.name_en : picture.name"
           loading="lazy"
         />
       </a>
