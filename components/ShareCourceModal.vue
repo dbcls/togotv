@@ -11,19 +11,21 @@
       </p>
       <hr />
       <p class="title">
-        TogoTVの利用者にこの有用な再生リストを共有しませんか?
+        {{ $t("share_playlist_title") }}
       </p>
       <p class="description">
-        TogoTVの<nuxt-link :to="localePath('/courses.html')"
-          >スキル別コース</nuxt-link
-        >にこの再生リストを追加しても良い場合は、以下のフォームからぜひお知らせください。
+        <i18n path="share_playlist_description" tag="span">
+          <template v-slot:courses>
+            <nuxt-link :to="localePath('/courses.html')">{{ $t("courses") }}</nuxt-link>
+          </template>
+        </i18n>
       </p>
       <form
         action="https://docs.google.com/forms/u/1/d/e/1FAIpQLScfzAgbNzdrC2GcW8YJDs4Uei68qtpieRwP5LiIARY9-6lITg/formResponse"
         method="post"
         target="hidden_iframe"
       >
-        <label for="playlist_title">共有する再生リストの名称案</label>
+        <label for="playlist_title">{{ $t("share_playlist_name") }}</label>
         <input
           type="text"
           id="playlist_title"
@@ -31,7 +33,7 @@
           name="entry.665981767"
           required
         />
-        <label for="playlist_URL">共有する再生リストのURL</label>
+        <label for="playlist_URL">{{ $t("share_playlist_url") }}</label>
         <input
           type="text"
           id="playlist_URL"
@@ -39,7 +41,7 @@
           name="entry.1153596095"
           required
         />
-        <label for="playlist_description">共有する再生リストの概要</label>
+        <label for="playlist_description">{{ $t("share_playlist_summary") }}</label>
         <textarea
           rows="4"
           type="text"

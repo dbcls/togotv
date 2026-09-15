@@ -83,9 +83,9 @@ export default Vue.extend({
       const hour = Math.floor(time / 3600);
 
       if (hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`;
+        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('min_unit')}</span>`;
       } else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`;
+        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('hour_unit')}</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('min_unit')}</span>`;
       }
     }
   }

@@ -6,12 +6,12 @@
         <h2 class="page_title tsukushi bold">{{this.$route.query.name}}</h2>
         <ul class="display_icon_wrapper">
           <li>
-            <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
-            <img v-if="$store.state.display === 'list'" src="~/assets/img/icon/icon_list.svg" alt="リスト表示">
+            <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" v-bind:alt="$t('list_view')">
+            <img v-if="$store.state.display === 'list'" src="~/assets/img/icon/icon_list.svg" v-bind:alt="$t('list_view')">
           </li>
           <li>
-            <img v-if="$store.state.display === 'list'" @click="toggleDisplay" src="~/assets/img/icon/icon_card_off.svg" alt="カード表示">
-            <img v-if="$store.state.display === 'card'" src="~/assets/img/icon/icon_card.svg" alt="カード表示">
+            <img v-if="$store.state.display === 'list'" @click="toggleDisplay" src="~/assets/img/icon/icon_card_off.svg" v-bind:alt="$t('card_view')">
+            <img v-if="$store.state.display === 'card'" src="~/assets/img/icon/icon_card.svg" v-bind:alt="$t('card_view')">
           </li>
         </ul>
       </div>

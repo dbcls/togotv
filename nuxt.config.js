@@ -73,8 +73,12 @@ export default {
     [
       "nuxt-i18n",
       {
-        locales: ["en", "ja"],
+        locales: [
+          { code: "en", iso: "en-US" },
+          { code: "ja", iso: "ja-JP" },
+        ],
         defaultLocale: "ja",
+        baseUrl: "https://togotv.dbcls.jp",
         detectBrowserLanguage: {
           useCookie: true,
           cookieKey: 'i18n_redirected',

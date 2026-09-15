@@ -13,10 +13,10 @@
               :key="i"
               :src="src"
               :class="['why_slide', { active: i === currentSlide }]"
-              alt="Heritage Trees × TogoTV 制作レビュー記録"
+              :alt="$t('ht_why_slide_alt')"
             />
           </div>
-          <div class="specimen_label tsukushi">{{ captions[currentSlide] }}</div>
+          <div class="specimen_label tsukushi">{{ $t(captions[currentSlide]) }}</div>
         </div>
         <div class="slide_dots">
           <span
@@ -32,16 +32,10 @@
       <div class="why_description_panel">
         <h2 class="tsukushi bold why_heading">Why Heritage Trees × TogoTV?</h2>
         <div class="why_body tsukushi">
-          <p>TogoTVでは、植物学に関するコンテンツをさらに充実させるため、京都府立植物園との連携により、科学的視座に基づいた植物イラストの制作を進めています。</p>
-          <p>植物を題材とした科学イラストは、美しさだけでなく、形態や特徴を正確に捉えることが求められるため、専門的な確認が欠かせません。そこでTogoTVでは、植物の専門家によるレビューを受けられる連携先を探していました。</p>
-          <p>京都府立植物園のHeritage Treesには、日本の植物史において重要な樹木に加え、さまざまな研究と関わりのある樹木が含まれています。京都府立植物園の皆様とTogoTVスタッフとの議論の結果、植物学のイラストとして最も相応しくかつ、体系的にまとめられるプロジェクトとして、今回のHeritage Treesコラボレーションが決定しました。</p>
-          <p>今回公開するイラストは、京都府立植物園の樹木医によるレビューを受けながら、イラストレーターとの綿密な議論を重ねて制作したものです。その一例として、左のスライドショーには京都府立植物園からご提供いただいた植物サンプルを撮影、実体顕微鏡による細部の確認、イラスト化、レビューの過程を記録した画像を掲載しています。</p>
-          <p>AIによる画像生成が注目される昨今ですが、科学イラストの制作においては、このように実物を用いた描きおこしや、顕微鏡などの専門的な機材を用いた綿密な確認と、専門家によるレビューを受けながら正確な情報を反映させることが重要です。</p>
-          <p>AIによるイラスト化は、いわゆる模式図やマッシュアップされた画像生成に優れる一方で、個体特徴表現に欠けるという問題があります。</p>
-          <p>TogoTVでは、今後も科学的な視点を大切にしながら、植物学に関するコンテンツの充実を図ってまいります。</p>
+          <p v-for="(key, index) in why_paragraphs" :key="index">{{ $t(key) }}</p>
         </div>
         <nuxt-link :to="localePath('/heritage-trees.html')" class="back_link tsukushi">
-          ← Heritage Trees トップへ
+          ← {{ $t('ht_back_to_top') }}
         </nuxt-link>
       </div>
     </div>
@@ -51,7 +45,7 @@
 
     <!-- サイトタイトル（左下・クリックでHeritage Treesホームへ） -->
     <div class="site_title is_home" @click="goBack">
-      <p class="collab_label tsukushi">京都府立植物園 × Togo Picture Gallery</p>
+      <p class="collab_label tsukushi">{{ $t('ht_collab_label') }}</p>
       <h1 class="main_title mont bold">Heritage Trees<br>× TogoTV</h1>
     </div>
 
@@ -69,10 +63,10 @@ export default Vue.extend({
         '/ht-review/slide-2.png',
         '/ht-review/slide-3.png',
       ],
-      captions: [
-        'No. 1 ハナミズキ（春）の制作過程',
-        'No. 6 シナマンサク（春）の制作過程',
-        'No. 14 トキワマンサク（春）の制作過程',
+      captions: ['ht_why_caption_1', 'ht_why_caption_2', 'ht_why_caption_3'],
+      why_paragraphs: [
+        'ht_why_p1', 'ht_why_p2', 'ht_why_p3', 'ht_why_p4',
+        'ht_why_p5', 'ht_why_p6', 'ht_why_p7',
       ],
       currentSlide: 0,
       slideTimer: null,

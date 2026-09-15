@@ -66,7 +66,7 @@
       <div class="video_section_header">
         <h2 v-if="$route.query.query" class="page_title tsukushi bold">
           <span v-if="$i18n.locale === 'en'">{{ $t('results_of') }}</span>
-          <span>「{{ $route ? $route.query.query : "" }}」</span>
+          <span>{{ $t('quote_open') }}{{ $route ? $route.query.query : "" }}{{ $t('quote_close') }}</span>
           <span v-if="$i18n.locale === 'ja'" >{{ $t('results_of') }}</span>
           <span class="found_num"><span class="num mont">{{video_num_by_type['manual'] + video_num_by_type['lecture'] + video_num_by_type['handson']}}</span>{{ $t('results') }}</span>
         </h2>
@@ -76,12 +76,12 @@
         </h2>
         <ul class="display_icon_wrapper">
           <li>
-            <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" alt="リスト表示">
-            <img v-if="$store.state.display === 'list'" src="~/assets/img/icon/icon_list.svg" alt="リスト表示">
+            <img v-if="$store.state.display === 'card'" @click="toggleDisplay" src="~/assets/img/icon/icon_list_off.svg" v-bind:alt="$t('list_view')">
+            <img v-if="$store.state.display === 'list'" src="~/assets/img/icon/icon_list.svg" v-bind:alt="$t('list_view')">
           </li>
           <li>
-            <img v-if="$store.state.display === 'list'" @click="toggleDisplay" src="~/assets/img/icon/icon_card_off.svg" alt="カード表示">
-            <img v-if="$store.state.display === 'card'" src="~/assets/img/icon/icon_card.svg" alt="カード表示">
+            <img v-if="$store.state.display === 'list'" @click="toggleDisplay" src="~/assets/img/icon/icon_card_off.svg" v-bind:alt="$t('card_view')">
+            <img v-if="$store.state.display === 'card'" src="~/assets/img/icon/icon_card.svg" v-bind:alt="$t('card_view')">
           </li>
         </ul>
       </div>
@@ -152,13 +152,8 @@ export default Vue.extend({
         tags: true,
         lang: true
       },
-      duration_range: {
-        '0': '0分',
-        '1': '5分',
-        '2': '10分',
-        '3': '20分',
-        '4': '20分~',
-      },
+      // スライダーの目盛り。表示は duration_range（computed）で単位を付ける
+      duration_values: [0, 5, 10, 20, null],
       tag_list: [],
       is_loading: false,
       video_num_by_type: {
@@ -176,6 +171,14 @@ export default Vue.extend({
     }
   },
   computed: {
+    duration_range: function() {
+      const unit = this.$t('min_unit');
+      const marks = {};
+      this.duration_values.forEach((minutes, index) => {
+        marks[String(index)] = minutes === null ? `20${unit}~` : `${minutes}${unit}`;
+      });
+      return marks;
+    },
     upload_date_range: function() {
       const this_year  = new Date().getFullYear();
       return {
@@ -213,12 +216,8 @@ export default Vue.extend({
                   delete param[key]
                 } else if (key === "duration(ISO 8601)") {
                   param[key] = param[key].map(data => {
-                    if(this.duration_range[data].indexOf('~') !== -1) {
-                      data = 30
-                    } else {
-                      data = this.duration_range[data].replace('分', '')
-                    }
-                    return Number(data)
+                    const minutes = this.duration_values[data]
+                    return Number(minutes === null ? 30 : minutes)
                   })
                   if(param[key][1] === 30) {
                     param[key][1] = 0
@@ -340,7 +339,7 @@ export default Vue.extend({
       } else if(this.$i18n && this.$i18n.locale === "ja") {
         return `「${this.$route.query.query}」${this.$t('results_of')}`
       } else {
-        return `${this.$t('results_of')}「${this.$route.query.query}」`
+        return `${this.$t('results_of')}${this.$t('quote_open')}${this.$route.query.query}${this.$t('quote_close')}`
       }
     },
     changeTitle () {
@@ -349,8 +348,8 @@ export default Vue.extend({
           document.title = `「${this.$route.query.query}」${this.$t('results_of')} | TogoTV`
           return `「${this.$route.query.query}」${this.$t('results_of')}`
         } else {
-          document.title = `${this.$t('results_of')}「${this.$route.query.query}」 | TogoTV`
-          return `${this.$t('results_of')}「${this.$route.query.query}」`
+          document.title = `${this.$t('results_of')}${this.$t('quote_open')}${this.$route.query.query}${this.$t('quote_close')} | TogoTV`
+          return `${this.$t('results_of')}${this.$t('quote_open')}${this.$route.query.query}${this.$t('quote_close')}`
         }
       } else {
         document.title = `${this.$t('all_results')} | TogoTV`

@@ -21,7 +21,39 @@ export default Vue.extend({
     Footer
   },
   head() {
+    // nuxt-i18n が locale に応じた <html lang> と og:locale を生成する
+    // （nuxt-i18n v6 のヘルパーは $nuxtI18nSeo）
+    const i18nSeo = this.$nuxtI18nSeo ? this.$nuxtI18nSeo() : {}
+    // hreflang / canonical は自前で組み立てる。
+    // このサイトは extendRoutes で .html エイリアスを足しているため
+    // switchLocalePath() が解決できず、nuxt-i18n の生成するリンクが
+    // 全ページ同じ URL になってしまう。JP と EN は /foo.html ↔ /en/foo.html で
+    // 1 対 1 に対応するので、パスから直接求める。
+    const BASE_URL = "https://togotv.dbcls.jp"
+    const raw = (this.$route.path || "/").replace(/index\.html$/, "")
+    const ja_path = raw.replace(/^\/en(\/|$)/, "/")
+    const en_path = ja_path === "/" ? "/en/" : "/en" + ja_path
+    const current_path = this.$i18n.locale === "en" ? en_path : ja_path
     return {
+      htmlAttrs: {
+        ...(i18nSeo.htmlAttrs || {}),
+        prefix: "og: http://ogp.me/ns#",
+      },
+      link: [
+        { hid: "canonical", rel: "canonical", href: BASE_URL + current_path },
+        { hid: "alternate-ja", rel: "alternate", hreflang: "ja", href: BASE_URL + ja_path },
+        { hid: "alternate-en", rel: "alternate", hreflang: "en", href: BASE_URL + en_path },
+        { hid: "alternate-x-default", rel: "alternate", hreflang: "x-default", href: BASE_URL + ja_path },
+      ],
+      meta: [
+        // ページ側で上書きされなければ locale 別の既定の description を入れる
+        {
+          hid: "description",
+          name: "description",
+          content: this.$t("site_description"),
+        },
+        ...(i18nSeo.meta || []),
+      ],
       script: [
         // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
         {

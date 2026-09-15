@@ -1,20 +1,20 @@
 <template>
   <div class="dbcls_wrapper">
     <section class="intro_section">
-      <h2 class="tsukushi bold">DBCLS解説動画集</h2>
+      <h2 class="tsukushi bold">{{ $t('dbcls_title') }}</h2>
       <div class="intro_content_wrapper">
         <div class="intro_image_wrapper">
           <img src="~/assets/img/welcome_main.png" alt="DBCLS" />
         </div>
         <div class="intro_text">
-          <p>
-            DBCLSでは、国内外のデータベースの統合化をはじめ、データベース利用者の利便性向上を目的としたアプリケーションや基盤技術の研究開発を行っています。また、各種データや既存のデータベースの統合化支援や、そのためのデータ標準化の整備を進めています。これらの研究開発および諸活動は、国内外の多くの関連する研究機関と連携して進めています。
-          </p>
-          <p>
-            こちらの特設ページでは、DBCLSが提供するデータベースやツールの使い方を解説した動画をご覧いただけます。研究に役立つ様々なリソースの活用方法から開発のコンセプトまで、動画でわかりやすく学ぶことができます。
-          </p>
+          <p>{{ $t('dbcls_intro_1') }}</p>
+          <p>{{ $t('dbcls_intro_2') }}</p>
           <p class="dbcls_link">
-            DBCLSの研究開発活動へのお問い合わせは、 <a href="https://dbcls.rois.ac.jp/" target="_blank" rel="noopener noreferrer">公式ウェブサイト</a> をご覧ください。
+            <i18n path="dbcls_contact" tag="span">
+              <template v-slot:site>
+                <a href="https://dbcls.rois.ac.jp/" target="_blank" rel="noopener noreferrer">{{ $t('official_website') }}</a>
+              </template>
+            </i18n>
           </p>
         </div>
       </div>
@@ -24,10 +24,10 @@
       <ul>
         <li v-for="category in categories" :key="category.id">
           <h3 class="category_name">
-            <span class="tsukushi bold">{{ category.title }}</span>
+            <span class="tsukushi bold">{{ $t(category.title) }}</span>
             <span class="total_count mont bold">
               <span class="count">{{ category.videos.length }}</span>
-              <span class="unit">本</span>
+              <span class="unit">{{ $t('videos_unit') }}</span>
             </span>
           </h3>
           <VideoListHorizontalScroll
@@ -38,7 +38,7 @@
               bg: 'white'
             }"
           />
-          <p v-else class="no_videos">動画がありません</p>
+          <p v-else class="no_videos">{{ $t('no_videos') }}</p>
         </li>
       </ul>
     </section>
@@ -59,17 +59,17 @@ export default Vue.extend({
       categories: [
         {
           id: "new",
-          title: "新着動画",
+          title: "new_videos",
           videos: []
         },
         {
           id: "lecture",
-          title: "講演動画",
+          title: "dbcls_lecture_videos",
           videos: []
         },
         {
           id: "database",
-          title: "データベースの使い方",
+          title: "dbcls_howto_videos",
           videos: []
         }
       ],
@@ -81,13 +81,13 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: "DBCLS動画",
+      title: this.$t("dbcls_page_title"),
       meta: [
-        { hid: "og:title", property: "og:title", content: "DBCLS動画" },
+        { hid: "og:title", property: "og:title", content: this.$t("dbcls_page_title") },
         {
           hid: "og:description",
           property: "og:description",
-          content: "DBCLSが提供するデータベースやツールの使い方を解説した動画"
+          content: this.$t("dbcls_page_description")
         },
         {
           hid: "og:url",

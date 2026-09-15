@@ -8,9 +8,9 @@
         </h1>
         <p class="description">{{ $t("top_description_1") }}<span class="br"><br></span>{{ $t("top_description_2") }}<nuxt-link :to="localePath(`/faq.html#copyrights`)" class="add_faq_icon"></nuxt-link></p>
         <ul :class="['description_list', $i18n.locale]">
-          <li>・{{ $t("manual_of_database_and_tool") }}</li>
-          <li>・{{ $t("ajacs_videos_and_documents") }}</li>
-          <li>・{{ $t("illustration") }}</li>
+          <li>{{ $t('bullet') }}{{ $t("manual_of_database_and_tool") }}</li>
+          <li>{{ $t('bullet') }}{{ $t("ajacs_videos_and_documents") }}</li>
+          <li>{{ $t('bullet') }}{{ $t("illustration") }}</li>
         </ul>
         <TextSearch props="index"/>
         <div class="search_example">
@@ -26,42 +26,17 @@
           <p>{{ $t('top_announcement') }}</p>
         </div> -->
         <div class="news_section">
-          <h2 class="news_title">TogoTV ニュース</h2>
+          <h2 class="news_title">{{ $t('news_title') }}</h2>
           <ul class="news_list">
-            <li>
-              <span class="news_badge">New!</span>
-              <span class="news_date">2026.8.21</span>
-              <nuxt-link :to="localePath('/heritage-trees.html')">TogoTVのピクチャーギャラリーに Heritage Trees 春編の追加イラスト３点が公開されました！</nuxt-link>
-            </li>
-            <li>
-              <span class="news_date">2026.7.17</span>
-              <nuxt-link :to="localePath('/pics.html')">形態異常プロジェクト（IMA）の新イラスト３点を公開！</nuxt-link>
-            </li>
-            <li>
-              <span class="news_date">2026.7.14</span>
-              <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトに春のイラスト２点掲載！</nuxt-link>
-            </li>
-            <li>
-              <span class="news_date">2026.7.14</span>
-              Togo picture のイラストが
-              <a href="https://doi.org/10.1038/s41417-026-01055-2" target="_blank" rel="noopener noreferrer">Feng et al. <em>Cancer Gene Therapy</em> 2026</a>
-              に利用されました！
-            </li>
-            <li>
-              <span class="news_date">2026.6.25</span>
-              Togo picture のイラストが
-              <a href="https://doi.org/10.21203/rs.3.rs-9936782/v1" target="_blank" rel="noopener noreferrer">Ikegami et al. <em>Research Square</em>（プレプリント）</a>
-              に利用されました！
-            </li>
-            <li>
-              <span class="news_date">2026.6.24</span>
-              Togo picture のイラストが
-              <a href="https://doi.org/10.1038/s41556-026-01982-0" target="_blank" rel="noopener noreferrer">Xie et al. <em>Nature Cell Biology</em> 2026</a>
-              に利用されました！
-            </li>
-            <li>
-              <span class="news_date">2026.6.11</span>
-              <nuxt-link :to="localePath('/heritage-trees.html')">京都府立植物園コラボレーション企画 Heritage Trees 特設サイトオープン！</nuxt-link>
+            <li v-for="(news, index) in news_items" :key="index">
+              <span v-if="news.is_new" class="news_badge">New!</span>
+              <span class="news_date">{{ news.date }}</span>
+              <nuxt-link v-if="news.to" :to="localePath(news.to)">{{ $i18n.locale === 'en' ? news.en : news.ja }}</nuxt-link>
+              <i18n v-else-if="news.cite" path="togopic_used_in" tag="span">
+                <template v-slot:paper>
+                  <a :href="news.cite.href" target="_blank" rel="noopener noreferrer">{{ news.cite.authors }} <em>{{ news.cite.journal }}</em>{{ $i18n.locale === 'en' ? news.cite.suffix_en : news.cite.suffix }}</a>
+                </template>
+              </i18n>
             </li>
           </ul>
         </div>
@@ -92,7 +67,7 @@
           <text x="128" y="147" text-anchor="middle" class="ag_end_label">avg</text>
         </svg>
         <p class="access_gauge_caption mont" v-if="access_stats.daysTracked > 0">
-          {{ access_stats.total }} visits · {{ access_stats.daysTracked }}日分
+          {{ access_stats.total }} visits · {{ $t('days_tracked', { n: access_stats.daysTracked }) }}
         </p>
       </div>
     </div>
@@ -214,6 +189,66 @@ export default Vue.extend({
       illustration_list: [],
       citation_list: [],
       access_stats: null,
+      // トップのニュース。新しいものを先頭に追加する。
+      //   to   … サイト内リンク（ja / en に本文を書く）
+      //   cite … 論文引用（本文は togopic_used_in で組み立てる）
+      news_items: [
+        {
+          date: '2026.8.21',
+          is_new: true,
+          to: '/heritage-trees.html',
+          ja: 'TogoTVのピクチャーギャラリーに Heritage Trees 春編の追加イラスト３点が公開されました！',
+          en: 'Three more Heritage Trees (Spring) illustrations have been added to the TogoTV Picture Gallery!',
+        },
+        {
+          date: '2026.7.17',
+          to: '/pics.html',
+          ja: '形態異常プロジェクト（IMA）の新イラスト３点を公開！',
+          en: 'Three new illustrations from the Illustrated Morphological Abnormalities (IMA) project are now available!',
+        },
+        {
+          date: '2026.7.14',
+          to: '/heritage-trees.html',
+          ja: '京都府立植物園コラボレーション企画 Heritage Trees 特設サイトに春のイラスト２点掲載！',
+          en: 'Two spring illustrations have been added to the Heritage Trees site, a collaboration with the Kyoto Botanical Gardens!',
+        },
+        {
+          date: '2026.7.14',
+          cite: {
+            href: 'https://doi.org/10.1038/s41417-026-01055-2',
+            authors: 'Feng et al.',
+            journal: 'Cancer Gene Therapy',
+            suffix: ' 2026',
+            suffix_en: ' 2026',
+          },
+        },
+        {
+          date: '2026.6.25',
+          cite: {
+            href: 'https://doi.org/10.21203/rs.3.rs-9936782/v1',
+            authors: 'Ikegami et al.',
+            journal: 'Research Square',
+            suffix: '（プレプリント）',
+            suffix_en: ' (preprint)',
+          },
+        },
+        {
+          date: '2026.6.24',
+          cite: {
+            href: 'https://doi.org/10.1038/s41556-026-01982-0',
+            authors: 'Xie et al.',
+            journal: 'Nature Cell Biology',
+            suffix: ' 2026',
+            suffix_en: ' 2026',
+          },
+        },
+        {
+          date: '2026.6.11',
+          to: '/heritage-trees.html',
+          ja: '京都府立植物園コラボレーション企画 Heritage Trees 特設サイトオープン！',
+          en: 'The Heritage Trees site, a collaboration with the Kyoto Botanical Gardens, is now open!',
+        },
+      ],
     }
   },
   head() {

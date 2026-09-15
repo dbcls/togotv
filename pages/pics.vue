@@ -200,7 +200,7 @@
         </div>
       </div>
       <p v-if="$store.state.display === 'card' && !is_loading && pictures.length === 0">
-        該当なし
+        {{ $t('no_result') }}
       </p>
       <ul
         v-if="$store.state.display === 'card' && !is_loading && pictures.length !== 0"
@@ -284,8 +284,10 @@ export default Vue.extend({
   },
   created() {
     Object.keys(this.facets).forEach(key => {
+      // タグは英語ページでは other_tags_en を引く（分類は API 側が未対応）
+      const field = key === "other_tags" ? this.tagFacetField : key;
       axios
-        .get(`https://togotv-api.dbcls.jp/api/facets/${key}?target=pictures`)
+        .get(`https://togotv-api.dbcls.jp/api/facets/${field}?target=pictures`)
         .then(data => {
           data.data.facets = data.data.facets.filter(facet => {
             return facet.key !== "";
@@ -477,6 +479,10 @@ export default Vue.extend({
     }
   },
   computed: {
+    // タグのファセット／絞り込みに使うフィールド名。英語ページでは英語列を引く
+    tagFacetField() {
+      return this.$i18n.locale === "en" ? "other_tags_en" : "other_tags";
+    },
     is_filter_on() {
       // テキスト検索中の場合もフィルタONとして扱う
       if (this._is_text_search) {
@@ -517,10 +523,11 @@ export default Vue.extend({
           if (!target_element_children.hasChildNodes()) {
             axios
               .get(
-                `https://togotv-api.dbcls.jp/api/search?target=pictures&other_tags=${tag}`
+                `https://togotv-api.dbcls.jp/api/search?target=pictures&${this.tagFacetField}=${encodeURIComponent(tag)}`
               )
               .then(data => {
                 let children_list = "";
+                const is_en = this.$i18n.locale === "en";
                 data.data.data.forEach(tag => {
                   children_list += `<li>
                     <a href="../${
@@ -530,7 +537,7 @@ export default Vue.extend({
                         <img src="https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${
                           tag.png
                         }"/>
-                        <p>${tag.name}</p>
+                        <p>${is_en && tag.name_en ? tag.name_en : tag.name}</p>
                       </div>
                       <p class="author">${this.removeTag(tag.author)}</p>
                     </a>
@@ -770,6 +777,12 @@ export default Vue.extend({
             param[key] = param[key].join(",");
           }
         });
+
+        // 英語ページではタグの絞り込みを other_tags_en で問い合わせる
+        if (param["other_tags"] !== undefined && this.tagFacetField !== "other_tags") {
+          param[this.tagFacetField] = param["other_tags"];
+          delete param["other_tags"];
+        }
 
         param["target"] = "pictures";
         param["rows"] = 40;

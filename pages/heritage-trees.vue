@@ -13,12 +13,16 @@
         <div class="home_description">
           <h2 class="tsukushi bold home_heading">Heritage Trees Project</h2>
           <p class="home_body tsukushi">
-            ヘリテージツリーズ（Heritage Trees, 歴史遺産樹木）は、日本最古の公立植物園である京都府立植物園が開園100年を記念して園内の貴重なお宝樹木を紹介するプロジェクトです。統合TVでは、京都府立植物園とのコラボレーションのもと、日本の植物史を体現する38本の樹木を体系的にイラスト化することにより、教育・研究・保全の基盤資料として公開しています。
+            {{ $t('ht_intro') }}
           </p>
           <p class="home_link tsukushi">
-            Heritage Treesについて詳しくは<a href="https://www.kyotobotanicalgardens.jp" target="_blank" rel="noopener noreferrer">京都府立植物園公式サイト</a>をご覧ください。
+            <i18n path="ht_more_info" tag="span">
+              <template v-slot:site>
+                <a href="https://www.kyotobotanicalgardens.jp" target="_blank" rel="noopener noreferrer">{{ $t('ht_garden_site') }}</a>
+              </template>
+            </i18n>
           </p>
-          <p class="home_hint tsukushi">▶ 右下の季節ブロックをクリックして各季節のイラストへ</p>
+          <p class="home_hint tsukushi">{{ $t('ht_hint') }}</p>
           <nuxt-link :to="localePath('/heritage-trees-why.html')" class="why_link tsukushi">
             Why Heritage Trees × TogoTV?
           </nuxt-link>
@@ -63,13 +67,13 @@
                   <p class="fg_name_sci mont">{{ item.scientific_name || item.name_en }}</p>
                 </div> -->
                 <div class="fg_popup">
-                  <p class="popup_name tsukushi bold">{{ item.name }}</p>
+                  <p class="popup_name tsukushi bold">{{ $i18n.locale === 'en' && item.name_en ? item.name_en : item.name }}</p>
                   <p class="popup_sci mont">{{ item.scientific_name || item.name_en }}</p>
                 </div>
               </div>
             </template>
             <div v-else class="mosaic_empty">
-              <p class="empty_text tsukushi">{{ currentSeason.comingSoon || '準備中' }}</p>
+              <p class="empty_text tsukushi">{{ seasonComingSoon || $t('ht_preparing') }}</p>
             </div>
           </div>
         </transition>
@@ -81,7 +85,7 @@
 
     <!-- サイトタイトル（左下・クリックでHome） -->
     <div class="site_title" :class="{ is_home: activeView === 'home' }" @click="goHome">
-      <p class="collab_label tsukushi">京都府立植物園 × Togo Picture Gallery</p>
+      <p class="collab_label tsukushi">{{ $t('ht_collab_label') }}</p>
       <h1 class="main_title mont bold">Heritage Trees<br>× TogoTV</h1>
     </div>
 
@@ -94,7 +98,7 @@
         :class="[season.id, `block-pos-${i}`, { active: activeView === 'season' && activeSeason === season.id }]"
         @click="goSeason(season.id)"
       >
-        <span class="block_kanji tsukushi bold">{{ season.title }}</span>
+        <span :class="['block_kanji', 'tsukushi', 'bold', { is_en: $i18n.locale === 'en' }]">{{ $i18n.locale === 'en' ? season.subtitle : season.title }}</span>
       </div>
     </div>
 
@@ -145,9 +149,9 @@ export default Vue.extend({
       activeView: 'home',
       activeSeason: null,
       seasons: [
-        { id: 'spring', title: '春', subtitle: 'Spring', comingSoon: '2026年6月に公開予定', images: [] },
-        { id: 'summer', title: '夏', subtitle: 'Summer', comingSoon: '2026年9月に公開予定', images: [] },
-        { id: 'autumn', title: '秋', subtitle: 'Autumn', comingSoon: '2026年11月に公開予定', images: [] },
+        { id: 'spring', title: '春', subtitle: 'Spring', comingSoon: 'ht_coming_spring', images: [] },
+        { id: 'summer', title: '夏', subtitle: 'Summer', comingSoon: 'ht_coming_summer', images: [] },
+        { id: 'autumn', title: '秋', subtitle: 'Autumn', comingSoon: 'ht_coming_autumn', images: [] },
         { id: 'winter', title: '冬', subtitle: 'Winter', comingSoon: null, images: [] }
       ],
       allImages: [],
@@ -158,6 +162,10 @@ export default Vue.extend({
   computed: {
     currentSeason() {
       return this.seasons.find(s => s.id === this.activeSeason) || {};
+    },
+    // comingSoon は翻訳キーを持つ。未設定の季節は空文字
+    seasonComingSoon() {
+      return this.currentSeason.comingSoon ? this.$t(this.currentSeason.comingSoon) : '';
     },
     cardSlots() {
       return CARD_SLOTS;
@@ -218,7 +226,7 @@ export default Vue.extend({
         this.allImages = res.data.data || [];
         this.categorizeImages();
       } catch (e) {
-        this.loadError = '画像の読み込みに失敗しました';
+        this.loadError = this.$t('image_load_failed');
       } finally {
         this.isLoading = false;
       }
@@ -742,6 +750,10 @@ export default Vue.extend({
       line-height: 1
       transition: color 0.2s ease
 
+      &.is_en
+        font-size: 15px
+        letter-spacing: 0.02em
+
     &.block-pos-0
       --rot: 1.8deg
       color: #c0334a
@@ -932,4 +944,7 @@ export default Vue.extend({
     gap: 4px
     .blocks_block > .block_kanji
       font-size: 28px
+
+      &.is_en
+        font-size: 12px
 </style>

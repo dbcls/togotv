@@ -47,7 +47,7 @@
           ></youtube>
         </div>
         <p class="original_link">
-          この動画が再生されない場合は、YouTubeでご覧ください。<a
+          {{ $t('video_fallback_note') }}<a
             :href="`https://youtu.be/${videoData.embedUrl}`"
             target="_blank"
             >{{ `https://youtu.be/${videoData.embedUrl}` }}</a
@@ -638,7 +638,7 @@ export default Vue.extend({
       })
       .catch(e => {
         this.is_fetching_mylist = false;
-        alert("新規プレイリストの作成に失敗しました。")
+        alert(this.$t('playlist_create_failed'))
       });
     },
     login() {

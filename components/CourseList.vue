@@ -13,7 +13,7 @@
         <div class="detail" :class="{ left: show_detail_left }">
           <nuxt-link class="detail_title tsukushi bold" :to="localePath(`/course.html?id=${course.id}`)">{{ course.title }}</nuxt-link>
           <p class="detail_description">{{ course.description }}</p>
-          <span class="tsukushi">再生リスト一覧</span>
+          <span class="tsukushi">{{ $t('playlist_list') }}</span>
           <ul class="detail_playlist">
             <li v-for="video in course.playlist" :key="video.videoid">
               <nuxt-link :to="localePath(`/${video.uploadDate.replace(/-/g, '')}.html`)" class="tsukushi bold">{{ video.title }}</nuxt-link>
@@ -79,9 +79,9 @@ export default Vue.extend({
       const hour = Math.floor(time / 3600);
 
       if(hour === 0) {
-        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
+        return `<span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('min_unit')}</span>`
       }　else {
-        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">時間</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">分</span>`
+        return `<span class="time mont bold">${hour}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('hour_unit')}</span><span class="time mont bold">${min}</span><span style="font-size: 12px; margin-right: 2px;">${this.$t('min_unit')}</span>`
       }
     }
   }
