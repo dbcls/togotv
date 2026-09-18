@@ -20,9 +20,10 @@
 
     <div v-else class="blocks_main">
       <div class="board_panel">
+        <div class="board_scaler" :style="scalerStyle">
         <div
           class="board"
-          :style="{ width: COLS * CELL + 'px', height: ROWS * CELL + 'px' }"
+          :style="boardStyle"
         >
           <div
             v-for="(row, r) in displayGrid"
@@ -82,8 +83,17 @@
             <button class="go_restart" @click="restart">もう一度遊ぶ</button>
           </div>
           <div v-if="!isRunning && !gameOver" class="start_overlay" @click="start">
-            <p>クリックしてスタート</p>
+            <p>タップしてスタート</p>
           </div>
+        </div>
+        </div>
+
+        <div class="touch_controls">
+          <button type="button" class="tc_btn" @click="moveHorizontal(-1)" aria-label="左へ">◀</button>
+          <button type="button" class="tc_btn tc_rotate" @click="rotate()" aria-label="回転">⟳</button>
+          <button type="button" class="tc_btn" @click="moveHorizontal(1)" aria-label="右へ">▶</button>
+          <button type="button" class="tc_btn" @click="moveDown()" aria-label="下へ">▼</button>
+          <button type="button" class="tc_btn tc_drop" @click="hardDrop()" aria-label="一気に落とす">⤓</button>
         </div>
       </div>
 
@@ -381,12 +391,29 @@ export default Vue.extend({
       playerName: '',
       playerEmail: '',
       muted: false,
+      boardScale: 1, // スマホで盤面を画面幅に収めるための縮小率
       // ブロックくずし(4ライン)演出用の状態。erased = 左から消えた列数(0..COLS)
       blocksClear: { active: false, rows: [], erased: 0 },
       frogHop: false,
     }
   },
   computed: {
+    // 盤面本体は常に COLS*CELL の実寸で描画し、transform で縮小(画像位置がズレない)
+    boardStyle() {
+      return {
+        width: COLS * CELL + 'px',
+        height: ROWS * CELL + 'px',
+        transform: `scale(${this.boardScale})`,
+        transformOrigin: 'top left',
+      }
+    },
+    // スケーラーは縮小後の見かけサイズを占有してレイアウトのはみ出しを防ぐ
+    scalerStyle() {
+      return {
+        width: COLS * CELL * this.boardScale + 'px',
+        height: ROWS * CELL * this.boardScale + 'px',
+      }
+    },
     userName() {
       const u = this.$auth && this.$auth.user
       return (u && (u.name || u.email)) || 'プレイヤー'
@@ -421,6 +448,8 @@ export default Vue.extend({
   },
   async mounted() {
     window.addEventListener('keydown', this.handleKey)
+    window.addEventListener('resize', this.updateBoardScale)
+    this.updateBoardScale()
     this.initBgm()
     if (this.$auth && this.$auth.loggedIn && !(this.$auth.user && this.$auth.user.name)) {
       // autoFetch: false のため、ログイン済みでも user 未取得のことがある
@@ -432,6 +461,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     window.removeEventListener('keydown', this.handleKey)
+    window.removeEventListener('resize', this.updateBoardScale)
     if (this.timerId) clearInterval(this.timerId)
     if (this._bgm) {
       this._bgm.pause()
@@ -445,6 +475,12 @@ export default Vue.extend({
   methods: {
     imgUrl(png) {
       return `https://dbarchive.biosciencedbc.jp/data/togo-pic/image/${png}`
+    },
+    updateBoardScale() {
+      if (typeof window === 'undefined') return
+      // 盤面(COLS*CELL=360px)を画面幅に収める。デスクトップは1(等倍)
+      const avail = Math.min(window.innerWidth, 460) - 40
+      this.boardScale = Math.max(0.5, Math.min(1, avail / (COLS * CELL)))
     },
     cellStyle(cell) {
       if (!cell) return {}
@@ -967,11 +1003,43 @@ export default Vue.extend({
   .board_panel
     flex: 0 0 auto
 
+  // 縮小後の見かけサイズを占有(はみ出し防止)。中の .board は transform で縮小
+  .board_scaler
+    position: relative
+
   .board
     position: relative
     background: #1a1a2e
     border: 3px solid #444
     box-sizing: border-box
+
+  // タッチ操作パッド(スマホのみ表示)
+  .touch_controls
+    display: none
+    margin: 12px auto 0
+    gap: 8px
+    justify-content: center
+    > .tc_btn
+      flex: 1 1 0
+      min-width: 0
+      height: 54px
+      border: none
+      border-radius: 10px
+      background: #eef1f1
+      color: $DEEP_MAIN_COLOR
+      font-size: 22px
+      line-height: 1
+      cursor: pointer
+      touch-action: manipulation
+      user-select: none
+      -webkit-tap-highlight-color: transparent
+      &:active
+        background: $MAIN_COLOR
+        color: #fff
+      &.tc_rotate
+        background: #ffe9a8
+      &.tc_drop
+        background: #ffd0dd
 
   .board_row
     display: flex
@@ -1341,6 +1409,16 @@ export default Vue.extend({
     > .blocks_main
       flex-direction: column
       align-items: center
+      gap: 20px
+    .board_panel
+      width: 100%
+      display: flex
+      flex-direction: column
+      align-items: center
+    .touch_controls
+      display: flex
+      width: 100%
+      max-width: 360px
     .side_panel
       flex: 1 1 auto
       width: 100%
