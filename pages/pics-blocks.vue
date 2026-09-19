@@ -23,7 +23,11 @@
         <div class="board_scaler" :style="scalerStyle">
         <div
           class="board"
+          :class="{ board_playing: isRunning && !gameOver }"
           :style="boardStyle"
+          @touchstart="onBoardTouchStart"
+          @touchmove="onBoardTouchMove"
+          @touchend="onBoardTouchEnd"
         >
           <div
             v-for="(row, r) in displayGrid"
@@ -167,6 +171,12 @@
               <li>↓ : ソフトドロップ</li>
               <li>↑ : 一気に落とす</li>
               <li>Space : 回転</li>
+            </ul>
+            <p class="controls_title" style="margin-top:8px">タッチ操作</p>
+            <ul>
+              <li>タップ : 回転</li>
+              <li>左右スワイプ : 移動</li>
+              <li>下フリック : 一気に落とす</li>
             </ul>
           </div>
 
@@ -478,9 +488,45 @@ export default Vue.extend({
     },
     updateBoardScale() {
       if (typeof window === 'undefined') return
-      // 盤面(COLS*CELL=360px)を画面幅に収める。デスクトップは1(等倍)
-      const avail = Math.min(window.innerWidth, 460) - 40
+      // 盤面(COLS*CELL=360px)を画面幅に収める。スマホは横幅いっぱい(左右8px余白)、
+      // デスクトップ/タブレットは等倍(1)で頭打ち。
+      const avail = Math.min(window.innerWidth - 16, 420)
       this.boardScale = Math.max(0.5, Math.min(1, avail / (COLS * CELL)))
+    },
+    // ---------- 盤面タッチ操作(タップ=回転 / 左右スワイプ=移動 / 下フリック=落下) ----------
+    onBoardTouchStart(e) {
+      if (!this.isRunning || this.gameOver || !this.current) return
+      const t = e.touches[0]
+      this._touch = { sx: t.clientX, sy: t.clientY, refX: t.clientX, st: Date.now(), moved: false }
+    },
+    onBoardTouchMove(e) {
+      if (!this._touch || !this.current) return
+      const t = e.touches[0]
+      const step = CELL * this.boardScale
+      let dx = t.clientX - this._touch.refX
+      const dyTotal = t.clientY - this._touch.sy
+      // 横方向にセル幅ぶん動いたら1マス移動(ドラッグで連続移動)
+      while (dx >= step) { this.moveHorizontal(1); this._touch.refX += step; dx -= step; this._touch.moved = true }
+      while (dx <= -step) { this.moveHorizontal(-1); this._touch.refX -= step; dx += step; this._touch.moved = true }
+      // 盤面上のスワイプでページがスクロールしないように
+      if (Math.abs(t.clientX - this._touch.sx) > 6 || Math.abs(dyTotal) > 6) {
+        if (e.cancelable) e.preventDefault()
+      }
+    },
+    onBoardTouchEnd(e) {
+      const td = this._touch
+      this._touch = null
+      if (!td || !this.isRunning || this.gameOver) return
+      const t = (e.changedTouches && e.changedTouches[0]) || null
+      const dx = t ? t.clientX - td.sx : 0
+      const dy = t ? t.clientY - td.sy : 0
+      const dt = Date.now() - td.st
+      const absX = Math.abs(dx), absY = Math.abs(dy)
+      if (!td.moved && absX < 14 && absY < 14 && dt < 400) {
+        this.rotate() // タップ = 回転
+      } else if (dy > 40 && absY > absX) {
+        this.hardDrop() // 下フリック = 一気に落とす
+      }
     },
     cellStyle(cell) {
       if (!cell) return {}
@@ -1012,8 +1058,11 @@ export default Vue.extend({
     background: #1a1a2e
     border: 3px solid #444
     box-sizing: border-box
+    // プレイ中は盤面上のスワイプでページを動かさない(ジェスチャー操作用)
+    &.board_playing
+      touch-action: none
 
-  // タッチ操作パッド(スマホのみ表示)
+  // タッチ操作パッド(タッチ端末で表示)
   .touch_controls
     display: none
     margin: 12px auto 0
@@ -1404,7 +1453,16 @@ export default Vue.extend({
     transform: translateX(-50%) scale(1)
     opacity: 1
 
-@media screen and (max-width: 768px)
+// タッチ端末(スマホ・iPad等)では操作ボタンを表示(横向きiPad等の広い画面でも)
+@media (pointer: coarse)
+  .blocks_wrapper .touch_controls
+    display: flex
+    width: 100%
+    max-width: 360px
+    margin: 12px auto 0
+
+// タブレット縦(iPad)まで: 1列に積んで画面幅内に収める(2列だと約864px必要ではみ出すため)
+@media screen and (max-width: 900px)
   .blocks_wrapper
     > .blocks_main
       flex-direction: column
@@ -1424,6 +1482,18 @@ export default Vue.extend({
       width: 100%
       max-width: 360px
       flex-direction: column
+  .blocks_wrapper > .blocks_bg > .bg_leaf
+    opacity: 0.12
+
+// スマホ: タイトル・説明文・余白を縮小(細長く見えないように)
+@media screen and (max-width: 768px)
+  .blocks_wrapper
+    padding-left: 12px
+    padding-right: 12px
+    > .blocks_title
+      font-size: 24px
+    > .blocks_subtitle
+      font-size: 12px
   .blocks_wrapper > .blocks_bg > .bg_leaf
     opacity: 0.1
 </style>
