@@ -56,7 +56,10 @@
           <div v-if="gameOver" class="game_over_overlay">
             <p class="go_title mont bold">GAME OVER</p>
             <p class="go_score">Score: {{ score }} (Lv.{{ level }})</p>
-            <template v-if="!justSaved">
+            <template v-if="botSuspected">
+              <p class="go_save_error">自動プレイの疑いが検出されたため、<br />このスコアはランキングに登録できません。</p>
+            </template>
+            <template v-else-if="!justSaved">
               <p v-if="$auth.loggedIn" class="go_login_hint">{{ userName }} として登録します</p>
               <input
                 v-else
@@ -93,11 +96,11 @@
         </div>
 
         <div class="touch_controls">
-          <button type="button" class="tc_btn" @click="moveHorizontal(-1)" aria-label="左へ">◀</button>
-          <button type="button" class="tc_btn tc_rotate" @click="rotate()" aria-label="回転">⟳</button>
-          <button type="button" class="tc_btn" @click="moveHorizontal(1)" aria-label="右へ">▶</button>
-          <button type="button" class="tc_btn" @click="moveDown()" aria-label="下へ">▼</button>
-          <button type="button" class="tc_btn tc_drop" @click="hardDrop()" aria-label="一気に落とす">⤓</button>
+          <button type="button" class="tc_btn" @click="onCtrlBtn($event, 'left')" aria-label="左へ">◀</button>
+          <button type="button" class="tc_btn tc_rotate" @click="onCtrlBtn($event, 'rotate')" aria-label="回転">⟳</button>
+          <button type="button" class="tc_btn" @click="onCtrlBtn($event, 'right')" aria-label="右へ">▶</button>
+          <button type="button" class="tc_btn" @click="onCtrlBtn($event, 'down')" aria-label="下へ">▼</button>
+          <button type="button" class="tc_btn tc_drop" @click="onCtrlBtn($event, 'drop')" aria-label="一気に落とす">⤓</button>
         </div>
       </div>
 
@@ -231,6 +234,10 @@ const I_RATE_MIN = 0.06    // 高レベルでの下限
 const RANKING_KEY = 'togo_picture_blocks_rankings'
 const MUTE_KEY = 'togo_picture_blocks_muted'
 const RANKING_MAX = 10
+// 不正(自動プレイ)対策の速度上限。人間には到達不能な閾値を超えたら登録拒否。
+const MAX_LINES_PER_MIN = 90   // ライン/分の上限
+const MAX_PIECES_PER_MIN = 220 // ピース/分の上限(約3.7/秒)
+const ANTICHEAT_MIN_LINES = 12 // これ未満の短いゲームは速度判定しない(誤検知回避)
 
 // BGM 音源(あとで差し替え)。static/audio に置くと /audio/... で配信される。
 // 音量は控えめ(うるさくならないように)。ファイルが無くてもゲームは動く。
@@ -402,6 +409,7 @@ export default Vue.extend({
       playerEmail: '',
       muted: false,
       boardScale: 1, // スマホで盤面を画面幅に収めるための縮小率
+      botSuspected: false, // 自動プレイ疑い(検出時はスコア登録を拒否)
       // ブロックくずし(4ライン)演出用の状態。erased = 左から消えた列数(0..COLS)
       blocksClear: { active: false, rows: [], erased: 0 },
       frogHop: false,
@@ -495,19 +503,20 @@ export default Vue.extend({
     },
     // ---------- 盤面タッチ操作(タップ=回転 / 左右スワイプ=移動 / 下フリック=落下) ----------
     onBoardTouchStart(e) {
+      if (!e || e.isTrusted !== true) return // 合成タッチは無視
       if (!this.isRunning || this.gameOver || !this.current) return
       const t = e.touches[0]
       this._touch = { sx: t.clientX, sy: t.clientY, refX: t.clientX, st: Date.now(), moved: false }
     },
     onBoardTouchMove(e) {
-      if (!this._touch || !this.current) return
+      if (!this._touch || !this.current || !e || e.isTrusted !== true) return
       const t = e.touches[0]
       const step = CELL * this.boardScale
       let dx = t.clientX - this._touch.refX
       const dyTotal = t.clientY - this._touch.sy
       // 横方向にセル幅ぶん動いたら1マス移動(ドラッグで連続移動)
-      while (dx >= step) { this.moveHorizontal(1); this._touch.refX += step; dx -= step; this._touch.moved = true }
-      while (dx <= -step) { this.moveHorizontal(-1); this._touch.refX -= step; dx += step; this._touch.moved = true }
+      while (dx >= step) { this._runInput(() => this.moveHorizontal(1)); this._touch.refX += step; dx -= step; this._touch.moved = true }
+      while (dx <= -step) { this._runInput(() => this.moveHorizontal(-1)); this._touch.refX -= step; dx += step; this._touch.moved = true }
       // 盤面上のスワイプでページがスクロールしないように
       if (Math.abs(t.clientX - this._touch.sx) > 6 || Math.abs(dyTotal) > 6) {
         if (e.cancelable) e.preventDefault()
@@ -516,16 +525,16 @@ export default Vue.extend({
     onBoardTouchEnd(e) {
       const td = this._touch
       this._touch = null
-      if (!td || !this.isRunning || this.gameOver) return
+      if (!td || !this.isRunning || this.gameOver || !e || e.isTrusted !== true) return
       const t = (e.changedTouches && e.changedTouches[0]) || null
       const dx = t ? t.clientX - td.sx : 0
       const dy = t ? t.clientY - td.sy : 0
       const dt = Date.now() - td.st
       const absX = Math.abs(dx), absY = Math.abs(dy)
       if (!td.moved && absX < 14 && absY < 14 && dt < 400) {
-        this.rotate() // タップ = 回転
+        this._runInput(() => this.rotate()) // タップ = 回転
       } else if (dy > 40 && absY > absX) {
-        this.hardDrop() // 下フリック = 一気に落とす
+        this._runInput(() => this.hardDrop()) // 下フリック = 一気に落とす
       }
     },
     cellStyle(cell) {
@@ -698,6 +707,7 @@ export default Vue.extend({
         return
       }
       this.current = piece
+      if (this._af) this._af.pieces += 1
     },
     canPlace(matrix, row, col) {
       return filledCells(matrix).every(([r, c]) => {
@@ -710,6 +720,12 @@ export default Vue.extend({
     },
     start() {
       if (this.gameOver) this.restart()
+      // 新しいゲーム開始時に不正対策の計測をリセット
+      if (!this._af) {
+        this._af = { startTs: Date.now(), trustedInputs: 0, pieces: 0, blocked: 0 }
+        this._inputCtx = false
+        this.botSuspected = false
+      }
       this.isRunning = true
       if (!this.current) this.spawnPiece()
       if (this.timerId) clearInterval(this.timerId)
@@ -728,6 +744,8 @@ export default Vue.extend({
       this.saveError = ''
       this.blocksClear = { active: false, rows: [], erased: 0 }
       this.frogHop = false
+      this.botSuspected = false
+      this._af = null // 次の start() で新規計測を初期化
       this.dropInterval = LEVEL_INTERVALS[1]
       this.start()
     },
@@ -736,9 +754,28 @@ export default Vue.extend({
       this.isRunning = false
       if (this.timerId) clearInterval(this.timerId)
       if (this._bgm) this._bgm.pause()
+      this.evaluateAntiCheat()
       // ログイン済みなら連絡先メールにGoogleのメールを初期表示(編集可)
       const u = this.$auth && this.$auth.user
       if (u && u.email && !this.playerEmail) this.playerEmail = u.email
+    },
+    // ③ 速度上限＋① プロヴェナンスで自動プレイを判定
+    evaluateAntiCheat() {
+      const af = this._af
+      if (!af || !af.startTs) return
+      const durMs = Math.max(1, Date.now() - af.startTs)
+      const mins = durMs / 60000
+      const lpm = this.linesCleared / mins
+      const ppm = af.pieces / mins
+      af.durationSec = Math.round(durMs / 1000)
+      af.lpm = Math.round(lpm)
+      af.ppm = Math.round(ppm)
+      // ③ 人間には不可能な速度(短すぎるゲームは誤検知回避で除外)
+      const tooFast = this.linesCleared >= ANTICHEAT_MIN_LINES &&
+        (lpm > MAX_LINES_PER_MIN || ppm > MAX_PIECES_PER_MIN)
+      // ① 多数のピースを置いたのに本物の入力がほぼ無い = 直呼び/自動プレイ
+      const noHumanInput = af.pieces >= 15 && af.trustedInputs < af.pieces * 0.25
+      this.botSuspected = !!(tooFast || noHumanInput)
     },
     tick() {
       if (!this.isRunning || this.gameOver || !this.current) return
@@ -892,10 +929,16 @@ export default Vue.extend({
     },
     async saveScore() {
       if (this.saving) return
+      // 自動プレイ疑いは登録拒否
+      if (this.botSuspected) {
+        this.saveError = '自動プレイの疑いが検出されたため登録できません'
+        return
+      }
       // ログイン済みならGoogleの名前、未ログインなら入力したニックネームで登録(ログイン任意)
       const name = this.$auth && this.$auth.loggedIn
         ? this.userName
         : (this.playerName.trim() || '名無し')
+      const af = this._af || {}
       const entry = {
         name,
         score: this.score,
@@ -903,6 +946,10 @@ export default Vue.extend({
         lines: this.linesCleared,
         email: this.playerEmail.trim(), // 賞品連絡用(公開ランキングには出さない)
         date: new Date().toISOString(),
+        // 不正対策テレメトリ(将来のGAS側検証用)
+        durationSec: af.durationSec || 0,
+        pieces: af.pieces || 0,
+        inputs: af.trustedInputs || 0,
       }
       this.saving = true
       this.saveError = ''
@@ -937,7 +984,15 @@ export default Vue.extend({
     },
 
     // ---------- 操作 ----------
+    // 本物の入力(キー/タッチ/ボタン)経由でのみ操作を許可する実行コンテキスト。
+    // コンソールからの直呼び(vm.hardDrop 等)は _inputCtx=false なので無効化される。
+    _runInput(fn) {
+      if (this._af) this._af.trustedInputs += 1
+      this._inputCtx = true
+      try { fn() } finally { this._inputCtx = false }
+    },
     moveHorizontal(dir) {
+      if (!this._inputCtx) { if (this._af) this._af.blocked += 1; return } // 直呼び拒否
       if (!this.current || this.gameOver || !this.isRunning) return
       const { matrix, row, col } = this.current
       if (this.canPlace(matrix, row, col + dir)) {
@@ -945,6 +1000,7 @@ export default Vue.extend({
       }
     },
     rotate() {
+      if (!this._inputCtx) { if (this._af) this._af.blocked += 1; return } // 直呼び拒否
       if (!this.current || this.gameOver || !this.isRunning) return
       const rotated = rotateMatrix(this.current.matrix)
       const { row, col } = this.current
@@ -960,6 +1016,7 @@ export default Vue.extend({
       }
     },
     hardDrop() {
+      if (!this._inputCtx) { if (this._af) this._af.blocked += 1; return } // 直呼び拒否
       if (!this.current || this.gameOver || !this.isRunning) return
       const { matrix, col } = this.current
       let row = this.current.row
@@ -967,15 +1024,30 @@ export default Vue.extend({
       this.current.row = row
       this.lockPiece()
     },
+    // 操作ボタン(タップ/クリック)経由。本物のイベントのみ通す。
+    onCtrlBtn(e, action) {
+      if (!e || e.isTrusted !== true) return
+      this._runInput(() => {
+        if (action === 'left') this.moveHorizontal(-1)
+        else if (action === 'right') this.moveHorizontal(1)
+        else if (action === 'down') this.moveDown()
+        else if (action === 'drop') this.hardDrop()
+        else if (action === 'rotate') this.rotate()
+      })
+    },
     handleKey(e) {
+      // 合成イベント(script の dispatchEvent 等)は isTrusted=false なので無視
+      if (!e || e.isTrusted !== true) return
       if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) {
         e.preventDefault()
       }
-      if (e.code === 'ArrowLeft') this.moveHorizontal(-1)
-      else if (e.code === 'ArrowRight') this.moveHorizontal(1)
-      else if (e.code === 'ArrowDown') this.moveDown()
-      else if (e.code === 'ArrowUp') this.hardDrop()
-      else if (e.code === 'Space') this.rotate()
+      this._runInput(() => {
+        if (e.code === 'ArrowLeft') this.moveHorizontal(-1)
+        else if (e.code === 'ArrowRight') this.moveHorizontal(1)
+        else if (e.code === 'ArrowDown') this.moveDown()
+        else if (e.code === 'ArrowUp') this.hardDrop()
+        else if (e.code === 'Space') this.rotate()
+      })
     },
   },
 })
