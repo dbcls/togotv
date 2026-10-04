@@ -59,6 +59,30 @@
         <img src="~/assets/img/logo.png" class="logo" alt="togo tv" />
         <span v-if="$i18n.locale === 'ja'">{{ $t('of_history') }}</span>
       </h2>
+      <h3 class="tsukushi bold">{{ $t('channel_stats_title') }}</h3>
+      <div class="channel_stats">
+        <ul class="channel_stats_list">
+          <li>
+            <p class="channel_stats_label tsukushi bold">{{ $t('channel_stats_views') }}</p>
+            <p class="channel_stats_value mont">{{ channelStats.views }}</p>
+          </li>
+          <li>
+            <p class="channel_stats_label tsukushi bold">{{ $t('channel_stats_subscribers') }}</p>
+            <p class="channel_stats_value mont">{{ channelStats.subscribers }}</p>
+          </li>
+          <li>
+            <p class="channel_stats_label tsukushi bold">{{ $t('channel_stats_videos') }}</p>
+            <p class="channel_stats_value mont">{{ formatCount(entryCounts.videos) }}</p>
+          </li>
+          <li>
+            <p class="channel_stats_label tsukushi bold">{{ $t('channel_stats_pictures') }}</p>
+            <p class="channel_stats_value mont">{{ formatCount(entryCounts.pictures) }}</p>
+          </li>
+        </ul>
+        <p class="channel_stats_date">
+          ※{{ $t('channel_stats_as_of', { date: channelStats.date }) }}
+        </p>
+      </div>
       <h3 class="tsukushi bold">{{ $t('play_number_transition') }}</h3>
       <div class="playtime_transition_graph">
         <img v-if="$i18n.locale === 'en'" src="~/static/20230731_TogoTVYouTube_stats_En.png" alt="">
@@ -102,14 +126,35 @@ export default Vue.extend({
   },
   data() {
     return {
+      // YouTubeチャンネルの統計値（手動更新）
+      channelStats: {
+        views: "3,677,451",
+        subscribers: "11,697",
+        date: "2026.9"
+      },
+      // 動画数・イラスト数はビルド時に前月末時点で集計（nuxt.config.js の writeEntryCounts）
+      entryCounts: {
+        as_of: null,
+        videos: null,
+        pictures: null
+      },
       history: [],
       history_en: []
     };
   },
   mounted() {
     this.fetchHistory()
+    this.fetchEntryCounts()
   },
   methods: {
+    fetchEntryCounts() {
+      axios.get(`${location.origin}${this.$router.history.base}/json/entry_counts.json`).then(data => {
+        this.entryCounts = data.data
+      })
+    },
+    formatCount(count) {
+      return typeof count === "number" ? count.toLocaleString("en-US") : "—"
+    },
     fetchHistory() {
       axios.get(`${location.origin}${this.$router.history.base}/json/history.json`).then(data => {
         this.history = data.data.history
@@ -220,6 +265,33 @@ h2
     > h3
       font-size: 22px
       margin-bottom: 26px
+    > .channel_stats
+      max-width: 890px
+      margin: 0 auto 70px
+      > .channel_stats_list
+        display: flex
+        justify-content: center
+        gap: 24px
+        list-style: none
+        padding: 0
+        margin: 0
+        > li
+          flex: 1
+          padding: 20px 12px
+          border: 2px solid $SUB_COLOR
+          border-radius: 6px
+          > .channel_stats_label
+            font-size: 16px
+            margin: 0 0 8px
+          > .channel_stats_value
+            font-size: 28px
+            font-weight: 600
+            color: $MAIN_COLOR
+            margin: 0
+      > .channel_stats_date
+        text-align: right
+        font-size: 14px
+        margin: 10px 0 0
     > .playtime_transition_graph
       margin-bottom: 70px
       > img
@@ -334,4 +406,12 @@ h2
     .history_section
       width: calc(100% - #{$VIEW_PADDING_SP} * 2)
       margin: 0 auto
+      > .channel_stats
+        > .channel_stats_list
+          flex-direction: column
+          gap: 12px
+          > li
+            padding: 14px 12px
+            > .channel_stats_value
+              font-size: 26px
 </style>

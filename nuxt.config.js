@@ -2,7 +2,46 @@ import axios from "axios";
 import ja from "./static/json/ja.json";
 import en from "./static/json/en.json";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
 dotenv.config();
+
+// 動画数・イラスト数を「前月末時点」で集計して static/json/entry_counts.json に書き出す
+// (APIはスプレッドシート由来。ビルド時に実行されるので、月が替わった最初のビルドで更新される)
+async function writeEntryCounts() {
+  // JSTで前月末日を求める
+  const nowJst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const lastMonthEnd = new Date(
+    Date.UTC(nowJst.getUTCFullYear(), nowJst.getUTCMonth(), 0)
+  );
+  const asOf = lastMonthEnd.toISOString().slice(0, 10);
+  const countUntil = (entries) =>
+    entries.filter((entry) => entry.uploadDate && entry.uploadDate <= asOf)
+      .length;
+  try {
+    const [videos, pictures] = await Promise.all([
+      axios.get(`https://togotv-api.dbcls.jp/api/entries?rows=10000`),
+      axios.get(
+        `https://togotv-api.dbcls.jp/api/entries?target=pictures&rows=10000`
+      ),
+    ]);
+    fs.writeFileSync(
+      path.join(__dirname, "static/json/entry_counts.json"),
+      JSON.stringify(
+        {
+          as_of: asOf,
+          videos: countUntil(videos.data.data),
+          pictures: countUntil(pictures.data.data),
+        },
+        null,
+        2
+      ) + "\n"
+    );
+  } catch (error) {
+    // 取得に失敗した場合は既存のファイルをそのまま使う
+    console.log("entry_counts error", error.message);
+  }
+}
 
 export default {
   mode: "universal",
@@ -264,6 +303,11 @@ const aliases = routes.map((route) => ({
     },
   },
   hooks: {
+    build: {
+      async before() {
+        await writeEntryCounts();
+      },
+    },
     generate: {
       async extendRoutes(routes) {
         const filtered = routes.filter((page) => !/\.html$/.test(page.route));

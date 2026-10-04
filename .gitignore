@@ -8,6 +8,9 @@ logsyarn-error.log*
 
 # Access counter (dev-only, local data)
 access-log.json
+
+# Entry counts (generated at build time by nuxt.config.js)
+static/json/entry_counts.json
 lerna-debug.log*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)

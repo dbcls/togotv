@@ -48,6 +48,7 @@
                     $route.path === '/rankings.html' ||
                     $route.path === '/course.html' ||
                     $route.path === '/tag.html' ||
+                    $route.path.indexOf('/workflow') === 0 ||
                     $route.path.match(/\/[\d]+\.html/),
                 }"
                 >{{ $t("search_videos") }}</span
@@ -88,6 +89,16 @@
                   <nuxt-link :to="localePath('/rankings.html')">{{
                     $t("ranking")
                   }}</nuxt-link>
+                </li>
+                <li @click="$event.stopPropagation()" class="link relation">
+                  <nuxt-link
+                    :class="{
+                      'nuxt-link-exact-active':
+                        $route.path.indexOf('/workflow-') === 0,
+                    }"
+                    :to="localePath('/workflows.html')"
+                    >{{ $t("video_workflows") }}</nuxt-link
+                  >
                 </li>
               </ul>
             </li>
@@ -390,6 +401,9 @@ header
             &.barchart
               &:before
                 @include icon('barchart')
+            &.relation
+              &:before
+                @include icon('relation')
             &.question
               &:before
                 @include icon('question')
