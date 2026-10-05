@@ -30,6 +30,9 @@
         <span class="wf_note_swatch" aria-hidden="true"></span>
         公開から年数が経っている動画です。ツールの画面や手順が現行版と異なる場合があります（更新予定）。
       </p>
+      <p v-if="hasSegmentStep" class="wf_diagram_note">
+        講演動画は、各ステップに該当する部分だけを再生します（全編は別ウィンドウで再生できます）。
+      </p>
     </div>
 
     <!-- 各ステップ -->
@@ -48,13 +51,29 @@
         <div class="wf_video">
           <div class="wf_video_inner">
             <iframe
-              :src="`https://www.youtube.com/embed/${step.youtube}`"
+              :src="embedUrl(step)"
               :title="step.videoTitle"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen
             ></iframe>
           </div>
+        </div>
+
+        <!-- 長い動画は、このステップに該当する区間だけを埋め込みで再生する -->
+        <div v-if="hasSegment(step)" class="wf_segment">
+          <p class="wf_segment_text">
+            <span class="wf_segment_badge">該当部分を再生</span>
+            <span class="mont">{{ step.start || "0:00" }}〜{{ step.end || step.duration }}</span>
+            <span class="wf_segment_length">（約{{ segmentMinutes(step) }}分）</span>
+          </p>
+          <a
+            class="wf_segment_full"
+            :href="fullUrl(step)"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="openFull($event, step)"
+          >全編を再生（別ウィンドウ・{{ step.duration }}）</a>
         </div>
 
         <p class="wf_video_meta">
@@ -119,6 +138,50 @@ export default Vue.extend({
   computed: {
     hasOutdated() {
       return this.steps.some(step => step.outdated);
+    },
+    hasSegmentStep() {
+      return this.steps.some(step => this.hasSegment(step));
+    }
+  },
+  methods: {
+    // "m:ss" / "h:mm:ss" を秒に変換する
+    toSeconds(time) {
+      if (!time) return 0;
+      return String(time)
+        .split(":")
+        .reduce((sum, part) => sum * 60 + Number(part), 0);
+    },
+    // step.start / step.end を指定すると、その区間だけを再生する
+    hasSegment(step) {
+      return Boolean(step.start || step.end);
+    },
+    segmentMinutes(step) {
+      const end = this.toSeconds(step.end || step.duration);
+      return Math.max(1, Math.round((end - this.toSeconds(step.start)) / 60));
+    },
+    embedUrl(step) {
+      const params = [];
+      if (step.start) params.push(`start=${this.toSeconds(step.start)}`);
+      if (step.end) params.push(`end=${this.toSeconds(step.end)}`);
+      const query = params.length ? `?${params.join("&")}` : "";
+      return `https://www.youtube.com/embed/${step.youtube}${query}`;
+    },
+    fullUrl(step) {
+      return `https://www.youtube.com/embed/${step.youtube}?autoplay=1`;
+    },
+    // 全編は別ウィンドウで開く。ポップアップがブロックされた場合はリンク（新しいタブ）にまかせる
+    openFull(event, step) {
+      const width = Math.min(1280, window.screen.availWidth);
+      const height = Math.round((width * 9) / 16);
+      const win = window.open(
+        this.fullUrl(step),
+        `togotv_full_${step.youtube}`,
+        `popup,width=${width},height=${height}`
+      );
+      if (win) {
+        event.preventDefault();
+        win.focus();
+      }
     }
   }
 });
@@ -311,6 +374,43 @@ export default Vue.extend({
       width: 100%
       height: 100%
       border: 0
+
+.wf_segment
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: 8px 16px
+  max-width: 720px
+  margin: 10px 0 0
+  padding: 10px 14px
+  background-color: #f5fafa
+  border-radius: 5px
+  font-size: 13px
+
+  > .wf_segment_text
+    margin: 0
+
+  .wf_segment_badge
+    display: inline-block
+    margin-right: 8px
+    padding: 2px 8px
+    border-radius: 3px
+    background-color: $MAIN_COLOR
+    color: #ffffff
+    font-size: 12px
+    font-weight: bold
+
+  .wf_segment_length
+    color: #888888
+
+  > .wf_segment_full
+    color: $MAIN_COLOR
+    font-weight: bold
+    text-decoration: none
+    white-space: nowrap
+    &:hover
+      text-decoration: underline
 
 .wf_video_meta
   max-width: 720px

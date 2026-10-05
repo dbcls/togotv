@@ -116,6 +116,9 @@ const TOOL_TAGS = {
   "UCSC Genome Browser": ["ゲノムブラウザ", "可視化"],
   "UCSC LiftOver": ["ゲノムブラウザ", "ゲノム座標変換"],
   IGV: ["ゲノムブラウザ", "可視化"],
+  // エピゲノム・ゲノム立体構造
+  "ChIP-Atlas": ["ChIP-seq", "転写制御", "公共データ再利用"],
+  "Hi-C 解析": ["Hi-C", "ゲノム立体構造", "講演動画"],
   // パスウェイ
   WikiPathways: ["パスウェイ", "ライセンス"],
   PathVisio: ["パスウェイ", "可視化"],
@@ -213,6 +216,17 @@ export default Vue.extend({
           description:
             "眺めるだけで終わらせず、必要な部分を切り出し、自分のデータを重ね、座標のズレを直し、手元で精査するまで。事故が起きやすい座標変換もカバーします。",
           tools: ["UCSC Table Browser", "UCSC Genome Browser", "UCSC LiftOver", "IGV"],
+          extraTags: ["実践"],
+          count: 5
+        },
+        {
+          path: "/workflow-epigenome.html",
+          category: "ゲノム研究",
+          title: "転写因子の結合とゲノムの立体構造",
+          subtitle: "転写制御の様子をゲノムブラウザーで可視化する",
+          description:
+            "ChIP-Atlas で転写因子の標的を探して結合の様子を確かめ、Hi-C 解析の講演で立体構造と公共データの使い方を学び、最後に IGV で重ねて可視化します。",
+          tools: ["ChIP-Atlas", "Hi-C 解析", "IGV"],
           extraTags: ["実践"],
           count: 5
         },
