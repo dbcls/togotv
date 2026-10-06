@@ -174,6 +174,8 @@ export default {
    */
   generate: {
     dir: "togotv",
+    // ブロックくずしゲームは非公開: 静的生成から除外(本番に pics-blocks.html を出力しない)
+    exclude: [/^\/pics-blocks/],
     async routes() {
       let generates = [];
       await axios

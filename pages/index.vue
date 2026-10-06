@@ -194,13 +194,6 @@ export default Vue.extend({
       //   cite … 論文引用（本文は togopic_used_in で組み立てる）
       news_items: [
         {
-          date: '2026.10.5',
-          is_new: true,
-          to: '/pics-blocks.html',
-          ja: '【本日限定公開】Togo picture gallery のイラストで遊ぶ「ブロックくずし」を公開中！',
-          en: '[Today only] "Block-kuzushi", a puzzle game made with Togo picture gallery illustrations, is available today!',
-        },
-        {
           date: '2026.10.4',
           is_new: true,
           to: '/workflows.html',
