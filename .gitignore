@@ -181,3 +181,30 @@ DBCLS_page_specification.md
 # Heritage Tree: 旧開発版（heritage-trees.vue が本番ファイル、/heritage-tree.html としてビルド）
 pages/heritage-tree-develop.vue
 pages/heritage-tree-develop2.vue
+
+# 機密情報（グローバルルール準拠）
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*
+*credential*
+serviceAccountKey.json
+*-service-account.json
+*service_account*.json
+firebase-adminsdk-*.json
+.aws/credentials
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.ppk
+*.sqlite
+*.db
+npm-debug.log*
+*.swp
+
+# Claude Code のローカル設定（個人の許可設定を含む）
+.claude/settings.local.json

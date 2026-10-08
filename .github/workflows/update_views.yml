@@ -3,10 +3,19 @@ name: Views の更新
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - name: Update ES database
-        run: curl -fsSL -X POST -H "Content-type:application/json" --data '{"user_id":"${{ secrets.ES_BASIC_ID }}", "passwd":"${{ secrets.ES_BASIC_PASS }}"}' ${{ secrets.UPDATE_VIEWS_ENDPOINT }}
+        run: curl -fsSL -X POST -H "Content-type:application/json" --data "{\"user_id\":\"$ES_BASIC_ID\", \"passwd\":\"$ES_BASIC_PASS\"}" "$UPDATE_VIEWS_ENDPOINT"
+        env:
+          ES_BASIC_ID: ${{ secrets.ES_BASIC_ID }}
+          ES_BASIC_PASS: ${{ secrets.ES_BASIC_PASS }}
+          UPDATE_VIEWS_ENDPOINT: ${{ secrets.UPDATE_VIEWS_ENDPOINT }}

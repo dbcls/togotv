@@ -133,7 +133,8 @@ export default {
         },
       },
     ],
-    "@nuxtjs/dotenv",
+    // .env の値はクライアントJSに埋め込まれるため、公開して良いキーだけに限定する
+    ["@nuxtjs/dotenv", { only: ["GOOGLE_CLIENT_ID"] }],
     "@nuxtjs/axios",
     "@nuxtjs/auth-next",
   ],

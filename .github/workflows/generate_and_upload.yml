@@ -5,17 +5,22 @@ on:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
       - name: Install dependencies
-        run: npm i
+        run: npm ci --ignore-scripts
       - name: Nuxt generate
         run: npm run generate
       - uses: jakejarvis/s3-sync-action@master
