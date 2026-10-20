@@ -32,13 +32,30 @@
           </button>
         </li>
       </ul>
-      <p class="result_count mont">
-        {{ filteredWorkflows.length }} / {{ workflowsWithTags.length }} 件
-      </p>
+      <div class="result_row">
+        <p class="result_count mont">
+          {{ filteredWorkflows.length }} / {{ workflowsWithTags.length }} 件
+        </p>
+        <div class="sort_switch" role="group" aria-label="並び順">
+          <span class="sort_label">並び順</span>
+          <button
+            v-for="mode in sortModes"
+            :key="mode.value"
+            type="button"
+            :class="['sort_button', { selected: sortMode === mode.value }]"
+            :aria-pressed="sortMode === mode.value ? 'true' : 'false'"
+            @click="sortMode = mode.value"
+          >
+            {{ mode.label }}
+          </button>
+        </div>
+      </div>
     </div>
 
     <ul class="workflow_list">
-      <li v-for="wf in filteredWorkflows" :key="wf.path" class="workflow_card">
+      <li v-for="wf in sortedWorkflows" :key="wf.path" class="workflow_card">
+        <!-- カード全体がリンクなので、いいねボタンはリンクの外に重ねて置く -->
+        <WorkflowLikeButton class="workflow_card_like" :id="wf.likeId" size="small" />
         <nuxt-link :to="localePath(wf.path)" class="workflow_card_link">
           <p class="workflow_card_category tsukushi bold">{{ wf.category }}</p>
           <h3 class="workflow_card_title tsukushi bold">{{ wf.title }}</h3>
@@ -69,6 +86,8 @@
 
 <script>
 import Vue from "vue";
+import WorkflowLikeButton from "~/components/WorkflowLikeButton.vue";
+import { fetchLikeCounts, workflowId } from "~/assets/js/workflowLikes.js";
 
 // ワークフローのカテゴリー。タグバーではこの順で先頭に並ぶ。
 const CATEGORIES = [
@@ -119,6 +138,13 @@ const TOOL_TAGS = {
   // エピゲノム・ゲノム立体構造
   "ChIP-Atlas": ["ChIP-seq", "転写制御", "公共データ再利用"],
   "Hi-C 解析": ["Hi-C", "ゲノム立体構造", "講演動画"],
+  // 難病・希少疾患
+  NanbyoData: ["難病", "希少疾患", "疾患情報", "オントロジー"],
+  DECIPHER: ["表現型", "バリアント", "希少疾患"],
+  PubCaseFinder: ["表現型", "希少疾患", "講演動画"],
+  // ミスセンス変異の評価
+  "PolyPhen-2": ["バリアント", "タンパク質構造"],
+  "AlphaFold DB": ["タンパク質構造", "AlphaFold"],
   // パスウェイ
   WikiPathways: ["パスウェイ", "ライセンス"],
   PathVisio: ["パスウェイ", "可視化"],
@@ -138,9 +164,18 @@ const TOOL_TAGS = {
 };
 
 export default Vue.extend({
+  components: { WorkflowLikeButton },
   data() {
     return {
       selectedTags: [],
+      // likes: いいねの多い順（同数なら標準の順） / default: 下の workflows の並び
+      sortMode: "likes",
+      sortModes: [
+        { value: "likes", label: "いいね順" },
+        { value: "default", label: "標準" }
+      ],
+      // 並べ替えはページを開いた時点の件数で行う（いいねを押した瞬間にカードが動かないように）
+      likeCounts: {},
       workflows: [
         {
           path: "/workflow-structure-intro.html",
@@ -220,6 +255,28 @@ export default Vue.extend({
           count: 5
         },
         {
+          path: "/workflow-missense.html",
+          category: "ゲノム研究",
+          title: "ミスセンス変異を、頻度から立体構造まで",
+          subtitle: "TogoVar で日本人集団での頻度と病原性を調べ、予測ツールと立体構造で変異の影響を確かめる",
+          description:
+            "TogoVar の2026年版の動画2本で日本人集団での頻度と病原性を調べ、PolyPhen-2 と Ensembl VEP で影響の予測を確かめ、AlphaFold DB で立体構造上の位置を見ます。",
+          tools: ["TogoVar", "PolyPhen-2", "Ensembl VEP", "AlphaFold DB"],
+          extraTags: ["実践"],
+          count: 5
+        },
+        {
+          path: "/workflow-nanbyo.html",
+          category: "ゲノム研究",
+          title: "難病を、名前から遺伝子と症例へ",
+          subtitle: "日本の指定難病を起点に、原因遺伝子・表現型・関連遺伝子の候補へとたどる",
+          description:
+            "NanbyoData で日本の難病を調べ、OMIM で原因遺伝子を確かめ、DECIPHER と PubCaseFinder で症状の側から見直し、TogoDX/Human で関連遺伝子の候補を広げます。",
+          tools: ["NanbyoData", "OMIM", "DECIPHER", "PubCaseFinder", "TogoDX"],
+          extraTags: ["実践"],
+          count: 5
+        },
+        {
           path: "/workflow-epigenome.html",
           category: "ゲノム研究",
           title: "転写因子の結合とゲノムの立体構造",
@@ -279,6 +336,7 @@ export default Vue.extend({
         wf.tools.forEach(tool => (TOOL_TAGS[tool] || []).forEach(add));
         (wf.extraTags || []).forEach(add);
         return Object.assign({}, wf, {
+          likeId: workflowId(wf.path),
           tags: tags,
           // カード上はカテゴリーをバッジで見せているので #タグ 一覧からは除く
           displayTags: tags.filter(t => t !== wf.category)
@@ -310,7 +368,18 @@ export default Vue.extend({
       return this.workflowsWithTags.filter(wf =>
         this.selectedTags.some(tag => wf.tags.indexOf(tag) !== -1)
       );
+    },
+    sortedWorkflows() {
+      if (this.sortMode !== "likes") return this.filteredWorkflows;
+      const order = wf => this.workflowsWithTags.indexOf(wf);
+      return this.filteredWorkflows.slice().sort((a, b) => {
+        const diff = (this.likeCounts[b.likeId] || 0) - (this.likeCounts[a.likeId] || 0);
+        return diff !== 0 ? diff : order(a) - order(b);
+      });
     }
+  },
+  async mounted() {
+    this.likeCounts = await fetchLikeCounts();
   },
   methods: {
     isSelected(tag) {
@@ -431,10 +500,42 @@ export default Vue.extend({
   margin-left: 6px
   opacity: 0.7
 
+.result_row
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: 8px 16px
+  margin: 12px 0 0
+
 .result_count
   font-size: 12px
   color: #777777
-  margin: 12px 0 0
+  margin: 0
+
+.sort_switch
+  display: flex
+  align-items: center
+  gap: 6px
+  font-size: 12px
+
+  > .sort_label
+    color: #777777
+    margin-right: 2px
+
+  > .sort_button
+    font-size: 12px
+    line-height: 1
+    color: $DEEP_MAIN_COLOR
+    background-color: #ffffff
+    border: 1px solid #cfe3e5
+    border-radius: 100px
+    padding: 6px 12px
+    cursor: pointer
+    &.selected
+      background-color: $MAIN_COLOR
+      border-color: $MAIN_COLOR
+      color: #ffffff
 
 // ─── ワークフローカード ───────────────────────────
 .workflow_list
@@ -450,6 +551,13 @@ export default Vue.extend({
   flex: 1 1 400px
   max-width: 460px
   min-width: 0
+  position: relative
+
+.workflow_card_like
+  position: absolute
+  top: 18px
+  right: 18px
+  z-index: 1
 
 .workflow_card_link
   display: block

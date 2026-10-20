@@ -3,6 +3,10 @@
     <!-- リード文 -->
     <p class="wf_lead">{{ lead }}</p>
 
+    <div v-if="likeId" class="wf_like_bar">
+      <WorkflowLikeButton :id="likeId" />
+    </div>
+
     <!-- ワークフロー図 -->
     <div class="wf_diagram_wrapper">
       <p class="wf_diagram_title tsukushi bold">ワークフロー</p>
@@ -33,6 +37,16 @@
       <p v-if="hasSegmentStep" class="wf_diagram_note">
         講演動画は、各ステップに該当する部分だけを再生します（全編は別ウィンドウで再生できます）。
       </p>
+
+      <!-- 使うツールの公式サイト -->
+      <div v-if="toolList.length" class="wf_tools">
+        <p class="wf_tools_title tsukushi bold">使うツール</p>
+        <ul class="wf_tools_list">
+          <li v-for="tool in toolList" :key="tool.url">
+            <a :href="tool.url" target="_blank" rel="noopener noreferrer" class="wf_tool_link">{{ tool.label }}</a>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <!-- 各ステップ -->
@@ -41,7 +55,19 @@
         <div class="wf_step_head">
           <span class="wf_step_no mont bold">{{ step.no }}</span>
           <div class="wf_step_headtext">
-            <p class="wf_step_tool mont bold">{{ step.tool }}</p>
+            <p class="wf_step_tool mont bold">
+              <template v-if="stepLinks(step).length">
+                <a
+                  v-for="link in stepLinks(step)"
+                  :key="link.url"
+                  :href="link.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="wf_tool_link"
+                >{{ stepLinks(step).length > 1 ? link.label : step.tool }}</a>
+              </template>
+              <template v-else>{{ step.tool }}</template>
+            </p>
             <h3 class="wf_step_title tsukushi bold">{{ step.heading }}</h3>
           </div>
         </div>
@@ -89,6 +115,11 @@
       <p class="wf_outro_text">{{ outro }}</p>
     </div>
 
+    <div v-if="likeId" class="wf_like_footer">
+      <p class="wf_like_footer_text">このワークフローが役に立ったら、いいねで教えてください。いいねの多いワークフローは一覧の上位に表示されます。</p>
+      <WorkflowLikeButton :id="likeId" />
+    </div>
+
     <!-- 発展 -->
     <div v-if="extras && extras.length" class="wf_extra">
       <p class="wf_extra_title tsukushi bold">さらに学ぶ</p>
@@ -125,9 +156,13 @@
 
 <script>
 import Vue from "vue";
+import WorkflowLikeButton from "~/components/WorkflowLikeButton.vue";
+import { toolLinks } from "~/assets/js/workflowTools.js";
+import { workflowId } from "~/assets/js/workflowLikes.js";
 
 export default Vue.extend({
   name: "VideoWorkflow",
+  components: { WorkflowLikeButton },
   props: {
     lead: { type: String, default: "" },
     steps: { type: Array, default: () => [] },
@@ -141,9 +176,26 @@ export default Vue.extend({
     },
     hasSegmentStep() {
       return this.steps.some(step => this.hasSegment(step));
+    },
+    // いいねの ID はページのパスから作る（/workflow-variant.html → workflow-variant）
+    likeId() {
+      return workflowId(this.$route.path);
+    },
+    // ステップに登場する順で、重複を除いたツールのリンク
+    toolList() {
+      const list = [];
+      this.steps.forEach(step =>
+        toolLinks(step.tool).forEach(link => {
+          if (!list.some(item => item.url === link.url)) list.push(link);
+        })
+      );
+      return list;
     }
   },
   methods: {
+    stepLinks(step) {
+      return toolLinks(step.tool);
+    },
     // "m:ss" / "h:mm:ss" を秒に変換する
     toSeconds(time) {
       if (!time) return 0;
@@ -196,6 +248,49 @@ export default Vue.extend({
   font-size: 15px
   line-height: 1.9
   margin: 0 0 32px
+
+.wf_like_bar
+  display: flex
+  justify-content: flex-end
+  margin: -16px 0 24px
+
+// ─── ツールの公式サイトへのリンク ─────────────────
+.wf_tool_link
+  color: inherit
+  text-decoration: none
+  border-bottom: 1px dotted currentColor
+  &::after
+    content: "↗"
+    font-size: 0.85em
+    margin-left: 2px
+  &:hover
+    border-bottom-style: solid
+  & + &
+    margin-left: 10px
+
+.wf_tools
+  display: flex
+  flex-wrap: wrap
+  align-items: baseline
+  gap: 6px 14px
+  margin: 16px 0 0
+  padding-top: 14px
+  border-top: 1px solid #dcebec
+
+  > .wf_tools_title
+    font-size: 13px
+    color: $DEEP_MAIN_COLOR
+    margin: 0
+
+  > .wf_tools_list
+    display: flex
+    flex-wrap: wrap
+    gap: 6px 14px
+    list-style: none
+    padding: 0
+    margin: 0
+    font-size: 13px
+    color: $MAIN_COLOR
 
 // ─── ワークフロー図 ───────────────────────────────
 .wf_diagram_wrapper
@@ -430,6 +525,23 @@ export default Vue.extend({
   white-space: nowrap
 
 // ─── まとめ・発展 ─────────────────────────────────
+.wf_like_footer
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: 12px 20px
+  margin-top: 20px
+  padding: 16px 20px
+  border: 1px solid #f2c7d1
+  border-radius: 6px
+
+  > .wf_like_footer_text
+    flex: 1 1 280px
+    font-size: 13px
+    line-height: 1.7
+    margin: 0
+
 .wf_outro
   margin-top: 48px
   padding: 20px
