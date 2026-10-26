@@ -2,16 +2,16 @@
   <div class="pictures_wrapper">
     <div class="facet_wrapper" v-if="$store.state.display === 'card'">
       <p class="facet_title search tsukushi bold">{{ $t("text_search") }}</p>
-      <div class="input_wrapper">
+      <!-- form submit はIME変換確定のEnterでは発火しないため、スマホのキーボードの「検索」キーでも安全に検索できる -->
+      <form class="input_wrapper" action="" @submit.prevent="searchByText">
         <input
-          type="text"
+          type="search"
+          enterkeyhint="search"
           :placeholder="$t('search_pictures')"
           v-model="keyword"
-          @keyup.enter="searchByText('enter')"
-          @keypress="setCanMessageSubmit()"
         />
-        <button @click="searchByText('click')"></button>
-      </div>
+        <button type="submit" :aria-label="$t('text_search')"></button>
+      </form>
       <p class="facet_title filter tsukushi bold">{{ $t("filter_search") }}</p>
       <p class="clear_btn" @click="clearFilter">{{ $t("clear_filter") }}</p>
       <div class="facet_small_section">
@@ -376,7 +376,6 @@ export default Vue.extend({
     return {
       is_loading: false,
       keyword: "",
-      canMessageSubmit: false,
       is_modal_on: false,
       selected_pic: {
         id: "",
@@ -736,7 +735,7 @@ export default Vue.extend({
         // テキスト検索時のページング
         axios
           .get(
-            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${this.keyword}&from=${page}&rows=40`
+            `https://togotv-api.dbcls.jp/api/search?target=pictures&text=${encodeURIComponent(this.keyword.trim())}&from=${page}&rows=40`
           )
           .then(data => {
             if (data.data.data && data.data.data.length > 0) {
@@ -859,29 +858,25 @@ export default Vue.extend({
       this.handleTouchEnd();
       this.is_mouse_down = false;
     },
-    setCanMessageSubmit() {
-      this.canMessageSubmit = true;
-    },
-    searchByText(type) {
-      if (this.keyword === "") {
+    searchByText() {
+      if (this.keyword.trim() === "") {
         return;
       }
-      if (type === "enter") {
-        if (!this.canMessageSubmit) {
-          return;
-        }
-        this.pictures = [];
-        this.filter_current_page = 1;
-        this.filter_last_page = 0;
-        // フィルタをクリアしてから検索
-        Object.keys(this.filters).forEach(key => {
-          this.filters[key] = [];
-        });
-        // テキスト検索時は特殊なフィルタ状態にする
-        this._is_text_search = true;
-        // fetchPageで初回データ取得
-        this.fetchPage(1);
+      // スマホではキーボードを閉じて結果を見せる
+      if (document.activeElement) {
+        document.activeElement.blur();
       }
+      this.pictures = [];
+      this.filter_current_page = 1;
+      this.filter_last_page = 0;
+      // フィルタをクリアしてから検索
+      Object.keys(this.filters).forEach(key => {
+        this.filters[key] = [];
+      });
+      // テキスト検索時は特殊なフィルタ状態にする
+      this._is_text_search = true;
+      // fetchPageで初回データ取得
+      this.fetchPage(1);
     },
     toggleDisplay() {
       this.$store.commit("toggleDisplay");
@@ -1043,6 +1038,9 @@ export default Vue.extend({
       > input
         width: 240px
         height: 28px
+        // type="search" の標準クリアボタンが検索ボタンと重なるため消す
+        &::-webkit-search-cancel-button
+          -webkit-appearance: none
       > button
         width: 18px
         height: 18px
@@ -1346,8 +1344,30 @@ export default Vue.extend({
 
 @media screen and (max-width: 896px)
   .pictures_wrapper
+    flex-direction: column
+    // スマホ・iPad縦ではテキスト検索だけをギャラリーの上に出す（絞り込み検索は非表示）
     > .facet_wrapper
-      display: none
+      width: 100%
+      min-width: 0
+      margin-right: 0
+      padding: 0 18px 18px
+      > p.facet_title.search
+        margin: 18px 0 10px
+      > p.facet_title.filter,
+      > p.clear_btn,
+      > .facet_small_section
+        display: none
+      > .input_wrapper
+        > input
+          width: 100%
+          height: 40px
+          // iOS Safari は16px未満の入力欄にフォーカスすると画面を拡大するため
+          font-size: 16px
+          -webkit-appearance: none
+          appearance: none
+        > button
+          width: 22px
+          height: 22px
 
 @media screen and (max-width: 480px)
   .pictures_wrapper
