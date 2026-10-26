@@ -31,6 +31,12 @@ const TOOL_LINKS = {
   NanbyoData: "https://nanbyodata.jp/",
   DECIPHER: "https://www.deciphergenomics.org/",
   PubCaseFinder: "https://pubcasefinder.dbcls.jp/",
+  gnomAD: "https://gnomad.broadinstitute.org/",
+  "GWAS Catalog": "https://www.ebi.ac.uk/gwas/",
+  "GTEx Portal": "https://gtexportal.org/",
+  // がん
+  COSMIC: "https://www.cosmickb.org/",
+  TCGA: "https://portal.gdc.cancer.gov/",
   // 論文・執筆
   "PubMed Central": "https://pmc.ncbi.nlm.nih.gov/",
   "Connected Papers": "https://www.connectedpapers.com/",

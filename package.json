@@ -5,10 +5,10 @@
   "author": "reika0717",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=dev node --max-old-space-size=4096 node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js",
-    "build": "node --max-old-space-size=4096 node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js build",
-    "start": "node --max-old-space-size=4096 node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js start",
-    "generate": "node --max-old-space-size=4096 node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js generate",
+    "dev": "NODE_ENV=dev node --max-old-space-size=4096 -r ./tools/node-compat.js node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js",
+    "build": "node --max-old-space-size=4096 -r ./tools/node-compat.js node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js build",
+    "start": "node --max-old-space-size=4096 -r ./tools/node-compat.js node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js start",
+    "generate": "node --max-old-space-size=4096 -r ./tools/node-compat.js node_modules/@nuxt/typescript-runtime/bin/nuxt-ts.js generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "lint-staged": {

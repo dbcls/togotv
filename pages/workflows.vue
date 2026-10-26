@@ -145,6 +145,14 @@ const TOOL_TAGS = {
   // ミスセンス変異の評価
   "PolyPhen-2": ["バリアント", "タンパク質構造"],
   "AlphaFold DB": ["タンパク質構造", "AlphaFold"],
+  // がんの体細胞変異
+  COSMIC: ["がん", "体細胞変異"],
+  TCGA: ["がん", "公共データ再利用"],
+  // 多因子疾患・集団頻度
+  gnomAD: ["バリアント", "集団頻度"],
+  "GWAS Catalog": ["GWAS", "形質"],
+  "GTEx Portal": ["発現解析", "eQTL"],
+  ポリジェニックスコア: ["GWAS", "疾患リスク"],
   // パスウェイ
   WikiPathways: ["パスウェイ", "ライセンス"],
   PathVisio: ["パスウェイ", "可視化"],
@@ -263,6 +271,28 @@ export default Vue.extend({
             "TogoVar の2026年版の動画2本で日本人集団での頻度と病原性を調べ、PolyPhen-2 と Ensembl VEP で影響の予測を確かめ、AlphaFold DB で立体構造上の位置を見ます。",
           tools: ["TogoVar", "PolyPhen-2", "Ensembl VEP", "AlphaFold DB"],
           extraTags: ["実践"],
+          count: 5
+        },
+        {
+          path: "/workflow-cancer-variant.html",
+          category: "ゲノム研究",
+          title: "その変異は、がんの変異か、日本人の多型か",
+          subtitle: "TogoVar で生まれつきのバリアントとしての頻度を確かめ、COSMIC と TCGA でがんの体細胞変異を調べる",
+          description:
+            "EGFR を例に、TogoVar で日本人集団での頻度と臨床的意義を確かめ、COSMIC でがんの体細胞変異を調べ、TCGA の公開データを検索・解析します。",
+          tools: ["TogoVar", "COSMIC", "TCGA"],
+          extraTags: ["実践"],
+          count: 4
+        },
+        {
+          path: "/workflow-common-variant.html",
+          category: "ゲノム研究",
+          title: "日本人の多型から、ありふれた病気のリスクへ",
+          subtitle: "TogoVar と gnomAD で集団ごとの頻度を比べ、GWAS・eQTL・ポリジェニックスコアへとつなぐ",
+          description:
+            "日本人集団の頻度を世界と比べ、GWAS Catalog で形質との関連、GTEx で遺伝子発現への影響を調べ、ポリジェニックスコアの考え方までたどります。",
+          tools: ["TogoVar", "gnomAD", "GWAS Catalog", "GTEx Portal", "ポリジェニックスコア"],
+          extraTags: ["入門"],
           count: 5
         },
         {
