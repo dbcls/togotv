@@ -32,6 +32,7 @@ const TOOL_LINKS = {
   DECIPHER: "https://www.deciphergenomics.org/",
   PubCaseFinder: "https://pubcasefinder.dbcls.jp/",
   gnomAD: "https://gnomad.broadinstitute.org/",
+  ClinVar: "https://www.ncbi.nlm.nih.gov/clinvar/",
   "GWAS Catalog": "https://www.ebi.ac.uk/gwas/",
   "GTEx Portal": "https://gtexportal.org/",
   // がん

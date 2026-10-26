@@ -114,10 +114,10 @@ export default Vue.extend({
           note: "ピークがトランスポゾン由来の配列に偏っていないかを確かめる。"
         },
         {
-          videoTitle: "Integrative Genomics Viewer IGVを使い倒す 〜マッピングデータを可視化する〜",
-          url: "https://togotv.dbcls.jp/20140716.html",
-          duration: "9:02",
-          note: "自分でマッピングした BAM ファイルを IGV に読み込みたいときに（少し古い版の解説です）。"
+          videoTitle: "Integrative Genomics Viewer IGVを使い倒す 〜マッピングデータを可視化する〜（2026年版）",
+          url: "https://togotv.dbcls.jp/20261006.html",
+          duration: "12:17",
+          note: "自分でマッピングした BAM ファイルを IGV に読み込んで、リードを確かめたいときに。"
         }
       ],
       lectures: [

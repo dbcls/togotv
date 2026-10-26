@@ -153,6 +153,7 @@ const TOOL_TAGS = {
   "GWAS Catalog": ["GWAS", "形質"],
   "GTEx Portal": ["発現解析", "eQTL"],
   ポリジェニックスコア: ["GWAS", "疾患リスク"],
+  ClinVar: ["バリアント", "疾患情報"],
   // パスウェイ
   WikiPathways: ["パスウェイ", "ライセンス"],
   PathVisio: ["パスウェイ", "可視化"],
@@ -270,6 +271,17 @@ export default Vue.extend({
           description:
             "TogoVar の2026年版の動画2本で日本人集団での頻度と病原性を調べ、PolyPhen-2 と Ensembl VEP で影響の予測を確かめ、AlphaFold DB で立体構造上の位置を見ます。",
           tools: ["TogoVar", "PolyPhen-2", "Ensembl VEP", "AlphaFold DB"],
+          extraTags: ["実践"],
+          count: 5
+        },
+        {
+          path: "/workflow-own-variant.html",
+          category: "ゲノム研究",
+          title: "自分のデータで見つけた変異を、公共データで意味づける",
+          subtitle: "IGV でリードを確かめ、VEP でまとめてアノテーションし、TogoVar と ClinVar で頻度と臨床的意義を調べる",
+          description:
+            "自分のシーケンスデータを出発点に、IGV でリードを確かめ、Docker 版 VEP でアノテーションし、TogoVar・ClinVar で頻度と臨床的意義を調べ、UCSC で重ねて見ます。",
+          tools: ["IGV", "Ensembl VEP", "TogoVar", "ClinVar", "UCSC Genome Browser"],
           extraTags: ["実践"],
           count: 5
         },
