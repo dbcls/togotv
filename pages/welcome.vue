@@ -128,7 +128,7 @@ export default Vue.extend({
     return {
       // YouTubeチャンネルの統計値（手動更新）
       channelStats: {
-        views: "3,677,451",
+        views: "3,685,039",
         subscribers: "11,697",
         date: "2026.9"
       },
