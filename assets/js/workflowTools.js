@@ -74,7 +74,16 @@ const TOOL_LINKS = {
     { label: "Git", url: "https://git-scm.com/" },
     { label: "GitHub", url: "https://github.com/" }
   ],
-  "Code Ocean": "https://codeocean.com/"
+  "Code Ocean": "https://codeocean.com/",
+  // 分子生物学実験
+  Addgene: "https://www.addgene.org/",
+  ApE: "https://jorgensen.biology.utah.edu/wayned/ape/",
+  "Primer-BLAST": "https://www.ncbi.nlm.nih.gov/tools/primer-blast/",
+  TogoMedium: "https://togomedium.org/",
+  // AI活用
+  "GitHub Copilot CLI": "https://github.com/features/copilot/cli",
+  "Claude Skills": "https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview",
+  "Google ADK": "https://google.github.io/adk-docs/"
 };
 
 // ツール名から [{ label, url }] を返す。登録がなければ空配列。

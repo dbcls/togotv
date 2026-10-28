@@ -6,13 +6,23 @@
       関連するツールの動画を「なぜ次にこれを使うのか」というストーリーでつないでいるので、
       教科書やワークフローのように順番にたどって学べます。
     </p>
+    <div class="like_note">
+      <p class="like_note_text">
+        <span class="like_note_icon" aria-hidden="true">♥</span>
+        いいねを押すと、いいねが多い順に並び替えられるようになります。ぜひ、気に入ったワークフローがあったらいいねを押してね。
+      </p>
+      <div class="like_note_corner">
+        <p class="like_note_text">動画でワークフローが役に立った時にこちらのボタンも押してみて→</p>
+        <WorkflowCornerLike />
+      </div>
+    </div>
 
     <!-- タグ絞り込み -->
     <div class="filter_bar">
       <div class="filter_head">
         <p class="filter_label tsukushi bold">タグで絞り込む</p>
         <button
-          v-if="selectedTags.length"
+          v-if="selectedTags.length || selectedTools.length"
           type="button"
           class="clear_button"
           @click="clearTags"
@@ -29,6 +39,19 @@
             @click="toggleTag(tag)"
           >
             {{ tag }}<span class="tag_count mont">{{ tagCount(tag) }}</span>
+          </button>
+        </li>
+      </ul>
+      <p class="filter_label filter_label_sub tsukushi bold">ツールで絞り込む</p>
+      <ul class="tag_filter_list">
+        <li v-for="tool in filterTools" :key="tool">
+          <button
+            type="button"
+            :class="['tag_button', 'is_tool', 'mont', { selected: isToolSelected(tool) }]"
+            :aria-pressed="isToolSelected(tool) ? 'true' : 'false'"
+            @click="toggleTool(tool)"
+          >
+            {{ tool }}<span class="tag_count">{{ toolCount(tool) }}</span>
           </button>
         </li>
       </ul>
@@ -87,6 +110,7 @@
 <script>
 import Vue from "vue";
 import WorkflowLikeButton from "~/components/WorkflowLikeButton.vue";
+import WorkflowCornerLike from "~/components/WorkflowCornerLike.vue";
 import { fetchLikeCounts, workflowId } from "~/assets/js/workflowLikes.js";
 
 // ワークフローのカテゴリー。タグバーではこの順で先頭に並ぶ。
@@ -94,11 +118,16 @@ const CATEGORIES = [
   "タンパク質構造研究",
   "発現解析",
   "ゲノム研究",
+  "分子生物学実験",
   "AIサイエンス",
   "PaperWork",
   "研究基盤",
   "その他"
 ];
+
+// 「ツールで絞り込む」に出すのは、この本数以上のワークフローで使われているツールだけ
+// （1本だけのツールまで並べるとボタンが多くなりすぎるため）
+const MIN_TOOL_FILTER_COUNT = 2;
 
 // ツールごとのタグ定義。
 // あるツールにタグを足したいときは、ここを1行編集すれば
@@ -169,14 +198,24 @@ const TOOL_TAGS = {
   "Clustal Omega": ["アラインメント"],
   Jalview: ["アラインメント", "系統樹", "可視化"],
   "MAFFT / RAxML / FigTree": ["アラインメント", "系統樹"],
-  DoMosaics: ["系統樹", "ドメイン構造", "可視化"]
+  DoMosaics: ["系統樹", "ドメイン構造", "可視化"],
+  // 分子生物学実験
+  Addgene: ["プラスミド", "クローニング"],
+  ApE: ["プラスミド", "クローニング"],
+  "Primer-BLAST": ["プライマー設計", "PCR"],
+  TogoMedium: ["培地", "微生物"],
+  // AI活用
+  "GitHub Copilot CLI": ["AI活用", "AIエージェント", "コード管理"],
+  "Claude Skills": ["AI活用", "AIエージェント", "自動化"],
+  "Google ADK": ["AI活用", "AIエージェント"]
 };
 
 export default Vue.extend({
-  components: { WorkflowLikeButton },
+  components: { WorkflowLikeButton, WorkflowCornerLike },
   data() {
     return {
       selectedTags: [],
+      selectedTools: [],
       // likes: いいねの多い順（同数なら標準の順） / default: 下の workflows の並び
       sortMode: "likes",
       sortModes: [
@@ -361,6 +400,28 @@ export default Vue.extend({
           tools: ["WSL2", "Docker", "Anaconda", "Git / GitHub", "Code Ocean"],
           extraTags: ["入門"],
           count: 5
+        },
+        {
+          path: "/workflow-ai.html",
+          category: "AIサイエンス",
+          title: "研究でAIを使う環境構築と実践",
+          subtitle: "AIをデータベースや手元のPCにつないで、研究の作業を任せる",
+          description:
+            "生成AIの全体像をつかみ、ChatGPT を TogoMCP につないでデータベースを横断検索。AI エージェントを手元に入れて作業を覚えさせ、自作し、論文にするときのルールまでを確かめます。",
+          tools: ["ChatGPT", "TogoMCP", "GitHub Copilot CLI", "Claude Skills", "Google ADK"],
+          extraTags: ["実践", "論文投稿"],
+          count: 7
+        },
+        {
+          path: "/workflow-wetlab.html",
+          category: "分子生物学実験",
+          title: "分子生物学実験に役に立つWEBサービスを学ぶ",
+          subtitle: "実験の準備を、ベンチに向かう前にウェブで進める",
+          description:
+            "Addgene でプラスミドを探し、ApE で設計、Primer-BLAST でプライマーを設計。TogoMedium で大腸菌 K-12 に合う培地を調べ、protocols.io で手順を記録・共有します。",
+          tools: ["Addgene", "ApE", "Primer-BLAST", "TogoMedium", "protocols.io"],
+          extraTags: ["入門"],
+          count: 5
         }
       ]
     };
@@ -405,10 +466,23 @@ export default Vue.extend({
         return diff !== 0 ? diff : a.localeCompare(b, "ja");
       });
     },
+    // 2本以上のワークフローで使われているツール。多い順、同数なら標準の並びで出てきた順
+    filterTools() {
+      const tools = [];
+      this.workflows.forEach(wf =>
+        wf.tools.forEach(tool => {
+          if (tools.indexOf(tool) === -1 && this.toolCount(tool) >= MIN_TOOL_FILTER_COUNT) tools.push(tool);
+        })
+      );
+      return tools.sort((a, b) => this.toolCount(b) - this.toolCount(a));
+    },
+    // タグとツールは、選んだもののどれかを含むワークフローを出す（OR）
     filteredWorkflows() {
-      if (!this.selectedTags.length) return this.workflowsWithTags;
-      return this.workflowsWithTags.filter(wf =>
-        this.selectedTags.some(tag => wf.tags.indexOf(tag) !== -1)
+      if (!this.selectedTags.length && !this.selectedTools.length) return this.workflowsWithTags;
+      return this.workflowsWithTags.filter(
+        wf =>
+          this.selectedTags.some(tag => wf.tags.indexOf(tag) !== -1) ||
+          this.selectedTools.some(tool => wf.tools.indexOf(tool) !== -1)
       );
     },
     sortedWorkflows() {
@@ -435,8 +509,20 @@ export default Vue.extend({
       if (i === -1) this.selectedTags.push(tag);
       else this.selectedTags.splice(i, 1);
     },
+    isToolSelected(tool) {
+      return this.selectedTools.indexOf(tool) !== -1;
+    },
+    toggleTool(tool) {
+      const i = this.selectedTools.indexOf(tool);
+      if (i === -1) this.selectedTools.push(tool);
+      else this.selectedTools.splice(i, 1);
+    },
     clearTags() {
       this.selectedTags = [];
+      this.selectedTools = [];
+    },
+    toolCount(tool) {
+      return this.workflows.filter(wf => wf.tools.indexOf(tool) !== -1).length;
     },
     tagCount(tag) {
       return this.workflowsWithTags.filter(wf => wf.tags.indexOf(tag) !== -1).length;
@@ -473,7 +559,32 @@ export default Vue.extend({
 .corner_lead
   font-size: 15px
   line-height: 1.9
-  margin: 0 0 28px
+  margin: 0 0 12px
+
+.like_note
+  font-size: 14px
+  line-height: 1.8
+  color: $DEEP_MAIN_COLOR
+  background-color: #fff6f7
+  border-radius: 6px
+  padding: 10px 16px
+  margin: 0 0 24px
+
+  .like_note_text
+    margin: 0
+
+  .like_note_icon
+    color: #e0607e
+    margin-right: 4px
+
+  > .like_note_corner
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 8px 14px
+    margin-top: 8px
+    padding-top: 8px
+    border-top: 1px dashed #f3c6d1
 
 // ─── タグ絞り込み ─────────────────────────────────
 .filter_bar
@@ -536,6 +647,9 @@ export default Vue.extend({
     background-color: $MAIN_COLOR
     border-color: $MAIN_COLOR
     color: #ffffff
+
+.filter_label_sub
+  margin: 16px 0 12px
 
 .tag_count
   font-size: 10px

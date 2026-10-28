@@ -30,9 +30,11 @@ async function request(url, options) {
 
 // 全ワークフローの件数 { "workflow-variant": 12, ... }。
 // 1ページに複数のボタンがあっても通信は1回で済むよう、結果を共有する。
+// fresh を true にすると、共有している結果を使わずに取り直す（件数を定期的に更新するとき用）
 let countsPromise = null;
-export function fetchLikeCounts() {
+export function fetchLikeCounts(fresh = false) {
   if (!LIKES_ENDPOINT) return Promise.resolve({});
+  if (fresh) countsPromise = null;
   if (!countsPromise) {
     countsPromise = request(`${LIKES_ENDPOINT}?action=list`)
       .then(json => (json && json.counts) || {})
