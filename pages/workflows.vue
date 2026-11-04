@@ -204,6 +204,11 @@ const TOOL_TAGS = {
   ApE: ["プラスミド", "クローニング"],
   "Primer-BLAST": ["プライマー設計", "PCR"],
   TogoMedium: ["培地", "微生物"],
+  // ゲノム編集
+  CRISPOR: ["ゲノム編集", "ガイドRNA設計"],
+  "Microhomology-Predictor": ["ゲノム編集", "変異予測"],
+  inDelphi: ["ゲノム編集", "変異予測"],
+  CRISPResso2: ["ゲノム編集", "NGS解析"],
   // AI活用
   "GitHub Copilot CLI": ["AI活用", "AIエージェント", "コード管理"],
   "Claude Skills": ["AI活用", "AIエージェント", "自動化"],
@@ -421,6 +426,17 @@ export default Vue.extend({
             "Addgene でプラスミドを探し、ApE で設計、Primer-BLAST でプライマーを設計。TogoMedium で大腸菌 K-12 に合う培地を調べ、protocols.io で手順を記録・共有します。",
           tools: ["Addgene", "ApE", "Primer-BLAST", "TogoMedium", "protocols.io"],
           extraTags: ["入門"],
+          count: 5
+        },
+        {
+          path: "/workflow-genome-editing.html",
+          category: "分子生物学実験",
+          title: "ゲノム編集のノックアウトを、予測してから確かめる",
+          subtitle: "切ったあとにできる変異を予測して、標的を選ぶ",
+          description:
+            "CRISPOR でガイド RNA の候補を探し、Microhomology-Predictor と inDelphi でフレームシフトになりやすい標的を選択。Primer-BLAST と CRISPResso2 で編集結果を確かめます。",
+          tools: ["CRISPOR", "Microhomology-Predictor", "inDelphi", "Primer-BLAST", "CRISPResso2"],
+          extraTags: ["実践"],
           count: 5
         }
       ]

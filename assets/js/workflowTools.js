@@ -80,6 +80,11 @@ const TOOL_LINKS = {
   ApE: "https://jorgensen.biology.utah.edu/wayned/ape/",
   "Primer-BLAST": "https://www.ncbi.nlm.nih.gov/tools/primer-blast/",
   TogoMedium: "https://togomedium.org/",
+  // ゲノム編集
+  CRISPOR: "https://crispor.gi.ucsc.edu/",
+  "Microhomology-Predictor": "http://www.rgenome.net/mich-calculator/",
+  inDelphi: "https://indelphi.giffordlab.mit.edu/",
+  CRISPResso2: "https://crispresso2.pinellolab.org/",
   // AI活用
   "GitHub Copilot CLI": "https://github.com/features/copilot/cli",
   "Claude Skills": "https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview",
