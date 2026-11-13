@@ -115,6 +115,14 @@
       <p class="wf_outro_text">{{ outro }}</p>
     </div>
 
+    <!-- AIと一緒にたどるためのプロンプト -->
+    <WorkflowPrompt
+      v-if="promptData"
+      :intro="promptData.intro"
+      :mcp="promptData.mcp || []"
+      :prompts="promptData.prompts"
+    />
+
     <div v-if="likeId" class="wf_like_footer">
       <p class="wf_like_footer_text">このワークフローが役に立ったら、いいねで教えてください。いいねの多いワークフローは一覧の上位に表示されます。</p>
       <WorkflowLikeButton :id="likeId" />
@@ -157,18 +165,22 @@
 <script>
 import Vue from "vue";
 import WorkflowLikeButton from "~/components/WorkflowLikeButton.vue";
+import WorkflowPrompt from "~/components/WorkflowPrompt.vue";
 import { toolLinks } from "~/assets/js/workflowTools.js";
 import { workflowId } from "~/assets/js/workflowLikes.js";
+import { promptFor } from "~/assets/js/prompts/index.js";
 
 export default Vue.extend({
   name: "VideoWorkflow",
-  components: { WorkflowLikeButton },
+  components: { WorkflowLikeButton, WorkflowPrompt },
   props: {
     lead: { type: String, default: "" },
     steps: { type: Array, default: () => [] },
     outro: { type: String, default: "" },
     extras: { type: Array, default: () => [] },
-    lectures: { type: Array, default: () => [] }
+    lectures: { type: Array, default: () => [] },
+    // { intro, mcp: [{ label, url, note }], prompts: [{ title, note, body }] }
+    prompt: { type: Object, default: null }
   },
   computed: {
     hasOutdated() {
@@ -180,6 +192,11 @@ export default Vue.extend({
     // いいねの ID はページのパスから作る（/workflow-variant.html → workflow-variant）
     likeId() {
       return workflowId(this.$route.path);
+    },
+    // プロンプトは assets/js/prompts/index.js から ID で引く（ページ側で渡すこともできる）
+    promptData() {
+      const data = this.prompt || promptFor(this.likeId);
+      return data && data.prompts && data.prompts.length ? data : null;
     },
     // ステップに登場する順で、重複を除いたツールのリンク
     toolList() {
