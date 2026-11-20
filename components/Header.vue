@@ -131,7 +131,7 @@
                 ]"
               >
                 <li @click="$event.stopPropagation()" class="link img">
-                  <nuxt-link :to="localePath('/pics.html')">
+                  <nuxt-link :to="localePath('/pics.html')" @click.native="resetPicsIfCurrent">
                     {{ $t('all_images') }}
                   </nuxt-link>
                 </li>
@@ -252,6 +252,11 @@ export default Vue.extend({
     RequestAgreementModal,
   },
   methods: {
+    resetPicsIfCurrent() {
+      // ギャラリー表示中は同じURLへの遷移になりページが作り直されないので、検索・絞り込みのリセットを通知する
+      // （ギャラリー以外にいるときは受け手がいないので何も起きない）
+      this.$nuxt.$emit("reset-pics");
+    },
     checkIfTop(path) {
       if (path === "/" || path.indexOf("index.html") !== -1) {
         return "index";

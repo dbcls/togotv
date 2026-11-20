@@ -303,7 +303,13 @@ export default Vue.extend({
         });
     });
   },
+  beforeDestroy() {
+    this.$nuxt.$off("reset-pics", this.clearFilter);
+  },
   mounted() {
+    // 表示中にヘッダーの「全ての画像」が押されたら一覧を初期状態に戻す（同じURLへの遷移ではページが再生成されないため）
+    this.$nuxt.$on("reset-pics", this.clearFilter);
+
     // クエリパラメータから検索状態を復元
     const query = Object.assign({}, this.$route.query);
 
@@ -319,7 +325,7 @@ export default Vue.extend({
     // テキスト検索の復元
     if (query.keyword) {
       this.keyword = query.keyword;
-      this._is_text_search = true;
+      this.is_text_search = true;
       this.filter_current_page = 1;
 
       // URLからクエリパラメータを削除（これ以上のループを防ぐ）
@@ -389,7 +395,7 @@ export default Vue.extend({
       filter_current_page: 1,
       filter_last_page: 0,
       filter_total_hits: 0,
-      _is_text_search: false,
+      is_text_search: false,
       _current_filter_params: null,
       _is_restoring: false,
       pictures: [],
@@ -447,7 +453,7 @@ export default Vue.extend({
           // フィルタが空かチェック（テキスト検索は別扱い）
           let has_filter = Object.keys(param).some(key => param[key].length > 0);
 
-          if (!has_filter && !this._is_text_search) {
+          if (!has_filter && !this.is_text_search) {
             // フィルターなし - 通常のページングに戻る
             this.pictures = [];
             this.filter_current_page = 1;
@@ -457,7 +463,7 @@ export default Vue.extend({
             this.fetchPage(1);
           } else if (has_filter) {
             // フィルタON（テキスト検索はクリア）
-            this._is_text_search = false;
+            this.is_text_search = false;
             this.pictures = [];
             this.filter_current_page = 1;
             this.filter_last_page = 0;
@@ -472,7 +478,7 @@ export default Vue.extend({
     },
     keyword: function(val) {
       if (val === "") {
-        this._is_text_search = false;
+        this.is_text_search = false;
         this.clearFilter();
       }
     }
@@ -484,7 +490,7 @@ export default Vue.extend({
     },
     is_filter_on() {
       // テキスト検索中の場合もフィルタONとして扱う
-      if (this._is_text_search) {
+      if (this.is_text_search) {
         return true;
       }
       let frag = false;
@@ -502,7 +508,7 @@ export default Vue.extend({
         this.filters[key] = [];
       });
       this.keyword = "";
-      this._is_text_search = false;
+      this.is_text_search = false;
       this._current_filter_params = null;
       this.filter_last_page = 0;
     },
@@ -731,7 +737,7 @@ export default Vue.extend({
             console.log("error", error);
             this.is_loading = false;
           });
-      } else if (this._is_text_search) {
+      } else if (this.is_text_search) {
         // テキスト検索時のページング
         axios
           .get(
@@ -874,7 +880,7 @@ export default Vue.extend({
         this.filters[key] = [];
       });
       // テキスト検索時は特殊なフィルタ状態にする
-      this._is_text_search = true;
+      this.is_text_search = true;
       // fetchPageで初回データ取得
       this.fetchPage(1);
     },
@@ -907,12 +913,12 @@ export default Vue.extend({
       const searchState = {};
 
       // テキスト検索の場合
-      if (this._is_text_search && this.keyword) {
+      if (this.is_text_search && this.keyword) {
         searchState.keyword = this.keyword;
       }
 
       // フィルタ検索の場合
-      if (this.is_filter_on && !this._is_text_search) {
+      if (this.is_filter_on && !this.is_text_search) {
         Object.keys(this.filters).forEach(key => {
           if (this.filters[key].length > 0) {
             searchState[key] = this.filters[key].join(',');
