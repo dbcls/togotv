@@ -80,7 +80,7 @@
           </li>
         </ul>
         <p class="channel_stats_date">
-          ※{{ $t('channel_stats_as_of', { date: channelStats.date }) }}
+          ※{{ $t('channel_stats_as_of', { date: $i18n.locale === 'ja' ? channelStats.date : channelStats.dateEn }) }}
         </p>
       </div>
       <h3 class="tsukushi bold">{{ $t('play_number_transition') }}</h3>
@@ -128,9 +128,10 @@ export default Vue.extend({
     return {
       // YouTubeチャンネルの統計値（手動更新）
       channelStats: {
-        views: "3,691,257",
-        subscribers: "11,697",
-        date: "2026.9"
+        views: "3,704,396",
+        subscribers: "11,706",
+        date: "2026.11末",
+        dateEn: "the end of Nov. 2026"
       },
       // 動画数・イラスト数はビルド時に前月末時点で集計（nuxt.config.js の writeEntryCounts）
       entryCounts: {
