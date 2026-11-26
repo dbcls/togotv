@@ -194,8 +194,14 @@ export default Vue.extend({
       //   cite … 論文引用（本文は togopic_used_in で組み立てる）
       news_items: [
         {
-          date: '2026.10.4',
+          date: '2026.11.26',
           is_new: true,
+          to: '/heritage-trees.html',
+          ja: 'TogoTVのピクチャーギャラリーに Heritage Trees 夏編のイラスト３点が公開されました！',
+          en: 'Three Heritage Trees (Summer) illustrations have been added to the TogoTV Picture Gallery!',
+        },
+        {
+          date: '2026.10.4',
           to: '/workflows.html',
           ja: '動画でワークフローを公開！',
           en: 'Video Workflows is now available!',
